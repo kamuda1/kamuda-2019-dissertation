@@ -14,7 +14,12 @@ This chapter applies machine learning algorithms to solve the problem of a ident
 
 \subsection{Training Dataset Overview}
 
-The dataset is composed of simulated gamma-ray templates. A one-dimension particle transport code developed at Sandia National Laboratory, GADRAS-DRF, was used to generate these templates. Because 
+The datasets used to train the models are composed of noiseless simulated gamma-ray templates. A one-dimension particle transport code developed at Sandia National Laboratory, GADRAS-DRF, was used to generate these templates. This simulation code can be used to model the conditions that effect spectra. The parameters used in this study are different detector materials, detector size, environmental scattering factors, shielding, and background as a function of location. GADRAS-DRF includes an option to create spectra without the Poisson noise expected for a spectrum. Using this, noiseless templates were generated.
+
+
+Table 
+
+
 
 Spectra change due to changes in measurement geometry. These changes include source-to-detector distance and the distance of both the detector and source from objects in an environment. To demonstrate this effect, $^{60}$Co spectra were simulated, Figure \ref{fig:sim_spectra_distance_comparison}, with different source-to-detector distances.
 
@@ -53,35 +58,78 @@ Spectra are also simulated with different FWHM parameters.
 \label{fig:sim_spectra_FWHM_comparison}
 \end{figure}
 
-\section{Results from training all models}
 
-When training final models, two main questions need to be addressed: how good is a given architecture at solving a problem on its training dataset and how good is a given dataset at generalizing to outside examples.
+\section{Data Augmentation Used}
 
-To determine how good a given architecture solves a problem, asymptotic convergence of the models performance needs to be measured. Because of the inherent stochastic nature of training machine learning algorithms (different random weight initialization, different mini-batches chosen during training, different data augmentation manifestations), each time a new network is trained the networks parameters and results will differ. This means a single trained instance of some model A may outperform a single trained instance of model B by chance, despite model B being an overall superior architecture. To more realistically compare how models perform on some dataset, a number of networks can be trained and their average performance compared. This is a method called bagging.
-
-\subsection{Asymptotic Model Performance on Training Dataset}
-
-For the best DNN and CNN architectures found in the hyperparameter search, using 'enough' data data samples as found in the hyperparameter search, 30 networks are trained. Their performance is observed in Figure \ref{fig:asymptotic_performance}.
+Several data augmentation techniques are employed when training the 
 
 
-%% Can also include performance using templates with extreme augmentation
+
+\section{Training the Dense and Convolution Autoencoder}
+
+The DAE and CAE are trained to act as feature extractors. There are a number of ways to construct the input and output for a spectral autoencoder. 
+
+
+
+
+
+\section{Model Evaluation}
+
+\subsection{Model performance on the easy dataset}
+
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_dummy}
-	\caption{Asymptotic model performance for both the CNN and DNN on the training sets.}
+	\includegraphics[width=0.9\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_dummy}
+	\caption{Model performance on the easy dataset. }
 	\label{fig:asymptotic_performance}
 \end{figure}
 
-Using N models as representative of asymptotic performance, justified in Figure \ref{fig:asymptotic_performance}, we can check out the confusion matrix associated with the test dataset to gain insight into how the algorithm is performing poorly and predict future shortcomings.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+% \section{Results from training all models}
+
+% When training final models, two main questions need to be addressed: how good is a given architecture at solving a problem on its training dataset and how good is a given dataset at generalizing to outside examples.
+
+% To determine how good a given architecture solves a problem, asymptotic convergence of the models performance needs to be measured. Because of the inherent stochastic nature of training machine learning algorithms (different random weight initialization, different mini-batches chosen during training, different data augmentation manifestations), each time a new network is trained the networks parameters and results will differ. This means a single trained instance of some model A may outperform a single trained instance of model B by chance, despite model B being an overall superior architecture. To more realistically compare how models perform on some dataset, a number of networks can be trained and their average performance compared. This is a method called bagging.
+
+% \subsection{Asymptotic Model Performance on Training Dataset}
+
+% For the best DNN and CNN architectures found in the hyperparameter search, using 'enough' data data samples as found in the hyperparameter search, 30 networks are trained. Their performance is observed in Figure \ref{fig:asymptotic_performance}.
 
 
 %% Can also include performance using templates with extreme augmentation
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/conf_matrix_example}
-	\caption{Asymptotic model performance for both the CNN and DNN on the training sets.}
-	\label{fig:asymptotic_performance}
-\end{figure}
+% \begin{figure}[H]
+% 	\centering
+% 	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_dummy}
+% 	\caption{Asymptotic model performance for both the CNN and DNN on the training sets.}
+% 	\label{fig:asymptotic_performance}
+% \end{figure}
+
+% Using N models as representative of asymptotic performance, justified in Figure \ref{fig:asymptotic_performance}, we can check out the confusion matrix associated with the test dataset to gain insight into how the algorithm is performing poorly and predict future shortcomings.
+
+
+%% Can also include performance using templates with extreme augmentation
+% \begin{figure}[H]
+% 	\centering
+% 	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/conf_matrix_example}
+% 	\caption{Asymptotic model performance for both the CNN and DNN on the training sets.}
+% 	\label{fig:asymptotic_performance}
+% \end{figure}
 
 % Can also analyze how changing a threshold would affect precision/recall!
 
