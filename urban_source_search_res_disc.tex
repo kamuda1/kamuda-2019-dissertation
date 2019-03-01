@@ -17,9 +17,38 @@ This chapter applies machine learning algorithms to solve the problem of a ident
 The datasets used to train the models are composed of noiseless simulated gamma-ray templates. A one-dimension particle transport code developed at Sandia National Laboratory, GADRAS-DRF, was used to generate these templates. This simulation code can be used to model the conditions that effect spectra. The parameters used in this study are different detector materials, detector size, environmental scattering factors, shielding, and background as a function of location. GADRAS-DRF includes an option to create spectra without the Poisson noise expected for a spectrum. Using this, noiseless templates were generated.
 
 
-Table 
 
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+Parameter & Values \\ \hline
+\begin{tabular}[c]{@{}c@{}}source-detector height \\ off ground {[}cm{]}\end{tabular} & 50.0, 75.0, 100.0, 125.0, 150.0 \\ \hline
+\begin{tabular}[c]{@{}c@{}}source-detector\\ distance {[}cm{]}\end{tabular} & \multicolumn{1}{l|}{50.0, 112.5, 175.0, 237.5, 300.0} \\ \hline
+\begin{tabular}[c]{@{}c@{}}Arial density of \\ solid aluminum {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.82, 4.18, 7.49, 13.16 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Arial density of\\  solid iron {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.53, 3.5, 6.28, 11.02 \\ \hline
+\begin{tabular}[c]{@{}c@{}}Arial density of \\ solid lead {[}g/cm\textasciicircum{}2{]}\end{tabular} & 0.22, 0.51, 0.92, 1.61 \\ \hline
+\begin{tabular}[c]{@{}c@{}}FWHM at\\  662 keV {[}channels{]}\end{tabular} & \multicolumn{1}{l|}{6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0} \\ \hline
+\end{tabular}
+\caption{Fixed GADRAS-DRF simulation parameters.}
+\label{table:simulation_parameters}
+\end{table}
 
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|}
+\hline
+Parameter & Values & Sampling \\ \hline
+integration time & 60 - 600 & uniform \\ \hline
+background counts per second & 200 & Poisson \\ \hline
+Signal to Background ratio & 0.5 - 2 & uniform \\ \hline
+0th order calibration & 0,10 & uniform \\ \hline
+1st order calibration & 0.83 - 1.16 & uniform \\ \hline
+2nd order calibration & 0 - 0 & uniform \\ \hline
+\end{tabular}
+\caption{Default data augmentation parameters.}
+\label{table:simulation_parameters}
+\end{table}
 
 Spectra change due to changes in measurement geometry. These changes include source-to-detector distance and the distance of both the detector and source from objects in an environment. To demonstrate this effect, $^{60}$Co spectra were simulated, Figure \ref{fig:sim_spectra_distance_comparison}, with different source-to-detector distances.
 
@@ -73,7 +102,25 @@ The DAE and CAE are trained to act as feature extractors. There are a number of 
 
 
 
-\section{Model Evaluation}
+\section{Generalization Performance Evaluation}
+
+In this section we analyze the generalization performance of each network on various datasets. 
+
+A default dataset will be modified. The default dataset will be  correspond to unshielded templates. 
+
+\subsection{Generalization Performance on Default Dataset}
+
+
+
+
+
+
+
+\subsection{Generalization Dependence on Full-Width-at-Half-Max}
+
+A dataset was constructed with default network 
+
+
 
 \subsection{Model performance on the easy dataset}
 
