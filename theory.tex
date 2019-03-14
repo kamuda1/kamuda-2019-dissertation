@@ -19,24 +19,49 @@ If the total of the photon's energy is deposited in the detector, a count is rec
 \label{fig:energy_dependence_interactions}
 \end{figure}
 
-\subsubsection{Compton Interaction}
+\subsubsection{Compton scattering}
 
-Compton scattering and absorption is the interaction of a photon with an electron. as seen in Figure \ref{fig:compton_scatter}. This is the main energy deposition mechanism in the range of energies useful for gamma-ray spectroscopy. 
+Compton scattering and absorption is the interaction of a gamma-ray photon with an electron in some absorbing material. This interaction is illustrated in Figure \ref{fig:compton_scatter}. 
+
+
+% This is the main energy deposition mechanism in the range of energies useful for gamma-ray spectroscopy.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.75\linewidth]{images/compton_scatter}
+\includegraphics[width=0.8\linewidth]{images/compton_scatter}
 \caption{Diagram of a Compton scattering event \cite{knoll}.}
 \label{fig:compton_scatter}
 \end{figure}
 
+The energy of the scattered photon
 
+\begin{equation} \label{eq:compton_scatter}
+E' = \frac{E}{1 + \frac{E}{m_{0} c^2} (1-cos\theta)}
+\end{equation}
+
+depends on the scattering angle, $\theta$, and the incident photon's energy, E. In equation \ref{eq:compton_scatter} m$_{0}$c$^{2}$ is the rest mass of the electron. A photon scattering at an angle of 180$^{o}$ deposits it's maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies also seen in Figure \ref{fig:ideal_compton}. Accounting for the binding energy of electrons in a medium produces a Compton continuum closer to the dotted line in Figure \ref{fig:ideal_compton}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\linewidth]{images/ideal_compton}
+\caption{Diagram of an idealized Compton scattering event \cite{gilmore}.}
+\label{fig:ideal_compton}
+\end{figure}
 
 
 
 \subsubsection{Pair Production}
 
 When a photon above 1022 keV interacts with a nucleus, there is a probability  
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.75\linewidth]{images/pair_production}
+\caption{Diagram of pair production \cite{gilmore}.}
+\label{fig:pair_production}
+\end{figure}
+
+
 
 
 \subsubsection{Photoelectric effect}
