@@ -2,7 +2,7 @@
 
 \section{Gamma-ray Spectroscopy}
 
-In this section, the physics responsible for the features in gamma-ray spectra are described. 
+In this section, the physics responsible for the features in gamma-ray spectra are described. Also described are factors that complicate gamma-ray spectroscopy, including changing background radiation fields and temperature effects on detector calibration.
 
 \subsection{Energy Deposition Mechanisms}
 
@@ -54,7 +54,7 @@ depends on the scattering angle, $\theta$, and the incident photon's energy, E. 
 
 \subsubsection{Pair Production}
 
-When a photon with energy above 1022 keV interacts with the coulomb field of a nucleus, there is a probability that the photon will disappear and be replaced by an electron-positron pair. The positron will then annihilate with an electron in the medium, creating two 511 keV photons. This process is illustrated in Figure \ref{fig:pair_production}. Because one or both of these annihilation photons can escape the detector, they can produce single or double escape peaks in a gamma-ray spectrum. As seen in Figure \ref{fig:pair_production_spectra}, single escape peaks occur at 511 keV below the full-energy peak and double escape peaks occur at 1022 keV below this peak.
+When a photon with energy above 1022 keV interacts with the coulomb field of a nucleus, there is a probability that the photon will disappear and be replaced by an electron-positron pair. The positron will then annihilate with an electron in the medium, creating two 511 keV photons. This process is illustrated in Figure \ref{fig:pair_production}. Because one or both of these annihilation photons can escape the detector, they can produce single or double escape peaks in a gamma-ray spectrum. As seen in Figure \ref{fig:pair_production_spectra}, single escape peaks occur at 511 keV below the full-energy peak and double escape peaks occur at 1022 keV below this peak. These 511 keV photons may also be measured by the detector, producing an annihilation radiation signal in the spectrum.
 
 \begin{figure}[H]
 \centering
@@ -73,8 +73,10 @@ When a photon with energy above 1022 keV interacts with the coulomb field of a n
 
 \subsection{Energy Resolution}
 
-The energy resolution of a radiation detector describes how broad a photon's photopeak is in the detector's spectrum. The resolution is measured either in units of energy or as a percent of the peaks energy. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor radiation detectors are seen in Table \ref{table:detector_resolutions}. 
+The energy resolution of a radiation detector describes how broad a photopeak is in a detector's spectrum. The resolution is based on the full width of the Gaussian at half of it's maximum value (FWHM). The FWHM is measured either in units of energy or as a percent of the peaks energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield for absorbed energy, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. In addition to this, the variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly increases the resolution of semiconductor detectors over the theoretical Poisson limit. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as the standard of comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are seen in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum from scintillation and semiconductor detectors. 
+
 % pg 345 knoll
+
 \begin{table}[H]
 \centering
 \begin{tabular}{|c|c|}
@@ -96,7 +98,7 @@ gamma-ray detector types (reproduced from \cite{RIIDMarketSurveyReport}).}
 \centering
 \includegraphics[width=0.95\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
 \caption{Ba133 spectrum measured using different detector materials \cite{RIIDMarketSurveyReport}.}
-\label{fig:uranium_concentration}
+\label{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report}
 \end{figure}
 
 
