@@ -73,7 +73,7 @@ When a photon with energy above 1022 keV interacts with the coulomb field of a n
 
 \subsection{Energy Resolution}
 
-The energy resolution of a radiation detector describes how broad a photopeak is in a detector's spectrum. The resolution is based on the full width of the Gaussian at half of it's maximum value (FWHM). The FWHM is measured either in units of energy or as a percent of the peaks energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield for absorbed energy, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. In addition to this, the variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly increases the resolution of semiconductor detectors over the theoretical Poisson limit. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as the standard of comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are seen in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum from scintillation and semiconductor detectors. 
+The energy resolution of a radiation detector describes how broad a photopeak is in a detector's spectrum. The resolution is based on the full width of the Gaussian at half of it's maximum value (FWHM). The FWHM is measured either in units of energy or as a percent of the peaks energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. In addition to this, the variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as the standard of comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are seen in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum from scintillation and semiconductor detectors. 
 
 % pg 345 knoll
 
@@ -96,24 +96,49 @@ gamma-ray detector types (reproduced from \cite{RIIDMarketSurveyReport}).}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
+\includegraphics[width=0.8\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
 \caption{Ba133 spectrum measured using different detector materials \cite{RIIDMarketSurveyReport}.}
 \label{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report}
 \end{figure}
 
 
-\subsection{Background Effects}
+\subsection{Background Radiation}
 
+A significant challenge to automated gamma-ray spectroscopy is the stochastic nature of the background radiation field. Background radiation comes from radioisotopes naturally distributed in the soil and cosmic radiation. Isotopes in the soil come from the uranium decay series, thorium  decay series, and $^{40}$K. The gamma-ray spectra from each of these sources are shown in Figure \ref{fig:background_components}. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{images/background_components}
+\caption{Monte Carlo simulations of background component spectra in NaI \cite{KULISEK2015}.}
+\label{fig:background_components}
+\end{figure}
+
+These radiation components can change both spatially and temporally. Background radiation isotopes change geologically, (Figures \ref{fig:USGS_u_conc}, \ref{fig:USGS_th_conc}, and \ref{fig:USGS_k_conc}) creating different background radiation patterns in different parts of the country. Local changes in soil composition may also be significant enough to be observed in gamma-ray spectra. Because common building materials like concrete and granite contain radioactive elements, the proximity to structures can cause local variations in background. 
+
+Background also changes over time. This change is largely due to the decay products of $^{222}$Rn gas generated by uranium decay in soil \cite{knoll}. Rain can also increase the level of background radiation by releasing trapped radon gas and other radioactive sources in the soil.
 
 % Air Survey on Background Gradients https://www-sciencedirect-com.proxy2.library.illinois.edu/science/article/pii/S0265931X13002373
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.95\linewidth]{images/temp_vs_relative_peak_position_CASANOVAS2012588}
-\caption{Map of uranium concentrations in the United States.}
-\label{fig:uranium_concentration}
+\includegraphics[width=0.9\linewidth]{images/USGS_u_conc}
+\caption{Map of uranium concentrations in the United States \cite{USGS}.}
+\label{fig:USGS_u_conc}
 \end{figure}
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{images/USGS_th_conc}
+\caption{Map of thorium concentrations in the United States \cite{USGS}.}
+\label{fig:USGS_th_conc}
+\end{figure}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.9\linewidth]{images/USGS_k_conc}
+\caption{Map of $^{40}$K concentrations in the United States \cite{USGS}.}
+\label{fig:USGS_k_conc}
+\end{figure}
 
 % \USGS Open-File Report 2005-1413: Terrestrial Radioactivity and
 %Gamma-ray Exposure in the United States and Canada," 2013.
