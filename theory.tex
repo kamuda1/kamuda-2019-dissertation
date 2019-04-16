@@ -17,7 +17,7 @@ The photoelectric effect occurs when a photon is absorbed by an atom in some mat
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\linewidth]{images/energy_dependence_interactions}
-\caption{Energy dependence for gamma-ray interactions in NaI \cite{knoll}.}
+\caption{Energy dependence for gamma-ray interactions in NaI(Tl) \cite{knoll}.}
 \label{fig:energy_dependence_interactions}
 \end{figure}
 
@@ -109,7 +109,7 @@ A significant challenge to automated gamma-ray spectroscopy is the stochastic na
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\linewidth]{images/background_components}
-\caption{Monte Carlo simulations of background component spectra in NaI \cite{KULISEK2015}.}
+\caption{Monte Carlo simulations of background component spectra in NaI(Tl) \cite{KULISEK2015}.}
 \label{fig:background_components}
 \end{figure}
 
@@ -145,20 +145,27 @@ Background also changes over time. This change is largely due to the decay produ
 % [Online]. Available: http://pubs.usgs.gov/of/2005/1413/maps.htm
 
 
-\subsection{Affect of Temperature Change on Calibration}
+\subsection{Affect of Temperature on Calibration and Resolution}
 
+The calibration of a NaI(Tl) detector can be changed due to drifts in electronics, such as the dynode, and drifts in temperature of the crystal. This is due to changes in the dominance of different scintillation light decay processes \cite{IANAKIEV2009432} and decay time constants \cite{MOSZYNSKI2006739} with changing temperature. These physical changes lead to appreciable changes in relative photopeak position, shown in Figure \ref{fig:CASANOVAS2012588}, and detector resolution, shown in Figure \ref{fig:temp-dependence-resolution-moszynski}.
 
-Figure \ref{fig:CASANOVAS2012588} shows how relative peak position shifts with respect to changes in temperature of an ORTEC Model 905-3 2x2 NaI detector. Gain stabilization methods exist, but because they rely on clear photopeaks in a spectrum. they are not 
+Automated gain stabilization methods exist, many requiring a clear photopeak in the spectrum to calibrate from. This can be achieved by measuring long enough to identify a background photopeak, attaching an external radioactive source to the detector, or by adding a reference light source. Measurement times long enough to identify a background photopeak may be infeasible for certain applications or the calibration step ignored altogether as a part of typical operation. Adding an external source of radiation adds unnecessary noise to the spectrum and additional light sources may malfunction. For these reasons, software-based automated gain stabilization techniques should be used to overcome this issue.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\linewidth]{images/temp_vs_relative_peak_position_CASANOVAS2012588}
-\caption{Temperature vs relative photopeak position for an ORTEC Model 905-3 2x2 NaI detector \cite{CASANOVAS2012588}.}
+\caption{Temperature vs relative photopeak position for an ORTEC Model 905-3 2x2 NaI(Tl) detector \cite{CASANOVAS2012588}.}
 \label{fig:CASANOVAS2012588}
 \end{figure}
 
 
 
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.95\linewidth]{images/temp-dependence-resolution-moszynski}
+\caption{The energy resolution measured for 662 keV γ-rays with a 25mm × 30mm NaI(Tl) crystal at 2 and 12 μs peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
+\label{fig:temp-dependence-resolution-moszynski}
+\end{figure}
 
 \section{Machine Learning}
 
