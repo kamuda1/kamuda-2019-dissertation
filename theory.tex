@@ -154,7 +154,7 @@ Automated gain stabilization methods exist, many requiring a clear photopeak in 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\linewidth]{images/temp_vs_relative_peak_position_CASANOVAS2012588}
-\caption{Temperature vs relative photopeak position for an ORTEC Model 905-3 2x2 NaI(Tl) detector \cite{CASANOVAS2012588}.}
+\caption{Temperature vs relative photopeak position for an ORTEC Model 905-3 2x2 NaI(Tl) detector.  Reproduced from \cite{CASANOVAS2012588}.}
 \label{fig:CASANOVAS2012588}
 \end{figure}
 
@@ -359,7 +359,9 @@ and
 %
 Using Equations \ref{eq:update1} and \ref{eq:update2}, the weights can be updated for a single iteration of backpropogation. 
 
-ANNs require some stopping condition to conclude training. One simple stopping condition is ending training when a threshold in network accuracy on a testing set is reached. Where this simple accuracy test is not applicable, such as for regression training sets, a condition based on the ANN training error metric can be used.
+ANNs require some stopping condition to conclude training. One simple stopping condition is ending training when a threshold in network accuracy on a testing set is reached. Other early stopping methods include 
+
+% Where this simple accuracy test is not applicable, such as for regression training sets, a condition based on the ANN training error metric can be used.
 
 Early stopping has the benefit of preventing overfitting and encouraging generalization. Early stopping works by removing a small portion of the training data and defining it as testing data. The ANN is trained using the new training data while some error metric for both the training and testing set are recorded. As training progresses, the ANN likely will overfit to the training data, leading to an increase in error for the testing dataset. Early stopping ends training before overfitting occurs, as illustrated in Figure \ref{fig:training_testing_error}. Because training is stopped before the error in a dataset unknown to the model increases, generalization, or the ability for the ANN to correctly identify patterns outside of the training set, is also improved.
 
@@ -372,35 +374,47 @@ Early stopping has the benefit of preventing overfitting and encouraging general
 
 \subsection{Convolution Neural Networks}
 
-Convolution neural networks (CNNs) use convolutional filters instead of weights. They have been used in image processing. 
+Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors and a simple trainable classifier like a linear model or naive Bayes. One difficulty in this is the expense in leveraging domain knowledge to design the custom feature extractors. Another challenge comes when the model is applied to a similar but more difficult problem, potentially requiring a new set of feature extractors. While these new features could be based on the old analysis, recreating them would still be costly and require considerable effort.
 
-One of the first CNN architectures was LeNet-5 \cite{Lecun1998}. LeNet-5 classified 32x32 images of handwritten digits using two convolution-average pooling layers followed by two dense layers and an output. 
+Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolution layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared between classes. This weight sharing decreasing the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
 
-AlexNet \cite{Krizhevsky2012} was the first exploration into wider and deeper CNNs. 
+One of the first CNN architectures was LeNet-5 \cite{Lecun1998}. LeNet-5, shown in Figure \ref{fig:cnn_mnist_lecun98}, classified 32x32 images of handwritten digits using two convolution-average pooling layers followed by two dense layers and an output. This was the first example of a machine learning algorithm creating custom filters and a classification model for the MNIST dataset.
 
-Much more work has been done furthering CNNs. VGG \cite{Simonyan2014} showed that smaller filter sizes are good. 
+% AlexNet \cite{Krizhevsky2012} was the first exploration into wider and deeper CNNs. 
+
+% Much more work has been done furthering CNNs. VGG \cite{Simonyan2014} showed that smaller filter sizes are good. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\linewidth]{images/cnn_mnist_lecun98}
+	\caption{Architecture of LeNet-5, a CNN created for digit recognition. Image reproduced from \cite{Lecun1998}}
+	\label{fig:cnn_mnist_lecun98}
+\end{figure}
 
 \section{Autoencoders} \label{Autoencoders}
 % \cite{CHARTE2018} is a practical guide to autoencoders. Great resource.
 
-Autoencoders were introduced by Hinton \cite{Hinton2006}. They can be used as a method to pre-train networks or as feature extractors \cite{CHARTE2018}.
+Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an encoding network and a decoding network. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and outputs a reproduction of the input signal, $X'$. 
 
-Other feature extraction methods exist. Principal component analysis (PCA) attempts to reduce the dimensionality of a dataset into linearly uncorrelated variables \cite{Jolliffe2002}. Using a few of these principle components, the data may be represented in a reduced space that contains most of the information present in the original data. Another linear feature extraction method is called linear discriminant analysis (LDA). LDA is a supervised feature extraction method that finds linear combinations of features that can be used to separate classes. Non-linear feature extraction methods, such as kernel PCA, also exist. Kernel PCA applies a non-linear transform to the input space and applies PCA to the data in this transformed space. For kernel PCA to perform well, the correct kernel must be chosen for a given problem, which is a non-trivial task.
+Methods to encourage the network to learn useful features include forcing the autoencoder to perform denoising \cite{Vincent2008, Vincent2010} and using an undercomplete representation as the encoding layer. Denoising autoencoders corrupt their input with noise, making the autoencoder learn more robust features than those used for simply copying the input. 
 
-Denoising was suggested as a method of extracting useful features from an autoencoder \cite{Vincent2008, Vincent2010}.
+
+Once trained, the encoder can be used as a method to pre-train other neural networks or as a feature extractor \cite{CHARTE2018}. 
 
 \cite{Masci2011} demonstrated that stacking convolution layers made a good autoencoder.
 
+Other feature extraction methods exist. Principal component analysis (PCA) attempts to reduce the dimensionality of a dataset into linearly uncorrelated variables \cite{Jolliffe2002}. Using a few of these principle components, the data may be represented in a reduced space that contains most of the information present in the original data. Another linear feature extraction method is called linear discriminant analysis (LDA). LDA is a supervised feature extraction method that finds linear combinations of features that can be used to separate classes. Non-linear feature extraction methods, such as kernel PCA, also exist. Kernel PCA applies a non-linear transform to the input space and applies PCA to the data in this transformed space. For kernel PCA to perform well, the correct kernel must be chosen for a given problem, which is a non-trivial task.
+
+
+
 % While autoencoders were touched on in the uranium enrichment work, they have not been explored thoroughly. There is some evidence that the autoencoder was overtrained to the A special case of denoising autoencoders will be explored for the ANSI dataset. 
 
-An autoencoder is an ANN whose goal is to learn a representation of the input. This is accomplished by simultaneously training an encoding ANN and a decoding ANN. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. As seen in this figure, the encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and outputs a reproduction of the input signal, $X'$.
+
 
 Without an autoencoder, a single ANN has to learn multiple tasks to identify isotopes. An ANN would have to simultaneously identify the detector calibration, background signal, and possible source signal. By training an autoencoder to reconstruct a background-subtracted and correctly calibrated spectrum, the task of isotope identification is simplified for the ANN. This may result in more accurate identifications. To test this, for each dataset a single autoencoder and three ANNs will be trained. The first will be trained without an autoencoder. The second will be trained using the encoder as input. The third will be trained using the full autoencoder as input. A random hyperparameter search will be used to find an appropriately structured autoencoder. The testing and validation error for these ANNs will be compared for each respective dataset.
 
-% is local spatial structure too much jargon? 
-In addition to using fully connected autoencoders, a 1-D convolutional autoencoder will also be explored. A DNN does not assume the input has local spatial structure, while a CNN does. Because gamma-ray spectra have local spatial structure in the form of photopeaks and Compton continua, it may be better to use a CNN over a DNN \cite{CHARTE2018}. To test this, the experiment described above will be repeated using a 1-D convolutional autoencoder.
+% In addition to using fully connected autoencoders, a 1-D convolutional autoencoder will also be explored. A DNN does not assume the input has local spatial structure, while a CNN does. Because gamma-ray spectra have local spatial structure in the form of photopeaks and Compton continua, it may be better to use a CNN over a DNN \cite{CHARTE2018}. To test this, the experiment described above will be repeated using a 1-D convolutional autoencoder.
 
-% Or I might just use the 1D convolutional autoencoder because it makes more sense
 
 \begin{figure}[H]
 \centering
