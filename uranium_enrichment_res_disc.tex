@@ -2,7 +2,16 @@
 
 \section{Problem Description and Training Dataset Overview}
 
+Natural uranium is composed of U238, U235, and U234. 
+
+
 The software package RadSrc was used to generate the gamma-ray intensities for U235 and U238 templates \cite{Hiller2007}. RadSrc, developed at Lawrence Livermore National Laboratory, uses Bateman equations 
+
+We used the F8 tally to calculate the absolute full
+energy peak efficiency of each energy bin.
+
+
+% FRAM application to U and Pu isotopics https://www.lanl.gov/orgs/n/n1/appnotes/LA-14018-M.pdf
 
 \section{Results from Training all Models}
 
@@ -28,17 +37,6 @@ Show how accuracy changes when using
     \item 
 \end{itemize}
 
-\section{Results from Changing Energy Windows}
-
-The energy windows that are important for uranium enrichment measurements are below 300 keV. Because of this, we can adjust our algorithm to use only these energy windows (Explain why the FWHM of these peaks are fine to use). The downside of this is we're not looking at the 1460 keV or 2614 keV background peaks for calibration. Will the background subtracting autoencoder deal with this? Will it's performance decrease? Can the autoencoder still subtract background in a useful way?
-
-Show how accuracy changes when using
-\begin{itemize}
-    \item Full spectrum
-    \subitem CNN, DNN, BS-DAE, BS-CAE, V-DAE, BS-CAE
-    \item Reduced ROI
-    \subitem CNN, DNN, BS-DAE, BS-CAE, V-DAE, BS-CAE
-\end{itemize}
 
 
 
