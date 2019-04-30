@@ -2,9 +2,34 @@
 
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5554294/
 
-Verifying the enrichment of HEU through passive nondestructive analysis is an important treaty verification and homeland security task. Measuring the enrichment of uranium is made difficult by the fact that it's characteristic gamma-rays are easily shielded. This task is made more difficult for treaty verification by the restriction placed on inspectors. IAEA inspectors face two major restrictions: a limited amount of time to measure data from declared items and the inability to look at a gamma-ray spectrum from some material. 
+% Although mass spectrometry leads to very accurate analytical results, it has the drawbacks of high costs of the device and its operation involving a long process and destructive sample analysis [1], [2]. https://www.sciencedirect.com/science/article/pii/S1738573317308057#bib1
+
+Verifying the enrichment of HEU through passive nondestructive analysis is an important treaty verification and homeland security task. Nondestructive analysis is preferred to preserve forensics evidence. 
+
+Measuring the enrichment of uranium is made difficult by the fact that it's characteristic gamma-rays are easily shielded. This task is made more difficult for treaty verification by the restriction placed on inspectors. IAEA inspectors face two major restrictions: a limited amount of time to measure data from declared items and the inability to look at a gamma-ray spectrum from some material. 
+
+The traditional method for using NaI detectors to measure uranium enrichment is the enrichment meter method \cite{Reilly1970}. This method exploits the proportionality between the activity of the 186 keV photon and the enrichment of $^{235}$U. This method requires a 
+
+"Generally, low resolution measurements of 'clean' uranium can be made to 1\% precision over nearly the entire range of uranium enrichment. Measurements in both Europe and the Former Soviet Union have observed bias effects of 5-10\% in low-resolution measurements caused by minor isotopes of uranium. This level of bias has been deemed unacceptable, causing some inspectors to resort to more expensive, time-consuming alternatives like mass spectrometry or liquid-nitrogen-cooler high-resolution detectors. As the international safeguards community attempts to inspect more facilities with less resources, these alternatives become highly undesirable. The minor isotopes come from the use of uranium recycled from reactors being used as feed in the enrichment plants. Daughters of $^{232}$U or $^{236}$U include the thorium decay chain which emits a 238.6-keV gamma ray from $^{212}$Pb. This gamma ray falls in the ROI used to estimate the Compton continuum under the 186-keV gamma ray. In addition, the multitude of high-energy gamma rays from the daughters of $^{232}$U change the shape of the Compton continuum that lies under the desired 186-keV peak. Just to make the entire issue more challenging, the level of this interference varies widely among the samples generally offered to the inspector, causing unpredictable, wide variations in the bias effects" \cite{SPRINKLE1997}
+
+
+
+Accuracies of +/- 10\% are expected for quick checks of high enriched material while accuracies of +/- 1\% are expected to verify mass spectroscopy measurments \cite{Kull1974}.
+
+% Need to address sample wall effect
+
+NaIGEM code to \cite{MORTREAU2004} 
+
 
 Changes in background in the facility may 
+
+
+
+
+\begin{equation} \label{eq:uenrichment}
+softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)}.
+\end{equation}
+
 
 
 
@@ -25,6 +50,23 @@ We used the F8 tally to calculate the absolute full energy peak efficiency of ea
 \section{Results from Training all Models}
 
 % Is it necessary to re-run the hyperparameter search, or are the 'simple' models good enough?
+
+The reported Rocky Flats shells isotopics are shown in Table \ref{table:rockyflats_isotopics}. Recent work has found estimated that impurities of $^{232}$U, mass fraction 6.0E-9\%, and $^{237}$Np, mass fraction 1.8E-4\%, \cite{RawoolSullivan2012} existed in the shells in 1971 (the year the shells were fabricated).
+
+\begin{table}[H]
+\centering
+\caption{Rocky Flats Isotopics \cite{Rothe1997}.}
+\label{table:rockyflats_isotopics}
+\begin{tabular}{|c|c|}
+\hline
+Uranium Isotope & \begin{tabular}[c]{@{}c@{}}Weight Percentage\\ (1965)\end{tabular} \\ \hline
+$^{233}$U & - \\ \hline
+$^{234}$U & 1.00 \\ \hline
+$^{235}$U & 93.19 \\ \hline
+$^{236}$U & 0.4 \\ \hline
+$^{238}$U & 5.41 \\ \hline
+\end{tabular}
+\end{table}
 
 Asymptotic models are 
 
