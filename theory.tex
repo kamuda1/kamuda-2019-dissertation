@@ -4,6 +4,8 @@
 
 In this section, the physics responsible for the features in gamma-ray spectra are described. Also described are factors that complicate gamma-ray spectroscopy, including changing background radiation fields and temperature effects on detector calibration.
 
+% https://sites.fas.harvard.edu/~phys191r/Bench_Notes/B1/NAI_catalog.pdf page 20 has efficiency uncertainty information
+
 \subsection{Energy Deposition Mechanisms}
 
 When a photon interacts with some radiation detection medium, it deposits some or all of it's energy into the material. There are three main methods of interaction: the photoelectric effect, Compton scattering, and pair production. These effects are energy dependent, as seen in Figure \ref{fig:energy_dependence_interactions}.
@@ -30,7 +32,7 @@ Compton scattering and absorption is the interaction of a gamma-ray photon with 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\linewidth]{images/compton_scatter}
+\includegraphics[width=0.7\linewidth]{images/compton_scatter}
 \caption{Diagram of a Compton scattering event \cite{knoll}.}
 \label{fig:compton_scatter}
 \end{figure}
@@ -41,12 +43,12 @@ The energy of a photon scattered off a free electron
 E' = \frac{E}{1 + \frac{E}{m_{0} c^2} (1-cos\theta)}
 \end{equation}
 
-depends on the scattering angle, $\theta$, and the incident photon's energy, E. In equation \ref{eq:compton_scatter} m$_{0}$c$^{2}$ is the rest mass of the electron. A photon scattering at an angle of 180$^{o}$ deposits it's maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies also seen in Figure \ref{fig:ideal_compton}. Accounting for the binding energy of electrons in a medium produces a Compton continuum closer to the dotted line in Figure \ref{fig:ideal_compton}.
+depends on the scattering angle, $\theta$, the incident photon's energy, E, and the rest mass of the electron, m$_{0}$c$^{2}$. A photon scattering at an angle of 180$^{o}$ deposits it's maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed at 180$^{o}$, as seen in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies known as the Compton continuum. Accounting for the binding energy of electrons in a medium produces a Compton continuum closer to the dotted line in Figure \ref{fig:ideal_compton}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\linewidth]{images/ideal_compton}
-\caption{Diagram of an idealized Compton scattering event \cite{gilmore}.}
+\caption{Diagram of energy absorbed in an idealized Compton scattering event \cite{gilmore}.}
 \label{fig:ideal_compton}
 \end{figure}
 
@@ -54,7 +56,7 @@ depends on the scattering angle, $\theta$, and the incident photon's energy, E. 
 
 \subsubsection{Pair Production}
 
-When a photon with energy above 1022 keV interacts with the coulomb field of a nucleus, there is a probability that the photon will disappear and be replaced by an electron-positron pair. The positron will then annihilate with an electron in the medium, creating two 511 keV photons. This process is illustrated in Figure \ref{fig:pair_production}. Because one or both of these annihilation photons can escape the detector, they can produce single or double escape peaks in a gamma-ray spectrum. As seen in Figure \ref{fig:pair_production_spectra}, single escape peaks occur at 511 keV below the full-energy peak and double escape peaks occur at 1022 keV below this peak. These 511 keV photons may also be measured by the detector, producing an annihilation radiation signal in the spectrum.
+When a photon with energy above 1022 keV interacts with the coulomb field of a nucleus, there is a probability that the photon will disappear and be replaced by an electron-positron pair. The positron will then annihilate with an electron in the medium, creating two 511 keV photons. This process is illustrated in Figure \ref{fig:pair_production}. Depending if one or both of these annihilation photons escape the detector, they produce single or double escape peaks in a gamma-ray spectrum. As seen in Figure \ref{fig:pair_production_spectra}, single escape peaks occur at 511 keV below the full-energy peak and double escape peaks occur at 1022 keV below this peak. These 511 keV photons may also be measured by the detector, producing an annihilation radiation signal in the spectrum.
 
 \begin{figure}[H]
 \centering
@@ -73,7 +75,7 @@ When a photon with energy above 1022 keV interacts with the coulomb field of a n
 
 \subsection{Energy Resolution}
 
-The energy resolution of a radiation detector describes how broad a photopeak is in a detector's spectrum. The resolution is based on the full width of the Gaussian at half of it's maximum value (FWHM). The FWHM is measured either in units of energy or as a percent of the peaks energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. In addition to this, the variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as the standard of comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are seen in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum from scintillation and semiconductor detectors. 
+The energy resolution of a radiation detector describes how broad a photopeak is in a spectrum. The resolution is based on the full width of the Gaussian at half of it's maximum value (FWHM). The FWHM is measured either in units of energy or as a percent of the peaks energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. The variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as a standard for comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors compared seen in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum from scintillation and semiconductor detectors. 
 
 % pg 345 knoll
 
@@ -104,7 +106,10 @@ gamma-ray detector types (reproduced from \cite{RIIDMarketSurveyReport}).}
 
 \subsection{Background Radiation}
 
-A significant challenge to automated gamma-ray spectroscopy is the stochastic nature of the background radiation field. Background radiation comes from radioisotopes naturally distributed in the soil and cosmic radiation. Isotopes in the soil come from the uranium decay series, thorium  decay series, and $^{40}$K. The gamma-ray spectra from each of these sources are shown in Figure \ref{fig:background_components}. 
+% In contrast, it is extremely difficult to measure a trustworthy background spectrum in the field. Moving or reorienting the detector to obtain a source7free background measurement will frequently produce a measurement that will likely differ significantly, and sometimes even exceeding, the true background at the source position. It is not at all unusual for environmental background to vary significantly over distances of a few meters. As a result, we typically confine our analyses to the foreground spectrum, as generally reflected in this paper. https://e-reports-ext.llnl.gov/pdf/770028.pdf
+
+
+A significant challenge to automated gamma-ray spectroscopy is the stochastic nature of the background radiation field. Background radiation comes from cosmic radiation and radioisotopes naturally distributed in soil and building materials. Isotopes in the soil come from the uranium decay series, thorium  decay series, and $^{40}$K. The gamma-ray spectra from each of these sources are shown in Figure \ref{fig:background_components}. 
 
 \begin{figure}[H]
 \centering
@@ -113,7 +118,7 @@ A significant challenge to automated gamma-ray spectroscopy is the stochastic na
 \label{fig:background_components}
 \end{figure}
 
-These radiation components can change both spatially and temporally. Background radiation isotopes change geologically, (Figures \ref{fig:USGS_u_conc}, \ref{fig:USGS_th_conc}, and \ref{fig:USGS_k_conc}) creating different background radiation patterns in different parts of the country. Local changes in soil composition may also be significant enough to be observed in gamma-ray spectra. Because common building materials like concrete and granite contain radioactive elements, the proximity to structures can cause local variations in background. 
+These radiation components can change both spatially and temporally. Background radiation isotope concentrations change geologically, (Figures \ref{fig:USGS_u_conc}, \ref{fig:USGS_th_conc}, and \ref{fig:USGS_k_conc}) creating different background radiation patterns in different parts of the country. Local changes in soil composition and building materials also are significant enough to change background. Because common building materials like concrete and granite contain radioactive elements, the proximity to these structures cause local variations in background. 
 
 Background also changes over time. This change is largely due to the decay products of $^{222}$Rn gas generated by uranium decay in soil \cite{knoll}. Rain can also increase the level of background radiation by releasing trapped radon gas and other radioactive sources in the soil.
 
@@ -147,9 +152,11 @@ Background also changes over time. This change is largely due to the decay produ
 
 \subsection{Affect of Temperature on Calibration and Resolution}
 
-The calibration of a NaI(Tl) detector can be changed due to drifts in electronics, such as the dynode, and drifts in temperature of the crystal. This is due to changes in the dominance of different scintillation light decay processes \cite{IANAKIEV2009432} and decay time constants \cite{MOSZYNSKI2006739} with changing temperature. These physical changes lead to appreciable changes in relative photopeak position, shown in Figure \ref{fig:CASANOVAS2012588}, and detector resolution, shown in Figure \ref{fig:temp-dependence-resolution-moszynski}.
+% https://www.pnnl.gov/main/publications/external/technical_reports/pnnl-14735.pdf
 
-Automated gain stabilization methods exist, many requiring a clear photopeak in the spectrum to calibrate from. This can be achieved by measuring long enough to identify a background photopeak, attaching an external radioactive source to the detector, or by adding a reference light source. Measurement times long enough to identify a background photopeak may be infeasible for certain applications or the calibration step ignored altogether as a part of typical operation. Adding an external source of radiation adds unnecessary noise to the spectrum and additional light sources may malfunction. For these reasons, software-based automated gain stabilization techniques should be used to overcome this issue.
+The calibration of a NaI(Tl) detector can be changed due to drifts in electronics, such as the dynode, and drifts in temperature of the crystal. Calibration drift has been identified as a key factor in the poor performance of RIIDs \cite{blackadar2003}. The dominance of different NaI(Tl) scintillation light decay processes \cite{IANAKIEV2009432} and decay time constants of these processes\cite{MOSZYNSKI2006739} are sensitive to temperature. These factors lead to appreciable changes in relative photopeak position with temperature, shown in Figure \ref{fig:CASANOVAS2012588}, and detector resolution, shown in Figure \ref{fig:temp-dependence-resolution-moszynski}. 
+
+While automated gain stabilization methods exist, many requiring a clear photopeak in the spectrum to calibrate from. This can be achieved by measuring long enough to identify a background photopeak, attaching an external radioactive source to the detector, or by adding a reference light source. Measurement times long enough to identify a background photopeak may be infeasible for certain applications or the calibration step ignored altogether as a part of typical operation. Adding an external source of radiation adds additional noise to the spectrum and additional light sources may malfunction. For these reasons, software-based automated gain stabilization techniques should be used to overcome this issue.
 
 \begin{figure}[H]
 \centering
@@ -169,9 +176,9 @@ Automated gain stabilization methods exist, many requiring a clear photopeak in 
 
 \section{Machine Learning}
 
-In this section, neural network architectures and parameters that effect training will be described. Neural network architectures will include DNN, CNN, and the autoencoder. 
+In this section, neural network architectures and parameters that effect training will be described. Models will include dense, convolutional, and autoencoder architectures. 
 
-\subsection{Neural Network Architecture}
+\subsection{General Neural Network Architecture}
 
 % Node/neruon, get this lingo straight here
 An ANN is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}^M$ to $\mathbb{R}^N$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in hidden layer B, and K neurons in output layer C. Each neuron in adjacent layers are connected by weights, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
@@ -359,11 +366,12 @@ and
 %
 Using Equations \ref{eq:update1} and \ref{eq:update2}, the weights can be updated for a single iteration of backpropogation. 
 
-ANNs require some stopping condition to conclude training. One simple stopping condition is ending training when a threshold in network accuracy on a testing set is reached. Other early stopping methods include 
+% Other early stopping methods include 
+
 
 % Where this simple accuracy test is not applicable, such as for regression training sets, a condition based on the ANN training error metric can be used.
 
-Early stopping has the benefit of preventing overfitting and encouraging generalization. Early stopping works by removing a small portion of the training data and defining it as testing data. The ANN is trained using the new training data while some error metric for both the training and testing set are recorded. As training progresses, the ANN likely will overfit to the training data, leading to an increase in error for the testing dataset. Early stopping ends training before overfitting occurs, as illustrated in Figure \ref{fig:training_testing_error}. Because training is stopped before the error in a dataset unknown to the model increases, generalization, or the ability for the ANN to correctly identify patterns outside of the training set, is also improved.
+ANNs require some stopping condition to conclude training. Stopping conditions include ending training when a threshold in network accuracy on a testing set is reached and ending training when the accuracy has not improved (either by some factor or absolutely) in a fixed number of epochs. Early stopping has the benefit of preventing overfitting and encouraging generalization. Early stopping works by removing a small portion of the training data and defining it as testing data. The ANN is trained using the new training data while some error metric for both the training and testing set are recorded. As training progresses, the ANN likely will overfit to the training data, leading to an increase in error for the testing dataset. Early stopping ends training before overfitting occurs, as illustrated in Figure \ref{fig:training_testing_error}. Because training is stopped before the error in a dataset unknown to the model increases, generalization, or the ability for the ANN to correctly identify patterns outside of the training set, is also improved.
 
 \begin{figure}[H]
 	\centering
@@ -394,24 +402,17 @@ One of the first CNN architectures was LeNet-5 \cite{Lecun1998}. LeNet-5, shown 
 \section{Autoencoders} \label{Autoencoders}
 % \cite{CHARTE2018} is a practical guide to autoencoders. Great resource.
 
-Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an encoding network and a decoding network. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and outputs a reproduction of the input signal, $X'$. 
+Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an encoding network and a decoding network. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and outputs a reproduction of the input signal, $X'$. Once trained, the encoder can be used as a method to pre-train other neural networks or as a feature extractor \cite{CHARTE2018}. 
 
 Methods to encourage the network to learn useful features include forcing the autoencoder to perform denoising \cite{Vincent2008, Vincent2010} and using an undercomplete representation as the encoding layer. Denoising autoencoders corrupt their input with noise, making the autoencoder learn more robust features than those used for simply copying the input. 
 
-
-Once trained, the encoder can be used as a method to pre-train other neural networks or as a feature extractor \cite{CHARTE2018}. 
-
-\cite{Masci2011} demonstrated that stacking convolution layers made a good autoencoder.
+% \cite{Masci2011} demonstrated that stacking convolution layers made a good autoencoder.
 
 Other feature extraction methods exist. Principal component analysis (PCA) attempts to reduce the dimensionality of a dataset into linearly uncorrelated variables \cite{Jolliffe2002}. Using a few of these principle components, the data may be represented in a reduced space that contains most of the information present in the original data. Another linear feature extraction method is called linear discriminant analysis (LDA). LDA is a supervised feature extraction method that finds linear combinations of features that can be used to separate classes. Non-linear feature extraction methods, such as kernel PCA, also exist. Kernel PCA applies a non-linear transform to the input space and applies PCA to the data in this transformed space. For kernel PCA to perform well, the correct kernel must be chosen for a given problem, which is a non-trivial task.
-
-
 
 % While autoencoders were touched on in the uranium enrichment work, they have not been explored thoroughly. There is some evidence that the autoencoder was overtrained to the A special case of denoising autoencoders will be explored for the ANSI dataset. 
 
 
-
-Without an autoencoder, a single ANN has to learn multiple tasks to identify isotopes. An ANN would have to simultaneously identify the detector calibration, background signal, and possible source signal. By training an autoencoder to reconstruct a background-subtracted and correctly calibrated spectrum, the task of isotope identification is simplified for the ANN. This may result in more accurate identifications. To test this, for each dataset a single autoencoder and three ANNs will be trained. The first will be trained without an autoencoder. The second will be trained using the encoder as input. The third will be trained using the full autoencoder as input. A random hyperparameter search will be used to find an appropriately structured autoencoder. The testing and validation error for these ANNs will be compared for each respective dataset.
 
 % In addition to using fully connected autoencoders, a 1-D convolutional autoencoder will also be explored. A DNN does not assume the input has local spatial structure, while a CNN does. Because gamma-ray spectra have local spatial structure in the form of photopeaks and Compton continua, it may be better to use a CNN over a DNN \cite{CHARTE2018}. To test this, the experiment described above will be repeated using a 1-D convolutional autoencoder.
 
