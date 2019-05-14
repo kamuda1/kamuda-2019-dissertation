@@ -6,100 +6,61 @@
 
 % Compare how well we identify isotopes with different calibration sampling granularity 
 
+% https://e-reports-ext.llnl.gov/pdf/312592.pdf holy shit they show common false positive isotopes and we see a lot of overlap
+
+
 
 \section{Problem Description and Training Dataset Overview}
 
 This chapter applies machine learning algorithms to solve the problem of a identifying a radioactive source in an urban environment where a source may be present. This scenario is applicable when performing source interdiction searching cargo containers, vehicles at boarder crossings, or security at high profile events. Urban environments present unique challenges to gamma-ray spectroscopy. Background radiation can change over city blocks due to different concentrations of uranium and thorium in building materials. Sources may be purposely shielded by unknown amounts of material to obscure their gamma-ray signal.
 
 
-\subsection{Training Dataset Overview}
-
-The datasets used to train the models are composed of noiseless simulated gamma-ray templates. A one-dimension particle transport code developed at Sandia National Laboratory, GADRAS-DRF, was used to generate these templates. This simulation code can be used to model the conditions that effect spectra. The parameters used in this study are different detector materials, detector size, environmental scattering factors, shielding, and background as a function of location. GADRAS-DRF includes an option to create spectra without the Poisson noise expected for a spectrum. Using this, noiseless templates were generated.
 
 
 
-\begin{table}[H]
-\centering
-\begin{tabular}{|c|c|}
-\hline
-Parameter & Values \\ \hline
-\begin{tabular}[c]{@{}c@{}}source-detector height \\ off ground {[}cm{]}\end{tabular} & 50.0, 75.0, 100.0, 125.0, 150.0 \\ \hline
-\begin{tabular}[c]{@{}c@{}}source-detector\\ distance {[}cm{]}\end{tabular} & \multicolumn{1}{l|}{50.0, 112.5, 175.0, 237.5, 300.0} \\ \hline
-\begin{tabular}[c]{@{}c@{}}Arial density of \\ solid aluminum {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.82, 4.18, 7.49, 13.16 \\ \hline
-\begin{tabular}[c]{@{}c@{}}Arial density of\\  solid iron {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.53, 3.5, 6.28, 11.02 \\ \hline
-\begin{tabular}[c]{@{}c@{}}Arial density of \\ solid lead {[}g/cm\textasciicircum{}2{]}\end{tabular} & 0.22, 0.51, 0.92, 1.61 \\ \hline
-\begin{tabular}[c]{@{}c@{}}FWHM at\\  662 keV {[}channels{]}\end{tabular} & \multicolumn{1}{l|}{6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0} \\ \hline
-\end{tabular}
-\caption{Fixed GADRAS-DRF simulation parameters.}
-\label{table:simulation_parameters}
-\end{table}
+\section{Online Data Augmentation Method}
 
-\begin{table}[H]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-Parameter & Values & Sampling \\ \hline
-integration time & 60 - 600 & uniform \\ \hline
-background counts per second & 200 & Poisson \\ \hline
-Signal to Background ratio & 0.5 - 2 & uniform \\ \hline
-0th order calibration & 0,10 & uniform \\ \hline
-1st order calibration & 0.83 - 1.16 & uniform \\ \hline
-2nd order calibration & 0 - 0 & uniform \\ \hline
-\end{tabular}
-\caption{Default data augmentation parameters.}
-\label{table:simulation_parameters}
-\end{table}
+Because simulating a dataset with sufficient combinations of available data augmentation - seen in Tables \ref{table:all_fixed_simulation_parameters} and \ref{table:all_variable_simulation_parameters} - online data augmentation techniques are employed. Online data augmentation has the benefit of implicitly regularizing the models.
 
-Spectra change due to changes in measurement geometry. These changes include source-to-detector distance and the distance of both the detector and source from objects in an environment. To demonstrate this effect, $^{60}$Co spectra were simulated, Figure \ref{fig:sim_spectra_distance_comparison}, with different source-to-detector distances.
+Steps in the data augmentation process are:
+\begin{enumerate}
+  \item Randomly choose a background template with the same FWHM as the source template
+  \item Rebin source and background template with a random calibration
+  \item Apply the LLD to both templates
+  \item Normalize both templates by the sum of their respective counts 
+  \item Scale both signals by their respective total counts
+  \begin{itemize}
+     \item Counts defined by randomly chosen background counts per second, integration time, and signal to background ratio
+   \end{itemize}
+  \item Add both signals 
+  \item Poisson sample the resulting signal
+\end{enumerate}
 
-$^{60}$Co spectra were also simulated at different distances from the ground, shown in Figure \ref{fig:sim_spectra_height_comparison}.
 
+\section{Learning Curve Comparison for Fixed-size Datasets and Online Data Augmentation Datasets}
+
+In this section we use learning curves to quantify how well the online data augmentation improved testing error. Learning curves are [definition, explanation]. Learning curves are used to determine a few things. We will use them to do [the following].
+
+First, They are used as a sanity check, to make sure we are sampling our input space with enough granularity. To know we are sampling well enough, we should be sampling in a region where the curves are flat for both algorithms.
+
+Secondly, Learning curves give us insight into which algorithm works better on the hyperparameter optimization dataset and simple version of the problem. We're expecting the CNN to outperform the DNN due to theoretical benefits of convolution architectures for our problem. We can also compare this curve to the final learning curves for the final datasets.
 
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.95\linewidth]{images/sim_spectra_distance_comparison}
-\caption{Comparison of a $^{60}$Co spectrum simulated at various source-detector distances.}
-\label{fig:sim_spectra_distance_comparison}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.95\linewidth]{images/sim_spectra_height_comparison}
-\caption{Comparison of a $^{60}$Co spectrum simulated at various source-detector heights off the ground.}
-\label{fig:sim_spectra_height_comparison}
+	\centering
+	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/learning_curve_dummy}
+	\caption{Learning curves from the best DNN with best performance from online data augmentation. Shown: learning curve example.}
+	\label{fig:learning_curves}
 \end{figure}
 
 
 
-To incorporate these changes, templates simulated at different distances are included in the dataset. These distances start at 30cm, which is the distance at which a 1 uCi source will have an activity of about 400 cps on a 2 inch diameter detector. This is about twice the expected activity of background. 
-
-Changes in calibration due to temperature shifts are also considered. Due to the relatively large magnitude in calibration shifts due to temperature shifts from -5 C to 40 C, it is expected incorporating these additions will also make the algorithm robust against calibration. If a As seen in \ref{fig:CASANOVAS2012588}, 
-
-
-Spectra are also simulated with different FWHM parameters.
-
-
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.95\linewidth]{images/sim_spectra_FWHM_comparison}
-\caption{Comparison of a $^{60}$Co spectrum simulated with various FWHM parameters.}
-\label{fig:sim_spectra_FWHM_comparison}
+	\centering
+	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/learning_curve_dummy}
+	\caption{Learning curves from the best CNN with best performance from online data augmentation. Shown: learning curve example.}
+	\label{fig:learning_curves}
 \end{figure}
-
-
-\section{Data Augmentation Used}
-
-Several data augmentation techniques are employed when training the 
-
-
-
-\section{Training the Dense and Convolution Autoencoder}
-
-The DAE and CAE are trained to act as feature extractors. There are a number of ways to construct the input and output for a spectral autoencoder. 
-
-
-
 
 
 \section{Generalization Performance Evaluation}
@@ -108,41 +69,99 @@ In this section we analyze the generalization performance of each network on var
 
 A default dataset will be modified. The default dataset will be  correspond to unshielded templates. 
 
-\subsection{Generalization Performance on Default Dataset}
+\subsection{Generalization Performance on Source-Detector Distance and Height Off Ground}
+
+In this section we analyze the generalization performance of each network on changes in source-detector distance and height. This tests if each model is sensitive to changes in the Compton continuum due to environmental scattering. Good performance in these simulated data may indicate better performance in real data.
+
+To test generalization performance, datasets are simulated with unshieled spectral templates with a FWHM of 7.5. 
 
 
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Simple Dataset.}
+         \label{fig:results_easy_distance_comparison_simple}
+     \end{subfigure}
 
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Full Dataset.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various source-detector distance.}
+        \label{fig:results_easy_distance_comparison}
+\end{figure}
 
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Simple Dataset.}
+         \label{fig:results_easy_distance_comparison_simple}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Full Dataset.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various source-detector heights.}
+        \label{fig:results_easy_distance_comparison}
+\end{figure}
 
 
 
 \subsection{Generalization Dependence on Full-Width-at-Half-Max}
 
-A dataset was constructed with default network 
-
-
-
-\subsection{Model performance on the easy dataset}
-
+Datasets were constructed with various Gaussian energy broadening function. This is to 
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.9\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_dummy}
-	\caption{Model performance on the easy dataset. }
-	\label{fig:asymptotic_performance}
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Simple Dataset.}
+         \label{fig:results_easy_distance_comparison_simple}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Full Dataset.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various Gaussian energy broadening functions.}
+        \label{fig:results_easy_distance_comparison}
 \end{figure}
 
 
+\subsection{Generalization Dependence on Shielding.}
 
+Datasets were constructed with and without shielding. 
 
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Simple Dataset.}
+         \label{fig:results_easy_distance_comparison_simple}
+     \end{subfigure}
 
-
-
-
-
-
-
-
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Full Dataset.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various amounts of shielding.}
+        \label{fig:results_easy_distance_comparison}
+\end{figure}
 
 
 
@@ -269,14 +288,3 @@ Figures \ref{fig:model_asymptotic_performance_eu152} and \ref{fig:model_asymptot
 \end{figure}
 
 
-
-\subsubsection{Spectra with a Single Isotope}
-
-
-
-
-\subsubsection{Spectra with a Isotope Mixtures}
-
-% Super crazy, check out effect of changing ID threshold on F1 score for these data. Or, using optimum threshold found before, check out 
-
-The ANNs ability to identify mixtures of less than three isotopes will be addressed. Mixtures of $^{60}$Co, $^{137}$Cs, $^{152}$Eu, and $^{133}$Ba will be recorded. The mean ANN outputs and their variances will be reported.
