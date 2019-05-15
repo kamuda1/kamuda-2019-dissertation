@@ -65,7 +65,9 @@ Secondly, Learning curves give us insight into which algorithm works better on t
 
 \section{Generalization Performance Evaluation}
 
-In this section we analyze the generalization performance of each network on various datasets. 
+In this section we analyze the generalization performance of each network on various datasets. To quantify performance on a range of spectra qualities, the F1-scores are shown over integration time and for different signal to background ratios. When the error between models differs significantly or is particularly large, confusion matrices are included to show what isotopes are problematic.
+
+Could also change the underlying distribution away from the training set by simulating a new template dataset with a different clutter parameter.
 
 A default dataset will be modified. The default dataset will be  correspond to unshielded templates. 
 
@@ -142,7 +144,7 @@ Datasets were constructed with various Gaussian energy broadening function. This
 
 \subsection{Generalization Dependence on Shielding.}
 
-Datasets were constructed with and without shielding. 
+Datasets were simulated with and without shielding. 
 
 \begin{figure}[H]
      \centering
@@ -164,7 +166,132 @@ Datasets were constructed with and without shielding.
 \end{figure}
 
 
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.8\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
+         \caption{Simple Training Dataset.}
+         \label{fig:results_easy_distance_comparison_simple}
+     \end{subfigure}
 
+     \begin{subfigure}[b]{0.8\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
+         \caption{Full Training Dataset.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+        \caption{Confusion matrices for the dataset with 60\% shielding.}
+        \label{fig:results_easy_distance_comparison}
+\end{figure}
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
+         \caption{Simple Training Dataset.}
+         \label{fig:results_easy_distance_comparison_simple}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
+         \caption{Full Training Dataset.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+     
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
+         \caption{Simple Training Dataset.}
+         \label{fig:results_easy_distance_comparison_simple}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
+         \caption{Full Training Dataset.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+     
+        \caption{Confusion matrices for the dataset with 60\% shielding.}
+        \label{fig:results_easy_distance_comparison}
+\end{figure}
+
+
+
+\subsection{Generalization Dependence on Calibration.}
+
+Datasets were simulated with various gain and offset setting.
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Simple Dataset.}
+         \label{fig:results_easy_distance_comparison_simple}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Full Dataset.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various gain and offset settings.}
+        \label{fig:results_easy_distance_comparison}
+\end{figure}
+
+
+
+\subsection{Generalization Dependence on Changing Background.}
+
+Datasets were simulated with backgrounds different from the training set and real measured background. It is expected that the full dataset will mistake background for isotopes more often than the simple dataset because photopeaks are decreased by shielding.
+
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Simple Dataset.}
+         \label{fig:fig:results_easy_background_simulated_simple}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Full Dataset.}
+         \label{fig:fig:results_easy_background_simulated_full}
+     \end{subfigure}
+        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various amounts of shielding.}
+        \label{fig:results_easy_background_simulated}
+\end{figure}
+
+
+
+Figure \ref{fig:results_full_background_inject} shows the identification performance on 
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Simple Dataset.}
+         \label{fig:results_full_background_inject_simple}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Full Dataset.}
+         \label{fig:results_full_background_inject_full}
+     \end{subfigure}
+        \caption{F1 score for all models trained on the full dataset. Datasets included here used various amounts of shielding.}
+        \label{fig:results_full_background_inject}
+\end{figure}
 
 
 % \section{Results from training all models}
@@ -221,16 +348,44 @@ Datasets were constructed with and without shielding.
 This section shows model asymptotic performance vs integration time for ANSI compliance. Using N models (justified previously as asymptotic). 
 
 
-% List Represents table of 
-\begin{itemize}
-  \item $^{137}$Cs + depleted uranium (DU)
-  \item $^{99m}$Tc + HEU
-  \item $^{201}$Tl + HEU
-  \item $^{67}$Ga + HEU
-  \item $^{131}$I + WGPu
-  \item Naturally occurring radioactive material (NORM) + HEU
-  \item NORM + WGPu
-\end{itemize}
+
+\begin{table}[H]
+\centering
+\caption{Isotope combinations required for the ANSI standard \cite{ANSI}.}
+\begin{tabular}{c}
+\hline
+$^{137}$Cs + depleted uranium (DU) \\ \hline
+$^{99m}$Tc + HEU \\ \hline
+$^{201}$Tl + HEU \\ \hline
+$^{67}$Ga + HEU \\ \hline
+$^{131}$I + WGPu \\ \hline
+NORM + HEU \\ \hline
+NORM + WGPu \\ \hline
+\end{tabular}
+\end{table}
+
+
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Simple Dataset.}
+         \label{fig:results_full_background_inject_simple}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Full Dataset.}
+         \label{fig:results_full_background_inject_full}
+     \end{subfigure}
+
+        \caption{F1 score for models tested on ANSI isotope combinations.}
+        \label{fig:results_full_background_inject}
+\end{figure}
+
 
 
 \subsection{Results on Measured Spectra}
@@ -248,43 +403,74 @@ Spectra were measured with different detector calibrations. A 2x2 Ortec NaI dete
 
 Figures \ref{fig:model_asymptotic_performance_co60} and \ref{fig:model_asymptotic_performance_cs137} show performance for isotopes with comparatively simple spectra.
 
+
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.75\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_time}
-	\caption{Asymptotic model performance for both the CNN and DNN on voltage vs integration time for $^{60}$Co.}
-	\label{fig:model_asymptotic_performance_co60}
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{$^{60}$Co}
+         \label{fig:model_asymptotic_performance_co60}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{$^{137}$Cs.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+     
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{$^{152}$Eu.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+     
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{$^{133}$Ba.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+
+        \caption{F1 score for all models trained on the simple dataset. Spectra measured with different gain settings.}
+        \label{fig:results_easy_distance_comparison}
 \end{figure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.75\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_time}
-	\caption{Asymptotic model performance for both the CNN and DNN on voltage vs integration time for $^{137}$Cs.}
-	\label{fig:model_asymptotic_performance_cs137}
-\end{figure}
-
-Figures \ref{fig:model_asymptotic_performance_eu152} and \ref{fig:model_asymptotic_performance_ba133} show performance for isotopes with comparatively complicated spectra.
 
 \begin{figure}[H]
-	\centering
-	\includegraphics[width=0.75\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_time}
-	\caption{Asymptotic model performance for both the CNN and DNN on voltage vs integration time for $^{152}$Eu.}
-	\label{fig:model_asymptotic_performance_eu152}
-\end{figure}
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{$^{60}$Co}
+         \label{fig:model_asymptotic_performance_co60}
+     \end{subfigure}
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.75\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_time}
-	\caption{Asymptotic model performance for both the CNN and DNN on voltage vs integration time for $^{133}$Ba.}
-	\label{fig:model_asymptotic_performance_ba133}
-\end{figure}
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{$^{137}$Cs.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+     
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{$^{152}$Eu.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
+     
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{$^{133}$Ba.}
+         \label{fig:results_easy_distance_comparison_full}
+     \end{subfigure}
 
-\subsubsection{Asymptotic Model Performance on Changing Shielding}
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.75\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_time}
-	\caption{Asymptotic model performance for both the CNN and DNN on shielding vs integration time.}
-	\label{fig:asymptotic_performance}
+        \caption{F1 score for all models trained on the full dataset. Spectra measured with different gain settings.}
+        \label{fig:results_easy_distance_comparison}
 \end{figure}
 
 
