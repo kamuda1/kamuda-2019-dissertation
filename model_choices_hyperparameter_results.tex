@@ -88,7 +88,7 @@ To show generalization improvements from including more physical parameters in t
 
 \begin{table}[H]
 \centering
-\caption{Range of parameters used for the first hyperparameter search dataset.}
+\caption{Range of parameters used for the simple dataset.}
 \label{table:hyperparameter_dataset_easy_parameters}
 \begin{tabular}{c|c|c|}
 \cline{2-3}
@@ -106,7 +106,7 @@ To show generalization improvements from including more physical parameters in t
 
 \begin{table}[H]
 \centering
-\caption{Range of parameters used for the second hyperparameter search dataset.}
+\caption{Range of parameters used for the full dataset.}
 \label{table:hyperparameter_dataset_full_parameters}
 \begin{tabular}{c|c|c|}
 \cline{2-3}
@@ -311,7 +311,7 @@ Figure \ref{fig:cnn_hyperparameters_f1_score} shows the distribution of random h
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/cnn_pooling_size_dummy.png}
-         \caption{Total Dense Layers}
+         \caption{CNN Pooling Size}
          \label{fig:cnn_dense_layers_learning}
      \end{subfigure}
 
@@ -357,27 +357,85 @@ Without an autoencoder, a single ANN has to learn multiple tasks to identify iso
 
 To test this, for each dataset a single autoencoder and three ANNs will be trained. The first will be trained without an autoencoder. The second will be trained using the encoder as input. A random hyperparameter search will be used to find an appropriately structured autoencoder. The testing and validation error for these ANNs will be compared for each respective dataset.
 
+\subsection{Autoencoder Structure Hyperparameter Search}
 
-\section{Summary of Final Model Architectures}
-
-Learning curves are [definition, explanation]. Learning curves are used to determine a few things. We will use them to do [the following].
-
-First, They are used as a sanity check, to make sure we are sampling our input space with enough granularity. To know we are sampling well enough, we should be sampling in a region where the curves are flat for both algorithms.
-
-Secondly, Learning curves give us insight into which algorithm works better on the hyperparameter optimization dataset and simple version of the problem. We're expecting the CNN to outperform the DNN due to theoretical benefits of convolution architectures for our problem. We can also compare this curve to the final learning curves for the final datasets.
+This section will explain the hyperparameter structures searched. The autoencoder used is a undercomplete denoising autoencoder \cite{Goodfellow-et-al-2016}. Because the denoising operation performs regularization, no additional regularization is added to these models.
 
 
+Figure \ref{fig:autoencoder_real_spectra} shows the autoencoder performance on real spectra, showing good performance.
 
-% Show learning curve to determine how many samples to add
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{images/bscae_example.png}
+	\caption{Example autoencoder decoding performance on real spectra.}
+	\label{fig:autoencoder_real_spectra}
+\end{figure}
+
+
+\subsection{Autoencoder Performance - As Pretraining or as Feature Extractor}
+
+This section will compare how well the autoencoders perform as pretrained networks and as feature extractors for a DNN. To do this, a trained CAE and DAE will be connected to a dense network. These will be trained to either fixing the autoencoder's weights or by fine-tuning them while the network learns.
+
+
+\begin{table}[H]
+\centering
+\caption{Range of hyperparameter explored for the DAE.}
+\label{table:hyperparameter_dataset_parameters_DAE}
+\begin{tabular}{c|c|c|}
+\cline{2-3}
+ & Hyperparameter Range & Sampling \\ \hline
+\multicolumn{1}{|c|}{Number of Layers} & 1 - 3 & Uniform \\ \hline
+\multicolumn{1}{|c|}{Nodes in Layer} & 2$^{5}$ - 2$^{10}$ & Power of Two \\ \hline
+\multicolumn{1}{|c|}{Initial Learning Rate} & 10$^{-4}$ - 10$^{-1}$ & Logarithmic \\ \hline
+\multicolumn{1}{|c|}{L2 Regularization Strength} & 10$^{-2}$ - 10$^{0}$ & Logarithmic \\ \hline
+\multicolumn{1}{|c|}{Dropout Frequency} & 0 - 1 & Uniform \\ \hline
+\multicolumn{1}{|c|}{Batch Size} & 2$^{4}$ - 2$^{10}$ & Power of Two \\ \hline
+\multicolumn{1}{|c|}{Activation Function} & relu, tanh & Uniform \\ \hline
+\multicolumn{1}{|c|}{Input Scaling} & sqrt, log1p & Uniform \\ \hline
+\end{tabular}
+\end{table}
+
+
+
+
+
+
+
+
+
+
+
+\begin{table}[H]
+\centering
+\caption{Comparison of fixed and pretrained autoencoders.}
+\label{table:autoencoders_fixed_pretrained}
+\begin{tabular}{|c|c|}
+\hline
+Model & Test Set F1 Score \\ \hline
+\begin{tabular}[c]{@{}c@{}}CAE-DNN\\ fixed\end{tabular} & 0.4 \\ \hline
+\begin{tabular}[c]{@{}c@{}}CAE-DNN as\\ pretraining\end{tabular} & 0.4 \\ \hline
+\begin{tabular}[c]{@{}c@{}}DAE-DNN\\ fixed\end{tabular} & 0.4 \\ \hline
+\begin{tabular}[c]{@{}c@{}}DAE-DNN as\\ pretraining\end{tabular} & 0.4 \\ \hline
+\end{tabular}
+\end{table}
+
+
+
+
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/learning_curve_dummy}
-	\caption{Learning curves from the best DNN and CNN. X-axis will change to number of (input space sampling granularity? input space sampling divisions?). Shown: learning curve example.}
-	\label{fig:Node}
+	\caption{Training curves for the fixed and pretraining DAE-DNN's, CAE-DNN's.}
+	\label{fig:learning_curves}
 \end{figure}
 
 
 
+
+\section{Summary of Final Model Architectures}
+
+
+This section discusses performance differences between the DNN, CNN, CAE-DNN, and DAE-DNN. These differences will be based on the final testing set error for all models.  
 
 
 
