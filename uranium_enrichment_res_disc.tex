@@ -47,7 +47,87 @@ We used the F8 tally to calculate the absolute full energy peak efficiency of ea
 
 % FRAM application to U and Pu isotopics https://www.lanl.gov/orgs/n/n1/appnotes/LA-14018-M.pdf
 
-\section{Results from Training all Models}
+\subsections{Training Datasets}
+
+
+\begin{table}[H]
+\centering
+\caption{Range of parameters used for the simple dataset.}
+\label{table:hyperparameter_dataset_easy_parameters_enrichment}
+\begin{tabular}{c|c|c|}
+\cline{2-3}
+ & Hyperparameter Range & Sampling \\ \hline
+\multicolumn{1}{|c|}{Source-Detector Distance {[}cm{]}} & 175.0 & N/A \\ \hline
+\multicolumn{1}{|c|}{Source-Detector Height {[}cm{]}} & 100.0 & N/A \\ \hline
+\multicolumn{1}{|c|}{FWHM 662 keV {[}s{]}} & 7.5 & N/A \\ \hline
+\multicolumn{1}{|c|}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\% & Uniform \\ \hline
+\multicolumn{1}{|c|}{Integration Time {[}s{]}} & 60 - 3600 & Uniform \\ \hline
+\multicolumn{1}{|c|}{Linear Calibration Offset} & 0.8 - 1.2 & Uniform \\ \hline
+\multicolumn{1}{|c|}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ \hline
+\end{tabular}
+\end{table}
+
+
+\begin{table}[H]
+\centering
+\caption{Range of parameters used for the full dataset.}
+\label{table:hyperparameter_dataset_full_parameters_enrichment}
+\begin{tabular}{c|c|c|}
+\cline{2-3}
+ & Hyperparameter Range & Sampling \\ \hline
+\multicolumn{1}{|c|}{Source-Detector Distance {[}cm{]}} & 50.5, 175.0, 300 & Uniform \\ \hline
+\multicolumn{1}{|c|}{Source-Detector Height {[}cm{]}} & 50, 100.0, 150 & Uniform \\ \hline
+\multicolumn{1}{|c|}{FWHM 662 keV {[}s{]}} & 7.0, 7.5, 8.0 & Uniform \\ \hline
+\multicolumn{1}{|c|}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ \hline
+\multicolumn{1}{|c|}{Reprocessing isotopes & $^{232}$U, $^{236}$U & Uniform \\ \hline
+\multicolumn{1}{|c|}{Integration Time {[}s{]}} & 60 - 3600 & Uniform \\ \hline
+\multicolumn{1}{|c|}{Linear Calibration Offset} & 0.8 - 1.2 & Uniform \\ \hline
+\multicolumn{1}{|c|}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ \hline
+\end{tabular}
+\end{table}
+
+
+\subsection{Autoencoder Performance - Fine Tuning networks on Urban Source Search Versus Uranium Enrichment Datasets}
+
+This section will compare performance differences when fine tuning an autoencoder using features found from the urban source search and the uranium enrichment datasets. The task of isotope identification in the urban source search dataset is different from the task of quantifying uranium enrichment in the uranium enrichment dataset. If the features found from the urban source search are useful as pretraining for uranium enrichment, pretrained networks may be distributed to the community.
+
+
+networks and as feature extractors for a DNN. To do this, a trained CAE and DAE will be connected to a dense network. These will be trained to either fixing the autoencoder's weights or by fine-tuning them while the network learns.
+
+
+\section{Generalization Results - Simulated Data}
+
+These sections describe how each model performed on simulated data.
+
+\subsection{Generalization results on changing }
+
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Simple Dataset.}
+         \label{fig:results_full_background_inject_simple}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.9\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+         \caption{Full Dataset.}
+         \label{fig:results_full_background_inject_full}
+     \end{subfigure}
+        \caption{Absolute error for all models trained on the full dataset. Datasets included here used various amounts of shielding.}
+        \label{fig:results_full_background_inject}
+\end{figure}
+
+
+
+
+
+
+\section{Results - Rocky Flats Shells}
+
 
 % Is it necessary to re-run the hyperparameter search, or are the 'simple' models good enough?
 
