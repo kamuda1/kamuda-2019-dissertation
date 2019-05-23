@@ -81,14 +81,13 @@ The energy resolution of a radiation detector describes how broad a photopeak is
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|}
-\hline
+\begin{tabular}{cc}
 Detector Type & \begin{tabular}[c]{@{}c@{}}Full Width at Half Maximum\\ (662 keV)\end{tabular} \\ \hline
-NaI(Tl) & 6 - 8 \% \\ \hline
-LaBr & 2 - 4 \% \\ \hline
-CeBr & 4 - 5 \% \\ \hline
-CZT & 1 - 2 \% \\ \hline
-HPGe & \textless 0.2 \% \\ \hline
+NaI(Tl) & 6 - 8 \% \\ % \hline
+LaBr & 2 - 4 \% \\ % \hline
+CeBr & 4 - 5 \% \\ % \hline
+CZT & 1 - 2 \% \\ % \hline
+HPGe & \textless 0.2 \% \\ % \hline
 \end{tabular}
 \caption{Typical energy resolutions of different
 gamma-ray detector types (reproduced from \cite{RIIDMarketSurveyReport}).}
@@ -170,7 +169,7 @@ While automated gain stabilization methods exist, many requiring a clear photope
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\linewidth]{images/temp-dependence-resolution-moszynski}
-\caption{The energy resolution measured for 662 keV γ-rays with a 25mm × 30mm NaI(Tl) crystal at 2 and 12 μs peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
+\caption{The energy resolution measured for 662 keV γ-rays with a 25mm × 30mm NaI(Tl) crystal at 2 and 12 $\mu$s peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
 \label{fig:temp-dependence-resolution-moszynski}
 \end{figure}
 
@@ -402,7 +401,7 @@ One of the first CNN architectures was LeNet-5 \cite{Lecun1998}. LeNet-5, shown 
 \section{Autoencoders} \label{Autoencoders}
 % \cite{CHARTE2018} is a practical guide to autoencoders. Great resource.
 
-Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an encoding network and a decoding network. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and outputs a reproduction of the input signal, $X'$. Once trained, the encoder can be used as a method to pre-train other neural networks or as a feature extractor \cite{CHARTE2018}. 
+Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an encoding network and a decoding network. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and outputs a reproduction of the input signal, $X'$. Once trained, the encoder can be used as a method to pre-train other neural networks or as a feature extractor \cite{Erhan2010,CHARTE2018}. 
 
 Methods to encourage the network to learn useful features include forcing the autoencoder to perform denoising \cite{Vincent2008, Vincent2010} and using an undercomplete representation as the encoding layer. Denoising autoencoders corrupt their input with noise, making the autoencoder learn more robust features than those used for simply copying the input. 
 
