@@ -26,13 +26,18 @@
 
 %%%%%%%%%%%%%%%
 
+
 \setcounter{secnumdepth}{5} % to make subsubsections work
+% \usepackage[caption = false]{subfig}
 \usepackage{setspace}
 \usepackage{epsfig}  % for figures
 \usepackage{graphicx}  % another package that works for figures
-\usepackage{subfigure}  % for subfigures
+\usepackage{subcaption}
+% \usepackage{subfigure}  % for subfigures
 \usepackage{amsmath}  % for math spacing
-\usepackage{amssymb}  % for math spacing
+%\usepackage{amssymb}  % for math spacing
+\usepackage{subcaption}
+
 %\usepackage{url}  % Hyphenation of URLs.
 \usepackage{lscape}  % Useful for wide tables or figures.
 \usepackage[justification=raggedright]{caption}	% makes captions ragged right - thanks to Bryce Lobdell
@@ -46,7 +51,7 @@
 %\otherdoctorate[abbrev]{Title of Degree}
 %\othermasters[abbrev]{Title of Degree}
 
-\title{Automated Isotope Identification Algorithm Using Artificial Neural Networks}
+\title{Automated Isotope Identification and Quantification Using Artificial Neural Networks}
 \author{Mark Kamuda}
 \department{Nuclear Plasma and Radiological Engineering}
 %\department{\mbox{Nuclear, Plasma, and Radiological Engineering}}
@@ -55,19 +60,16 @@
 % Advisor name is required for
 % - doctoral students for the ProQuest abstract
 % - master's students who do not have a master's committee
-% \advisor{Assistant Professor Clair J. Sullivan}
+\advisor{Assistant Professor Kathryn Huff}
 
 % Uncomment the \committee command for
 % - all doctoral students
 % - master's students who have a master's committee
-\committee{Kathryn Huff, Adviser\\
-        Rizwan Uddin\\
-        Tomasz Kozlowski\\
-        Clair Sullivan\\
-        Mark Hasagawa-Johnson}
-
-
-
+\committee{Assistant Professor Kathryn Huff, Chair\\
+        Professor Rizwan Uddin\\
+        Associate Professor Tomasz Kozlowski\\
+        Professor Mark Hasagawa-Johnson\\
+        Dr. Clair Sullivan\\}
 
 
 \begin{document}
@@ -162,10 +164,9 @@
 
 
 \include{model_choices_hyperparameter_results}
-% Removing this for now
+
 
 \include{urban_source_search_res_disc}
-
 
 \include{uranium_enrichment_res_disc}
 

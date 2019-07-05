@@ -67,10 +67,10 @@ Additional x-rays may be created from materials around the detector. These are i
 % \multicolumn{1}{|c|}{Source-Detector Distance {[}cm{]}} & 175.0 & N/A \\ \hline
 \multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 100.0 & N/A\\ % \hline
 \multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.5 & N/A \\ % \hline
-\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding \\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\% & Uniform \\  %\hline
+\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding \\ (Percent 200 keV Attenuated)\end{tabular}} & 0\%, 20\% & Uniform \\  %\hline
 \multicolumn{1}{c}{Integration Time {[}s{]}} & 60 - 3600 & Uniform \\ % \hline
 \multicolumn{1}{c}{Linear Calibration Offset} & 0.8 - 1.2 & Uniform \\ % \hline
-\multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ % \hline
+\multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ \hline
 \end{tabular}
 \end{table}
 
@@ -85,21 +85,21 @@ Additional x-rays may be created from materials around the detector. These are i
 \multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 50.5, 175.0, 300 & Uniform \\ % \hline
 \multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 50, 100.0, 150 & Uniform \\ % \hline
 \multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.0, 7.5, 8.0 & Uniform \\ % \hline
-\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ % \hline
+\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 200 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ % \hline
 \multicolumn{1}{c}{Reprocessing isotopes} & $^{232}$U, $^{236}$U & Uniform \\ % \hline
 \multicolumn{1}{c}{Integration Time {[}s{]}} & 60 - 3600 & Uniform \\ % \hline
 \multicolumn{1}{c}{Linear Calibration Offset} & 0.8 - 1.2 & Uniform \\ % \hline
-\multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ % \hline
+\multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ \hline
 \end{tabular}
 \end{table}
 
 
-\subsection{Autoencoder Performance - Fine Tuning networks on Urban Source Search Versus Uranium Enrichment Datasets}
+% \subsection{Autoencoder Performance - Fine Tuning networks on Urban Source Search Versus Uranium Enrichment Datasets}
 
-This section will compare performance differences when fine tuning an autoencoder using features found from the urban source search and the uranium enrichment datasets. The task of isotope identification in the urban source search dataset is different from the task of quantifying uranium enrichment in the uranium enrichment dataset. If the features found from the urban source search are useful as pretraining for uranium enrichment, pretrained networks may be distributed to the community.
+% This section will compare performance differences when fine tuning an autoencoder using features found from the urban source search and the uranium enrichment datasets. The task of isotope identification in the urban source search dataset is different from the task of quantifying uranium enrichment in the uranium enrichment dataset. If the features found from the urban source search are useful as pretraining for uranium enrichment, pretrained networks may be distributed to the community.
 
 
-networks and as feature extractors for a DNN. To do this, a trained CAE and DAE will be connected to a dense network. These will be trained to either fixing the autoencoder's weights or by fine-tuning them while the network learns.
+% networks and as feature extractors for a DNN. To do this, a trained CAE and DAE will be connected to a dense network. These will be trained to either fixing the autoencoder's weights or by fine-tuning them while the network learns.
 
 
 \section{Generalization Results - Simulated Data}
@@ -112,7 +112,8 @@ These sections describe how each model performed on simulated enriched uranium.
 \label{table:generalization_enrichment_values}
 \caption{$^{235}$U enrichment values.}
 \begin{tabular}{c}
-\hline
+
+Enrichment values \\ \hline
 0.10 \\ \hline
 0.25 \\ \hline
 0.50 \\ \hline
@@ -203,7 +204,7 @@ Unshielded enriched uranium spectra were simulated with various background templ
 
 \subsection{Generalization Results on Reprocessed Uranium}
 
-Reprocessed uranium contains trace parasitic impurities ($^{233}$U, $^{236}$U, $^{237}$Np, $^{239}$Pu) that can change the gamma-ray spectrum and interfere with the 186 keV gamma-ray from $^{235}$U. To test the effect of these on 
+Reprocessed uranium contains trace parasitic impurities ($^{233}$U, $^{236}$U, $^{237}$Np, $^{239}$Pu) that can change the gamma-ray spectrum and interfere with the 186 keV gamma-ray from $^{235}$U. To test the effect of these on regression accuracy, spectra are simulated with and without various impurities.
 
 
 \begin{figure}[H]
@@ -235,7 +236,7 @@ The reported Rocky Flats shells isotopics are shown in Table \ref{table:rockyfla
 
 \begin{table}[H]
 \centering
-\caption{Rocky Flats Isotopics \cite{Rothe1997}.}
+\caption{Rocky Flats isotopics \cite{Rothe1997}.}
 \label{table:rockyflats_isotopics}
 \begin{tabular}{|c|c|}
 \hline
@@ -252,21 +253,6 @@ Asymptotic models are
 
 
 Again, measure asymptotic MSE convergence.
-
-
-
-\section{Results from Adding Physics}
-
-Show how accuracy changes when using
-\begin{itemize}
-    \item Multiple detector-source distance
-    \subitem CNN, DNN, BS-DAE, BS-CAE, V-DAE, BS-CAE
-    \item Cement floor
-    \subitem CNN, DNN, BS-DAE, BS-CAE, V-DAE, BS-CAE
-    \item Solid vs shell vs solid and shell uranium
-    \subitem CNN, DNN, BS-DAE, BS-CAE, V-DAE, BS-CAE
-    \item 
-\end{itemize}
 
 
 

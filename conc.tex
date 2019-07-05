@@ -3,7 +3,7 @@
 \section{General Conclusions}
 
 
-\section{Steps Towards Practical Application}
+\section{Steps Toward Practical Application}
 
 For this model to be applied in the real world, a few things need to be added. Overall, a larger more thorough validation dataset must be created to ensure certain isotope combinations do not present as adversarial. That is, a validation dataset must be used to ensure a threat isotope is not commonly identified as benign. Additional hyperparameter tests need to be preformed with more intelligent hyperparameter ranges. Additional network architectures and hyperparameters should be explored. These can include inception networks and batch normalization.
 
@@ -11,7 +11,7 @@ Generalization performance must also be more thoroughly measured and improved. T
 
 
 
-\section{Suggested Future Works}
+\section{Suggested Future Work}
 
 % 80%+ Wish list 
 Siamese networks for SNM identification. Step 1, train a siamese network on simulated SNM with realistic missile shielding. Step 2, take a random warhead and call it 'golden'. Compare all other warheads to this, using only the spectrum as input. Boom, got a zero-knowledge verification alg.
@@ -42,5 +42,6 @@ Construct a dataset to detect obscured sources. For example, make a dataset with
 
 Can you create a dataset to perform online uranium enrichment using NaI for fuel fabrication plants? Need to incorporate centrifuge wall thickness, can possibly use time-series data to identify when things change? May need to worry more about calibration drift due to temperature or electronics drift.
 
+Analyze how the model is operating using LIME.
 
-
+Multi-task learning on identifying and quantifying isotopes. Identifying can use a softmax output on one-hot encoded outputs while quantifying can use a separate softmax output on quantities. Does this get us better enrichment measurement and identification performance?

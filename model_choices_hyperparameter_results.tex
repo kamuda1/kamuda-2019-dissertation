@@ -15,33 +15,31 @@ The parameters simulated are based on handheld RIID scenarios. The source-detect
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|}
-\hline
-Parameter & Values \\ \hline
-\begin{tabular}[c]{@{}c@{}}source-detector height \\ off ground {[}cm{]}\end{tabular} & 50.0, 75.0, 100.0, 125.0, 150.0 \\ \hline
-\begin{tabular}[c]{@{}c@{}}source-detector\\ distance {[}cm{]}\end{tabular} & \multicolumn{1}{l|}{50.0, 112.5, 175.0, 237.5, 300.0} \\ \hline
-\begin{tabular}[c]{@{}c@{}}Arial density of \\ solid aluminum {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.82, 4.18, 7.49, 13.16 \\ \hline
-\begin{tabular}[c]{@{}c@{}}Arial density of\\  solid iron {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.53, 3.5, 6.28, 11.02 \\ \hline
-\begin{tabular}[c]{@{}c@{}}Arial density of \\ solid lead {[}g/cm\textasciicircum{}2{]}\end{tabular} & 0.22, 0.51, 0.92, 1.61 \\ \hline
-\begin{tabular}[c]{@{}c@{}}FWHM at\\  662 keV {[}\%{]}\end{tabular} & \multicolumn{1}{l|}{6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0} \\ \hline
-\end{tabular}
 \caption{Fixed GADRAS-DRF simulation parameters.}
+\begin{tabular}{cc}
+Parameter & Values \\ \hline
+\begin{tabular}[c]{@{}c@{}}source-detector height \\ off ground {[}cm{]}\end{tabular} & 50.0, 75.0, 100.0, 125.0, 150.0 \\ % \hline
+\begin{tabular}[c]{@{}c@{}}source-detector\\ distance {[}cm{]}\end{tabular} & \multicolumn{1}{l}{50.0, 112.5, 175.0, 237.5, 300.0} \\ % \hline
+\begin{tabular}[c]{@{}c@{}}Arial density of \\ solid aluminum {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.82, 4.18, 7.49, 13.16 \\ % \hline
+\begin{tabular}[c]{@{}c@{}}Arial density of\\  solid iron {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.53, 3.5, 6.28, 11.02 \\ % \hline
+\begin{tabular}[c]{@{}c@{}}Arial density of \\ solid lead {[}g/cm\textasciicircum{}2{]}\end{tabular} & 0.22, 0.51, 0.92, 1.61 \\ % \hline
+\begin{tabular}[c]{@{}c@{}}FWHM at\\  662 keV {[}\%{]}\end{tabular} & \multicolumn{1}{l}{6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0} \\ % \hline
+\end{tabular}
 \label{table:all_fixed_simulation_parameters}
 \end{table}
 
 \begin{table}[H]
 \centering
-\begin{tabular}{|c|c|c|}
-\hline
-Parameter & Values & Sampling \\ \hline
-integration time & 60 - 600 & uniform \\ \hline
-background counts per second & 200 & Poisson \\ \hline
-Signal to Background ratio & 0.5 - 2 & uniform \\ \hline
-0th order calibration & 0 - 10 & uniform \\ \hline
-1st order calibration & 0.83 - 1.16 & uniform \\ \hline
-2nd order calibration & 0 - 0 & uniform \\ \hline
-\end{tabular}
 \caption{Default data augmentation parameters.}
+\begin{tabular}{ccc}
+Parameter & Values & Sampling \\ \hline
+integration time & 60 - 600 & uniform \\ % \hline
+background counts per second & 200 & Poisson \\ % \hline
+Signal to Background ratio & 0.5 - 2 & uniform \\ % \hline
+0th order calibration & 0 - 10 & uniform \\ % \hline
+1st order calibration & 0.83 - 1.16 & uniform \\ % \hline
+2nd order calibration & 0 - 0 & uniform \\ % \hline
+\end{tabular}
 \label{table:all_variable_simulation_parameters}
 \end{table}
 
@@ -90,16 +88,16 @@ To show generalization improvements from including more physical parameters in t
 \centering
 \caption{Range of parameters used for the simple dataset.}
 \label{table:hyperparameter_dataset_easy_parameters}
-\begin{tabular}{c|c|c|}
-\cline{2-3}
+\begin{tabular}{ccc}
+% \cline{2-3}
  & Hyperparameter Range & Sampling \\ \hline
-\multicolumn{1}{|c|}{Source-Detector Distance {[}cm{]}} & 175.0 & N/A \\ \hline
-\multicolumn{1}{|c|}{Source-Detector Height {[}cm{]}} & 100.0 & N/A \\ \hline
-\multicolumn{1}{|c|}{FWHM 662 keV {[}s{]}} & 7.5 & N/A \\ \hline
-\multicolumn{1}{|c|}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\% & Uniform \\ \hline
-\multicolumn{1}{|c|}{Integration Time {[}s{]}} & 60 - 3600 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Linear Calibration Offset} & 0.8 - 1.2 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ \hline
+\multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 175.0 & N/A \\ % \hline
+\multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 100.0 & N/A \\ % \hline
+\multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.5 & N/A \\ % \hline
+\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\% & Uniform \\ % \hline
+\multicolumn{1}{c}{Integration Time {[}s{]}} & 60 - 3600 & Uniform \\ % \hline
+\multicolumn{1}{c}{Linear Calibration Offset} & 0.8 - 1.2 & Uniform \\ % \hline
+\multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ % \hline
 \end{tabular}
 \end{table}
 
@@ -108,16 +106,16 @@ To show generalization improvements from including more physical parameters in t
 \centering
 \caption{Range of parameters used for the full dataset.}
 \label{table:hyperparameter_dataset_full_parameters}
-\begin{tabular}{c|c|c|}
-\cline{2-3}
+\begin{tabular}{ccc}
+% \cline{2-3}
  & Hyperparameter Range & Sampling \\ \hline
-\multicolumn{1}{|c|}{Source-Detector Distance {[}cm{]}} & 50.5, 175.0, 300 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Source-Detector Height {[}cm{]}} & 50, 100.0, 150 & Uniform \\ \hline
-\multicolumn{1}{|c|}{FWHM 662 keV {[}s{]}} & 7.0, 7.5, 8.0 & Uniform \\ \hline
-\multicolumn{1}{|c|}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ \hline
-\multicolumn{1}{|c|}{Integration Time {[}s{]}} & 60 - 3600 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Linear Calibration Offset} & 0.8 - 1.2 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ \hline
+\multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 50.5, 175.0, 300 & Uniform \\ % \hline
+\multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 50, 100.0, 150 & Uniform \\ % \hline
+\multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.0, 7.5, 8.0 & Uniform \\ % \hline
+\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ % \hline
+\multicolumn{1}{c}{Integration Time {[}s{]}} & 60 - 3600 & Uniform \\ % \hline
+\multicolumn{1}{c}{Linear Calibration Offset} & 0.8 - 1.2 & Uniform \\ % \hline
+\multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ % \hline
 \end{tabular}
 \end{table}
 
@@ -137,19 +135,19 @@ Architecture and training hyperparamters are shown in Table \ref{table:hyperpara
 
 \begin{table}[H]
 \centering
-\caption{Range of hyperparameter explored for the DNN.}
+\caption{Range of hyperparameters explored for the DNN.}
 \label{table:hyperparameter_dataset_parameters_DNN}
-\begin{tabular}{c|c|c|}
-\cline{2-3}
+\begin{tabular}{ccc}
+% \cline{2-3}
  & Hyperparameter Range & Sampling \\ \hline
-\multicolumn{1}{|c|}{Number of Layers} & 1 - 3 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Nodes in Layer} & 2$^{5}$ - 2$^{10}$ & Power of Two \\ \hline
-\multicolumn{1}{|c|}{Initial Learning Rate} & 10$^{-4}$ - 10$^{-1}$ & Logarithmic \\ \hline
-\multicolumn{1}{|c|}{L2 Regularization Strength} & 10$^{-2}$ - 10$^{0}$ & Logarithmic \\ \hline
-\multicolumn{1}{|c|}{Dropout Frequency} & 0 - 1 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Batch Size} & 2$^{4}$ - 2$^{10}$ & Power of Two \\ \hline
-\multicolumn{1}{|c|}{Activation Function} & relu, tanh & Uniform \\ \hline
-\multicolumn{1}{|c|}{Input Scaling} & sqrt, log1p & Uniform \\ \hline
+\multicolumn{1}{c}{Number of Layers} & 1 - 3 & Uniform \\ % \hline
+\multicolumn{1}{c}{Nodes in Layer} & 2$^{5}$ - 2$^{10}$ & Power of Two \\ % \hline
+\multicolumn{1}{c}{Initial Learning Rate} & 10$^{-4}$ - 10$^{-1}$ & Logarithmic \\ % \hline
+\multicolumn{1}{c}{L2 Regularization Strength} & 10$^{-2}$ - 10$^{0}$ & Logarithmic \\ % \hline
+\multicolumn{1}{c}{Dropout Frequency} & 0 - 1 & Uniform \\ % \hline
+\multicolumn{1}{c}{Batch Size} & 2$^{4}$ - 2$^{10}$ & Power of Two \\ % \hline
+\multicolumn{1}{c}{Activation Function} & relu, tanh & Uniform \\ % \hline
+\multicolumn{1}{c}{Input Scaling} & sqrt, log1p & Uniform \\ % \hline
 \end{tabular}
 \end{table}
 
@@ -244,22 +242,22 @@ Just like the autoencoder, this can be done in one or two steps. One step: Train
 
 \begin{table}[H]
 \centering
-\caption{Range of hyperparameter explored for the CNN.}
+\caption{Range of hyperparameters explored for the CNN.}
 \label{table:hyperparameter_dataset_parameters_CNN}
-\begin{tabular}{c|c|c|}
-\cline{2-3}
+\begin{tabular}{ccc}
+% \cline{2-3}
  & Hyperparameter Range & Sampling \\ \hline
-\multicolumn{1}{|c|}{Number of Filter Kernels} & \begin{tabular}[c]{@{}c@{}}(4)   (8)   (16)    (32)\\ (4, 8)  (8, 16)  (16, 32)\\ (4, 8, 16)   (8, 16, 32)\end{tabular} & Uniform \\ \hline
-\multicolumn{1}{|c|}{Filter Kernel Length} & 2, 4, 8, 16 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Pooling size} & 2, 4, 8, 16 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Number of Dense Layers} & 1 - 3 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Nodes in Dense Layers} & 10 - 1000 & Logarithmic \\ \hline
-\multicolumn{1}{|c|}{Initial Learning Rate} & 10$^{-4}$ - 10$^{-1}$ & Logarithmic \\ \hline
-\multicolumn{1}{|c|}{L2 Regularization Strength} & 10$^{-2}$ - 10$^{0}$ & Logarithmic \\ \hline
-\multicolumn{1}{|c|}{Dropout Frequency} & 0 - 1 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Batch Size} & 2$^{4}$ - 2$^{6}$ & Power of Two \\ \hline
-\multicolumn{1}{|c|}{Activation Function} & tanh & Uniform \\ \hline
-\multicolumn{1}{|c|}{Input Scaling} & sqrt, log1p & Uniform \\ \hline
+\multicolumn{1}{c}{Number of Filter Kernels} & \begin{tabular}[c]{@{}c@{}}(4)   (8)   (16)    (32)\\ (4, 8)  (8, 16)  (16, 32)\\ (4, 8, 16)   (8, 16, 32)\end{tabular} & Uniform \\ % \hline
+\multicolumn{1}{c}{Filter Kernel Length} & 2, 4, 8, 16 & Uniform \\ % \hline
+\multicolumn{1}{c}{Pooling size} & 2, 4, 8, 16 & Uniform \\ % \hline
+\multicolumn{1}{c}{Number of Dense Layers} & 1 - 3 & Uniform \\ % \hline
+\multicolumn{1}{c}{Nodes in Dense Layers} & 10 - 1000 & Logarithmic \\ % \hline
+\multicolumn{1}{c}{Initial Learning Rate} & 10$^{-4}$ - 10$^{-1}$ & Logarithmic \\ % \hline
+\multicolumn{1}{c}{L2 Regularization Strength} & 10$^{-2}$ - 10$^{0}$ & Logarithmic \\ % \hline
+\multicolumn{1}{c}{Dropout Frequency} & 0 - 1 & Uniform \\ % \hline
+\multicolumn{1}{c}{Batch Size} & 2$^{4}$ - 2$^{6}$ & Power of Two \\ % \hline
+\multicolumn{1}{c}{Activation Function} & tanh & Uniform \\ % \hline
+\multicolumn{1}{c}{Input Scaling} & sqrt, log1p & Uniform \\ % \hline
 \end{tabular}
 \end{table}
 
@@ -379,19 +377,19 @@ This section will compare how well the autoencoders perform as pretrained networ
 
 \begin{table}[H]
 \centering
-\caption{Range of hyperparameter explored for the DAE.}
+\caption{Range of hyperparameters explored for the DAE.}
 \label{table:hyperparameter_dataset_parameters_DAE}
-\begin{tabular}{c|c|c|}
-\cline{2-3}
+\begin{tabular}{ccc}
+% \cline{2-3}
  & Hyperparameter Range & Sampling \\ \hline
-\multicolumn{1}{|c|}{Number of Layers} & 1 - 3 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Nodes in Layer} & 2$^{5}$ - 2$^{10}$ & Power of Two \\ \hline
-\multicolumn{1}{|c|}{Initial Learning Rate} & 10$^{-4}$ - 10$^{-1}$ & Logarithmic \\ \hline
-\multicolumn{1}{|c|}{L2 Regularization Strength} & 10$^{-2}$ - 10$^{0}$ & Logarithmic \\ \hline
-\multicolumn{1}{|c|}{Dropout Frequency} & 0 - 1 & Uniform \\ \hline
-\multicolumn{1}{|c|}{Batch Size} & 2$^{4}$ - 2$^{10}$ & Power of Two \\ \hline
-\multicolumn{1}{|c|}{Activation Function} & relu, tanh & Uniform \\ \hline
-\multicolumn{1}{|c|}{Input Scaling} & sqrt, log1p & Uniform \\ \hline
+\multicolumn{1}{c}{Number of Layers} & 1 - 3 & Uniform \\ % \hline
+\multicolumn{1}{c}{Nodes in Layer} & 2$^{5}$ - 2$^{10}$ & Power of Two \\ % \hline
+\multicolumn{1}{c}{Initial Learning Rate} & 10$^{-4}$ - 10$^{-1}$ & Logarithmic \\ % \hline
+\multicolumn{1}{c}{L2 Regularization Strength} & 10$^{-2}$ - 10$^{0}$ & Logarithmic \\ % \hline
+\multicolumn{1}{c}{Dropout Frequency} & 0 - 1 & Uniform \\ % \hline
+\multicolumn{1}{c}{Batch Size} & 2$^{4}$ - 2$^{10}$ & Power of Two \\ % \hline
+\multicolumn{1}{c}{Activation Function} & relu, tanh & Uniform \\ % \hline
+\multicolumn{1}{c}{Input Scaling} & sqrt, log1p & Uniform \\ % \hline
 \end{tabular}
 \end{table}
 
@@ -409,13 +407,12 @@ This section will compare how well the autoencoders perform as pretrained networ
 \centering
 \caption{Comparison of fixed and pretrained autoencoders.}
 \label{table:autoencoders_fixed_pretrained}
-\begin{tabular}{|c|c|}
-\hline
-Model & Test Set F1 Score \\ \hline
-\begin{tabular}[c]{@{}c@{}}CAE-DNN\\ fixed\end{tabular} & 0.4 \\ \hline
-\begin{tabular}[c]{@{}c@{}}CAE-DNN as\\ pretraining\end{tabular} & 0.4 \\ \hline
-\begin{tabular}[c]{@{}c@{}}DAE-DNN\\ fixed\end{tabular} & 0.4 \\ \hline
-\begin{tabular}[c]{@{}c@{}}DAE-DNN as\\ pretraining\end{tabular} & 0.4 \\ \hline
+\begin{tabular}{cc}
+Model & Test Set F1 Score \\  \hline
+\begin{tabular}[c]{@{}c@{}}CAE-DNN\\ fixed\end{tabular} & 0.4 \\ % \hline
+\begin{tabular}[c]{@{}c@{}}CAE-DNN as\\ pretraining\end{tabular} & 0.4 \\ % \hline
+\begin{tabular}[c]{@{}c@{}}DAE-DNN\\ fixed\end{tabular} & 0.4 \\ % \hline
+\begin{tabular}[c]{@{}c@{}}DAE-DNN as\\ pretraining\end{tabular} & 0.4 \\ % \hline
 \end{tabular}
 \end{table}
 
