@@ -8,13 +8,21 @@ In this section, the physics responsible for the features in gamma-ray spectra a
 
 \subsection{Energy Deposition Mechanisms}
 
-When a photon interacts with some radiation detection medium, it deposits some or all of it's energy into the material. There are three main methods of interaction: the photoelectric effect, Compton scattering, and pair production. These effects are energy dependent, as seen in Figure \ref{fig:energy_dependence_interactions}.
+When a photon interacts with some radiation detection medium (e.g. a NaI(Tl) crystal), it deposits some or all of its energy into the material. There are three main methods of interaction: the photoelectric effect, Compton scattering, and pair production. These effects are energy dependent, as seen in Figure \ref{fig:energy_dependence_interactions}.
 
-If the total of the photon's energy is deposited in the detector, a count is recorded in the spectrum's photopeak. If the photon deposits only a part of it's energy and escapes the detector, a count will be recorded somewhere below the full-energy photopeak.  The following sections describe intrinsic mechanisms that remove counts from the full-energy peak.% Absolute efficiency is also affected by shielding material and source-to-detector distance.
+If all of the photon's energy is deposited in the detector, a count is recorded in the spectrum's photopeak. If the photon deposits only a part of its energy and escapes the detector, a count will be recorded somewhere below the full-energy photopeak.  The following sections describe intrinsic mechanisms that remove counts from the full-energy peak. % Absolute efficiency is also affected by shielding material and source-to-detector distance.
 
 \subsubsection{Photoelectric effect}
 
-The photoelectric effect occurs when a photon is absorbed by an atom in some material. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates a vacancy in the atom of the material. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. Because of their low energies, Auger electrons are typically quickly reabsorbed. The characteristic x-ray can either be reabsorbed by the material or escape.
+The photoelectric effect occurs when a photon is absorbed by an atom. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron, 
+
+\begin{equation} \label{eq:compton_scatter}
+\gamma 
+
+E' = \frac{E}{1 + \frac{E}{m_{0} c^2} (1-cos\theta)}
+\end{equation}
+
+. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates a vacancy in the atom of the material. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
 
 \begin{figure}[H]
 \centering
