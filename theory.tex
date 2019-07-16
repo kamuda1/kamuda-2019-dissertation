@@ -12,17 +12,16 @@ When a photon interacts with some radiation detection medium (e.g. a NaI(Tl) cry
 
 If all of the photon's energy is deposited in the detector, a count is recorded in the spectrum's photopeak. If the photon deposits only a part of its energy and escapes the detector, a count will be recorded somewhere below the full-energy photopeak.  The following sections describe intrinsic mechanisms that remove counts from the full-energy peak. % Absolute efficiency is also affected by shielding material and source-to-detector distance.
 
-\subsubsection{Photoelectric effect}
+\subsubsection{Photoelectric Absorption}
 
-The photoelectric effect occurs when a photon is absorbed by an atom. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron, 
-
-\begin{equation} \label{eq:compton_scatter}
-\gamma 
-
-E' = \frac{E}{1 + \frac{E}{m_{0} c^2} (1-cos\theta)}
+Photoelectric absorption is a process that can occur when a photon with energy greater than the binding energy of a bound electron, $E_{b}$, is absorbed by an atom. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron
+%
+\begin{equation} \label{eq:photoelectric_effect}
+% \gamma 
+E_{e^{-}} = h\nu - E_{b}
 \end{equation}
-
-. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates a vacancy in the atom of the material. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
+%
+where $h\nu$ is the energy of the incident photon. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates an electron vacancy in the original atom. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
 
 \begin{figure}[H]
 \centering
@@ -51,7 +50,7 @@ The energy of a photon scattered off a free electron
 E' = \frac{E}{1 + \frac{E}{m_{0} c^2} (1-cos\theta)}
 \end{equation}
 
-depends on the scattering angle, $\theta$, the incident photon's energy, E, and the rest mass of the electron, m$_{0}$c$^{2}$. A photon scattering at an angle of 180$^{o}$ deposits it's maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed at 180$^{o}$, as seen in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies known as the Compton continuum. Accounting for the binding energy of electrons in a medium produces a Compton continuum closer to the dotted line in Figure \ref{fig:ideal_compton}.
+depends on the scattering angle, $\theta$, the incident photon's energy, E, and the rest mass of the electron, m$_{o}$c$^{2}$. A photon scattering at an angle of 180$^{o}$ deposits it's maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed at $\theta$ = 180$^{o}$, seen in the solid line in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies known as the Compton continuum. Accounting for the binding energy of electrons in a medium produces a Compton continuum closer to the dotted line in Figure \ref{fig:ideal_compton}.
 
 \begin{figure}[H]
 \centering
@@ -64,7 +63,7 @@ depends on the scattering angle, $\theta$, the incident photon's energy, E, and 
 
 \subsubsection{Pair Production}
 
-When a photon with energy above 1022 keV interacts with the coulomb field of a nucleus, there is a probability that the photon will disappear and be replaced by an electron-positron pair. The positron will then annihilate with an electron in the medium, creating two 511 keV photons. This process is illustrated in Figure \ref{fig:pair_production}. Depending if one or both of these annihilation photons escape the detector, they produce single or double escape peaks in a gamma-ray spectrum. As seen in Figure \ref{fig:pair_production_spectra}, single escape peaks occur at 511 keV below the full-energy peak and double escape peaks occur at 1022 keV below this peak. These 511 keV photons may also be measured by the detector, producing an annihilation radiation signal in the spectrum.
+When a photon with energy above 1022 keV interacts with the Coulomb field of a nucleus, there is a probability that the photon will disappear and be replaced by an electron-positron pair. The positron will then annihilate with an electron in the medium, creating two 511 keV photons. This process is illustrated in Figure \ref{fig:pair_production}. If one or both of these annihilation photons escape the detector, they produce single or double escape peaks in a gamma-ray spectrum. As seen in Figure \ref{fig:pair_production_spectra}, single escape peaks occur at 511 keV below the full-energy peak and double escape peaks occur at 1022 keV below this peak. These 511 keV photons may also be measured by the detector, producing an annihilation radiation signal in the spectrum.
 
 \begin{figure}[H]
 \centering
@@ -83,7 +82,7 @@ When a photon with energy above 1022 keV interacts with the coulomb field of a n
 
 \subsection{Energy Resolution}
 
-The energy resolution of a radiation detector describes how broad a photopeak is in a spectrum. The resolution is based on the full width of the Gaussian at half of it's maximum value (FWHM). The FWHM is measured either in units of energy or as a percent of the peaks energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. The variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as a standard for comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors compared seen in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum from scintillation and semiconductor detectors. 
+The energy resolution of a radiation detector describes the width of a photopeak's distribution at a location in a spectrum. The resolution is based on the full width of the Gaussian at half of its maximum value (FWHM). The FWHM is measured either in units of energy or as a percent of the peak's energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. The variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as a standard for comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are compared in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum as measured by scintillation and semiconductor detectors. 
 
 % pg 345 knoll
 
@@ -105,7 +104,7 @@ gamma-ray detector types (reproduced from \cite{RIIDMarketSurveyReport}).}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.8\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
+\includegraphics[width=0.99\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
 \caption{$^{133}$Ba spectrum measured using common detector materials \cite{RIIDMarketSurveyReport}.}
 \label{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report}
 \end{figure}
@@ -116,7 +115,7 @@ gamma-ray detector types (reproduced from \cite{RIIDMarketSurveyReport}).}
 % In contrast, it is extremely difficult to measure a trustworthy background spectrum in the field. Moving or reorienting the detector to obtain a source7free background measurement will frequently produce a measurement that will likely differ significantly, and sometimes even exceeding, the true background at the source position. It is not at all unusual for environmental background to vary significantly over distances of a few meters. As a result, we typically confine our analyses to the foreground spectrum, as generally reflected in this paper. https://e-reports-ext.llnl.gov/pdf/770028.pdf
 
 
-A significant challenge to automated gamma-ray spectroscopy is the stochastic nature of the background radiation field. Background radiation comes from cosmic radiation and radioisotopes naturally distributed in soil and building materials. Isotopes in the soil come from the uranium decay series, thorium  decay series, and $^{40}$K. The gamma-ray spectra from each of these sources are shown in Figure \ref{fig:background_components}. 
+A significant challenge to automated gamma-ray spectroscopy is the stochastic nature of the background radiation field. Background radiation comes from cosmic radiation and radioisotopes naturally distributed in soil and building materials. Isotopes in the soil primarily come from the uranium decay series, thorium  decay series, and $^{40}$K. The gamma-ray spectra from each of these sources are shown in Figure \ref{fig:background_components}. 
 
 \begin{figure}[H]
 \centering
@@ -125,30 +124,30 @@ A significant challenge to automated gamma-ray spectroscopy is the stochastic na
 \label{fig:background_components}
 \end{figure}
 
-These radiation components can change both spatially and temporally. Background radiation isotope concentrations change geologically, (Figures \ref{fig:USGS_u_conc}, \ref{fig:USGS_th_conc}, and \ref{fig:USGS_k_conc}) creating different background radiation patterns in different parts of the country. Local changes in soil composition and building materials also are significant enough to change background. Because common building materials like concrete and granite contain radioactive elements, the proximity to these structures cause local variations in background. 
+These radiation components can change both spatially and temporally. Because subsurface rocks vary in their elemental composition, background radiation isotope concentrations change geologically (Figures \ref{fig:USGS_u_conc}, \ref{fig:USGS_th_conc}, and \ref{fig:USGS_k_conc}). Local changes in soil composition and building materials also are significant enough to impact background. Because common building materials like concrete and granite contain radioactive elements, the proximity to these structures cause local variations in background. 
 
-Background also changes over time. This change is largely due to the decay products of $^{222}$Rn gas generated by uranium decay in soil \cite{knoll}. Rain can also increase the level of background radiation by releasing trapped radon gas and other radioactive sources in the soil.
+Background also changes over time, largely due to the decay products of $^{222}$Rn gas generated by uranium decay in soil \cite{knoll}. Rain can accordingly increase the level of background radiation by releasing trapped radon gas and other radioactive sources in the soil.
 
 % Air Survey on Background Gradients https://www-sciencedirect-com.proxy2.library.illinois.edu/science/article/pii/S0265931X13002373
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\linewidth]{images/USGS_u_conc}
-\caption{Map of uranium concentrations in the United States \cite{USGS}.}
+\caption{Map of uranium concentrations in the United States (Reproduced from \cite{USGS}).}
 \label{fig:USGS_u_conc}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\linewidth]{images/USGS_th_conc}
-\caption{Map of thorium concentrations in the United States \cite{USGS}.}
+\caption{Map of thorium concentrations in the United States (Reproduced from \cite{USGS}).}
 \label{fig:USGS_th_conc}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\linewidth]{images/USGS_k_conc}
-\caption{Map of $^{40}$K concentrations in the United States \cite{USGS}.}
+\caption{Map of potassium concentrations in the United States (Reproduced from \cite{USGS}).}
 \label{fig:USGS_k_conc}
 \end{figure}
 
@@ -161,9 +160,9 @@ Background also changes over time. This change is largely due to the decay produ
 
 % https://www.pnnl.gov/main/publications/external/technical_reports/pnnl-14735.pdf
 
-The calibration of a NaI(Tl) detector can be changed due to drifts in electronics, such as the dynode, and drifts in temperature of the crystal. Calibration drift has been identified as a key factor in the poor performance of RIIDs \cite{blackadar2003}. The dominance of different NaI(Tl) scintillation light decay processes \cite{IANAKIEV2009432} and decay time constants of these processes\cite{MOSZYNSKI2006739} are sensitive to temperature. These factors lead to appreciable changes in relative photopeak position with temperature, shown in Figure \ref{fig:CASANOVAS2012588}, and detector resolution, shown in Figure \ref{fig:temp-dependence-resolution-moszynski}. 
+The calibration of a NaI(Tl) detector can vary due to drifts in electronics, such as the dynode, and drifts in temperature of the crystal. Calibration drift has been identified as a key factor in the poor performance of RIIDs \cite{blackadar2003}. The distribution of the intensities of different NaI(Tl) scintillation light decay processes \cite{IANAKIEV2009432} and decay time constants of these processes \cite{MOSZYNSKI2006739} are sensitive to temperature. These factors lead to appreciable changes in relative photopeak position with temperature, shown in Figure \ref{fig:CASANOVAS2012588}, and detector resolution, shown in Figure \ref{fig:temp-dependence-resolution-moszynski}. 
 
-While automated gain stabilization methods exist, many requiring a clear photopeak in the spectrum to calibrate from. This can be achieved by measuring long enough to identify a background photopeak, attaching an external radioactive source to the detector, or by adding a reference light source. Measurement times long enough to identify a background photopeak may be infeasible for certain applications or the calibration step ignored altogether as a part of typical operation. Adding an external source of radiation adds additional noise to the spectrum and additional light sources may malfunction. For these reasons, software-based automated gain stabilization techniques should be used to overcome this issue.
+While automated gain stabilization methods exist, many require a clear photopeak in the spectrum to calibrate from. This can be achieved with measurement times long enough to identify a background photopeak, attaching an external radioactive source to the detector, or by adding a reference light source. Measurement times long enough to identify a background photopeak may be infeasible for certain applications or the calibration step ignored altogether as a part of typical operation. Adding an external source of radiation adds additional noise to the spectrum. For these reasons, software-based, automated, gain stabilization techniques should be used to overcome this issue.
 
 \begin{figure}[H]
 \centering
@@ -186,12 +185,14 @@ While automated gain stabilization methods exist, many requiring a clear photope
 
 \section{Machine Learning}
 
-In this section, neural network architectures and parameters that effect training will be described. Models will include dense, convolutional, and autoencoder architectures. 
+In this section, neural network architectures and parameters that affect training will be described. Models will include dense, convolutional, and autoencoder architectures. 
 
 \subsection{General Neural Network Architecture}
 
 % Node/neruon, get this lingo straight here
-An ANN is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}^M$ to $\mathbb{R}^N$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in hidden layer B, and K neurons in output layer C. Each neuron in adjacent layers are connected by weights, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
+An \acrlong{ANN} is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}^M$ to $\mathbb{R}^N$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not observed by in the input or output. Each neuron in adjacent layers are connected by weights, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
+
+
 
 
 \begin{figure}[H]
@@ -202,7 +203,7 @@ An ANN is a mathematical model that attempts to map an arbitrary function from $
 \end{figure}
 
 
-Similar to a biological neuron, the ANN neuron receives input stimuli, performs an operation using it, and outputs the resulting signal. The structure and equation governing the operation of an individual neuron is shown in Figure \ref{fig:Node}. 
+Similar to a biological neuron, the ANN neuron receives input stimuli, performs an operation using it, and returns a signal. The structure and equation governing the operation of an individual neuron is shown in Figure \ref{fig:Node}. 
 
 \begin{figure}[H]
 	\centering
