@@ -212,24 +212,29 @@ Similar to a biological neuron, the ANN neuron receives input stimuli, performs 
 	\label{fig:Node}
 \end{figure}
 
-As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layers values ($A_1$, $A_2$, ... $A_N$}) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biologic neuron receives from its dendrites. The stimulus is then operated on by an activation function $f$, typically a non-linear function. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by setting the network weights, $\mathbf{W}$, in such a way that they minimize the error between target values, $\mathbf{T}$, in a training dataset, $\mathbf{Y}$, and the ANN output given that training dataset, $f( \mathbf{Y} ; \mathbf{W} )$, 
+As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A_1$, $A_2$, ... $A_N$}) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by setting the network weights, $\mathbf{W}$, in such a way that they minimize the error between target values, $\mathbf{T}$, in a training dataset, $\mathbf{Y}$, and the ANN output given that training dataset, $f( \mathbf{Y} ; \mathbf{W} )$, 
 %
 \begin{equation} \label{eq:argminW_Error}
 \underset{\mathbf{W}}{\text{argmin}} {\text{ Error}}(f(\mathbf{Y} ; \mathbf{W} ) , \mathbf{T} ).
 \end{equation}
 % \underset{w}{\text{argmin}} \sum_{i=1}^{N} \Vert t_i - y_i \Vert^2
-Except under simple cases, Equation \ref{eq:argminW_Error} cannot be solved analytically. Numerical methods for solving this equation include gradient descent through the back-propagation of errors \cite{Rumelhart1986}, genetic learning algorithms \cite{Yao1999}, and Newtons method \cite{Fletcher2000}.
+Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analytically. Numerical methods for solving this equation include gradient descent through the back-propagation of errors \cite{Rumelhart1986}, genetic learning algorithms \cite{Yao1999}, and Newton's method \cite{Fletcher2000}.
 
 
 \subsection{Simple Neural Network Example}
 
-An example of a very simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN takes two inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron will be represented by $w_{ij}$. The bias is set to a constant value of 1. This allows the bias to be effectively trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range from -1 to 1. Using these outputs, any input can be classified into a given class if the class' respective output neurons value is above zero, or not in a class if the output neurons value is below zero. The equation for the output of the $j^{th}$ output is given in Equation \ref{eq:single_layer_eq_sum}, where $x_i$ is the $i^{th}$ input from the previous layer, and $b_i$ is the value of the weight connecting the $j^{th}$ output to the bias neuron.
+An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN takes two inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron will be represented by $w_{ij}$. An extra node, called the bias, is added to make the model affine. The bias is set to a constant value of 1, allows the bias to be effectively trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range from -1 to 1. Using these outputs, any input can be classified into a given class if the class' respective output neurons value is above zero, or not in a class if the output neurons value is below zero. The equation for the output of the $j^{th}$ output is given in Equation \ref{eq:single_layer_eq_sum}, where $x_i$ is the $i^{th}$ input from the previous layer, and $b_i$ is the value of the weight connecting the $j^{th}$ output to the bias neuron.
+%
+%\begin{align}
+%    myvar &= \mbox{blerp}
+%\end{align}
+%
 %
 \begin{equation} \label{eq:single_layer_eq_sum}
 y_j = \tanh(\sum_i x_i w_{ij} + b_j),
 \end{equation}
 
-To more clearly understand the geometry of the network's operation, consider the dataset in Figure \ref{fig:training_set_one_layer}. This dataset is composed of three classes: red, green, and blue. The axes that define this dataset are the inputs to the single layer network in Figure \ref{fig:one_layer_net}, ($x_1$,$x_2$). If $\mathbf{W}$ is defined to be a vector with elements ($w_{11}$, $w_{21}$), a line can be defined perpendicular to $\mathbf{W}$ and shifted by $\frac{b_1}{||\mathbf{W}||}$ away from the origin in the direction of $\mathbf{W}$. Given appropriate values for $w_{11}$, $w_{21}$, and $b_1$, a line that separates the blue class from the non-blue class can be created. Any point on the -$\mathbf{W}$ side of the line will have $y_1 < 0$, allowing for classification. Similarly, a separating line for the red class using $w_{12}$, $w_{22}$, and $b_2$ and a separating line for the green class using $w_{13}$, $w_{23}$, and $b_3$ can be constructed. 
+To more clearly understand the geometry of the network's operation, consider the dataset in Figure \ref{fig:training_set_one_layer}. This dataset is composed of three classes: red, green, and blue. The axes that define this dataset are the inputs to the single layer network in Figure \ref{fig:one_layer_net}, ($x_1$,$x_2$). If $\mathbf{W}$ is defined to be a vector with elements ($w_{11}$, $w_{21}$), a line can be defined perpendicular to $\mathbf{W}$ and shifted by $\frac{b_1}{||\mathbf{W}||}$ from the origin in the direction of $\mathbf{W}$. Given appropriate values for $w_{11}$, $w_{21}$, and $b_1$, a line that separates the blue class from the non-blue class can be created. Any point on the -$\mathbf{W}$ side of the line will have $y_1 < 0$, allowing for classification. Similarly, a separating line for the red class using $w_{12}$, $w_{22}$, and $b_2$ and a separating line for the green class using $w_{13}$, $w_{23}$, and $b_3$ can be constructed. 
 
 The classes in this example dataset are linearly separable, meaning lines can be drawn completely separating each class. If the classes were not linearly separable, additional hidden layers would be necessary to compute the function. It has been shown that additional hidden layers allow the creation of arbitrary decision boundaries \cite{Hornik1991}. 
 %
@@ -256,46 +261,37 @@ The classes in this example dataset are linearly separable, meaning lines can be
 
 \subsection{Neural Network Training}
 
-One of the most common methods of training an ANN is through error backpropagation. Error backpropagation is a method to minimizes an error function with respect to the weights connecting neurons as seen in Equation \ref{eq:dMSE}. % If the error function is convex with respect to the network weights, the error with respect to the weights in the network can be minimized using its derivative. THIS IS WRONG. ANN with no hidden layers will have a purely convex error fctn wrt weights, add layers and we get local minima/maxima
+One of the most common methods of training an ANN is through error backpropagation, a method used to minimize an error function with respect to a set of weights connecting neurons. It can be applied as seen in Equation \ref{eq:dMSE}. % If the error function is convex with respect to the network weights, the error with respect to the weights in the network can be minimized using its derivative. THIS IS WRONG. ANN with no hidden layers will have a purely convex error fctn wrt weights, add layers and we get local minima/maxima
 
-Training the simple, one-layer ANN requires finding an expression for \ref{eq:dMSE}. For the following section, let $y_i$ be defined as in Equation \ref{eq:single_layer_eq_sum}, $E_{MSE}$ be defined as the mean squared error function, and training data be defined as in Equation \ref{eq:train_data_D} where $\bold{x_n}$ represents the $n^{th}$ training token and $t_n$ represents the $n^{th}$ binary training target \cite{Nielsen2015}. Note, this derivation would need to be repeated for a different error function. By the chain rule,
-%
-\begin{equation} \label{eq:dMSE}
-\frac{dE_{MSE}}{dw_j} = \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}.
-\end{equation}
+Training a single-layer ANN requires finding an expression for \ref{eq:dMSE}. For the following section, let $y_i$ be defined as in Equation \ref{eq:single_layer_eq_sum}, $E_{MSE}$ be defined as the mean squared error function, and training data be defined as 
 %
 \begin{equation} \label{eq:train_data_D}
- D={(\boldsymbol{x}_1,t_1), ... ,(\boldsymbol{x}_n,t_n)}
+ D={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}
 \end{equation}
+%
+where $\boldsymbol{x}_{n}$ represents the $n^{th}$ training example and $t_n$ represents the $n^{th}$ training target \cite{Nielsen2015}. Note, this derivation would need to be repeated for different error functions. By the chain rule,
+%
+\begin{equation} \label{eq:dMSE}
+\frac{dE_{MSE}}{dw_j} = \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}
+\end{equation}
+%
 Equation \ref{eq:dMSE} can be solved by first evaluating $\frac{dE_{MSE}}{dy_i}$,
 %
-\begin{equation} \label{dE_{MSE}/dy_i}
-\frac{dE_{MSE}}{dy_i}  = \frac{d}{dy_i} \sum_i(t_i - y_i)^2
-\end{equation}
-%
-\begin{equation} \label{dE_{MSE}/dy_i}
- = \sum_i  \frac{d}{dy_i} (t_i - y_i)^2
-\end{equation}
-%
-\begin{equation} \label{eq:MSE_deriv}
- =  -2 \sum_i  (t_i - y_i).
-\end{equation}
+\begin{align*} \label{dE_{MSE}/dy_i}
+\frac{dE_{MSE}}{dy_i}  &= \frac{d}{dy_i} \sum_i(t_i - y_i)^2 \\
+&= \sum_i  \frac{d}{dy_i} (t_i - y_i)^2 \\
+&=  -2 \sum_i  (t_i - y_i).
+\end{align*}
 %
 Evaluating $\frac{dy_i}{dw_j}$,
 %
-\begin{equation} \label{dE_{MSE}/dy_i}
-\frac{dy_i}{dw_j}  = \frac{d}{dw_j} \tanh( \boldsymbol{w}' \boldsymbol{x}_i + b) 
-\end{equation}
+\begin{align*} \label{dE_{MSE}/dy_i}
+\frac{dy_i}{dw_j}  &= \frac{d}{dw_j} \tanh( \boldsymbol{w}' \boldsymbol{x}_i + b) \\
+&= \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b) \frac{d}{dw_j}( \boldsymbol{w}' \boldsymbol{x}_i + b) \\
+&= \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b)  x_{ij}.
+\end{align*} 
 %
-\begin{equation} \label{dE_{MSE}/dy_i}
- = \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b) \frac{d}{dw_j}( \boldsymbol{w}' \boldsymbol{x}_i + b)
-\end{equation}
-%
-\begin{equation} \label{dE_{MSE}/dy_i}
- = \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b)  x_{ij}.
-\end{equation}
-%
-\noindent where $x_{ij}$ is the $j^{th}$ feature of the $i^{th}$ training vector.
+\noindent where $x_{ij}$ is the $j^{th}$ index of the $i^{th}$ training vector.
 %
 The update rule for the bias vector is found using
 %
@@ -337,27 +333,32 @@ and
 \Delta b_{j} = - \eta \frac{dE_{MSE}}{db_j}
 \end{equation}
 %
-where $\eta$ in Equations \ref{eq:update1} and \ref{eq:update2} represents the learning rate of the neural network. The learning rate and its effect on training will be discussed more thoroughly in a later section.
+where $\eta$ in Equations \ref{eq:update1} and \ref{eq:update2} represents the learning rate of the neural network. The learning rate and its effect on training will be discussed more thoroughly in section \ref{LearningRateSubsection}.
 
-Gradient descent can also be applied to multi-layer ANN. Given an L-layer network where the input stimuli to the $l^{th}$ layer training example x is represented by
-%
+Gradient descent can be applied to an ANN with multiple layers. The input to the the $l^{th}$ layer given some training example $\boldsymbol{x}$ in an L-layer network is 
 \begin{equation} \label{eq:CrossEntropy}
 \boldsymbol{z}^{x,l} = \boldsymbol{w}^{l}  \boldsymbol{a}^{x,l-1} + \boldsymbol{b}^{l}
 \end{equation}
 %
-where $\boldsymbol{w}^{l}$ is the $l^{th}$ layer's weight matrix, $\boldsymbol{b}^{l}$ is the $l^{th}$ layer's bias vector, and the output activation vector from the $(l-1)^{th}$ layer is 
+where the activation from the $(l-1)^{th}$ layer is
 %
 \begin{equation} \label{eq:CrossEntropy}
-\boldsymbol{a}^{x,l-1} = f^{l-1}(\boldsymbol{z}^{x,l-1})
+\boldsymbol{a}^{x,l-1} = f^{l-1}(\boldsymbol{z}^{x,l-1}).
 \end{equation}
+
+\begin{align*}
+  \text{and where } \boldsymbol{w}^{l} &= l^{th} \text{ layer's weight matrix,} \\
+  \boldsymbol{b}^{l} &= l^{th} \text{ layer's bias vector,} \\
+  f^{l-1} &= \text{ non-linear activation function used in the $(l-1)^{th}$-layer}
+\end{align*}
 %
-where $f^{l-1}$ represents the non-linear activation function used in the $(l-1)^{th}$-layer. Defining the output error as 
+Defining the output error as 
 %
 \begin{equation} \label{eq:CrossEntropy}
 \delta^{x,L} = \frac{\partial C}{\partial a^{x,L}} \odot \frac{\partial f^{l-1}(\boldsymbol{z}^{x,l-1}) }{\partial \boldsymbol{z}^{x,l-1}}, 
 \end{equation}
 %
-where $\odot$ is the Hadamard product, the output error can backpropagate to previous layers. For each $l=L-1,L-2,...,2$ an error can be defined by
+where $\odot$ is the element-wise product, the output error can backpropagate to previous layers. For each $l=L-1,L-2,...,2$ an error can be defined by
 %
 \begin{equation} \label{eq:CrossEntropy}
 \delta^{x,l} = ((\boldsymbol{w}^{l+1})^T \delta^{l+1}) \odot \frac{\partial f^{l}(\boldsymbol{z}^{x,l}) }{\partial \boldsymbol{z}^{x,l}}.
@@ -375,14 +376,14 @@ and
 \frac{\partial E}{\partial b_j} = \delta^l_j.
 \end{equation}
 %
-Using Equations \ref{eq:update1} and \ref{eq:update2}, the weights can be updated for a single iteration of backpropogation. 
+Using Equations \ref{eq:CrossEntropy1} and \ref{eq:CrossEntropy2}, the weights can be updated for a single iteration of backpropogation. 
 
 % Other early stopping methods include 
 
 
 % Where this simple accuracy test is not applicable, such as for regression training sets, a condition based on the ANN training error metric can be used.
 
-ANNs require some stopping condition to conclude training. Stopping conditions include ending training when a threshold in network accuracy on a testing set is reached and ending training when the accuracy has not improved (either by some factor or absolutely) in a fixed number of epochs. Early stopping has the benefit of preventing overfitting and encouraging generalization. Early stopping works by removing a small portion of the training data and defining it as testing data. The ANN is trained using the new training data while some error metric for both the training and testing set are recorded. As training progresses, the ANN likely will overfit to the training data, leading to an increase in error for the testing dataset. Early stopping ends training before overfitting occurs, as illustrated in Figure \ref{fig:training_testing_error}. Because training is stopped before the error in a dataset unknown to the model increases, generalization, or the ability for the ANN to correctly identify patterns outside of the training set, is also improved.
+ANNs require some stopping condition to conclude training. Early stopping works by removing a small portion of the training data and defining it as testing data. The ANN is trained using the new training data while some error metric for both the training and testing set are recorded. As training progresses, the ANN likely will overfit to the training data, leading to an increase in error for the testing dataset. This process is illustrated in Figure \ref{fig:training_testing_error}. Stopping conditions include ending training when a threshold on an error metric is reached or ending training when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs. Early stopping has the benefit of preventing overfitting and encouraging generalization.
 
 \begin{figure}[H]
 	\centering
@@ -391,13 +392,13 @@ ANNs require some stopping condition to conclude training. Stopping conditions i
 	\label{fig:training_testing_error}
 \end{figure}
 
-\subsection{Convolution Neural Networks}
+\subsection{Convolutional Neural Networks}
 
 Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors and a simple trainable classifier like a linear model or naive Bayes. One difficulty in this is the expense in leveraging domain knowledge to design the custom feature extractors. Another challenge comes when the model is applied to a similar but more difficult problem, potentially requiring a new set of feature extractors. While these new features could be based on the old analysis, recreating them would still be costly and require considerable effort.
 
-Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolution layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared between classes. This weight sharing decreasing the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
+Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolutional layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared among classes. This weight sharing decreases the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
 
-One of the first CNN architectures was LeNet-5 \cite{Lecun1998}. LeNet-5, shown in Figure \ref{fig:cnn_mnist_lecun98}, classified 32x32 images of handwritten digits using two convolution-average pooling layers followed by two dense layers and an output. This was the first example of a machine learning algorithm creating custom filters and a classification model for the MNIST dataset.
+Figure \ref{fig:cnn_mnist_lecun98} shows one of the first successful CNN architectures, LeNet-5 \cite{Lecun1998}, which classified 32x32 images of handwritten digits using two convolution-average pooling layers followed by two dense layers and an output. This was the first example of a machine learning algorithm creating custom filters and a classification model for the MNIST dataset.
 
 % AlexNet \cite{Krizhevsky2012} was the first exploration into wider and deeper CNNs. 
 
@@ -413,9 +414,9 @@ One of the first CNN architectures was LeNet-5 \cite{Lecun1998}. LeNet-5, shown 
 \section{Autoencoders} \label{Autoencoders}
 % \cite{CHARTE2018} is a practical guide to autoencoders. Great resource.
 
-Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an encoding network and a decoding network. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and outputs a reproduction of the input signal, $X'$. Once trained, the encoder can be used as a method to pre-train other neural networks or as a feature extractor \cite{Erhan2010,CHARTE2018}. 
+Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an \textit{encoding network} and a \textit{decoding network}. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and reproduces the input signal, $X'$. Once trained, the encoder can pre-train other neural networks or serve as a feature extractor \cite{Erhan2010,CHARTE2018}. 
 
-Methods to encourage the network to learn useful features include forcing the autoencoder to perform denoising \cite{Vincent2008, Vincent2010} and using an undercomplete representation as the encoding layer. Denoising autoencoders corrupt their input with noise, making the autoencoder learn more robust features than those used for simply copying the input. 
+Methods to encourage the network to learn useful features include forcing the autoencoder to perform denoising \cite{Vincent2008, Vincent2010} and by using an encoding smaller than the input signal (also called an undercomplete autoencoder). Denoising autoencoders corrupt their input with noise, making the autoencoder learn more robust features than those used for simply copying the input. 
 
 % \cite{Masci2011} demonstrated that stacking convolution layers made a good autoencoder.
 
@@ -446,9 +447,9 @@ Other feature extraction methods exist. Principal component analysis (PCA) attem
 
 In addition to the weights connecting neurons, ANNs can have additional hyperparameters. Hyperparameters determine both the networks structure (number of layers, number of nodes in each layer, activation function for each layer) and how the model learns (learning rate, momentum, loss function). In the following section, various hyperparameters and their effects on ANN learning are discussed.
 
-\subsubsection{Learning Rate}
+\subsubsection{Learning Rate} \label{LearningRateSubsection}
 
-The learning rate is a tunable parameter that affects the magnitude of each weight update. If $\eta$ is too small, the network will learn slowly and training will be inefficient. If $\eta$ is too large, the network will fail to learn, either by converging to a non-extremum or by diverging. An example of a small and large learning rate are shown in Figure \ref{fig:Learning_rate_comparison} 
+The learning rate , $\eta$, affects the magnitude of each weight update. If $\eta$ is too small, the network will learn slowly and training will be inefficient. If $\eta$ is too large, the network will fail to learn, either by converging to a non-extremum or by diverging. An example of a small and large learning rate are shown in Figure \ref{fig:Learning_rate_comparison} 
 
 \begin{figure}[H]
 	\centering
@@ -468,13 +469,14 @@ Another method to speed up learning is to add a momentum hyperparameter, $\mu$, 
 \Delta w_{ij}(n) = - \eta \frac{dE_{MSE}}{dw_j} +\mu \Delta w_{ij}(n-1).
 \end{equation}
 %
-Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when the weights are updated at large steps, far from an optima, but will decrease near an optima, allowing slower learning near an optimum.
+Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when the weights are updated at large steps, far from an optima, but will decrease near an optima, allowing slower learning near an optimum. 
  
 \subsubsection{Training Algorithms}
 
-There are many ANN training algorithms that employ clever learning rate schedules and momentum functions. These algorithms include but are not limited to: Nesterov's accelerated gradient \cite{nesterov1983}, simulated annealing \cite{Kirkpatrick1983}, ADADELTA \cite{ADADELTA}, and ADAM \cite{Kingma2015}. 
+There are many ANN training algorithms that employ various learning rate schedules and momentum functions. These algorithms include but are not limited to: Nesterov's accelerated gradient \cite{nesterov1983}, simulated annealing \cite{Kirkpatrick1983}, ADADELTA (An Adaptive Learning Rate Method) \cite{ADADELTA}, and Adam (Adaptive Moment Estimation) \cite{Kingma2015}. 
 
-The ADAM optimizer was chosen as the training algorithm for the work presented in this thesis due to its incorporation of parts of other successful optimization algorithms and its reported superior performance over these algorithms. Another benefit of the ADAM optimizer is introduction of only one hyperparameter, the learning rate. 
+% Adam incorporates of parts of RMSprop and AdaGrad.
+In this thesis, the Adam optimizer was chosen as the training algorithm. The Adam optimizer is widely used due to training speedups and performance improvements on popular benchmark datasets like MNIST \cite{lecun98}, IMDB movie reviews \cite{Maas2011}, and CIFAR-10 \cite{Krizhevsky2009}. Another benefit of Adam is the introduction of effectively only one hyperparameter, the learning rate.
 
 The ADAM optimizer update rule is described below. For the following, $g_t$ is the gradient of the error function with respect to the network parameters at iteration $t$, 
 \begin{equation} \label{eq:adam1}
@@ -484,7 +486,7 @@ is the estimate of the mean of the gradient at iteration $t$ and
 \begin{equation} \label{eq:adam2}
 v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2
 \end{equation}
-is the estimate of the variance of the gradient at iteration $t$. For the following, the variables $\beta_1$ and $\beta_2$ are parameters called decay rates, $\epsilon$ is another parameter, and $\theta_t$ represents the network parameters at iteration $t$. As described by Kingma and Lei Ba, The default values for $\beta_1$, $\beta_2$, and $\epsilon$ are 0.9, 0.999, and $10^{-8}$ respectively \cite{Kingma2015}. These values were seen to work well for a variety of problems. While these hyperparameters can also be tuned, it has been shown that the default values work well for a variety of network architectures and datasets \cite{Kingma2015}. The bias-corrected first moment estimate is given by
+is the estimate of the variance of the gradient at iteration $t$. For the following, the variables $\beta_1$ and $\beta_2$ are parameters called decay rates, $\epsilon$ is included for numerical stability, and $\theta_t$ represents the network parameters at iteration $t$. As described by Kingma and Lei Ba, The default values for $\beta_1$, $\beta_2$, and $\epsilon$ are 0.9, 0.999, and $10^{-8}$ respectively \cite{Kingma2015}. These values were seen to work well for a variety of problems. While these hyperparameters can also be tuned, it has been shown that the default values work well for a variety of network architectures and datasets \cite{Kingma2015}. The bias-corrected first moment estimate is given by
 \begin{equation} \label{eq:adam3}
 \hat{m}_t = \dfrac{m_t}{1 - \beta^t_1}
 \end{equation}
