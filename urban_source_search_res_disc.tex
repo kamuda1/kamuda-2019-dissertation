@@ -12,7 +12,7 @@
 
 \section{Problem Description and Training Dataset Overview}
 
-This chapter applies machine learning algorithms to solve the problem of a identifying a radioactive source in an urban environment where a source may be present. This scenario is applicable when performing source interdiction searching cargo containers, vehicles at boarder crossings, or security at high profile events. Urban environments present unique challenges to gamma-ray spectroscopy. Background radiation can change over city blocks due to different concentrations of uranium and thorium in building materials. Sources may be purposely shielded by unknown amounts of material to obscure their gamma-ray signal.
+This chapter applies machine learning algorithms to solve the problem of identifying a radioactive source in an urban environment where a source may be present. This scenario is applicable when performing source interdiction searching cargo containers, vehicles at boarder crossings, or security at high profile events. Urban environments present unique challenges to gamma-ray spectroscopy. Background radiation can change over city blocks due to different concentrations of uranium and thorium in building materials. Sources may be purposely shielded by unknown amounts of material to obscure their gamma-ray signal.
 
 
 
@@ -43,7 +43,7 @@ In this section we use learning curves to quantify how well the online data augm
 
 First, They are used as a sanity check, to make sure we are sampling our input space with enough granularity. To know we are sampling well enough, we should be sampling in a region where the curves are flat for both algorithms.
 
-Secondly, Learning curves give us insight into which algorithm works better on the hyperparameter optimization dataset and simple version of the problem. We're expecting the CNN to outperform the DNN due to theoretical benefits of convolution architectures for our problem. We can also compare this curve to the final learning curves for the final datasets.
+Secondly, Learning curves give us insight into which algorithm works better on the hyperparameter optimization dataset and simplified version of the problem. We're expecting the CNN to outperform the DNN due to theoretical benefits of convolution architectures for our problem. We can also compare this curve to the final learning curves for the final datasets.
 
 
 \begin{figure}[H]
@@ -83,17 +83,17 @@ To test generalization performance, datasets are simulated with unshieled spectr
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
+         \caption{Simplified Dataset.}
          \label{fig:results_easy_distance_comparison_simple}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Full Dataset.}
+         \caption{Complete Dataset.}
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various source-detector distance.}
+        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various source-detector distance.}
         \label{fig:results_easy_distance_comparison}
 \end{figure}
 
@@ -102,17 +102,17 @@ To test generalization performance, datasets are simulated with unshieled spectr
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
+         \caption{Simplified Dataset.}
          \label{fig:results_easy_distance_comparison_simple}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Full Dataset.}
+         \caption{Complete Dataset.}
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various source-detector heights.}
+        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various source-detector heights.}
         \label{fig:results_easy_distance_comparison}
 \end{figure}
 
@@ -127,17 +127,17 @@ Datasets were constructed with various Gaussian energy broadening function. This
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
+         \caption{Simplified Dataset.}
          \label{fig:results_easy_distance_comparison_simple}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Full Dataset.}
+         \caption{Complete Dataset.}
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various Gaussian energy broadening functions.}
+        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various Gaussian energy broadening functions.}
         \label{fig:results_easy_distance_comparison}
 \end{figure}
 
@@ -151,17 +151,17 @@ Datasets were simulated with and without shielding.
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
+         \caption{Simplified Dataset.}
          \label{fig:results_easy_distance_comparison_simple}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Full Dataset.}
+         \caption{Complete Dataset.}
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various amounts of shielding.}
+        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various amounts of shielding.}
         \label{fig:results_easy_distance_comparison}
 \end{figure}
 
@@ -171,14 +171,14 @@ Datasets were simulated with and without shielding.
      \begin{subfigure}[b]{0.8\textwidth}
          \centering
          \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Simple Training Dataset.}
+         \caption{Simplified Training Dataset.}
          \label{fig:results_easy_distance_comparison_simple}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.8\textwidth}
          \centering
          \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Full Training Dataset.}
+         \caption{Complete Training Dataset.}
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
         \caption{Confusion matrices for the dataset with 60\% shielding.}
@@ -190,28 +190,28 @@ Datasets were simulated with and without shielding.
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Simple Training Dataset.}
+         \caption{Simplified Training Dataset.}
          \label{fig:results_easy_distance_comparison_simple}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Full Training Dataset.}
+         \caption{Complete Training Dataset.}
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
      
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Simple Training Dataset.}
+         \caption{Simplified Training Dataset.}
          \label{fig:results_easy_distance_comparison_simple}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Full Training Dataset.}
+         \caption{Complete Training Dataset.}
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
      
@@ -230,17 +230,17 @@ Datasets were simulated with various gain and offset setting.
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
+         \caption{Simplified Dataset.}
          \label{fig:results_easy_distance_comparison_simple}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Full Dataset.}
+         \caption{Complete Dataset.}
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various gain and offset settings.}
+        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various gain and offset settings.}
         \label{fig:results_easy_distance_comparison}
 \end{figure}
 
@@ -248,7 +248,7 @@ Datasets were simulated with various gain and offset setting.
 
 \subsection{Generalization Dependence on Changing Background.}
 
-Datasets were simulated with backgrounds different from the training set and real measured background. It is expected that the full dataset will mistake background for isotopes more often than the simple dataset because photopeaks are decreased by shielding.
+Datasets were simulated with backgrounds different from the training set and real measured background. It is expected that the complete dataset will mistake background for isotopes more often than the simplified dataset because photopeaks are decreased by shielding.
 
 
 \begin{figure}[H]
@@ -256,17 +256,17 @@ Datasets were simulated with backgrounds different from the training set and rea
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
+         \caption{Simplified Dataset.}
          \label{fig:fig:results_easy_background_simulated_simple}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Full Dataset.}
+         \caption{Complete Dataset.}
          \label{fig:fig:results_easy_background_simulated_full}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simple dataset. Datasets included here used various amounts of shielding.}
+        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various amounts of shielding.}
         \label{fig:results_easy_background_simulated}
 \end{figure}
 
@@ -279,17 +279,17 @@ Figure \ref{fig:results_full_background_inject} shows the identification perform
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
+         \caption{Simplified Dataset.}
          \label{fig:results_full_background_inject_simple}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Full Dataset.}
+         \caption{Complete Dataset.}
          \label{fig:results_full_background_inject_full}
      \end{subfigure}
-        \caption{F1 score for all models trained on the full dataset. Datasets included here used various amounts of shielding.}
+        \caption{F1 score for all models trained on the complete dataset. Datasets included here used various amounts of shielding.}
         \label{fig:results_full_background_inject}
 \end{figure}
 
@@ -371,14 +371,14 @@ NORM + WGPu \\ % \hline
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
+         \caption{Simplified Dataset.}
          \label{fig:results_full_background_inject_simple}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.9\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Full Dataset.}
+         \caption{Complete Dataset.}
          \label{fig:results_full_background_inject_full}
      \end{subfigure}
 
@@ -401,7 +401,7 @@ To see the generalization performance of the model to changing calibration, spec
 
 Spectra were measured with different detector calibrations. A 2x2 Ortec NaI detector was set to 770 V, setting it's 1024th channel to 3 MeV. To capture a large range of calibrations, voltages varied from 720 V to 820 V in steps of 15 V. The $^{137}$Cs, $^{60}$Co, and $^{133}$Ba source had an activity of 1$\mu$C. For these sources, a source-to-detector distance of 14.25 mm was used to keep the cps on the detector from the source equal to the cps on the detector from background.
 
-Figures \ref{fig:model_asymptotic_performance_co60} and \ref{fig:model_asymptotic_performance_cs137} show performance for isotopes with comparatively simple spectra.
+Figures \ref{fig:model_asymptotic_performance_co60} and \ref{fig:model_asymptotic_performance_cs137} show performance for isotopes with comparatively simplified spectra.
 
 
 \begin{figure}[H]
@@ -434,7 +434,7 @@ Figures \ref{fig:model_asymptotic_performance_co60} and \ref{fig:model_asymptoti
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
 
-        \caption{F1 score for all models trained on the simple dataset. Spectra measured with different gain settings.}
+        \caption{F1 score for all models trained on the simplified dataset. Spectra measured with different gain settings.}
         \label{fig:results_easy_distance_comparison}
 \end{figure}
 
@@ -469,7 +469,7 @@ Figures \ref{fig:model_asymptotic_performance_co60} and \ref{fig:model_asymptoti
          \label{fig:results_easy_distance_comparison_full}
      \end{subfigure}
 
-        \caption{F1 score for all models trained on the full dataset. Spectra measured with different gain settings.}
+        \caption{F1 score for all models trained on the complete dataset. Spectra measured with different gain settings.}
         \label{fig:results_easy_distance_comparison}
 \end{figure}
 

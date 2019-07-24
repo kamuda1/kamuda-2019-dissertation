@@ -223,16 +223,20 @@ Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analyti
 
 \subsection{Simple Neural Network Example}
 
-An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN takes two inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron will be represented by $w_{ij}$. An extra node, called the bias, is added to make the model affine. The bias is set to a constant value of 1, allows the bias to be effectively trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range from -1 to 1. Using these outputs, any input can be classified into a given class if the class' respective output neurons value is above zero, or not in a class if the output neurons value is below zero. The equation for the output of the $j^{th}$ output is given in Equation \ref{eq:single_layer_eq_sum}, where $x_i$ is the $i^{th}$ input from the previous layer, and $b_i$ is the value of the weight connecting the $j^{th}$ output to the bias neuron.
+An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN takes two inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron will be represented by $w_{ij}$. An extra node, called the bias, is added to make the model affine. The bias is set to a constant value of 1, allows the bias to be effectively trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range from -1 to 1. Using this function, if an input $\boldsymbol{x}$ results in the $y_{j}^{th}$ output neuron rising above zero, $\boldsymbol{x}$ can be classified as part of the ${j}^{th}$ class (or as not a part of the ${j}^{th}$ class if the output is below zero). The equation for the output of the $j^{th}$ class is 
+%
+\begin{align*} \label{eq:single_layer_eq_sum}
+y_j &= \tanh(\sum_i x_i w_{ij} + b_j),
+\end{align*}
+%
+where $x_i$ is the $i^{th}$ input from the previous layer, and $b_i$ is the value of the weight connecting the $j^{th}$ output to the bias neuron.
 %
 %\begin{align}
 %    myvar &= \mbox{blerp}
 %\end{align}
 %
 %
-\begin{equation} \label{eq:single_layer_eq_sum}
-y_j = \tanh(\sum_i x_i w_{ij} + b_j),
-\end{equation}
+
 
 To more clearly understand the geometry of the network's operation, consider the dataset in Figure \ref{fig:training_set_one_layer}. This dataset is composed of three classes: red, green, and blue. The axes that define this dataset are the inputs to the single layer network in Figure \ref{fig:one_layer_net}, ($x_1$,$x_2$). If $\mathbf{W}$ is defined to be a vector with elements ($w_{11}$, $w_{21}$), a line can be defined perpendicular to $\mathbf{W}$ and shifted by $\frac{b_1}{||\mathbf{W}||}$ from the origin in the direction of $\mathbf{W}$. Given appropriate values for $w_{11}$, $w_{21}$, and $b_1$, a line that separates the blue class from the non-blue class can be created. Any point on the -$\mathbf{W}$ side of the line will have $y_1 < 0$, allowing for classification. Similarly, a separating line for the red class using $w_{12}$, $w_{22}$, and $b_2$ and a separating line for the green class using $w_{13}$, $w_{23}$, and $b_3$ can be constructed. 
 
@@ -343,9 +347,8 @@ Gradient descent can be applied to an ANN with multiple layers. The input to the
 where the activation from the $(l-1)^{th}$ layer is
 %
 \begin{equation} \label{eq:CrossEntropy}
-\boldsymbol{a}^{x,l-1} = f^{l-1}(\boldsymbol{z}^{x,l-1}).
+\boldsymbol{a}^{x,l-1} = f^{l-1}(\boldsymbol{z}^{x,l-1})
 \end{equation}
-
 \begin{align*}
   \text{and where } \boldsymbol{w}^{l} &= l^{th} \text{ layer's weight matrix,} \\
   \boldsymbol{b}^{l} &= l^{th} \text{ layer's bias vector,} \\
@@ -394,7 +397,7 @@ ANNs require some stopping condition to conclude training. Early stopping works 
 
 \subsection{Convolutional Neural Networks}
 
-Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors and a simple trainable classifier like a linear model or naive Bayes. One difficulty in this is the expense in leveraging domain knowledge to design the custom feature extractors. Another challenge comes when the model is applied to a similar but more difficult problem, potentially requiring a new set of feature extractors. While these new features could be based on the old analysis, recreating them would still be costly and require considerable effort.
+Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors (e.g. manually creating features using edge and line detectors for face classification) and a simple trainable classifier like a linear model or naive Bayes. One difficulty in this is the expense in leveraging domain knowledge to design the custom feature extractors. Another challenge comes when the model is applied to a similar but more difficult problem, potentially requiring a new set of feature extractors. While these new features could be based on the old analysis, recreating them would still be costly and require considerable effort.
 
 Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolutional layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared among classes. This weight sharing decreases the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
 
@@ -445,7 +448,7 @@ Other feature extraction methods exist. Principal component analysis (PCA) attem
 
 \subsection{Hyperparameters}
 
-In addition to the weights connecting neurons, ANNs can have additional hyperparameters. Hyperparameters determine both the networks structure (number of layers, number of nodes in each layer, activation function for each layer) and how the model learns (learning rate, momentum, loss function). In the following section, various hyperparameters and their effects on ANN learning are discussed.
+In addition to the weights connecting neurons, \textit{hyperparameters} can modify ANN behavior. Hyperparameters determine both the networks structure (number of layers, number of nodes in each layer, activation function for each layer) and how the model learns (learning rate, momentum, loss function). The following section discusses various hyperparameters and their effects on ANN learning.
 
 \subsubsection{Learning Rate} \label{LearningRateSubsection}
 
@@ -454,7 +457,7 @@ The learning rate , $\eta$, affects the magnitude of each weight update. If $\et
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/Learning_rate_comparison_v2}
-	\caption{Example training paths for a large learning rate, red, and a small learning rate, green.}
+	\caption{Example training paths for a large learning rate and a small learning rate.}
 	\label{fig:Learning_rate_comparison}
 \end{figure}
 
@@ -511,29 +514,36 @@ Finally, the weight update equation is computed as
 The choice of cost function to train against depends on the targets the network is attempting to learn. One of the simplest error functions is the binary accuracy for classification, 
 %
 \begin{equation} \label{eq:Binary_accuracy}
-E_{Binary} = {\frac{1} N} \sum_{n=1}^N [\hat{y}_n \neq y_n ],
+E_{Binary} = {\frac{1} N} \sum_{n=1}^N \mathds{1}[\hat{y}_n \neq y_n ],
 \end{equation}
 %
-where N is the total number of output neurons, $y_n$ is the ground truth of the n$^{th}$ output, and $\hat{y}_n$ is the ANN output of the n$^{th}$ output neuron. While this is a simple function, it penalizes the model for being close to the answer. Because there is no incremental indication that a model is improving, this error function is not typically used for gradient descent algorithms.
+where N is the total number of output neurons, $y_n$ is the ground truth of the n$^{th}$ output, and $\hat{y}_n$ is the ANN output of the n$^{th}$ output neuron. While this is a simple function, it cannot be used to train a gradient descent algorithm because it is discontinuous (there is no incremental indication that a model is improving).
 
-A simple differentiable cost function is the mean squared error (MSE) function shown in Equation \ref{eq:MSE_error}. This function is differentiable, so gradient descent algorithms can be applied to it. The MSE function is appropriate when targets are any real number, as in a regression problem. 
+A simple differentiable cost function is the mean squared error (MSE) function,
 %
 \begin{equation} \label{eq:MSE_error}
-E_{Binary} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2,
+E_{Binary} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2.
 \end{equation}
 %
-For classification problems, the average cross entropy, shown in Equation \ref{eq:CrossEntropy} can be used. Cross entropy measures how different the probability distributions $y_n$ and $\hat{y}_n$ are from each other. Because the cross entropy treats $y_n$ and $\hat{y}_n$ as probability distributions, they are required to exist in the range [0,1].
+Because this function is differentiable, it can be used to train a gradient descent algorithm. The MSE function is appropriate when targets are any real number, as in a regression problem. 
+
+For classification problems, the average cross entropy, 
 %
 \begin{equation} \label{eq:CrossEntropy}
 E = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n) +  (1-y_n) \log(1-\hat{y}_n), 
 \end{equation}
 %
+can be used. Cross entropy measures the similarity between the distributions $y_n$ and $\hat{y}_n$. Because the cross entropy treats $y_n$ and $\hat{y}_n$ as probability distributions, they are required to exist in [0,1].
 
-Because the softmax function can be used for classification, it is traditionally used as the output function for the model when using the cross entropy cost function. The softmax function is used in binary classification problems to calculate posterior class probabilities \cite{Bridle1990}.
-
+Because the softmax function,
+%
 \begin{equation} \label{eq:softmax}
 softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)}.
-\end{equation}
+\end{equation},
+%
+can be used for classification, it is traditionally used as the output function for the model when using the cross entropy cost function. The softmax function is used in binary classification problems to calculate posterior class probabilities \cite{Bridle1990}.
+
+
 
 
 %% This part is kinda total butts
@@ -543,23 +553,27 @@ softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)}.
 
 Weight regularization is a hyperparameter that penalizes the ANN when the magnitude of the weights increases. Because the magnitude of the weights is tied to the complexity of the model, adding weight regularization attempts to limit complexity and the probability of overfitting.
 
-A common method of incorporating weight regularization is by adding an $L_n$ regularization term to the error function, as seen in Equation \ref{eq:L2_Reg}. Common values for $n$ are 1 and 2. Adding weight regularization allows the magnitude of the weights to increase only when there is a comparable reduction in the unmodified error function.
+A common method of incorporating weight regularization is by adding an $L_n$ regularization term to the error function, 
 %
 \begin{equation} \label{eq:L2_Reg}
 \tilde{E} = E + \sum_i \lambda w_i^n.
 \end{equation}
 %
+Common values for $n$ are 1 and 2. Adding weight regularization allows the magnitude of the weights to increase only when there is a comparable reduction in the unmodified error function.
+
 In Equation \ref{eq:L2_Reg}, $w_i$ is the weight between each neuron in the ANN and $\lambda$ is the regularization strength hyperparameter. A larger $\lambda$ will force the ANN to prefer smaller weights connecting the neurons. If the parameter $\lambda$ is too small, the unbounded model complexity may fit only the training data. If the parameter $\lambda$ is too large, the ANN will only minimize the $L_n$ error, failing to learn.
 
 \subsubsection{Neuron Dropout}
 
-Another method to reduce model complexity is neuron dropout. Neuron dropout is the process of temporarily removing a neuron from the ANN architecture \cite{Srivastava2014}. By randomly removing neurons from an ANN during training, heavy local codependency between neurons that could lead to the ANN becoming stuck in a local minimum in the error function, and thus overtraining, is discouraged. The frequency with which neurons are removed is called the neuron dropout rate, which is a hyperparameter.
+Another method to reduce model complexity is by adding a \textit{neuron dropout rate} hyperparameter. Neuron dropout is the process of temporarily removing a random set of neuron from the ANN architecture during each training iteration \cite{Srivastava2014}. By randomly removing neurons from an ANN during training, heavy local codependency between neurons that could lead to the ANN becoming stuck in a local minimum in the error function - and thus overtraining - is discouraged. The frequency with which neurons are removed is called the neuron dropout rate.
 
 Almost always, taking the average output of more than one separately trained ANN improves the performance of the ANN \cite{Srivastava2014}. By applying dropout at each neuron with the same probability throughout training, the ANN's architecture changes every iteration. The makes neuron dropout a cost efficient way to effectively average many different ANN architectures, improving performance.
 
 \subsubsection{Data Augmentation}
 
-Data augmentation changes the data during training using physically realistic transformations. For example, a training dataset of images can be rotated, flipped, blurred, or color augmented during training. An example of horizontal flip and a blur augmentation are seen in Figure \ref{fig:cat}. This cheaply expands the training dataset and discourages overtraining, as the ANN never observes the exact same image. Both the augmentation method and strength of said method are hyperparameters. 
+Machine learning algorithms perform better with more data. To increase the effective amount of data available during training, existing data can be augmented using physically realistic transformations in a process called \textit{data augmentation}. For example, a training dataset of images can be rotated, flipped, blurred, or color augmented during training. An example of horizontal flip and a blur augmentation are seen in Figure \ref{fig:cat}. Both the augmentation method and parameters of the method (e.g. degrees rotated, Gaussian blur variance) are hyperparameters.
+
+Data augmentation can be performed either online or offline. Online data augmentation refers to applying the augmentation during each training batch, ensuring the network never sees the same data twice. If augmenting the data is computationally expensive, this method can slow training - potentially prohibitively. Offline data augmentation is used to expand the dataset before training. This can be used to reduce computational costs during training at the expense of storing the additional data.
 
 \begin{figure}[H]
 	\centering
@@ -570,11 +584,11 @@ Data augmentation changes the data during training using physically realistic tr
 
 \subsection{Hyperparameter Optimization}
 
-In general, ANNs have many hyperparameters that require optimization. Optimizing these hyperparameters will lead to more efficient training and more accurate performance when training is concluded. There are several different methods to perform hyperparameter optimization for an ANN. These methods may include manual optimization, exhaustive grid search, and random parameter search.
+In general, ANNs have many hyperparameters that require optimization. Optimizing these hyperparameters will lead to more efficient training and more accurate performance when training is concluded. There are several different methods to perform hyperparameter optimization for an ANN. These methods include manual optimization, exhaustive grid search, and random parameter search.
 
-Manually optimizing parameters is necessary when developing a novel algorithm. This involves changing hyperparameters and observing how the ANN trains and the final error on a validation dataset. Ideally, the ANN should train quickly and have a low error on a validation dataset. For many parameters `rule of thumb' values exist that can be used to find parameters that work to some degree. Due to the large hyperparameter space, a manual search is cost prohibitive if further optimization is desired.
+Manually optimizing parameters is necessary when developing a novel algorithm. This involves changing hyperparameters and observing training performance and validation dataset error. Ideally, the ANN should train quickly and have a low error on a validation dataset. For many parameters `rule of thumb' values exist that can be used to find parameters that work to some degree. Due to the large hyperparameter space, a manual search is cost prohibitive if further optimization is desired.
 
-Once a range of parameters is determined through a manual search, multiple methods are available to explore the parameter space for an optimal solution. One method is an exhaustive grid search. In a grid search the parameter space is divided into a uniform grid and the joint performance of all parameters is tested. The grid search method is ineffective for two reasons. First, neural networks may have a large number of hyperparameters that need to be explored, and the computational requirement to explore the hyperparameter space increases exponentially with increasing hyperparamters. Second, in practice only a few hyperparameters dominate performance, but the dominating hyperparameters are different for different applications. A grid search may under represent the importance of key hyperparamters, as seen in Figure \ref{fig:Bergstra12a_hyperparameter_grid_vs_random}.  While this method works, it has been shown that a random search in the hyperparameter target domain finds better hyperparameters quicker than testing equally distributed points in the chosen range \cite{Bergstra2012}. It can also be shown that given 60 random samples over some space with a finite minimum, the minimum of those 60 random samples is within 5\% of the true minimum with 95\% probability \cite{Zheng2015}. This means that given a range of hyperparameters, the best performing hyperparameter combination out of 60 randomly sampled points is very likely to be close to optimal. 
+Once a range of parameters is determined through a manual search, multiple methods are available to explore the parameter space for an optimal solution. One method is an exhaustive grid search. In a grid search the parameter space is divided into a uniform grid and the joint performance of all parameters is tested. The grid search method is ineffective for two reasons. First, neural networks may have a large number of hyperparameters that need to be explored, and the computational requirement to explore the hyperparameter space increases exponentially with increasing hyperparamters. Second, in practice only a few hyperparameters dominate performance, but the dominating hyperparameters are different for different applications. A grid search may under represent the importance of key hyperparamters, as seen in Figure \ref{fig:Bergstra12a_hyperparameter_grid_vs_random}.  While this method works, it has been shown that a random search in the hyperparameter target domain finds better hyperparameters quicker than testing equally distributed points in the chosen range \cite{Bergstra2012}. It can also be shown that given 60 random samples over some space with a finite minimum, the minimum of those 60 random samples is within 5\% of the true minimum with 95\% probability \cite{Zheng2015}.% This means that given a range of hyperparameters, the best performing hyperparameter combination out of 60 randomly sampled points is very likely to be close to optimal.
 
 \begin{figure}[H]
 	\centering

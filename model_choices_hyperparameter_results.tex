@@ -8,7 +8,7 @@ The other general architecture that will be explored is a 1D CNN.
 
 \subsection{Training Dataset Overview}
 
-The datasets used to train the models are composed of noiseless simulated gamma-ray templates. A one-dimension particle transport code developed at Sandia National Laboratory, GADRAS-DRF, was used to generate these templates. This simulation code can be used to model the conditions that effect spectra. The parameters used in this study are different detector materials, detector size, environmental scattering factors, shielding, and background as a function of location. GADRAS-DRF includes an option to create spectra without the Poisson noise expected for a spectrum. Using this, noiseless templates were generated.
+The datasets used to train the models are composed of noiseless simulated gamma-ray templates. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF, was used to generate these templates. This simulation code can be used to model the conditions that effect spectra. The parameters used in this study are different detector materials, detector size, environmental scattering factors, shielding, and background as a function of location. GADRAS-DRF includes an option to create spectra without the Poisson noise expected for a spectrum. Using this, noiseless templates were generated.
 
 The parameters simulated are based on handheld RIID scenarios. The source-detector height from ground are sampled between values shin and arm height. 
 
@@ -82,7 +82,7 @@ Different NaI(Tl) detectors have different amounts of peak Gaussian broadening. 
 
 \section{Datasets Used for the Hyperparameter Search}
 
-To show generalization improvements from including more physical parameters in the simulated dataset, networks will be trained on two datasets. Because datasets of different complexity often need different architectures and hyperparameters \cite{Bergstra2012}, independent hyperparameter searches will be conducted for each dataset. The first dataset is comprised of unshielded gamma-ray spectra of ANSI isotopes simulated using GADRAS. Each spectrum has parameters randomly selected from Table \ref{table:hyperparameter_dataset_easy_parameters}. The average training error from 5-fold cross validation training using early stopping patience of 20 epochs was used to train 128 models. The maximum number of epochs was set to 200. A total of 1000 spectra are simulated for each isotope for the DNN. A total of 100 spectra are simulated for each isotope for the CNN due to computational constraints training the CNN.
+To show generalization improvements from including more physical parameters in the simulated dataset, networks were trained on two datasets. Because datasets of different complexity often need different architectures and hyperparameters \cite{Bergstra2012}, independent hyperparameter searches will be conducted for each dataset. The simplified dataset is comprised of unshielded gamma-ray spectra of ANSI isotopes simulated using GADRAS. Each spectrum has parameters randomly selected from Table \ref{table:hyperparameter_dataset_easy_parameters}. The average training error from 5-fold cross validation training using early stopping patience of 20 epochs was used to train 128 models. The maximum number of epochs was set to 200. A total of 1000 spectra are simulated for each isotope for the DNN. A total of 100 spectra are simulated for each isotope for the CNN due to computational constraints training the CNN.
 
 \begin{table}[H]
 \centering
@@ -104,7 +104,7 @@ To show generalization improvements from including more physical parameters in t
 
 \begin{table}[H]
 \centering
-\caption{Range of parameters used for the full dataset.}
+\caption{Range of parameters used for the complete dataset.}
 \label{table:hyperparameter_dataset_full_parameters}
 \begin{tabular}{ccc}
 % \cline{2-3}
@@ -158,14 +158,14 @@ Random efficiency curves for different reprocessing methods for the DNN are show
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/random_hp_search_dnn_easy}
-	\caption{Random hyperparameter search efficiency curves for the DNN using the first dataset.}
+	\caption{Random hyperparameter search efficiency curves for the DNN using the simplified dataset.}
 	\label{fig:random_hp_search_dnn_easy}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/random_hp_search_dnn_full}
-	\caption{Random hyperparameter search efficiency curves for the DNN using the second dataset.}
+	\caption{Random hyperparameter search efficiency curves for the DNN using the complete dataset.}
 	\label{fig:random_hp_search_dnn_full}
 \end{figure}
 
@@ -265,14 +265,14 @@ Just like the autoencoder, this can be done in one or two steps. One step: Train
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/random_hp_search_cnn_easy}
-	\caption{Random hyperparameter search efficiency curves for the CNN using the first dataset.}
+	\caption{Random hyperparameter search efficiency curves for the CNN using the simplified dataset.}
 	\label{fig:random_hp_search_cnn_easy}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/random_hp_search_cnn_full}
-	\caption{Random hyperparameter search efficiency curves for the CNN using the second dataset.}
+	\caption{Random hyperparameter search efficiency curves for the CNN using the complete dataset.}
 	\label{fig:random_hp_search_cnn_full}
 \end{figure}
 
