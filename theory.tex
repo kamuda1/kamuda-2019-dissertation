@@ -212,31 +212,28 @@ Similar to a biological neuron, the ANN neuron receives input stimuli, performs 
 	\label{fig:Node}
 \end{figure}
 
-As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A_1$, $A_2$, ... $A_N$}) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by setting the network weights, $\mathbf{W}$, in such a way that they minimize the error between target values, $\mathbf{T}$, in a training dataset, $\mathbf{Y}$, and the ANN output given that training dataset, $f( \mathbf{Y} ; \mathbf{W} )$, 
+As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A_1$, $A_2$, ... $A_N$}) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by finding a function, $f$, that solves
 %
-\begin{equation} \label{eq:argminW_Error}
-\underset{\mathbf{W}}{\text{argmin}} {\text{ Error}}(f(\mathbf{Y} ; \mathbf{W} ) , \mathbf{T} ).
-\end{equation}
-% \underset{w}{\text{argmin}} \sum_{i=1}^{N} \Vert t_i - y_i \Vert^2
+\begin{align} \label{eq:argminW_Error}
+\underset{\mathbf{W}}{\text{argmin}} &{\text{ Error}}(f(\mathbf{Y} ; \mathbf{W} ) , \mathbf{T} ), \\
+\text{where } \mathbf{W} &= \text{network weights} \nonumber \\
+\mathbf{T} &= \text{target values in a dataset} \nonumber \\
+\mathbf{Y} &= \text{training data in a dataset.} \nonumber
+\end{align}
+%
 Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analytically. Numerical methods for solving this equation include gradient descent through the back-propagation of errors \cite{Rumelhart1986}, genetic learning algorithms \cite{Yao1999}, and Newton's method \cite{Fletcher2000}.
 
 
 \subsection{Simple Neural Network Example}
 
-An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN takes two inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron will be represented by $w_{ij}$. An extra node, called the bias, is added to make the model affine. The bias is set to a constant value of 1, allows the bias to be effectively trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range from -1 to 1. Using this function, if an input $\boldsymbol{x}$ results in the $y_{j}^{th}$ output neuron rising above zero, $\boldsymbol{x}$ can be classified as part of the ${j}^{th}$ class (or as not a part of the ${j}^{th}$ class if the output is below zero). The equation for the output of the $j^{th}$ class is 
+An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN takes two inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron will be represented by $w_{ij}$. An extra node, called the bias, is added to make the model affine. The bias is set to a constant value of 1, allows the bias to be effectively trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range from -1 to 1. Using this function, if an input results in the $y_{j}^{th}$ output neuron rising above zero, that input can be classified as part of the ${j}^{th}$ class (or as not a part of the ${j}^{th}$ class if the output is below zero). The equation for the output corresponding to the $j^{th}$ class is 
 %
-\begin{align*} \label{eq:single_layer_eq_sum}
-y_j &= \tanh(\sum_i x_i w_{ij} + b_j),
-\end{align*}
-%
-where $x_i$ is the $i^{th}$ input from the previous layer, and $b_i$ is the value of the weight connecting the $j^{th}$ output to the bias neuron.
-%
-%\begin{align}
-%    myvar &= \mbox{blerp}
-%\end{align}
-%
-%
-
+\begin{align} \label{eq:single_layer_eq_sum}
+y_j &= \tanh(\sum_i x_i w_{ij} + b_j), \\
+\text{where } y_j &= j^{th} \text{ output activation} \nonumber \\
+x_i &= i^{th} \text{ input from the previous layer} \nonumber \\
+b_j &= \text{weight connecting the } j^{th} \text{ output to the bias neuron.} \nonumber
+\end{align}
 
 To more clearly understand the geometry of the network's operation, consider the dataset in Figure \ref{fig:training_set_one_layer}. This dataset is composed of three classes: red, green, and blue. The axes that define this dataset are the inputs to the single layer network in Figure \ref{fig:one_layer_net}, ($x_1$,$x_2$). If $\mathbf{W}$ is defined to be a vector with elements ($w_{11}$, $w_{21}$), a line can be defined perpendicular to $\mathbf{W}$ and shifted by $\frac{b_1}{||\mathbf{W}||}$ from the origin in the direction of $\mathbf{W}$. Given appropriate values for $w_{11}$, $w_{21}$, and $b_1$, a line that separates the blue class from the non-blue class can be created. Any point on the -$\mathbf{W}$ side of the line will have $y_1 < 0$, allowing for classification. Similarly, a separating line for the red class using $w_{12}$, $w_{22}$, and $b_2$ and a separating line for the green class using $w_{13}$, $w_{23}$, and $b_3$ can be constructed. 
 
@@ -267,13 +264,14 @@ The classes in this example dataset are linearly separable, meaning lines can be
 
 One of the most common methods of training an ANN is through error backpropagation, a method used to minimize an error function with respect to a set of weights connecting neurons. It can be applied as seen in Equation \ref{eq:dMSE}. % If the error function is convex with respect to the network weights, the error with respect to the weights in the network can be minimized using its derivative. THIS IS WRONG. ANN with no hidden layers will have a purely convex error fctn wrt weights, add layers and we get local minima/maxima
 
-Training a single-layer ANN requires finding an expression for \ref{eq:dMSE}. For the following section, let $y_i$ be defined as in Equation \ref{eq:single_layer_eq_sum}, $E_{MSE}$ be defined as the mean squared error function, and training data be defined as 
+Training a single-layer ANN requires finding an expression for \ref{eq:dMSE} \cite{Nielsen2015}. For the following section, let $y_i$ be defined as in Equation \ref{eq:single_layer_eq_sum}, $E_{MSE}$ be defined as the mean squared error function, and training data be defined as %
+\begin{align} \label{eq:train_data_D}
+D&={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}, \\
+\text{where } \boldsymbol{x}_{n} &= n^{th} \text{ training example} \nonumber \\
+t_n &= n^{th} \text{ training target.} \nonumber
+\end{align}
 %
-\begin{equation} \label{eq:train_data_D}
- D={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}
-\end{equation}
-%
-where $\boldsymbol{x}_{n}$ represents the $n^{th}$ training example and $t_n$ represents the $n^{th}$ training target \cite{Nielsen2015}. Note, this derivation would need to be repeated for different error functions. By the chain rule,
+Note, this derivation would need to be repeated for different error functions. By the chain rule,
 %
 \begin{equation} \label{eq:dMSE}
 \frac{dE_{MSE}}{dw_j} = \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}
@@ -281,29 +279,29 @@ where $\boldsymbol{x}_{n}$ represents the $n^{th}$ training example and $t_n$ re
 %
 Equation \ref{eq:dMSE} can be solved by first evaluating $\frac{dE_{MSE}}{dy_i}$,
 %
-\begin{align*} \label{dE_{MSE}/dy_i}
+\begin{align} \label{dE_{MSE}/dy_i}
 \frac{dE_{MSE}}{dy_i}  &= \frac{d}{dy_i} \sum_i(t_i - y_i)^2 \\
-&= \sum_i  \frac{d}{dy_i} (t_i - y_i)^2 \\
-&=  -2 \sum_i  (t_i - y_i).
-\end{align*}
+&= \sum_i  \frac{d}{dy_i} (t_i - y_i)^2 \nonumber \\
+&=  -2 \sum_i  (t_i - y_i). \nonumber
+\end{align}
 %
 Evaluating $\frac{dy_i}{dw_j}$,
 %
-\begin{align*} \label{dE_{MSE}/dy_i}
+\begin{align} \label{dy_i/dw_i}
 \frac{dy_i}{dw_j}  &= \frac{d}{dw_j} \tanh( \boldsymbol{w}' \boldsymbol{x}_i + b) \\
-&= \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b) \frac{d}{dw_j}( \boldsymbol{w}' \boldsymbol{x}_i + b) \\
-&= \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b)  x_{ij}.
-\end{align*} 
+&= \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b) \frac{d}{dw_j}( \boldsymbol{w}' \boldsymbol{x}_i + b) \nonumber \\
+&= \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b)  x_{ij}. \nonumber
+\end{align}
 %
 \noindent where $x_{ij}$ is the $j^{th}$ index of the $i^{th}$ training vector.
 %
 The update rule for the bias vector is found using
 %
-\begin{equation} \label{eq:ladidadi}
+\begin{equation} \label{eq:dE_MSE/db_j}
 \frac{dE_{MSE}}{db_j} = \frac{dE_{MSE}}{dy_i} \frac{dy_i}{db_j}.
 \end{equation}
 %
-The expression for $\frac{dE_{MSE}}{dy_i}$ is known from Equation \ref{eq:MSE_deriv}. Evaluating the other derivative in \ref{eq:ladidadi},
+The expression for $\frac{dE_{MSE}}{dy_i}$ is known from Equation \ref{dy_i/dw_i}. Evaluating the other derivative in \ref{eq:dE_MSE/db_j},
 %
 \begin{equation} \label{dE_{MSE}/dw_j}
 \frac{dy_i}{db_j} = \frac{d}{db_j} \tanh(\boldsymbol{w}'\boldsymbol{x}_i + b),
@@ -386,7 +384,7 @@ Using Equations \ref{eq:CrossEntropy1} and \ref{eq:CrossEntropy2}, the weights c
 
 % Where this simple accuracy test is not applicable, such as for regression training sets, a condition based on the ANN training error metric can be used.
 
-ANNs require some stopping condition to conclude training. Early stopping works by removing a small portion of the training data and defining it as testing data. The ANN is trained using the new training data while some error metric for both the training and testing set are recorded. As training progresses, the ANN likely will overfit to the training data, leading to an increase in error for the testing dataset. This process is illustrated in Figure \ref{fig:training_testing_error}. Stopping conditions include ending training when a threshold on an error metric is reached or ending training when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs. Early stopping has the benefit of preventing overfitting and encouraging generalization.
+ANNs require some stopping condition to conclude training. Early stopping works by first removing a small portion of the training data and defining it as testing data. The ANN is trained using the new training data while some error metric for both the training and testing set are recorded. As training progresses, the ANN likely will overfit to the training data, leading to an increase in error for the testing dataset. This process is illustrated in Figure \ref{fig:training_testing_error}. Stopping conditions include ending training when a threshold on an error metric is reached or ending training when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs. Early stopping has the benefit of preventing overfitting and encouraging generalization.
 
 \begin{figure}[H]
 	\centering
@@ -397,11 +395,11 @@ ANNs require some stopping condition to conclude training. Early stopping works 
 
 \subsection{Convolutional Neural Networks}
 
-Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors (e.g. manually creating features using edge and line detectors for face classification) and a simple trainable classifier like a linear model or naive Bayes. One difficulty in this is the expense in leveraging domain knowledge to design the custom feature extractors. Another challenge comes when the model is applied to a similar but more difficult problem, potentially requiring a new set of feature extractors. While these new features could be based on the old analysis, recreating them would still be costly and require considerable effort.
+Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors (e.g. manually creating features using edge and line detectors for face recognition) and a simple trainable classifier like a linear model or naive Bayes. There are a number of issues with creating and using custom feature extractors. Robust feature extraction algorithms often require extensive domain knowledge - making them expensive to create. There is often little guarantee that these features will be optimal for classification or regression tasks. A classifier created around suboptimal features has the potential to perform poorly in real-world conditions or similar problems.
 
 Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolutional layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared among classes. This weight sharing decreases the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
 
-Figure \ref{fig:cnn_mnist_lecun98} shows one of the first successful CNN architectures, LeNet-5 \cite{Lecun1998}, which classified 32x32 images of handwritten digits using two convolution-average pooling layers followed by two dense layers and an output. This was the first example of a machine learning algorithm creating custom filters and a classification model for the MNIST dataset.
+Figure \ref{fig:cnn_mnist_lecun98} shows one of the first successful CNN architectures, LeNet-5 \cite{Lecun1998}, which classified 32x32 images of handwritten digits using two convolution and average pooling layers followed by two dense layers and an output. This was the first example of a machine learning algorithm creating custom filters and a classification model for the MNIST dataset.
 
 % AlexNet \cite{Krizhevsky2012} was the first exploration into wider and deeper CNNs. 
 
@@ -423,7 +421,7 @@ Methods to encourage the network to learn useful features include forcing the au
 
 % \cite{Masci2011} demonstrated that stacking convolution layers made a good autoencoder.
 
-Other feature extraction methods exist. Principal component analysis (PCA) attempts to reduce the dimensionality of a dataset into linearly uncorrelated variables \cite{Jolliffe2002}. Using a few of these principle components, the data may be represented in a reduced space that contains most of the information present in the original data. Another linear feature extraction method is called linear discriminant analysis (LDA). LDA is a supervised feature extraction method that finds linear combinations of features that can be used to separate classes. Non-linear feature extraction methods, such as kernel PCA, also exist. Kernel PCA applies a non-linear transform to the input space and applies PCA to the data in this transformed space. For kernel PCA to perform well, the correct kernel must be chosen for a given problem, which is a non-trivial task.
+Other commonly used feature extraction methods are principal component analysis (PCA) \cite{Jolliffe2002}, and linear discriminant analysis (LDA) \cite{Welling2007}. PCA attempts to reduce the dimensionality of a dataset into linearly uncorrelated variables. Using a few of these principle components, the data may be represented in a reduced space that contains most of the information present in the original data. Another linear feature extraction method is LDA. LDA is a supervised feature extraction method that finds linear combinations of features that can be used to separate classes. Non-linear feature extraction methods, such as kernel PCA, also exist. Kernel PCA applies a non-linear transform to the input space and applies PCA to the data in this transformed space. For kernel PCA to perform well, the correct kernel must be chosen for a given problem, which is a non-trivial task.
 
 % While autoencoders were touched on in the uranium enrichment work, they have not been explored thoroughly. There is some evidence that the autoencoder was overtrained to the A special case of denoising autoencoders will be explored for the ANSI dataset. 
 
