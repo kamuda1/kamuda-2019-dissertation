@@ -55,7 +55,7 @@ Parameter & Values \\ \hline
 \begin{tabular}[c]{@{}c@{}}Areal density of\\  solid iron {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.53, 3.5, 6.28, 11.02 \\ 
 \begin{tabular}[c]{@{}c@{}}Areal density of \\ solid lead {[}g/cm\textasciicircum{}2{]}\end{tabular} & 0.22, 0.51, 0.92, 1.61 \\ 
 \begin{tabular}[c]{@{}c@{}}FWHM at\\  662 keV {[}\%{]}\end{tabular} & \multicolumn{1}{c}{6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0} \\ 
-\begin{tabular}[c]{@{}c@{}}Background\\ Location \end{tabular} & \multicolumn{1}{c}{Chicago, Miami, Boston} \\ 
+\begin{tabular}[c]{@{}c@{}}Background\\ Location \end{tabular} & \begin{tabular}[c]{@{}c@{}}Albuquerque, Atlanta, Austin,\\ Chicago , Knoxville , Miami\end{tabular}
 \end{tabular}
 \label{table:all_fixed_simulation_parameters}
 \end{table}
@@ -68,8 +68,8 @@ Parameter \\ \hline
 integration time \\ 
 background counts per second \\ 
 Signal to Background ratio \\ 
-0th order calibration \\ 
-1st order calibration \\ 
+Calibration - Offset \\ 
+Calibration - Gain \\ 
 \end{tabular}
 \label{table:all_variable_simulation_parameters}
 \end{table}
@@ -93,7 +93,7 @@ Signal to Background ratio \\
 
 To investigate which parameters affect generalization performance, networks were trained using a simple and complete set of template simulation parameters. The parameters used for the simplified dataset are shown in Table \ref{table:hyperparameter_dataset_easy_parameters} and parameters used for the complete dataset are shown in Table \ref{table:hyperparameter_dataset_full_parameters}. Both datasets are comprised of the following isotopes from ANSI N42-34-2006 \cite{ANSI}: $^{241}$Am, $^{133}$Ba, $^{57}$Co, $^{60}$Co, $^{51}$Cr, $^{137}$Cs, $^{152}$Eu, $^{67}$Ga, $^{123}$I, $^{125}$I, $^{131}$I, $^{111}$In, $^{192}$Ir, $^{177m}$Lu, $^{99}$Mo, $^{237}$Np, $^{103}$Pd, $^{239}$Pu, $^{240}$Pu, $^{226}$Ra, $^{75}$Se, $^{153}$Sm, $^{99m}$Tc, $^{201}$Tl, $^{204}$Tl, $^{233}$U, $^{235}$U, $^{238}$U, and $^{133}$Xe.
 
-Because datasets of different complexity often need different architectures and hyperparameters \cite{Bergstra2012}, independent hyperparameter searches were conducted for both datasets. For each dataset, a total of 1000 spectra are simulated for each isotope for the DNN and a total of 100 spectra are simulated for each isotope for the CNN. A lower number of spectra used in the CNN hyperparameter search due to computational constraints associated with training the CNNs. Each spectrum is simulated with parameters randomly sampled from the simple or complete parameter set.
+Because datasets of different complexity often need different architectures and hyperparameters \cite{Bergstra2012}, independent hyperparameter searches were conducted for both datasets. For each dataset, a total of 100 spectra were simulated for each isotope. Each spectrum was simulated with parameters randomly sampled from the simple or complete parameter set.
 
 \begin{table}[H]
 \centering
@@ -108,7 +108,7 @@ Because datasets of different complexity often need different architectures and 
 \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\% & Uniform \\ 
 \multicolumn{1}{c}{Integration Time {[}s{]}} & 60 - 600 & Log-Uniform \\ 
 \multicolumn{1}{c}{Calibration - Offset (channels)} & 0 - 10 & Uniform \\ 
-\multicolumn{1}{c}{Calibration - Linear} & 0.9 - 1.1 & Uniform \\ 
+\multicolumn{1}{c}{Calibration - Gain} & 0.9 - 1.1 & Uniform \\ 
 \multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ 
 \multicolumn{1}{c}{Background Counts Per Second} & 200 & Poisson \\ 
 \end{tabular}
@@ -128,29 +128,27 @@ Because datasets of different complexity often need different architectures and 
 \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ 
 \multicolumn{1}{c}{Integration Time {[}s{]}} & 10 - 3600 & Log-Uniform \\ 
 \multicolumn{1}{c}{Calibration - Offset (channels)} & 0 - 10 & Uniform \\ 
-\multicolumn{1}{c}{Calibration - Linear} & 0.8 - 1.2 & Uniform \\ 
+\multicolumn{1}{c}{Calibration - Gain} & 0.8 - 1.2 & Uniform \\ 
 \multicolumn{1}{c}{Signal to Background Ratio} & 0.1 - 3.0 & Uniform \\ 
 \multicolumn{1}{c}{Background Counts Per Second} & 200 & Poisson \\ 
 \end{tabular}
 \end{table}
 
 
-
-%   make_pipeline(FunctionTransformer(np.log1p, validate=True), Normalizer(norm='l1')),
-%   make_pipeline(FunctionTransformer(np.log1p, validate=True), Normalizer(norm='max')),
-%   make_pipeline(FunctionTransformer(np.sqrt, validate=True)),
-%   make_pipeline(FunctionTransformer(np.sqrt, validate=True), Normalizer(norm='l1')),
-%   make_pipeline(FunctionTransformer(np.sqrt, validate=True), Normalizer(norm='max')),
-
 \section{Hyperparameter Search Results}
 
-For each network and both datasets, the average testing error from 5-fold cross validation was recorded. An early stopping patience of 20 epochs was used to train 128 models. The maximum number of epochs was set to 200. The results of the hyperparameter searches are shown using random efficiency curves and by comparing parameter values versus F1 score in the testing set. Random efficiency curves are used to indicate the quality of the hyperparameter search space and allow for reproducibility. Analyzing how the parameter values change the F1 score gives us an idea of which parameters are important. Hyperparameter bounds are based on trial and error from previous published and unpublished results.
+To determine an optimum combination of hyperparameters, a random hyperparameter search over hyperparameters was performed. For each network and both datasets, the average testing set error from 5-fold cross validation was recorded. An early stopping patience of 20 epochs was used to train 128 models. The maximum number of epochs was set to 200. The results of the hyperparameter searches are shown using random efficiency curves and by comparing parameter values versus average F1 scores in the testing set. Random efficiency curves indicate the quality of the hyperparameter search space and allows for reproducibility. Analyzing how the parameter values change the F1 score gives us an idea of which parameters are important. Hyperparameter bounds are based on trial and error from previous published and unpublished experiments.
+
+% A sharper efficiency curve shows that many hyperparameter combinations perform well, whereas 
+
+% The shape of this curve indicates the frequency of good models under random search, and quantifies the relative volumes (in search space) of the various levels of performance - Bergstra2012a
+
 
 % These also allow for researchers who want to fit models to this dataset to have a performance benchmark. If you wanted to compare random hyperparameter search to more intelligent methods, you could compare using this.
 
 \subsection{Dense Architecture}
 
-Architecture and training hyperparamters are shown in Table \ref{table:hyperparameter_dataset_parameters_DNN}. Note, the number of nodes in each layers was made to decrease for each subsequent layer.
+Architecture and training hyperparamters are shown in Table \ref{table:hyperparameter_dataset_parameters_DNN}. Note, the number of nodes in each layers was made to decrease for each subsequent layer. The input scaling is read left-to-right. For example, the sqrt-max scaling would first take the square root of the each channel in the spectrum and then normalized the spectrum by its maximum value. The L1 norm normalizes a spectrum by its L1 norm. The log1p function is the base 10 logarithm of the input plus one.
 
 \begin{table}[H]
 \centering
@@ -166,8 +164,7 @@ Architecture and training hyperparamters are shown in Table \ref{table:hyperpara
 \multicolumn{1}{c}{Dropout Frequency} & 0 - 1 & Uniform \\
 \multicolumn{1}{c}{Batch Size} & 2$^{4}$ - 2$^{10}$ & Power of Two \\
 \multicolumn{1}{c}{Activation Function} & relu, tanh & Uniform \\
-% \multicolumn{1}{c}{Input Scaling} & sqrt, sqrt-max, sqrt-l$_{1}$ norm, log1p-None, log1p-max, log1p-l$_{1}$ norm, & Uniform \\
-\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\ sqrt-l$_{1}$ norm,\\ log1p, log1p-max,\\ log1p-l$_{1}$ norm\end{tabular} & Uniform \\
+\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\ sqrt-L1 norm,\\ log1p, log1p-max,\\ log1p-L1 norm\end{tabular} & Uniform \\
 \end{tabular}
 \end{table}
 
@@ -277,7 +274,7 @@ Just like the autoencoder, this can be done in one or two steps. One step: Train
 \multicolumn{1}{c}{Dropout Frequency} & 0 - 1 & Uniform \\
 \multicolumn{1}{c}{Batch Size} & 2$^{4}$ - 2$^{6}$ & Power of Two \\
 \multicolumn{1}{c}{Activation Function} & tanh & Uniform \\
-\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\sqrt-l$_{1}$ norm,\\ log1p-None, log1p-max,\\ log1p-l$_{1}$ norm\end{tabular} & Uniform \\
+\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\sqrt-L1 Norm,\\ log1p-None, log1p-max,\\ log1p-L1 Norm\end{tabular} & Uniform \\
 \end{tabular}
 \end{table}
 
