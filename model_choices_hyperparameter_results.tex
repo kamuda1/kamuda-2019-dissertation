@@ -137,7 +137,7 @@ Because datasets of different complexity often need different architectures and 
 
 \section{Hyperparameter Search Results}
 
-To determine an optimum combination of hyperparameters, a random hyperparameter search over hyperparameters was performed. For each network and both datasets, the average testing set error from 5-fold cross validation was recorded. An early stopping patience of 20 epochs was used to train 128 models. The maximum number of epochs was set to 200. The results of the hyperparameter searches are shown using random efficiency curves and by comparing parameter values versus average F1 scores in the testing set. Random efficiency curves indicate the quality of the hyperparameter search space and allows for reproducibility. Analyzing how the parameter values change the F1 score gives us an idea of which parameters are important. Hyperparameter bounds are based on previous published and unpublished experiments as well as recommendations from literature \cite{Bengio2018}.
+To determine an optimum combination of hyperparameters, a random hyperparameter search over hyperparameters was performed. For each network and both datasets, the average testing set error from 5-fold cross validation was recorded. An early stopping patience of 20 epochs was used to train 256 models. To reduce wall-clock time, the maximum number of epochs was set to 200 and training ended if the F1 score in the test set did not rise above 10$\%$ after 10 epochs. The results of the hyperparameter searches are shown using random efficiency curves and by comparing parameter values versus average testing set F1 scores from the 5-fold cross validation. Random efficiency curves indicate the quality of the hyperparameter search space and allows for reproducibility. Analyzing how the parameter values change the F1 score gives us an idea of which parameters are important. Hyperparameter bounds are based on previous published and unpublished experiments as well as recommendations from literature \cite{Bengio2018}.
 
 % A sharper efficiency curve shows that many hyperparameter combinations perform well, whereas 
 
@@ -148,7 +148,7 @@ To determine an optimum combination of hyperparameters, a random hyperparameter 
 
 \subsection{Dense Architecture}
 
-Architecture and training hyperparamters are shown in Table \ref{table:hyperparameter_dataset_parameters_DNN}. Note, the number of nodes in each layers was made to decrease for each subsequent layer. The input scaling is read left-to-right. For example, the sqrt-max scaling would first take the square root of the each channel in the spectrum and then normalized the spectrum by its maximum value. The L1 norm normalizes a spectrum by its L1 norm. The log1p function is the base 10 logarithm of the input plus one.
+Architecture and training hyperparamters for the DNN are shown in Table \ref{table:hyperparameter_dataset_parameters_DNN}. Note, the number of nodes in each layers was made to decrease for each subsequent layer. The input scaling is read left-to-right. For example, the sqrt-max scaling would first take the square root of the each channel in the spectrum and then normalized the spectrum by its maximum value. The L1 norm normalizes a spectrum by its L1 norm. The log1p function is the base 10 logarithm of the input plus one.
 
 \begin{table}[H]
 \centering
@@ -170,7 +170,7 @@ Architecture and training hyperparamters are shown in Table \ref{table:hyperpara
 
 
 
-Random efficiency curves for different reprocessing methods for the DNN are shown in Figure \ref{fig:random_hp_search_dnn_easy}. This figure implies that the optimum prepossessing step is BLANK. It's interesting that BLANK does better than BLANK.
+Random efficiency experiment curves for the DNN trained on the simple and complete datasets are shown in Figures \ref{fig:random_hp_search_dnn_easy} and \ref{fig:random_hp_search_dnn_full}. A large number of hyperparameter combinations did not reduce their F1 score in the training set quickly enough and their training was ended early. As expected, the complete dataset took many more trials to obtain good performance. The median F1 score in the simple dataset begins to asymptote after an experiment size of 16 while the F1 score in the complete dataset does not asymptote. This indicated that when applying DNN's to more difficult problems in gamma-ray spectroscopy wider hyperparameter ranges need to be explored, more advanced hyperparameter search strategies need to be employed, or that DNN's are not well suited to perform tasks in gamma-ray spectroscopy. 
 
 \begin{figure}[H]
 	\centering
@@ -246,8 +246,6 @@ Figure \ref{fig:dense_hyperparameters_f1_score} shows the distribution of random
 \end{figure}
 
 
-In addition to hyperparameters associated with the DNN's architecture and training, hyperparameters explored include the autoencoder used. Autoencoders can generate a different encoding based on a given architecture. The mean squared reconstruction error may not be the best metric to measure how good this encoding is as a preprocessing step. To determine an optimum preprocessing architecture for the dense and convolutional autoencoder, the choice of preprocessing architectures was added as a hyperparameter. The choices belong to the set with the N best reconstruction errors, respective of dense and convolution architecture.
-
 % \subsubsection{Hyperparameter Search Results - Autoencoders}
 
 % Now that we know optimized autoencoder architectures for the DNN, we need to optimize training hyperparameters. 
@@ -263,7 +261,7 @@ In addition to hyperparameters associated with the DNN's architecture and traini
 
 \subsection{Convolution Architecture}
 
-Just like the autoencoder, this can be done in one or two steps. One step: Train and optimize the entire network, convolution and dense layers. Two steps: Train and optimize the dense layer, using random initialization for non-trainable convolution filters. We'll probably go with the two-step.
+Architecture and training hyperparamters for the CNN are shown in Table \ref{table:hyperparameter_dataset_parameters_CNN}. Note, as with the DNN the number of nodes in the dense layers was made to decrease for each subsequent layer. A smaller range of batch sizes was searched in the CNN compared to the DNN due to computational constraints.
 
 \begin{table}[H]
 \centering
@@ -281,11 +279,13 @@ Just like the autoencoder, this can be done in one or two steps. One step: Train
 \multicolumn{1}{c}{L2 Regularization Strength} & 10$^{-3}$ - 10$^{0}$ & Log-Uniform \\
 \multicolumn{1}{c}{Dropout Frequency} & 0 - 1 & Uniform \\
 \multicolumn{1}{c}{Batch Size} & 2$^{4}$ - 2$^{6}$ & Power of Two \\
-\multicolumn{1}{c}{Activation Function} & tanh & Uniform \\
+\multicolumn{1}{c}{Activation Function} & tanh, relu & Uniform \\
 \multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\sqrt-L1 Norm,\\ log1p-None, log1p-max,\\ log1p-L1 Norm\end{tabular} & Uniform \\
 \end{tabular}
 \end{table}
 
+
+Random efficiency experiment curves for the CNN trained on the simple and complete datasets are shown in Figures \ref{fig:random_hp_search_cnn_easy} and \ref{fig:random_hp_search_cnn_full}. Similar to the dense network, a large number of hyperparameter combinations did not reduce their F1 score in the training set quickly enough and their training was ended early. Interestingly, the median F1 score in both datasets smoothly increased with additional trials. Both datasets achieved an F1 score above 90$\%$. This demonstrates that the hyperparameter bounds used for both problems are well suited to the problems and that CNN's have more potential than DNN's for perform tasks in gamma-ray spectroscopy.
 
 \begin{figure}[H]
 	\centering
@@ -306,7 +306,6 @@ Just like the autoencoder, this can be done in one or two steps. One step: Train
 
 
 Figure \ref{fig:cnn_hyperparameters_f1_score} shows the distribution of random hyperparameters from the CNN and their average F1 score from the k-folds testing set. 
-
 
 \begin{figure}[H]
      \centering
@@ -365,18 +364,21 @@ Figure \ref{fig:cnn_hyperparameters_f1_score} shows the distribution of random h
          \caption{Total Convolution Layers}
          \label{fig:cnn_num_conv_layers}
      \end{subfigure}  
-     
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/cnn_scaler.png}
-         \caption{Feature Scaling}
-         \label{fig:cnn_scaler}
-     \end{subfigure}
-     
-        \caption{Effect of CNN hyperparameters on F1 score. Blue circles represent the simple dataset, green crosses are the complete dataset.}
-        \label{fig:cnn_hyperparameters_f1_score}
+    \caption{Effect of CNN hyperparameters on F1 score. Blue circles represent the simple dataset, green crosses are the complete dataset.}
 \end{figure}
 
+\begin{figure} \ContinuedFloat
+    \centering
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/cnn_scaler.png}
+        \caption{Feature Scaling}
+        \label{fig:cnn_scaler}
+    \end{subfigure}
+
+        \caption{Effect of CNN hyperparameters on F1 score. Blue circles represent the simple dataset, green crosses are the complete dataset (cont.).}
+        \label{fig:cnn_hyperparameters_f1_score}
+\end{figure}
 
 \section{Autoencoder Architectures}
 
@@ -386,6 +388,8 @@ Without an autoencoder, a single ANN has to learn multiple tasks to identify iso
 
 
 To test this, for each dataset a single autoencoder and three ANNs will be trained. The first will be trained without an autoencoder. The second will be trained using the encoder as input. A random hyperparameter search will be used to find an appropriately structured autoencoder. The testing and validation error for these ANNs will be compared for each respective dataset.
+
+% In addition to hyperparameters associated with the DNN's architecture and training, hyperparameters explored include the autoencoder used. Autoencoders can generate a different encoding based on a given architecture. The mean squared reconstruction error may not be the best metric to measure how good this encoding is as a preprocessing step. To determine an optimum preprocessing architecture for the dense and convolutional autoencoder, the choice of preprocessing architectures was added as a hyperparameter. The choices belong to the set with the N best reconstruction errors, respective of dense and convolution architecture.
 
 \subsection{Autoencoder Structure Hyperparameter Search}
 
