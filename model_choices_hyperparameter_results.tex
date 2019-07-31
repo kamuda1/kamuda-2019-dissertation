@@ -137,7 +137,7 @@ Because datasets of different complexity often need different architectures and 
 
 \section{Hyperparameter Search Results}
 
-To determine an optimum combination of hyperparameters, a random hyperparameter search over hyperparameters was performed. For each network and both datasets, the average testing set error from 5-fold cross validation was recorded. An early stopping patience of 20 epochs was used to train 128 models. The maximum number of epochs was set to 200. The results of the hyperparameter searches are shown using random efficiency curves and by comparing parameter values versus average F1 scores in the testing set. Random efficiency curves indicate the quality of the hyperparameter search space and allows for reproducibility. Analyzing how the parameter values change the F1 score gives us an idea of which parameters are important. Hyperparameter bounds are based on trial and error from previous published and unpublished experiments.
+To determine an optimum combination of hyperparameters, a random hyperparameter search over hyperparameters was performed. For each network and both datasets, the average testing set error from 5-fold cross validation was recorded. An early stopping patience of 20 epochs was used to train 128 models. The maximum number of epochs was set to 200. The results of the hyperparameter searches are shown using random efficiency curves and by comparing parameter values versus average F1 scores in the testing set. Random efficiency curves indicate the quality of the hyperparameter search space and allows for reproducibility. Analyzing how the parameter values change the F1 score gives us an idea of which parameters are important. Hyperparameter bounds are based on previous published and unpublished experiments as well as recommendations from literature \cite{Bengio2018}.
 
 % A sharper efficiency curve shows that many hyperparameter combinations perform well, whereas 
 
@@ -194,45 +194,53 @@ Figure \ref{fig:dense_hyperparameters_f1_score} shows the distribution of random
      \centering
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/learning_rate_dummy.png}
+         \includegraphics[width=\textwidth]{images/dnn_learning_rate.png}
          \caption{Learning Rate}
-         \label{fig:learning_rate_learning}
+         \label{fig:dnn_learning_rate}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/dropout_dummy.png}
+         \includegraphics[width=\textwidth]{images/dnn_dropout.png}
          \caption{Dropout Rate}
-         \label{fig:dropout_learning}
+         \label{fig:dnn_dropout}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/batch_size_dummy.png}
+         \includegraphics[width=\textwidth]{images/dnn_batch_size.png}
          \caption{Batch Size}
-         \label{fig:batch_size_learning}
+         \label{fig:dnn_batch_size}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/dense_layers_total_dummy.png}
+         \includegraphics[width=\textwidth]{images/dnn_dense_layers_total.png}
          \caption{Total Dense Layers}
-         \label{fig:dense_layers_learning}
+         \label{fig:dnn_dense_layers_total}
      \end{subfigure}
 
     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/l2_reg_dummy.png}
+         \includegraphics[width=\textwidth]{images/dnn_l2_reg.png}
          \caption{L2 Regularization Scale}
-         \label{fig:L2_scale_learning}
+         \label{fig:dnn_l2_reg}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/dense_nodes_total_dummy.png}
+         \includegraphics[width=\textwidth]{images/dnn_dense_nodes_total.png}
          \caption{Total Nodes}
-         \label{fig:total_nodes_learning}
+         \label{fig:dnn_dense_nodes_total}
      \end{subfigure}     
+
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/dnn_scaler.png}
+         \caption{Feature Scaling}
+         \label{fig:dnn_scaler}
+     \end{subfigure}
+
         \caption{Effect of hyperparameters on F1 score. Blue circles represent the simple dataset, green crosses are the complete dataset.}
         \label{fig:dense_hyperparameters_f1_score}
 \end{figure}
@@ -304,59 +312,66 @@ Figure \ref{fig:cnn_hyperparameters_f1_score} shows the distribution of random h
      \centering
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/cnn_learning_rate_dummy.png}
+         \includegraphics[width=\textwidth]{images/cnn_learning_rate.png}
          \caption{Learning Rate}
-         \label{fig:cnn_learning_rate_learning}
+         \label{fig:cnn_learning_rate}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/cnn_dropout_dummy.png}
+         \includegraphics[width=\textwidth]{images/cnn_dropout.png}
          \caption{Dropout Rate}
-         \label{fig:cnn_dropout_learning}
+         \label{fig:cnn_dropout}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/cnn_batch_size_dummy.png}
+         \includegraphics[width=\textwidth]{images/cnn_batch_size.png}
          \caption{Batch Size}
-         \label{fig:cnn_batch_size_learning}
+         \label{fig:cnn_batch_size}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/cnn_pooling_size_dummy.png}
+         \includegraphics[width=\textwidth]{images/cnn_pooling_size.png}
          \caption{CNN Pooling Size}
-         \label{fig:cnn_dense_layers_learning}
+         \label{fig:cnn_pooling_size}
      \end{subfigure}
 
     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/cnn_l2_reg_dummy.png}
+         \includegraphics[width=\textwidth]{images/cnn_l2_reg.png}
          \caption{L2 Regularization Scale}
-         \label{fig:cnn_L2_scale_learning}
+         \label{fig:cnn_l2_reg}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/cnn_dense_nodes_total_dummy.png}
+         \includegraphics[width=\textwidth]{images/cnn_dense_nodes_total.png}
          \caption{Total Dense Nodes}
-         \label{fig:cnn_total_nodes_learning}
+         \label{fig:cnn_dense_nodes_total}
      \end{subfigure}  
      
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/cnn_kernel_length_dummy.png}
+         \includegraphics[width=\textwidth]{images/cnn_kernel_length.png}
          \caption{Convolution Kernel Length}
-         \label{fig:cnn_L2_scale_learning}
+         \label{fig:cnn_kernel_length}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/cnn_num_conv_layers_dummy.png}
+         \includegraphics[width=\textwidth]{images/cnn_num_conv_layers.png}
          \caption{Total Convolution Layers}
-         \label{fig:cnn_total_nodes_learning}
+         \label{fig:cnn_num_conv_layers}
      \end{subfigure}  
+     
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/cnn_scaler.png}
+         \caption{Feature Scaling}
+         \label{fig:cnn_scaler}
+     \end{subfigure}
      
         \caption{Effect of CNN hyperparameters on F1 score. Blue circles represent the simple dataset, green crosses are the complete dataset.}
         \label{fig:cnn_hyperparameters_f1_score}
@@ -374,27 +389,56 @@ To test this, for each dataset a single autoencoder and three ANNs will be train
 
 \subsection{Autoencoder Structure Hyperparameter Search}
 
-This section will explain the hyperparameter structures searched. The autoencoder used is a undercomplete denoising autoencoder \cite{Goodfellow-et-al-2016}. Because the denoising operation performs regularization, no additional regularization is added to these models.
+This section will explain the hyperparameter structures searched. The autoencoder used is a undercomplete denoising autoencoder \cite{Goodfellow-et-al-2016}. Because the denoising operation performs regularization implicitly, no additional regularization is added to the autoencoders. 
+
+The autoencoder structures are found using a grid search. The autoencoders that reproduce the background subtracted signal the best are used in a dense random hyperparameter search as the signal preprocessing.
 
 
-Figure \ref{fig:autoencoder_real_spectra} shows the autoencoder performance on real spectra, showing good performance.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\linewidth]{images/bscae_example.png}
-	\caption{Example autoencoder decoding performance on real spectra.}
-	\label{fig:autoencoder_real_spectra}
-\end{figure}
-
-
-\subsection{Autoencoder Performance - As Pretraining or as Feature Extractor}
-
-This section will compare how well the autoencoders perform as pretrained networks and as feature extractors for a DNN. To do this, a trained CAE and DAE will be connected to a dense network. These will be trained to either fixing the autoencoder's weights or by fine-tuning them while the network learns.
+\subsubsection{Dense Autoencoder Structure}
 
 
 \begin{table}[H]
 \centering
-\caption{Range of hyperparameters explored for the DAE.}
+\caption{Hyperparameters used in the grid search for the DAE architecture.}
+\label{table:hyperparameters_DAE}
+\begin{tabular}{ccc}
+% \cline{2-3}
+ & Hyperparameter Range & Sampling \\ \hline
+\multicolumn{1}{c}{Architectures} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\ sqrt-L1 norm,\\ log1p, log1p-max,\\ log1p-L1 norm\end{tabular} & Uniform \\
+\multicolumn{1}{c}{Initial Learning Rate} & 10$^{-3}$ & N/A \\ 
+\multicolumn{1}{c}{Batch Size} & 32 & N/A \\ 
+\multicolumn{1}{c}{Activation Function} & relu, tanh & Uniform \\ 
+\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\ sqrt-L1 norm,\\ log1p, log1p-max,\\ log1p-L1 norm\end{tabular} & Uniform \\
+\end{tabular}
+\end{table}
+
+\subsubsection{Convolutional Autoencoder Structure}
+
+\begin{table}[H]
+\centering
+\caption{Hyperparameters used in the grid search for the CAE architecture.}
+\label{table:hyperparameters_CAE}
+\begin{tabular}{ccc}
+% \cline{2-3}
+ & Hyperparameter Range & Sampling \\ \hline
+\multicolumn{1}{c}{Architectures} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\ sqrt-L1 norm,\\ log1p, log1p-max,\\ log1p-L1 norm\end{tabular} & Uniform \\
+\multicolumn{1}{c}{Initial Learning Rate} & 10$^{-3}$ & N/A \\ 
+\multicolumn{1}{c}{Batch Size} & 32 & N/A \\ 
+\multicolumn{1}{c}{Activation Function} & relu, tanh & Uniform \\ 
+\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\ sqrt-L1 norm,\\ log1p, log1p-max,\\ log1p-L1 norm\end{tabular} & Uniform \\
+\end{tabular}
+\end{table}
+
+
+
+\subsection{Autoencoder Performance}
+
+In this section, we perform a random hyperparameter search for dense networks using the autoencoders. 
+
+
+\begin{table}[H]
+\centering
+\caption{Range of hyperparameters explored for the dense network.}
 \label{table:hyperparameter_dataset_parameters_DAE}
 \begin{tabular}{ccc}
 % \cline{2-3}
@@ -406,7 +450,7 @@ This section will compare how well the autoencoders perform as pretrained networ
 \multicolumn{1}{c}{Dropout Frequency} & 0 - 1 & Uniform \\ 
 \multicolumn{1}{c}{Batch Size} & 2$^{4}$ - 2$^{10}$ & Power of Two \\ 
 \multicolumn{1}{c}{Activation Function} & relu, tanh & Uniform \\ 
-\multicolumn{1}{c}{Input Scaling} & sqrt, log1p & Uniform \\ 
+\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}} sqrt-DAE, log1p-DAE,\\sqrt-L1 Norm,\\ log1p-None, log1p-max,\\ log1p-L1 Norm\end{tabular} & Uniform \\
 \end{tabular}
 \end{table}
 
