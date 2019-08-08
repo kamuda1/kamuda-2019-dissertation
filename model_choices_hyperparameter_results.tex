@@ -1,10 +1,8 @@
 \chapter{Machine Learning Models Explored}
 
-This section describes the process of choosing the architectural and regularization hyperparamers for each model. The section also describes the datasets used to train the models 
+This section describes the process of choosing the architectural and regularization hyperparamers for the dense and 1D convolutional models explored in this work. This section also describes the datasets used to tune the hyperparameters.
 
-The simplest model explored is the DNN. Because of the high dimension of the input data, feature extraction methods will be implemented and compared. These methods include PCA, a DAE, and a CAE. 
-
-The other general architecture that will be explored is a 1D CNN. 
+% Dense and convolutional models are explored for two different reasons. 
 
 \subsection{Training Templates Overview}
 
@@ -105,7 +103,7 @@ Because datasets of different complexity often need different architectures and 
 \multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 175.0 & N/A \\ 
 \multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 100.0 & N/A \\ 
 \multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.5 & N/A \\ 
-\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\% & Uniform \\ 
+\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 200 keV Attenuated)\end{tabular}} & 0\%, 20\% & Uniform \\ 
 \multicolumn{1}{c}{Integration Time {[}s{]}} & 60 - 600 & Log-Uniform \\ 
 \multicolumn{1}{c}{Calibration - Offset (channels)} & 0 - 10 & Uniform \\ 
 \multicolumn{1}{c}{Calibration - Gain} & 0.9 - 1.1 & Uniform \\ 
@@ -125,7 +123,7 @@ Because datasets of different complexity often need different architectures and 
 \multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 50.5, 175.0, 300 & Uniform \\ 
 \multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 50, 100.0, 150 & Uniform \\ 
 \multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.0, 7.5, 8.0 & Uniform \\ 
-\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 662 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ 
+\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 200 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ 
 \multicolumn{1}{c}{Integration Time {[}s{]}} & 10 - 3600 & Log-Uniform \\ 
 \multicolumn{1}{c}{Calibration - Offset (channels)} & 0 - 10 & Uniform \\ 
 \multicolumn{1}{c}{Calibration - Gain} & 0.8 - 1.2 & Uniform \\ 
@@ -475,16 +473,14 @@ Input Scaling & sqrt-max & sqrt-max
 
 \subsection{Autoencoder Architectures}
 
+Without an autoencoder, a single ANN has to learn multiple tasks to identify isotopes. An ANN would have to simultaneously identify the detector calibration, background signal, and source signal. By pretraining each network using an autoencoder to reconstruct a background-subtracted spectrum, the task of isotope identification is simplified for the ANN. To explore if using pretrained models results in more accurate identifications, a DAE and CAE were trained using the model parameters found in the hyperparameter search. 
+
+% This section will explain the hyperparameter structures searched. The autoencoder used is a undercomplete denoising autoencoder \cite{Goodfellow-et-al-2016}. Because the denoising operation performs regularization implicitly, no additional regularization is added to the autoencoders. 
+
+% The autoencoder structures are found using a grid search. The autoencoders that reproduce the background subtracted signal the best are used in a dense random hyperparameter search as the signal preprocessing.
 
 
-Without an autoencoder, a single ANN has to learn multiple tasks to identify isotopes. An ANN would have to simultaneously identify the detector calibration, background signal, and source signal. By training an autoencoder to reconstruct a background-subtracted and correctly calibrated spectrum, the task of isotope identification is simplified for the ANN. This may result in more accurate identifications. 
-
-This section will explain the hyperparameter structures searched. The autoencoder used is a undercomplete denoising autoencoder \cite{Goodfellow-et-al-2016}. Because the denoising operation performs regularization implicitly, no additional regularization is added to the autoencoders. 
-
-The autoencoder structures are found using a grid search. The autoencoders that reproduce the background subtracted signal the best are used in a dense random hyperparameter search as the signal preprocessing.
-
-
-The DAE structure is based on the dense hyperparameter search. The DAE trained on both datasets uses the same parameters as Table \ref{table:hyperparameter_dataset_parameters_DNN} without regularization and with an initial learning rate set to 10$^{-5}$. The DAE does not use L2 regularization or dropout due to the implicit regularization of the undercomplete encoding and the denoising background subtracting process.
+% The DAE structure is based on the dense hyperparameter search. The DAE trained on both datasets uses the same parameters as Table \ref{table:hyperparameter_dataset_parameters_DNN} without regularization and with an initial learning rate set to 10$^{-5}$. The DAE does not use L2 regularization or dropout due to the implicit regularization of the undercomplete encoding and the denoising background subtracting process.
 
 % \begin{table}[H]
 % \centering
@@ -501,13 +497,13 @@ The DAE structure is based on the dense hyperparameter search. The DAE trained o
 % \end{tabular}
 % \end{table}
 
-The CAE structure is based on the convolutional hyperparameter search. The CAE's trained on both datasets use the same parameters as Table \ref{table:hyperparameter_dataset_parameters_CNN} without regularization and with an initial learning rate set to 10$^{-5}$.
+% The CAE structure is based on the convolutional hyperparameter search. The CAE's trained on both datasets use the same parameters as Table \ref{table:hyperparameter_dataset_parameters_CNN} without regularization and with an initial learning rate set to 10$^{-5}$.
 
 
-\section{Summary of Final Model Architectures}
+% \section{Summary of Final Model Architectures}
 
 
-This section discusses performance differences between the DNN, CNN, CAE-DNN, and DAE-DNN. These differences will be based on the final testing set error for all models.  
+% This section discusses performance differences between the DNN, CNN, CAE-DNN, and DAE-DNN. These differences will be based on the final testing set error for all models.  
 
 
 
