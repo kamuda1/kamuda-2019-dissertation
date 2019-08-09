@@ -18,7 +18,7 @@ This chapter applies machine learning algorithms to solve the problem of identif
 
 
 
-\section{Online Data Augmentation Method}
+\section{Data Augmentation Implementation}
 
 Because simulating a dataset with sufficient combinations of available data augmentation - seen in Tables \ref{table:all_fixed_simulation_parameters} and \ref{table:all_variable_simulation_parameters} - online data augmentation techniques are employed. Online data augmentation has the benefit of implicitly regularizing the models.
 
@@ -45,6 +45,8 @@ First, They are used as a sanity check, to make sure we are sampling our input s
 
 Secondly, Learning curves give us insight into which algorithm works better on the hyperparameter optimization dataset and simplified version of the problem. We're expecting the CNN to outperform the DNN due to theoretical benefits of convolution architectures for our problem. We can also compare this curve to the final learning curves for the final datasets.
 
+For the autoencoders, pretraining was done using a fixed dataset of 10000 samples. Because of the implicit regularization of the undercomplete encoding and the denoising background subtracting process, both networks do not use a additional regularization when training. The initial learning rate of each autoencoder was set to 10$^{-5}$.
+
 
 \begin{figure}[H]
 	\centering
@@ -65,11 +67,9 @@ Secondly, Learning curves give us insight into which algorithm works better on t
 
 \section{Generalization Performance Evaluation}
 
-In this section we analyze the generalization performance of each network on various datasets. To quantify performance on a range of spectra qualities, the F1-scores are shown over integration time and for different signal to background ratios. When the error between models differs significantly or is particularly large, confusion matrices are included to show what isotopes are problematic.
+In this section we analyze the generalization performance of each network and training dataset. To quantify performance on a range of spectra qualities, the F1-scores for each bagged model are shown over integration time and signal to background ratios of 0.1 and 0.5.
 
-Could also change the underlying distribution away from the training set by simulating a new template dataset with a different clutter parameter.
-
-A default dataset will be modified. The default dataset will be  correspond to unshielded templates. 
+% When the error between models differs significantly or is particularly large, confusion matrices are included to show what isotopes are problematic.
 
 \subsection{Generalization Performance on Source-Detector Distance and Height Off Ground}
 
@@ -80,144 +80,158 @@ To test generalization performance, datasets are simulated with unshieled spectr
 
 \begin{figure}[H]
      \centering
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simplified Dataset.}
-         \label{fig:results_easy_distance_comparison_simple}
+         \includegraphics[width=\textwidth]{images/generalization-height-easy-01.png}
+         \caption{}
+         \label{fig:generalization-height-easy-01}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-height-easy-05.png}
+         \caption{}
+         \label{fig:generalization-height-easy-05}
      \end{subfigure}
 
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:results_easy_distance_comparison_full}
+         \includegraphics[width=\textwidth]{images/generalization-height-full-01.png}
+         \caption{}
+         \label{fig:generalization-height-full-01}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various source-detector distance.}
-        \label{fig:results_easy_distance_comparison}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-height-full-05.png}
+         \caption{}
+         \label{fig:generalization-height-full-05}
+     \end{subfigure}
+
+        \caption{Height-off-ground generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with 10000 total dataset examples,}
+        \label{fig:generalization_height_fixeddataset}
 \end{figure}
+
+
 
 \begin{figure}[H]
      \centering
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simplified Dataset.}
-         \label{fig:results_easy_distance_comparison_simple}
+         \includegraphics[width=\textwidth]{images/generalization-height-aug-easy-01.png}
+         \caption{}
+         \label{fig:generalization-height-aug-easy-01}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-height-aug-easy-05.png}
+         \caption{}
+         \label{fig:generalization-height-aug-easy-05}
      \end{subfigure}
 
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:results_easy_distance_comparison_full}
+         \includegraphics[width=\textwidth]{images/generalization-height-aug-full-01.png}
+         \caption{}
+         \label{fig:generalization-height-aug-full-01}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various source-detector heights.}
-        \label{fig:results_easy_distance_comparison}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-height-aug-full-05.png}
+         \caption{}
+         \label{fig:generalization-height-aug-full-05}
+     \end{subfigure}
+
+        \caption{Height-off-ground generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with data augmentation,}
+        \label{fig:generalization_height_augdataset}
+\end{figure}
+
+\subsection{Generalization Performance on Source-Detector Standoff Distance}
+
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-dist-easy-01.png}
+         \caption{}
+         \label{fig:generalization-dist-easy-01}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-dist-easy-05.png}
+         \caption{}
+         \label{fig:generalization-dist-easy-05}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-dist-full-01.png}
+         \caption{}
+         \label{fig:generalization-dist-full-01}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-dist-full-05.png}
+         \caption{}
+         \label{fig:generalization-dist-full-05}
+     \end{subfigure}
+
+        \caption{Standoff distance generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with 10000 total dataset examples,}
+        \label{fig:generalization_distt_fixeddataset}
+\end{figure}
+
+
+
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-dist-aug-easy-01.png}
+         \caption{}
+         \label{fig:generalization-dist-aug-easy-01}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-dist-aug-easy-05.png}
+         \caption{}
+         \label{fig:generalization-dist-aug-easy-05}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-dist-aug-full-01.png}
+         \caption{}
+         \label{fig:generalization-dist-aug-full-01}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-dist-aug-full-05.png}
+         \caption{}
+         \label{fig:generalization-dist-aug-full-05}
+     \end{subfigure}
+
+        \caption{Standoff distance generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with data augmentation,}
+        \label{fig:generalization_dist_augdataset}
 \end{figure}
 
 
 
 \subsection{Generalization Dependence on Full-Width-at-Half-Max}
 
-Datasets were constructed with various Gaussian energy broadening function. This is to 
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simplified Dataset.}
-         \label{fig:results_easy_distance_comparison_simple}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:results_easy_distance_comparison_full}
-     \end{subfigure}
-        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various Gaussian energy broadening functions.}
-        \label{fig:results_easy_distance_comparison}
-\end{figure}
-
 
 \subsection{Generalization Dependence on Shielding.}
 
 Datasets were simulated with and without shielding. 
 
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simplified Dataset.}
-         \label{fig:results_easy_distance_comparison_simple}
-     \end{subfigure}
 
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:results_easy_distance_comparison_full}
-     \end{subfigure}
-        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various amounts of shielding.}
-        \label{fig:results_easy_distance_comparison}
-\end{figure}
-
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.8\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Simplified Training Dataset.}
-         \label{fig:results_easy_distance_comparison_simple}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.8\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Complete Training Dataset.}
-         \label{fig:results_easy_distance_comparison_full}
-     \end{subfigure}
-        \caption{Confusion matrices for the dataset with 60\% shielding.}
-        \label{fig:results_easy_distance_comparison}
-\end{figure}
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Simplified Training Dataset.}
-         \label{fig:results_easy_distance_comparison_simple}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Complete Training Dataset.}
-         \label{fig:results_easy_distance_comparison_full}
-     \end{subfigure}
-     
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Simplified Training Dataset.}
-         \label{fig:results_easy_distance_comparison_simple}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{model_choice_hyperparameter_search_images/conf_matrix_example.png}
-         \caption{Complete Training Dataset.}
-         \label{fig:results_easy_distance_comparison_full}
-     \end{subfigure}
-     
-        \caption{Confusion matrices for the dataset with 60\% shielding.}
-        \label{fig:results_easy_distance_comparison}
-\end{figure}
 
 
 
@@ -225,123 +239,82 @@ Datasets were simulated with and without shielding.
 
 Datasets were simulated with various gain and offset setting.
 
+
 \begin{figure}[H]
      \centering
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simplified Dataset.}
-         \label{fig:results_easy_distance_comparison_simple}
+         \includegraphics[width=\textwidth]{images/generalization-cal-easy-01.png}
+         \caption{}
+         \label{fig:generalization-dist-easy-01}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-cal-easy-05.png}
+         \caption{}
+         \label{fig:generalization-dist-easy-05}
      \end{subfigure}
 
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:results_easy_distance_comparison_full}
+         \includegraphics[width=\textwidth]{images/generalization-cal-full-01.png}
+         \caption{}
+         \label{fig:generalization-dist-full-01}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various gain and offset settings.}
-        \label{fig:results_easy_distance_comparison}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-cal-full-05.png}
+         \caption{}
+         \label{fig:generalization-dist-full-05}
+     \end{subfigure}
+
+        \caption{Calibration gain generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with 10000 total dataset examples,}
+        \label{fig:generalization_distt_fixeddataset}
 \end{figure}
 
 
 
-\subsection{Generalization Dependence on Changing Background.}
-
-Datasets were simulated with backgrounds different from the training set and real measured background. It is expected that the complete dataset will mistake background for isotopes more often than the simplified dataset because photopeaks are decreased by shielding.
-
 
 \begin{figure}[H]
      \centering
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simplified Dataset.}
-         \label{fig:fig:results_easy_background_simulated_simple}
+         \includegraphics[width=\textwidth]{images/generalization-cal-aug-easy-01.png}
+         \caption{}
+         \label{fig:generalization-dist-aug-easy-01}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-cal-aug-easy-05.png}
+         \caption{}
+         \label{fig:generalization-dist-aug-easy-05}
      \end{subfigure}
 
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:fig:results_easy_background_simulated_full}
+         \includegraphics[width=\textwidth]{images/generalization-cal-aug-full-01.png}
+         \caption{}
+         \label{fig:generalization-dist-aug-full-01}
      \end{subfigure}
-        \caption{F1 score for all models trained on the simplified dataset. Datasets included here used various amounts of shielding.}
-        \label{fig:results_easy_background_simulated}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/generalization-cal-aug-full-05.png}
+         \caption{}
+         \label{fig:generalization-dist-aug-full-05}
+     \end{subfigure}
+
+        \caption{Calibration gain generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with data augmentation,}
+        \label{fig:generalization_dist_augdataset}
 \end{figure}
 
+% \subsection{Generalization Dependence on Changing Background.}
 
+% Datasets were simulated with backgrounds different from the training set and real measured background. It is expected that the complete dataset will mistake background for isotopes more often than the simplified dataset because photopeaks are decreased by shielding.
 
-Figure \ref{fig:results_full_background_inject} shows the identification performance on 
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simplified Dataset.}
-         \label{fig:results_full_background_inject_simple}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:results_full_background_inject_full}
-     \end{subfigure}
-        \caption{F1 score for all models trained on the complete dataset. Datasets included here used various amounts of shielding.}
-        \label{fig:results_full_background_inject}
-\end{figure}
-
-
-% \section{Results from training all models}
-
-% When training final models, two main questions need to be addressed: how good is a given architecture at solving a problem on its training dataset and how good is a given dataset at generalizing to outside examples.
-
-% To determine how good a given architecture solves a problem, asymptotic convergence of the models performance needs to be measured. Because of the inherent stochastic nature of training machine learning algorithms (different random weight initialization, different mini-batches chosen during training, different data augmentation manifestations), each time a new network is trained the networks parameters and results will differ. This means a single trained instance of some model A may outperform a single trained instance of model B by chance, despite model B being an overall superior architecture. To more realistically compare how models perform on some dataset, a number of networks can be trained and their average performance compared. This is a method called bagging.
-
-% \subsection{Asymptotic Model Performance on Training Dataset}
-
-% For the best DNN and CNN architectures found in the hyperparameter search, using 'enough' data data samples as found in the hyperparameter search, 30 networks are trained. Their performance is observed in Figure \ref{fig:asymptotic_performance}.
-
-
-%% Can also include performance using templates with extreme augmentation
-% \begin{figure}[H]
-% 	\centering
-% 	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/asymptotic_performance_dummy}
-% 	\caption{Asymptotic model performance for both the CNN and DNN on the training sets.}
-% 	\label{fig:asymptotic_performance}
-% \end{figure}
-
-% Using N models as representative of asymptotic performance, justified in Figure \ref{fig:asymptotic_performance}, we can check out the confusion matrix associated with the test dataset to gain insight into how the algorithm is performing poorly and predict future shortcomings.
-
-
-%% Can also include performance using templates with extreme augmentation
-% \begin{figure}[H]
-% 	\centering
-% 	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/conf_matrix_example}
-% 	\caption{Asymptotic model performance for both the CNN and DNN on the training sets.}
-% 	\label{fig:asymptotic_performance}
-% \end{figure}
-
-% Can also analyze how changing a threshold would affect precision/recall!
-
-% \subsection{Results from training models using extreme data augmentation vs Data Augmentation grid sampling}
-
-% Show learning curve between models 
-% Instead of training examples on x-axis, plot against "number of divisions" (which also has a number of training examples included...)
-% Note! You can start holding parameters constant to see what parameter the model is having difficulty explaining
-% \begin{figure}[H]
-%	\centering
-%	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/learning_curve_dummy}
-%	\caption{Learning curve example.}
-%	\label{fig:Node}
-%\end{figure}
-
-%% Plot of average F1-score vs epochs for all models. Datasets include different detector model (use this as validation set) and same detector model with certain augmentation parameters frozen (or just the training set).
-
-
-%% Plot of average F1-score vs epochs for all models. Datasets include different detector model (us this as validation set) and same detector model with certain augmentation parameters frozen (or just the training set).
 
 \subsection{Results on Spectra for ANSI compliance}
 
