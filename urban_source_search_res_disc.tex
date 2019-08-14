@@ -67,7 +67,7 @@ For the autoencoders, pretraining was done using a fixed dataset of 10000 sample
 
 \section{Generalization Performance Evaluation}
 
-In this section we analyze the generalization performance of each network and training dataset. To quantify performance on a range of spectra qualities, the F1-scores for each bagged model are shown over integration time and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. For each generalization dataset, ten spectra are generated for each isotope using the indicated simulation parameters.
+In this section we analyze the generalization performance of each network and training dataset. To quantify performance on a range of spectra qualities, the F1-scores for each bagged model are shown over integration time and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. For each generalization dataset, ten spectra are generated for each isotope using the indicated simulation parameters. Models trained on the simple and complete datasets are referred to as simple models and complete models. F1 scores shown in averaged over five networks trained with either a fixed dataset of 10000 examples or online data augmentation,
 
 \begin{table}[H]
 \centering
@@ -165,7 +165,8 @@ Models trained on the simple dataset did not generalize well to low signal-to-ba
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     50 cm & \blackline & 100 cm & \blackdotline & 150 cm & \blackdashdotline
     \end{tabular}
-        \caption{Height-off-ground generalization performance of the DNN, CNN with and without autoencoder pretraining. The F1 score is averaged over five networks trained with 10000 total dataset examples. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+    
+        \caption{Height-off-ground generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_height_fixeddataset}
 \end{figure}
 
@@ -206,7 +207,7 @@ The performance using online data augmentation are shown in Figure \ref{fig:gene
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     50 cm & \blackline & 100 cm & \blackdotline & 150 cm & \blackdashdotline
     \end{tabular}
-        \caption{Height-off-ground generalization performance of the DNN, CNN with and without autoencoder pretraining. The F1 score is averaged over five networks trained with data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Height-off-ground generalization performance of each model trained using data augmentation. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_height_augdataset}
 \end{figure}
 
@@ -256,7 +257,7 @@ As seen in Figure \ref{fig:generalization_dist_fixeddataset}, general trends see
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     50 cm & \blackline & 175 cm & \blackdotline & 300 cm & \blackdashdotline
     \end{tabular}
-        \caption{Standoff distance generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with 10000 total dataset examples, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Standoff distance generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_dist_fixeddataset}
 \end{figure}
 
@@ -299,7 +300,7 @@ Training with online data augmentation again reduced performance in all models e
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     50 cm & \blackline & 175 cm & \blackdotline & 300 cm & \blackdashdotline
     \end{tabular}
-        \caption{Standoff distance generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Standoff distance generalization performance of each model trained using data augmentation. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_dist_augdataset}
 \end{figure}
 
@@ -309,7 +310,7 @@ Training with online data augmentation again reduced performance in all models e
 
 In this section we analyze the generalization performance of each network on changes in detector resolution. An example of these changes can be seen in Figure \ref{fig:sim_spectra_FWHM_comparison}.
 
-Changes in resolution do not significantly impact performance of any model. Trends are similar to distance and height generalization.
+Changes in resolution do not significantly impact performance of any model. General trends are similar to distance and height generalization.
 
 
 \begin{figure}[H]
@@ -347,7 +348,7 @@ Changes in resolution do not significantly impact performance of any model. Tren
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     7.0 & \blackline & 7.5 & \blackdotline & 8.0 & \blackdashdotline
     \end{tabular}
-        \caption{Resolution generalization performance of the DNN, CNN with and without autoencoder pretraining. Resolutions in legend are measured at 662 keV. F1 score shown in averaged over five networks trained with data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Resolution generalization performance of each model trained using a fixed dataset. Resolutions in legend are measured at 662 keV. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_fwhm_fixeddataset}
 \end{figure}
 
@@ -389,15 +390,18 @@ Changes in resolution do not significantly impact performance of any model. Tren
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     7.0 & \blackline & 7.5 & \blackdotline & 8.0 & \blackdashdotline
     \end{tabular}
-        \caption{Resolution generalization performance of the DNN, CNN with and without autoencoder pretraining. Resolutions in legend are measured at 662 keV. F1 score shown in averaged over five networks trained with data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Resolution generalization performance of each model trained using data augmentation. Resolutions in legend are measured at 662 keV. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_fwhm_augdataset}
 \end{figure}
 
 
 \subsection{Generalization Dependence on Shielding.}
 
-In this section we analyze the generalization performance of each network on changes in shielding.
+In this section we analyze the generalization performance of each network on changes in shielding. Spectra were simulated with iron shielding that shields 40\%, 60\%, and 80\% of the intensity of a 662 keV gamma-ray.
 
+As seen previously, simple models do not generalize to the low signal-to-background spectra. Simple models, which only uses unshielded and 20\% shielded templates, do generalize to other shielding amounts in higher signal-to-background spectra. Each simple model achieves and F1 score above 80\% after 2000 seconds for the 40\% attenuated spectra. Only the CAE achieves similar performance for the 40\% attenuated spectra. All other models and shielding settings attain F1 scores between 50\% and 75\%.
+
+The complete models perform much better in the low signal-to-background spectra. Both complete convolutional models perform comparatively and outperform the complete dense models. Each network's performance on 40\% and 60\% attenuated spectra were comparable, while the 80\% attenuation reduced performance more significantly. Similar trends are seen in higher signal-to-background spectra. 
 
 
 \begin{figure}[H]
@@ -433,12 +437,18 @@ In this section we analyze the generalization performance of each network on cha
     DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
     \end{tabular}
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    60\% & \blackline & 40\% & \blackdotline & 80\% & \blackdashdotline
+    40\% & \blackline & 60\% & \blackdotline & 80\% & \blackdashdotline
     \end{tabular}
-        \caption{Shielding generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+    
+    
+        \caption{Shielding generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_shielding_fixeddataset}
 \end{figure}
 
+
+Performance for the simple data augmented models was similar to the fixed dataset models at the low signal-to-background ratio. At the higher signal-to-background ratio performance dropped, especially for the CAE whose F1 score was near zero throughout the range of integration times. 
+
+Performance for the complete data augmented models was mostly similar to the fixed dataset models at the low signal-to-background ratio and comparable at the higher signal-to-background ratio. The main difference was the improved performance of the complete CNN at the low signal-to-background ratio.
 
 
 
@@ -475,17 +485,21 @@ In this section we analyze the generalization performance of each network on cha
     DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
     \end{tabular}
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    60\% & \blackline & 40\% & \blackdotline & 80\% & \blackdashdotline
+    40\% & \blackline & 60\% & \blackdotline & 80\% & \blackdashdotline
     \end{tabular}
-        \caption{Shielding generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Shielding generalization performance of each model trained using data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_shielding_augdataset}
 \end{figure}
 
 
 
-\subsection{Generalization Dependence on Calibration.}
+\subsection{Generalization Dependence on Gain}
 
-In this section we analyze the generalization performance of each network on changes in calibration.
+In this section we analyze the generalization performance of each network on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. 
+
+The simple models generalized somewhat to the 1.2 relative gain while struggling with the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, making them unusable. Because the simple models are trained to always have these features available, they cannot correctly identify spectra without them. The simple CNN performed best on the relative gain of 1.2.
+
+The complete models performed better with changing gain, but still struggled with the 0.8 relative gain. The complete CNN performed the best on each relative gain setting compared to the other models.
 
 
 \begin{figure}[H]
@@ -523,11 +537,11 @@ In this section we analyze the generalization performance of each network on cha
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     0.8 & \blackline & 1.0 & \blackdotline & 1.2 & \blackdashdotline
     \end{tabular}
-        \caption{Calibration gain generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with 10000 total dataset examples, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Calibration gain generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_cal_fixeddataset}
 \end{figure}
 
-
+Online augmentation did not significantly improve the performance of the simple models while it did improve the performance of the CNN with respect to changing calibration. The F1 score for the complete CNN and DNN increased for all shielding settings except the higher signal-to-background spectra with a 0.8 relative gain.
 
 
 \begin{figure}[H]
@@ -565,7 +579,7 @@ In this section we analyze the generalization performance of each network on cha
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     0.8 & \blackline & 1.0 & \blackdotline & 1.2 & \blackdashdotline
     \end{tabular}
-        \caption{Calibration gain generalization performance of the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Calibration gain generalization performance of each model trained using data augmentation. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_cal_augdataset}
 \end{figure}
 
@@ -574,48 +588,48 @@ In this section we analyze the generalization performance of each network on cha
 % Datasets were simulated with backgrounds different from the training set and real measured background. It is expected that the complete dataset will mistake background for isotopes more often than the simplified dataset because photopeaks are decreased by shielding.
 
 
-\subsection{Results on Spectra for ANSI compliance}
+% \subsection{Results on Spectra for ANSI compliance}
 
-This section shows model asymptotic performance vs integration time for ANSI compliance. Using N models (justified previously as asymptotic). 
-
-
-
-\begin{table}[H]
-\centering
-\caption{Isotope combinations required for the ANSI standard \cite{ANSI}.}
-\begin{tabular}{c}
-Isotope Combinations \\ \hline
-$^{137}$Cs + depleted uranium (DU) \\ % \hline
-$^{99m}$Tc + HEU \\ % \hline
-$^{201}$Tl + HEU \\ % \hline
-$^{67}$Ga + HEU \\ % \hline
-$^{131}$I + WGPu \\ % \hline
-NORM + HEU \\ % \hline
-NORM + WGPu \\ % \hline
-\end{tabular}
-\end{table}
+% This section shows model asymptotic performance vs integration time for ANSI compliance. Using N models (justified previously as asymptotic). 
 
 
 
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simplified Dataset.}
-         \label{fig:results_full_background_inject_simple}
-     \end{subfigure}
+% \begin{table}[H]
+% \centering
+% \caption{Isotope combinations required for the ANSI standard \cite{ANSI}.}
+% \begin{tabular}{c}
+% Isotope Combinations \\ \hline
+% $^{137}$Cs + depleted uranium (DU) \\ % \hline
+% $^{99m}$Tc + HEU \\ % \hline
+% $^{201}$Tl + HEU \\ % \hline
+% $^{67}$Ga + HEU \\ % \hline
+% $^{131}$I + WGPu \\ % \hline
+% NORM + HEU \\ % \hline
+% NORM + WGPu \\ % \hline
+% \end{tabular}
+% \end{table}
 
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:results_full_background_inject_full}
-     \end{subfigure}
 
-        \caption{F1 score for models tested on ANSI isotope combinations.}
-        \label{fig:results_full_background_inject}
-\end{figure}
+
+% \begin{figure}[H]
+%      \centering
+%      \begin{subfigure}[b]{0.9\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+%          \caption{Simplified Dataset.}
+%          \label{fig:results_full_background_inject_simple}
+%      \end{subfigure}
+
+%      \begin{subfigure}[b]{0.9\textwidth}
+%          \centering
+%          \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
+%          \caption{Complete Dataset.}
+%          \label{fig:results_full_background_inject_full}
+%      \end{subfigure}
+
+%         \caption{F1 score for models tested on ANSI isotope combinations.}
+%         \label{fig:results_full_background_inject}
+% \end{figure}
 
 
 
@@ -897,7 +911,12 @@ Due to the relatively low gamma-ray energies of $^{133}$Ba compared to the other
 \end{figure}
 
 
-Because the gamma-ray energies of $^{152}$Eu are spread out 
+The simple DAE performs well generalizing to shielded $^{152}$Eu while the simple CNN generalizes poorly. The simple CAE and DNN both perform similarly across the full range of shielding. 
+
+The complete CNN identifies lightly and moderately shielded $^{152}$Eu with a high posterior probability. The DNN performs second best, identifying these spectra with a slightly lower posterior probability. The complete DNN operates consistently over a range of integration times for the heavily shielded $^{152}$Eu. Only after 150 seconds of integration time does the CNN perform similarly on heavily shielded $^{152}$Eu. % The complete CAE performs worse.
+
+
+% Because the gamma-ray energies of $^{152}$Eu are spread out 
 
 
 \begin{figure}[H]
@@ -925,19 +944,15 @@ Because the gamma-ray energies of $^{152}$Eu are spread out
         \label{fig:shielding_eu152}
 \end{figure}
 
-\section{Chapter Conclusions}
+\section{Chapter Discussion and Conclusion}
 
-This chapter shows that CNN's trained on the complete dataset generalize very well to simulated and real gamma-ray spectra. When trained on the 
+This chapter shows that CNN's trained on the complete dataset generalize very well to simulated and real gamma-ray spectra. When trained on the simple dataset CNN's often also perform well when identifying spectra outside the simple datasets parameters, but struggle with real spectra. The autoencoders perform very poorly in the simulated spectra, but generalized well to parameters outside the easy training set -   particularly DAE's. There is also some evidence that CAE's generalize better to isotopes with predominately low energy photopeaks in real spectra. Occasionally, at lower signal-to-background ratios, the DNN outperforms the CNN. Because the DNN likely compares counts in different regions, it should be more robust against changes in Compton continua as it compares counts in photopeak areas. Despite this, DNN's offer unpredictable performance. Due to the large number of inputs, the DNN's are likely overtraining to specific combinations of noise in the training datasets.
 
-DNN's penalized for unpredictable performance. They are likely overtraining to specific combinations of 
+In addition to the above, the results also shown that using datasets of fixed sizes should be preferred over using online data augmentation. Online data augmentation usually reduced performance in each network. There is some evidence that the CNN generalizes better when trained with online data augmentation. This may be due to the larger capacity of the CNN compared to the DNN. 
 
-Autoencoders - particularly DAE's - generalized well to parameters outside the easy training set. Autoencoders blur DAE's generalized well because... There is some evidence that CAE's generalize better to isotopes with predominately low energy photopeaks.
+% To take advantage of this, it may be best to include a committee of CNN's and DNN's, or to train networks for specific ranges of integration time.
 
-The generalization performance results show that CNN's generally outperform other models and that autoencoder pretraining does not help with performance. Occasionally, at very low signal-to-background ratios, the DNN outperforms the CNN. To take advantage of this, it may be best to include a committee of CNN's and DNN's, or to train networks for specific ranges of integration time.
-
-From the results shown in this chapter, using datasets of fixed sizes should be preferred over using online data augmentation. Online data augmentation usually reduced performance in each network
-
-A committee of models can be constructed with CAEs, DAEs, and CNNs. 
+% A committee of models can be constructed with CAEs, DAEs, and CNNs. 
 
 
 
