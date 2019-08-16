@@ -2,6 +2,8 @@
 
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5554294/
 
+% great examples of various enriched U with a large range of detector resolutions https://www.lanl.gov/orgs/n/n1/docs/la_14206.pdf 
+
 % Although mass spectrometry leads to very accurate analytical results, it has the drawbacks of high costs of the device and its operation involving a long process and destructive sample analysis [1], [2]. https://www.sciencedirect.com/science/article/pii/S1738573317308057#bib1
 
 Verifying the enrichment of HEU through passive nondestructive analysis is important for safeguards applications and homeland security tasks. Nondestructive analysis is preferred to preserve forensics evidence and to allow for remote measurements. 
@@ -39,6 +41,8 @@ softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)}.
 \section{Problem Description and Training Dataset Overview}
 
 The gamma-ray signatures from metallic HEU come from the decay of $^{238}$U, $^{235}$U, $^{232}$U, the daughters of these isotopes, and uranium K x-rays. In low-resolution detectors, The primary photopeaks of $^{235}$U signature are at 144 keV, 163 keV, and 186 keV. $^{238}$U daughters produces photopeaks at 92 keV and 1001 keV. The uranium K x-rays at 98 keV are driven by the alpha decay from $^{234}$U \cite{Hofstetter2008}. $^{234}$U naturally occurs in uranium ore and co-enriches with $^{235}$U due to their close atomic mass. Due to a small branching ratio, $^{234}$U has an unresolvable photopeak at 121 keV in HEU spectra measured by NaI(Tl) detectors.
+
+Because the features that are typically used to differentiate HEU from LEU (the 186 keV peak from $^{235}$U and the 1001 keV peak from the $^{238}$U daughter $^{234m}$Pa) are on very different scales, it may be better to scale the input using the $log1p$ instead of $sqrt$. To test this, each model is trained with $log1p-max$ and $sqrt-max$ scaling.
 
 % The software package RadSrc was used to generate the gamma-ray intensities for $^{235}$U and $^{238}$U templates \cite{Hiller2007}. RadSrc, developed at Lawrence Livermore National Laboratory, uses Bateman equations to decay samples. We simulate clean uranium  composed of only $^{235}$U and $^{238}$U. 
 
