@@ -2,7 +2,9 @@
 
 % https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5554294/
 
-% great examples of various enriched U with a large range of detector resolutions https://www.lanl.gov/orgs/n/n1/docs/la_14206.pdf 
+% great examples of various enriched U with a large range of detector resolutions https://www.lanl.gov/orgs/n/n1/docs/la_14206.pdf
+
+% u232 origin, enrichment as function of u235 fraaction https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-12075.pdf
 
 % Although mass spectrometry leads to very accurate analytical results, it has the drawbacks of high costs of the device and its operation involving a long process and destructive sample analysis [1], [2]. https://www.sciencedirect.com/science/article/pii/S1738573317308057#bib1
 
@@ -40,15 +42,26 @@ softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)}.
 
 \section{Problem Description and Training Dataset Overview}
 
-The gamma-ray signatures from metallic HEU come from the decay of $^{238}$U, $^{235}$U, $^{232}$U, the daughters of these isotopes, and uranium K x-rays. In low-resolution detectors, The primary photopeaks of $^{235}$U signature are at 144 keV, 163 keV, and 186 keV. $^{238}$U daughters produces photopeaks at 92 keV and 1001 keV. The uranium K x-rays at 98 keV are driven by the alpha decay from $^{234}$U \cite{Hofstetter2008}. $^{234}$U naturally occurs in uranium ore and co-enriches with $^{235}$U due to their close atomic mass. Due to a small branching ratio, $^{234}$U has an unresolvable photopeak at 121 keV in HEU spectra measured by NaI(Tl) detectors. Because of this, the gamma-ray spectrum from $^{234}$U decay is not included in the template spectra.
+The gamma-ray signatures from HEU come from the decay of $^{238}$U, $^{235}$U, $^{232}$U, and the daughters of these isotopes. In low-resolution detectors, The primary photopeaks of $^{235}$U signature are at 144 keV, 163 keV, and 186 keV. The $^{238}$U daughter $^{234m}$Pa produces two main photopeaks at 766 keV and 1001 keV. $^{232}$U, only present in significant quantities in recycled uranium, produces a photopeak at 2614 keV from its $^{208}$Tl daughter.
+
+% u232 production reactions from uranium species https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-12075.pdf
 
 % FRAM application to U and Pu isotopics https://www.lanl.gov/orgs/n/n1/appnotes/LA-14018-M.pdf
 
 \subsection{Training Datasets}
 
+The software package RadSrc was used to generate the specific gamma-ray intensities for $^{235}$U, $^{238}$U, and $^{232}$U templates \cite{Hiller2007}. RadSrc, developed at Lawrence Livermore National Laboratory, uses Bateman equations to calculate in-growth of daughters and their respective specific gamma-ray intensities. Isotopes in enriched uranium reach secular equilibrium in about six months. To account for this, RadSrc was used to find specific gamma-ray intensities for 50 year old uranium species. The specific activities for each species are found in Table \ref{table:specific_activities_radsrc}.
+
+A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid 13 kg uranium sphere. The MCNP code was used to calculate the physics due to self attenuation and distance and GADRAS-DRF was used to model the response in a 2'' x 2'' NaI detector.
 
 
-The software package RadSrc was used to generate the specific gamma-ray activities for $^{235}$U, $^{238}$U, and $^{232}$U templates \cite{Hiller2007}. RadSrc, developed at Lawrence Livermore National Laboratory, uses Bateman equations to calculate in-growth of daughters and their respective specific gamma-ray activities. The specific activities for each species are found in Table \ref{table:specific_activities_radsrc}. The specific activity for the x-ray component was fit by hand to a 93\% enriched HEU spectrum. It is assumed that the x-ray component is driven by alpha decay from $^{234}$U and that $^{234}$U co-enriches linearly with $^{235}$U. Because of this, when simulating additional spectra, it was assumed that the x-ray component would scale linearly with enrichment. One study estimated that impurities of $^{232}$U with a mass fraction of 6.0E-9 existed in one sample of HEU created with recycled material  \cite{RawoolSullivan2012}. Based on this, to account for various burn-up conditions in the recycled material, each sample that included $^{232}$U used a mass fraction randomly chosen between 1e-10 and 1e-8. The probability that a spectrum was simulated with $^{232}$U was one half. 
+
+% The $^{232}$U \cite{Peurrung2019}
+
+
+
+One study estimated that impurities of $^{232}$U with a mass fraction of 6.0E-9 existed in one sample of HEU created with recycled material  \cite{RawoolSullivan2012}. Based on this, to account for various burn-up conditions in the recycled material, each sample that included $^{232}$U used a mass fraction randomly chosen between 1e-10 and 1e-8. The probability that a spectrum was simulated with $^{232}$U was one half. 
+
 
 
 \begin{table}[H]
@@ -59,11 +72,10 @@ The software package RadSrc was used to generate the specific gamma-ray activiti
 % \cline{2-3}
 % Isotope & photos/second/gram \\ \hline
 % Isotope & $\frac{photos}{s g}$ \\ \hline
-Isotope & Specific Activity  \\ \hline
+Isotope & Specific Gamma-ray Intensities [$\gamma$/gram/second] \\ \hline
 \multicolumn{1}{c}{$^{232}$U} & 1.20e12 \\ 
 \multicolumn{1}{c}{$^{235}$U} & 2.07e5 \\
 \multicolumn{1}{c}{$^{238}$U} & 3.80e3 \\ 
-\multicolumn{1}{c}{x-ray} & 4.30e4 \\ \hline
 \end{tabular}
 \end{table}
 
