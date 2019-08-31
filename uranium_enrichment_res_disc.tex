@@ -98,6 +98,11 @@ Isotope & {\begin{tabular}[c]{@{}c@{}}Specific Gamma-ray\\ Intensities [$\gamma$
 % networks and as feature extractors for a DNN. To do this, a trained CAE and DAE will be connected to a dense network. These will be trained to either fixing the autoencoder's weights or by fine-tuning them while the network learns.
 
 
+\subsection{Training Outline}
+
+% Simple and complete DNN's, CNN's, CAE's, and DAE's were trained 
+
+
 \section{Generalization Results - Simulated Data}
 
 These sections describe how each model performed on simulated enriched uranium.
@@ -109,23 +114,38 @@ Enriched uranium spectra were simulated with various amounts of shielding.
 
 
 
+
 \begin{figure}[H]
      \centering
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
-         \label{fig:results_full_background_inject_simple}
+         \includegraphics[width=\textwidth]{images/simuranium-noshield.png}
+         \caption{}
+         \label{fig:simuranium-noshield}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/simuranium-lightal.png}
+         \caption{}
+         \label{fig:simuranium-lightal}
      \end{subfigure}
 
-     \begin{subfigure}[b]{0.9\textwidth}
+     \begin{subfigure}[b]{0.49\textwidth}
          \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:results_full_background_inject_full}
+         \includegraphics[width=\textwidth]{images/simuranium-mediumlead.png}
+         \caption{}
+         \label{fig:simuranium-mediumlead}
      \end{subfigure}
-        \caption{Absolute error for all models trained on the complete dataset. Datasets included here used various amounts of shielding.}
-        \label{fig:results_full_background_inject}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/simuranium-heavylead.png}
+         \caption{}
+         \label{fig:simuranium-heavylead}
+     \end{subfigure}
+        \caption{Calibration gain generalization performance in simulated spectra for the DNN, CNN with and without autoencoder pretraining.}
+        \label{fig:gain_eu152}
 \end{figure}
 
 
@@ -155,37 +175,11 @@ Unshielded enriched uranium spectra were simulated with various changes in their
 \end{figure}
 
 
-\subsection{Generalization Results on Changing Background}
-
-Unshielded enriched uranium spectra were simulated with various background templates.  
-
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Simple Dataset.}
-         \label{fig:results_full_background_inject_simple}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.9\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/results_easy_distance_comparison}
-         \caption{Complete Dataset.}
-         \label{fig:results_full_background_inject_full}
-     \end{subfigure}
-        \caption{Absolute error for all models trained on the complete dataset. Datasets included here used various background templates.}
-        \label{fig:results_full_background_inject}
-\end{figure}
-
 
 
 
 \section{Results - Rocky Flats Shells}
 
-
-% Is it necessary to re-run the hyperparameter search, or are the 'simple' models good enough?
 
 The reported Rocky Flats shells isotopics are shown in Table \ref{table:rockyflats_isotopics}. Recent work has found estimated that impurities of $^{232}$U, mass fraction 6.0E-9, and $^{237}$Np, mass fraction 1.8E-4, \cite{RawoolSullivan2012} existed in the shells in 1971 (the year the shells were fabricated).
 
