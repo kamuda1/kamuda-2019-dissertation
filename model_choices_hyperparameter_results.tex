@@ -6,7 +6,7 @@ This section describes the process of choosing the architectural and regularizat
 
 \subsection{Training Templates Overview}
 
-The datasets used to train the models are created using templates of simulated gamma-ray spectra without Poisson noise. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF (Gamma Detector Response and Analysis Software - Detector Response Function), was used to generate these templates. This simulation code can be used to model physical conditions that affect spectra. For example, spectra change due to changes in measurement geometry. These changes include source-to-detector distance and the distance of both the detector and source from objects in an environment. To demonstrate this effect, $^{60}$Co spectra were simulated at various source-to-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights off ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the the shape of the Compton continuum, the peak-to-total ratio, and the magnitude of the backscatter peak. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different broadening parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
+The datasets used to train the models are created using templates of simulated gamma-ray spectra without Poisson noise. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF (Gamma Detector Response and Analysis Software - Detector Response Function), was used to generate these templates. This simulation code can be used to model physical conditions that affect spectra. For example, spectra change due to changes in measurement geometry. These changes include source-to-detector distance, the distance of the detector from the source, and the distance of these items from objects in an environment. To demonstrate this effect, $^{60}$Co spectra were simulated at various source-to-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights off ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the shape of the Compton continuum, the peak-to-total ratio, and the magnitude of the backscatter peak. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different broadening parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
 
 
 \begin{figure}[H]
@@ -38,7 +38,7 @@ The datasets used to train the models are created using templates of simulated g
 
 % Changes in calibration due to temperature shifts are also considered. Due to the relatively large magnitude in calibration shifts due to temperature shifts from -5 C to 40 C \cite{CASANOVAS2012588}, it is expected incorporating these additions will also make the algorithm robust against calibration.
 
-The template parameters used in this study are shown in Table \ref{table:all_fixed_simulation_parameters}. These parameters are based on handheld RIID scenarios. The source-detector height off ground are sampled between average shin and arm heights. The source-detector distance range corresponds to expected standoff distances. The areal density of each material corresponds to a 20$\%$, 40$\%$, 60$\%$, and 80$\%$ attenuation of a 200 keV photon. The photon energy was chosen because it is near the 186 keV energy of the most important $^{235}$U photopeak. A set of unshielded templates is also included. The FWHM range was chosen based on reported FWHM values for a NaI(Tl) detector (see section \ref{subsection_energy_resolution}). Background locations were chosen based on their geographic and geologic differences.
+The template parameters used in this study are shown in Table \ref{table:all_fixed_simulation_parameters}. These parameters are based on handheld RIID scenarios. The source-detector height off the ground are sampled between average shin and arm heights. The source-detector distance range corresponds to expected standoff distances. The areal density of each material corresponds to a 20$\%$, 40$\%$, 60$\%$, and 80$\%$ attenuation of a 200 keV photon. The photon energy was chosen because it is near the 186 keV energy of the characteristic $^{235}$U photopeak. A set of unshielded templates is also included. The FWHM range was chosen based on reported FWHM values for a NaI(Tl) detector (see section \ref{subsection_energy_resolution}). Background locations were chosen based on their geographic and geologic differences.
 
 In addition to the parameters simulated by GADRAS-DRF, parameters are included to perform data augmentation. These parameters are shown in Table \ref{table:all_variable_simulation_parameters}.
 
@@ -91,7 +91,7 @@ Calibration - Gain \\
 
 To investigate which parameters affect generalization performance, networks were trained using a simple and complete set of template simulation parameters. The parameters used for the simplified dataset are shown in Table \ref{table:hyperparameter_dataset_easy_parameters} and parameters used for the complete dataset are shown in Table \ref{table:hyperparameter_dataset_full_parameters}. Both datasets are comprised of the following isotopes from ANSI N42-34-2006 \cite{ANSI}: $^{241}$Am, $^{133}$Ba, $^{57}$Co, $^{60}$Co, $^{51}$Cr, $^{137}$Cs, $^{152}$Eu, $^{67}$Ga, $^{123}$I, $^{125}$I, $^{131}$I, $^{111}$In, $^{192}$Ir, $^{177m}$Lu, $^{99}$Mo, $^{237}$Np, $^{103}$Pd, $^{239}$Pu, $^{240}$Pu, $^{226}$Ra, $^{75}$Se, $^{153}$Sm, $^{99m}$Tc, $^{201}$Tl, $^{204}$Tl, $^{233}$U, $^{235}$U, $^{238}$U, and $^{133}$Xe.
 
-Because datasets of different complexity often need different architectures and hyperparameters \cite{Bergstra2012}, independent hyperparameter searches were conducted for both datasets. For each dataset, a total of 100 spectra were simulated for each isotope. Each spectrum was simulated with parameters randomly sampled from the simple or complete parameter set.
+Datasets of different complexity often need different architectures and hyperparameters \cite{Bergstra2012}, independent hyperparameter searches were conducted for both datasets. For each dataset, a total of 100 spectra were simulated for each isotope. Each spectrum was simulated with parameters randomly sampled from the simple or complete parameter set.
 
 \begin{table}[H]
 \centering
@@ -135,7 +135,7 @@ Because datasets of different complexity often need different architectures and 
 
 \section{Hyperparameter Search Results}
 
-To determine an optimum combination of hyperparameters, a random hyperparameter search over hyperparameters was performed. For each network and both datasets, the average testing set error from 5-fold cross validation was recorded. An early stopping patience of 20 epochs was used to train 256 models. To reduce wall-clock time, the maximum number of epochs was set to 200 and training ended if the F1 score in the test set did not rise above 10$\%$ after 10 epochs. The results of the hyperparameter searches are shown using random efficiency curves and by comparing parameter values versus average testing set F1 scores from the 5-fold cross validation. Random efficiency curves indicate the quality of the hyperparameter search space and allows for reproducibility. Analyzing how the parameter values change the F1 score gives us an idea of which parameters are important. Hyperparameter bounds are based on previous published and unpublished experiments as well as recommendations from literature \cite{Bengio2018}.
+To determine an optimum combination of hyperparameters, a random hyperparameter search was performed. The average testing set error from 5-fold cross validation was recorded for each network and both datasets. An early stopping patience of 20 epochs was used to train 256 models. The maximum number of epochs was set to 200 and training ended if the F1 score in the test set did not rise above 10$\%$ after 10 epochs. The results of the hyperparameter searches are shown using random efficiency curves and by comparing parameter values versus average testing set F1 scores from the 5-fold cross validation. Random efficiency curves indicate the quality of the hyperparameter search space and allows for reproducibility. Analyzing how the parameter values change the F1 score gives us an idea of which parameters are important. Hyperparameter bounds are based on previous published and unpublished experiments as well as recommendations from literature \cite{Bengio2018}.
 
 % A sharper efficiency curve shows that many hyperparameter combinations perform well, whereas 
 
@@ -146,7 +146,7 @@ To determine an optimum combination of hyperparameters, a random hyperparameter 
 
 \subsection{Dense Architecture}
 
-Architecture and training hyperparamters for the DNN are shown in Table \ref{table:hyperparameter_dataset_parameters_DNN}. Note, the number of nodes in each layers was made to decrease for each subsequent layer. The input scaling is read left-to-right. For example, the sqrt-max scaling would first take the square root of the each channel in the spectrum and then normalized the spectrum by its maximum value. The L1 norm normalizes a spectrum by its L1 norm. The log1p function is the base 10 logarithm of the input plus one.
+Architecture and training hyperparamters for the DNN are shown in Table \ref{table:hyperparameter_dataset_parameters_DNN}. The number of nodes in each layers decrease for each subsequent layer. The input scaling is read left-to-right. For example, the sqrt-max scaling would first take the square root of the each channel in the spectrum and then normalized the spectrum by its maximum value. The L1 norm normalizes a spectrum by its L1 norm. The log1p function is the base 10 logarithm of the input plus one.
 
 \begin{table}[H]
 \centering
@@ -185,7 +185,7 @@ Random efficiency experiment curves for the DNN trained on the simple and comple
 \end{figure}
 
 
-Figure \ref{fig:dense_hyperparameters_f1_score} shows the distribution of hyperparameters searched and their average testing set F1 score from the 5-folds cross validation. Because few networks trained on the complete dataset achieved high F1 scores, conclusions based on these will suffer from a small sample size. General trends in the simple dataset are more representative of actual performance. 
+Figure \ref{fig:dense_hyperparameters_f1_score} shows the distribution of hyperparameters searched and their average testing set F1 score from the 5-folds cross validation. Conclusions based on these will suffer from a small sample size because few networks trained on the complete dataset achieved high F1 scores. General trends in the simple dataset are more representative of actual performance.
 
 Sub-figure \ref{fig:dnn_learning_rate} shows that a learning rate less than 10$^{-2}$ should be used for future hyperparameter searches. This figure also shows that the more difficult dataset prefers a slower learning rate, with best performing networks using learning rates below 10$^{-3.5}$. Smaller learning rates should also be explored in future searches, if computationally feasible.
 
@@ -268,7 +268,7 @@ Sub-figures \ref{fig:dnn_scaler} shows the effect of feature preprocessing on pe
 \begin{table}[H]
 \centering
 \caption{Optimum DNN hyperparameter combination found for the simple and complete dataset.}
-\label{table:hyperparameter_dataset_parameters_DNN}
+\label{table:hyperparameter_opt_parameters_DNN}
 \begin{tabular}{ccc}
 \multirow{2}{*}{Hyperparameter} & \multicolumn{2}{c}{Optimum Value} \\
  & Simple Dataset & Complete Dataset \\ \hline
@@ -288,7 +288,7 @@ Input Scaling & sqrt & sqrt-max
 
 \subsection{Convolution Architecture}
 
-Architecture and training hyperparamters for the CNN are shown in Table \ref{table:hyperparameter_dataset_parameters_CNN}. Note, as with the DNN the number of nodes in the dense layers was made to decrease for each subsequent layer. A smaller range of batch sizes was searched in the CNN compared to the DNN due to computational constraints.
+Architecture and training hyperparamters for the CNN are shown in Table \ref{table:hyperparameter_dataset_parameters_CNN}. Note, as with the DNN the number of nodes in the dense layers decreased with each subsequent layer. A smaller range of batch sizes was searched in the CNN compared to the DNN due to computational constraints.
 
 \begin{table}[H]
 \centering
@@ -312,7 +312,7 @@ Architecture and training hyperparamters for the CNN are shown in Table \ref{tab
 \end{table}
 
 
-Random efficiency experiment curves for the CNN trained on the simple and complete datasets are shown in Figures \ref{fig:random_hp_search_cnn_easy} and \ref{fig:random_hp_search_cnn_full}. Similar to the dense network, a large number of hyperparameter combinations did not reduce their F1 score in the training set quickly enough and their training was ended early. Interestingly, the median F1 score in both datasets smoothly increased with additional trials. Both datasets achieved an F1 score above 90$\%$. This demonstrates that the hyperparameter bounds used for both problems are well suited to the problems and that CNN's have more potential than DNN's for perform tasks in gamma-ray spectroscopy. As with the DNN, the final F1 scores on the simplified dataset are higher than the final F1 scores on the complete dataset.
+Random efficiency experiment curves for the CNN trained on the simple and complete datasets are shown in Figures \ref{fig:random_hp_search_cnn_easy} and \ref{fig:random_hp_search_cnn_full}. Similar to the dense network, a large number of hyperparameter combinations did not reduce their F1 score in the training set quickly enough and their training was ended early. Interestingly, the median F1 score in both datasets smoothly increased with additional trials. Both datasets achieved an F1 score above 90$\%$. This demonstrates that the hyperparameter bounds used for both problems are well suited to the problems and that CNN's have more potential than DNN's for gamma-ray spectroscopy. As with the DNN, the final F1 scores on the simplified dataset are higher than the final F1 scores on the complete dataset.
 
 \begin{figure}[H]
 	\centering
@@ -333,11 +333,11 @@ Figure \ref{fig:cnn_hyperparameters_f1_score} shows the distribution of hyperpar
 
 The CNN's training performance was largely agnostic to many hyperparameters, including those associated with the dense part of the CNN. Figure \ref{fig:cnn_hyperparameters_f1_score} shows that both datasets train similarly over a wide range of learning rates blow 10$^{-2}$, dense layer dropout rate below 0.6, L2 regularization scales below 10$^{-1}$, between 50 - 200 total dense nodes, and both mini-batch sizes, 
 
-The CNN training performance on the complete dataset was sensitive to hyperparameters related to model capacity. The total number of convolutional layers had the largest affect on the performance of the complete dataset. Because of the additional complexity in the complete dataset, deeper networks - which extract more abstract features - are necessary for good performance. CNNs with additional convolutional layers should be explored for similar problems. Interestingly, additional dense layers did not provide the same boost in performance. The simple dataset performed well with a large range of total dense layers while the complete dataset preferred fewer layers, achieving the best F1 score with a single layer. This may be show that too many dense layers leads to overtraining on more complicated datasets. 
+The CNN training performance on the complete dataset was sensitive to hyperparameters related to model capacity. The total number of convolutional layers had the largest affect on the performance of the complete dataset. Because of the additional complexity in the complete dataset, deeper networks - which extract more abstract features - are necessary for good performance. CNNs with additional convolutional layers should be explored for similar problems. Additional dense layers did not provide the same boost in performance. The simple dataset performed well with a large range of total dense layers while the complete dataset preferred fewer layers, achieving the best F1 score with a single layer. A high number of dense layers overtrain on more complicated datasets. 
 
-Performance was also sensitive to other convolutional hyperparameters. Both datasets worked well with each convolutional pooling size, but the complicated dataset worked best when the convolutional pooling size was largest. Larger pooling sizes add more shift and scale invariance, which is more important in the complete dataset due to it's wider range of detector gain settings. Similarly, larger convolutional kernel lengths were were required for good performance in the complete dataset. Larger kernels incorporate information in a larger range of channels. Larger kernels may be necessary to incorporate photopeaks and Compton continua, where smaller filters may be sufficient to identify photopeaks alone. Identifying the photopeaks may be enough to identify isotopes in the simple dataset, but not the more complicated dataset where photopeaks are degraded and changed by a wider range of shielding, source-detector distances, source-detector heights, and signal to background ratios. The preference for depth in the convolutional part of the CNN was also seen in the number of convolutional filters.
+Performance was also sensitive to other convolutional hyperparameters. Both datasets worked well with each convolutional pooling size, but the complete dataset worked best when the convolutional pooling size was largest. Larger pooling sizes add more shift and scale invariance, which is more important in the complete dataset due to a wider range of detector gain settings. Similarly, larger convolutional kernel lengths were required for good performance in the complete dataset. Larger kernels incorporate information in a larger range of channels. Larger kernels may be necessary to incorporate photopeaks and Compton continua, where smaller filters may be sufficient to identify photopeaks alone. Identifying the photopeaks may be enough to identify isotopes in the simple dataset because there are fewer confounding variables. The preference for depth in the convolutional part of the CNN was also seen in the number of convolutional filters.
 
-The effect of scaling on performance was similar to the DNN. Using $sqrt$ scaling yielded the best performing networks, especially when tied with $max$ normalization. Interestingly, while $log1p-L1$ performed very poorly, $sqrt-L1$ yielded comparable performance to the other scaling strategies - despite the discrepancy in feature magnitude. This is likely due to the fact that the CNN is extracting scale invariant features (like photopeak locations) from the input signal.
+The effect of scaling on performance was similar to the DNN. Using $sqrt$ scaling yielded the best performing networks, especially when tied with $max$ normalization. Interestingly, while $log1p-L1$ performed very poorly, $sqrt-L1$ yielded comparable performance to the other scaling strategies - despite the discrepancy in feature magnitude. This is likely due to the fact that the CNN extracts scale invariant features (like photopeak locations) from the input signal.
 
 
 \begin{figure}[H]
@@ -433,7 +433,7 @@ The effect of scaling on performance was similar to the DNN. Using $sqrt$ scalin
 \begin{table}[H]
 \centering
 \caption{Optimum CNN hyperparameter combination found for the simple and complete dataset.}
-\label{table:hyperparameter_dataset_parameters_DNN}
+\label{table:hyperparameter_opt_parameters_CNN}
 \begin{tabular}{ccc}
 \multirow{2}{*}{Hyperparameter} & \multicolumn{2}{c}{Optimum Value} \\
  & Simple Dataset & Complete Dataset \\ \hline
@@ -471,9 +471,11 @@ Input Scaling & sqrt-max & sqrt-max
 % \end{tabular}
 % \end{table}
 
-\subsection{Autoencoder Architectures}
+\subsection{Autoencoder Architectures} \label{section_autoencoder_archetectures}
 
 Without an autoencoder, a single ANN has to learn multiple tasks to identify isotopes. An ANN would have to simultaneously identify the detector calibration, background signal, and source signal. By pretraining each network using an autoencoder to reconstruct a background-subtracted spectrum, the task of isotope identification is simplified for the ANN. To explore if using pretrained models results in more accurate identifications, a DAE and CAE were trained using the model parameters found in the hyperparameter search. 
+
+Pretraining was performed using a dataset of 10000 samples generated using the simple and complete dataset parameters (Tables \ref{table:hyperparameter_dataset_easy_parameters} and \ref{table:hyperparameter_dataset_full_parameters}). Because of the implicit regularization of the undercomplete encoding and the denoising background subtracting process, both networks do not use a additional regularization when training. The initial learning rate of each autoencoder was set to 10$^{-5}$.
 
 % This section will explain the hyperparameter structures searched. The autoencoder used is a undercomplete denoising autoencoder \cite{Goodfellow-et-al-2016}. Because the denoising operation performs regularization implicitly, no additional regularization is added to the autoencoders. 
 
