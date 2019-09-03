@@ -9,6 +9,13 @@
 % https://e-reports-ext.llnl.gov/pdf/312592.pdf holy shit they show common false positive isotopes and we see a lot of overlap
 
 
+\newcommand{\blackline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,solid,line width = 1.1pt](0,0) -- (6mm,0);}}}
+
+\newcommand{\blackdotline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dashed,line width = 1.1pt](0,0) -- (6mm,0);}}}
+
+\newcommand{\blackdashdotline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dash dot,line width = 1.1pt](0,0) -- (6mm,0);}}}
+
+\newcommand{\blackdottedline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dotted,line width = 1.1pt](0,0) -- (6mm,0);}}}
 
 \section{Problem Description and Training Dataset Overview}
 
@@ -18,56 +25,76 @@ This chapter applies machine learning algorithms to solve the problem of identif
 
 
 
-\section{Data Augmentation Implementation}
+% \section{Data Augmentation Implementation}
 
-Because simulating a dataset with sufficient combinations of available data augmentation - seen in Tables \ref{table:all_fixed_simulation_parameters} and \ref{table:all_variable_simulation_parameters} - online data augmentation techniques are employed. Online data augmentation has the benefit of implicitly regularizing the models.
+% Because simulating a dataset with sufficient combinations of available data augmentation - seen in Tables \ref{table:all_fixed_simulation_parameters} and \ref{table:all_variable_simulation_parameters} - online data augmentation techniques are employed. Online data augmentation has the benefit of implicitly regularizing the models.
 
-Steps in the data augmentation process are:
-\begin{enumerate}
-  \item Randomly choose a background template with the same FWHM as the source template
-  \item Rebin source and background template with a random calibration
-  \item Apply the LLD to both templates
-  \item Normalize both templates by the sum of their respective counts 
-  \item Scale both signals by their respective total counts
-  \begin{itemize}
-     \item Counts defined by randomly chosen background counts per second, integration time, and signal to background ratio
-   \end{itemize}
-  \item Add both signals 
-  \item Poisson sample the resulting signal
-\end{enumerate}
+% Steps in the data augmentation process are:
+% \begin{enumerate}
+%   \item Randomly choose a background template with the same FWHM as the source template
+%   \item Rebin source and background template with a random calibration
+%   \item Apply the LLD to both templates
+%   \item Normalize both templates by the sum of their respective counts 
+%   \item Scale both signals by their respective total counts
+%   \begin{itemize}
+%      \item Counts defined by randomly chosen background counts per second, integration time, and signal to background ratio
+%   \end{itemize}
+%   \item Add both signals 
+%   \item Poisson sample the resulting signal
+% \end{enumerate}
 
 
 \section{Learning Curve Comparison for Fixed-size Datasets and Online Data Augmentation Datasets}
 
-In this section we use learning curves to quantify how well the online data augmentation improved testing error. Learning curves are [definition, explanation]. Learning curves are used to determine a few things. We will use them to do [the following].
+In this section we use learning curves to determine the number of examples in the training dataset and quantify how the online data augmentation method improved the testing error. To create the learning curves, a dataset of 3 x 10$^{8}$ spectra (1 x 10$^{4}$ examples per class) were generated for both the simple and complete dataset parameters (Tables \ref{table:hyperparameter_dataset_easy_parameters} and \ref{table:hyperparameter_dataset_full_parameters}). For each number of examples explored, a random subset of the 3 x 10$^{8}$ spectra were used as a training set. Stratified sampling was used to keep the number of examples per class as equal as possible. A holdout dataset of 300 total spectra (10 examples per class) was used as a testing dataset set. Training was ended after an early stopping condition with a patience of 100 epochs was reached. A total of 5 models were trained for the DNN, CNN, DAE, and CAE and their outputs were averaged to reduce variance between models. Online data augmentation was also implemented using an early stopping patience of 50 and 100 for the simple and complete models.
 
-First, They are used as a sanity check, to make sure we are sampling our input space with enough granularity. To know we are sampling well enough, we should be sampling in a region where the curves are flat for both algorithms.
-
-Secondly, Learning curves give us insight into which algorithm works better on the hyperparameter optimization dataset and simplified version of the problem. We're expecting the CNN to outperform the DNN due to theoretical benefits of convolution architectures for our problem. We can also compare this curve to the final learning curves for the final datasets.
-
-For the autoencoders, pretraining was done using a fixed dataset of 10000 samples. Because of the implicit regularization of the undercomplete encoding and the denoising background subtracting process, both networks do not use a additional regularization when training. The initial learning rate of each autoencoder was set to 10$^{-5}$.
+The learning curve for the simple model shows that past 5000 examples the F1 score saturates to one. This shows that each model is well suited to generalize within the simple parameter space. Due to the error not decreasing during training, training was rerun on one CAE model at 1 x 10$^{4}$ and 2 x 10$^{4}$ samples. This can be attributed to a poor CAE pretraining. This poor pretraining can also be seen in the CAE's poor online data augmentation performance. The performance of each network trained with online data augmentation was poor.
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/learning_curve_dummy}
-	\caption{Learning curves from the best DNN with best performance from online data augmentation. Shown: learning curve example.}
-	\label{fig:learning_curves}
+	\includegraphics[width=0.9\linewidth]{images/learning_curves_easy}
+	\begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
+    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
+    \end{tabular}
+    \begin{tabular}{r@{: }l r@{: }l}
+    Testing Error & \blackline & Training Error & \blackdotline
+    \end{tabular}
+    \begin{tabular}{r@{: }l}
+    Online Data Augmentation Error & \blackdashdotline
+    \end{tabular}
+	\caption{Learning curves for each simple model.}
+	\label{fig:learning_curves_easy}
 \end{figure}
+
+
+The training set error curves in the complete learning curve plot are less steep than those in the simple learning curve plot. This shows that the complete dataset is more complex and models require more examples to generalize to unseen examples. The learning curve for the complete model shows the CNN and DNN converging to near one after 5 x 10$^{3}$ and 1.5 x 10$^{4}$ examples. The testing and training F1 score curves for the CNN and DNN also show low-bias and low-variance, indicating the hyperparameter search found appropriate values for the complexity of the complete dataset. 
+
+The training errors for the autoencoder models do not saturate as quickly as the training errors for the CNN and DNN. This shows that either the pretraining has a large effect on learning or the pretrained models need regularization during fine-tuning. Both the DAE and CAE saturate past 1 x 10$^{4}$ examples. Similar to the simple training curve, training was rerun on one CAE model at 1.5 x 10$^{4}$ and 2 x 10$^{4}$.
 
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{model_choice_hyperparameter_search_images/learning_curve_dummy}
-	\caption{Learning curves from the best CNN with best performance from online data augmentation. Shown: learning curve example.}
-	\label{fig:learning_curves}
+	\includegraphics[width=0.9\linewidth]{images/learning_curves_full}
+    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
+    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
+    \end{tabular}
+    \begin{tabular}{r@{: }l r@{: }l}
+    Testing Error & \blackline & Training Error & \blackdotline
+    \end{tabular}
+    \begin{tabular}{r@{: }l}
+    Online Data Augmentation Error & \blackdashdotline
+    \end{tabular}
+	\caption{Learning curves for each complete model.}
+	\label{fig:learning_curves_full}
 \end{figure}
+
 
 
 \section{Generalization Performance Evaluation}
 
-In this section we analyze the generalization performance of each network and training dataset. To quantify performance on a range of spectra qualities, the F1-scores for each bagged model are shown over integration time and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. For each generalization dataset, ten spectra are generated for each isotope using the indicated simulation parameters. Models trained on the simple and complete datasets are referred to as simple models and complete models. F1 scores shown in averaged over five networks trained with either a fixed dataset of 10000 examples or online data augmentation,
+In this section we analyze the generalization performance of each network and training dataset. To quantify performance on a range of spectral qualities, the F1-scores for each bagged model are shown over integration times from 10 seconds to an hour  and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. For each generalization dataset, ten spectra are generated for each isotope using the indicated simulation parameters. Models trained on the simple and complete datasets are referred to as simple models and complete models. F1 scores shown are averaged over five networks trained with either a fixed dataset of 10000 examples or online data augmentation,
 
 \begin{table}[H]
 \centering
@@ -112,13 +139,6 @@ Hyperparameter &  Value \\ \hline
 
 % When the error between models differs significantly or is particularly large, confusion matrices are included to show what isotopes are problematic.
 
-\newcommand{\blackline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,solid,line width = 1.1pt](0,0) -- (6mm,0);}}}
-
-\newcommand{\blackdotline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dashed,line width = 1.1pt](0,0) -- (6mm,0);}}}
-
-\newcommand{\blackdashdotline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dash dot,line width = 1.1pt](0,0) -- (6mm,0);}}}
-
-\newcommand{\blackdottedline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dotted,line width = 1.1pt](0,0) -- (6mm,0);}}}
 
 \subsection{Generalization Performance on Source-Detector Height}
 
