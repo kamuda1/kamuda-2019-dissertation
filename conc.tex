@@ -2,46 +2,48 @@
 
 \section{General Conclusions}
 
+This dissertation demonstrates a general method to optimize machine learning architectures for low-resolution gamma-ray spectroscopy. In an attempt to shed light on a black box, CNN and DNN hyperparameters from random searches were analyzed with respect to testing set F1 score. In particular, it was found that $sqrt-max$ scaling was often a preferred preprocessing method for each model. Future experiments into machine learning architectures for gamma-ray spectroscopy should be guided by the hyperparameter bounds and discussion from this section. The method demonstrates that more complicated spectroscopic tasks, such as quantifying uranium enrichment, require more complicated machine learning architectures.
+
+This work also demonstrates a general method to construct a dataset for radioactive source interdiction. Experiments were created to test generalization limits for source interdiction datasets using a narrow and wide range of simulated parameters. From these experiments we observe that CNNs show the most promise for source interdiction, often achieving the highest F1 score on simulated datasets and high posterior probabilities for correct isotopes in measured data. CNN's and DNN's show good performance on a wide range of detector calibrations in both simulated and measured spectra. This performance makes CNN's and DNN's good candidates for use on handheld RIID detectors where the calibration is often unreliable.
+
+We also observe that including shielding in the training dataset was necessary to correctly identify shielded isotopes in both simulated and measured spectra. Autoencoders trained without shielding demonstrate some generalization capabilities when identifying measured shielded spectra. The pretrained ability to reconstruct spectra uniquely benefits the autoencoders when identifying distorted spectroscopic signals. 
+
+This work also demonstrates a general method to construct a dataset for uranium enrichment regression. While CNN's outperform DNN's in source interdiction tasks, dense models show better performance when quantifying uranium enrichment in measured spectra. This shows that the convolutional kernel sizes are inappropriately large for features in enriched uranium spectra or that CNN's are better suited to the pattern recognition problem of isotope identification. This also shows that dense networks are better suited for quantification tasks which require comparing counts in specific spectral regions. Fundamentally, this demonstrates that a machine learning model must be carefully chosen and tailored to a given spectroscopic task.
+
 
 \section{Steps Toward Practical Application}
 
-For this model to be applied in the real world, a few things need to be added. Overall, a larger more thorough validation dataset must be created to ensure certain isotope combinations do not present as adversarial. That is, a validation dataset must be used to ensure a threat isotope is not commonly identified as benign. Additional hyperparameter tests need to be preformed with more intelligent hyperparameter ranges. Additional network architectures and hyperparameters should be explored. These can include inception networks and batch normalization.
+A few things need to be added for this method to be applied in production RIID devices. Dataset simulation parameters can more accurately reflect real-world conditions. For example, a more realistic background count-rate distribution and additional background templates can be added. Devices can also come with networks designed for specific background environments, such as the background expected in a certain city or in different geological areas. Model source strengths can be based on expected count rates from each source in a range of activities expected. Additional simulated NaI crystal variations would need to be added to the training set because manufacturing differences between NaI shape effects can affect peak-to-total ratios and detector intrinsic efficiency. Shielding should be added based on how much information content is lost from the source signal when increasing shielding is added.
 
-Generalization performance must also be more thoroughly measured and improved. To increase generalization, a wider range of scattering environments needs to be added to the spectral templates. More detector parameters need to be varied and their effect on performance must be measured. 
+Additional validation datasets must be investigated. Validation datasets are needed to investigate if certain isotope combinations could mask each other or otherwise change identification. 
+
+% Generalization performance must also be more thoroughly measured and improved. To increase generalization, a wider range of scattering environments needs to be added to the simulated spectral templates. More detector parameters need to be varied and their effect on performance must be measured. 
+
+% New network architectures and training hyperparameters should be explored. Novel machine learning archetectures such as inception networks and batch normalization.
 
 
 
 \section{Suggested Future Work}
 
-% 80%+ Wish list 
-Siamese networks for SNM identification. Step 1, train a siamese network on simulated SNM with realistic missile shielding. Step 2, take a random warhead and call it 'golden'. Compare all other warheads to this, using only the spectrum as input. Boom, got a zero-knowledge verification alg.
-% Differentiate different enrichments of uranium? 
-% Use it as a feature extractor!!!!!
+A simulated training dataset allows the same machine learning model creation process to be applied to different detector materials like plastic scintillator, CZT, and HPGe detectors. Different detector materials produce spectra with unique features and significantly different resolutions. The hyperparameter selection process outlined in this work can be repeated for these materials and optimum hyperparameters can be compared. This will help us understand how each machine learning model uses spectral features.
 
-Treating dataset expansion methods [calibration, signal-to-total ratio] as random data augmentation instead of sampling them discreetly. Compare asymptotic performance of this 'extreme data augmentation model' on template dataset to performance of 'dataset expansion models' at expansion levels sufficient for learning curve asymptote. 
+In addition to the deep learning algorithms presented in this thesis, more classical machine learning algorithms such as the support vector machine, random forests, and k-means should be applied to similar datasets an their performance analyzed. Performance can also be compared to models trained on feature extraction methods like autoencoders or principal component analysis.
 
-Create training datasets composed of isotope mixtures. How to sample these mixtures? Exhaustive? Latin hypercube (this is my preference)? Uniform random? See how this works on single- and multi-isotope identification.
+Pretrained autoencoders could be further explored for a variety of applications. Autoencoders pretrained using low-resolution NaI spectra could be used to train networks for detectors with different resolution. Different autoencoder feature extraction processes can also be explored. Examples of this include: using a spectrum as input and outputting posterior probability that each channel contains a photo-peak and using a gain-shifted spectrum as input and outputting a gain-corrected spectrum. The encoding from different feature extraction methods could be fed into a DNN, support vector machine, random forests, or k-means algorithm and their performance compared.
 
-For the autoencoder, compare performance of a model using cross-entropy loss on data log-normalized and squished on [0,1] to a model using mean-squared-error loss on data log-normalized and data sqrt-normalized.
+% Finally, different machine learning models that combine time-series information, such as LSTMs, could be explored. An LSTM could be trained to identify a background
 
-% True future work
 
- 
+% created to identify images of  could be used for SNM identification using low-resolution gamma-ray detectors. 
 
-Much of the gamma-ray spectrum has no information in it, there are no peaks in certain regions. You can apply different preprocessing techniques to shrink these sections (similar to what RSL has done). What is the effect of these re-calibrations on performance?
+% models that incorporate time series 
 
-See how well kernel SVM, boosted trees, random forests work on features extracted by DAE, CAE, PCA. Do these methods perform better on the datasets I've provided compared to the neural networks I've demonstrated? Compare speed, accuracy on simulated and collected data.
 
-Autoencoder that takes spectrum as input, output is peak positions. Use this as a feature extractor. 
+% A method to Siamese networks for SNM identification. Step 1, train a siamese network on simulated SNM with realistic missile shielding. Step 2, take a random warhead and call it 'golden'. Compare all other warheads to this, using only the spectrum as input. Boom, got a zero-knowledge verification alg.
 
-Can you address background identification errors by adding a higher penalizing term to the cost of mislabeling background? How does this play with precision/recall/F1 score as you change the decision threshold?
+% Additional datasets can be constructed for specific identification problems. For example, a dataset can be constructed to perform online uranium enrichment using NaI in fuel fabrication plants. Need to incorporate centrifuge wall thickness, can possibly use time-series data to identify when things change? May need to worry more about calibration drift due to temperature or electronics drift.
 
-A simulated training set also allows the same ANN creation process to be applied to different detector materials. This is because different gamma-ray detector materials, such as CZT or HPGe, create spectra with different features.
 
-Construct a dataset to detect obscured sources. For example, make a dataset with different (theoretically identifiable) amounts of HEU hidden by industrial and medical sources. 
 
-Can you create a dataset to perform online uranium enrichment using NaI for fuel fabrication plants? Need to incorporate centrifuge wall thickness, can possibly use time-series data to identify when things change? May need to worry more about calibration drift due to temperature or electronics drift.
+% A committee of models can be explored to incorporate dense and convolutional architectures. 
 
-Analyze how the model is operating using LIME.
-
-Multi-task learning on identifying and quantifying isotopes. Identifying can use a softmax output on one-hot encoded outputs while quantifying can use a separate softmax output on quantities. Does this get us better enrichment measurement and identification performance?
