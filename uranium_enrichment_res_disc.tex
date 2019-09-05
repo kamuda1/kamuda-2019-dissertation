@@ -52,11 +52,16 @@ To investigate how well a machine learning algorithm can learn uranium enrichmen
 
 \subsection{Training Dataset Details}
 
-A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid 13 kg uranium sphere. The MCNP code was used to calculate the physics due to self attenuation and distance and GADRAS-DRF was used to model the response in a 2'' x 2'' NaI detector. Simulation parameters are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
+A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid 13 kg uranium sphere. The MCNP code was used to calculate the physics due to self attenuation and distance and GADRAS-DRF was used to model the response in a 2'' x 2'' NaI detector. The universe in the MCNP simulation, shown in Figure \ref{fig:mcnp_diagram}, was empty except for a 19 cm concrete block fixed at 180 cm from the origin, a 5.5 cm radius sphere of bare uranium fixed at the origin, and a bare 2'' x 2'' NaI cylinder located between them. The concrete block was added to include backscatter radiation from the source. A total of 10$^{8}$ particles were simulated for each configuration.
+
+\begin{figure}[H]
+	\centering
+    \includegraphics[trim=50 50 50 50,clip,width=0.99\linewidth]{images/mcnp_diagram.png}
+	\caption{Diagram of MCNP simulation (not to scale).}
+	\label{fig:mcnp_diagram}
+\end{figure}
 
 The software package RadSrc was used to generate the specific gamma-ray intensities for $^{235}$U, $^{238}$U, and $^{232}$U templates \cite{Hiller2007}. RadSrc, developed at Lawrence Livermore National Laboratory, uses Bateman equations to calculate in-growth of daughters and their respective specific gamma-ray intensities. Isotopes in enriched uranium reach secular equilibrium in about six months. To account for this, RadSrc was used to find specific gamma-ray intensities for 50 year old uranium species. The specific activities for each species are found in Table \ref{table:specific_activities_radsrc}.
-
-The amount of each component's spectral template was combined based on the desired enrichment. One study estimated that impurities of $^{232}$U with a mass fraction of 6.0E-9 existed in one sample of HEU created with recycled material \cite{RawoolSullivan2012}. Based on this, to account for various burn-up conditions in the recycled material \cite{Peurrung2019}, each sample that included $^{232}$U used a mass fraction uniformly chosen between 4e-9 and 2e-8. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was one half.
 
 \begin{table}[H]
 \centering
@@ -74,6 +79,7 @@ Isotope & {\begin{tabular}[c]{@{}c@{}}Specific Gamma-ray\\ Intensities [$\gamma$
 \end{tabular}
 \end{table}
 
+The amount of each component's spectral template was combined based on the desired enrichment. One study estimated that impurities of $^{232}$U with a mass fraction of 6.0E-9 existed in one sample of HEU created with recycled material \cite{RawoolSullivan2012}. Based on this, to account for factors that change $^{232}$U content (burn-up conditions in the recycled material, \cite{Peurrung2019}), each sample that included $^{232}$U used a mass fraction uniformly chosen between 4e-9 and 2e-8. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was one half. Complete simulation parameters for the coupled MCNP and GADRAS-DRF code are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
 
 \begin{table}[H]
 \centering
@@ -97,9 +103,7 @@ Isotope & {\begin{tabular}[c]{@{}c@{}}Specific Gamma-ray\\ Intensities [$\gamma$
 
 \subsection{Training Outline}
 
-Simple and complete network architectures found in Section \ref{table:hyperparameter_opt_parameters_DNN} and \ref{table:hyperparameter_opt_parameters_CNN} were trained on a simulated dataset of 10$^{5}$ uranium spectra. Models architectures trained to perform uranium enrichment had their number of outputs changed to one, their output function changed to a sigmoid, and their main cost function changed to mean squared error. Pretrained simple and complete DAE and CAE models from Section \ref{section_autoencoder_archetectures} were also fine-tuned using the simulated uranium dataset.
-
-
+Simple and complete model architectures discussed in Sections \ref{table:hyperparameter_opt_parameters_DNN} and \ref{table:hyperparameter_opt_parameters_CNN} were trained on a simulated dataset of 10$^{5}$ uranium spectra. Model architectures were modified to perform regression. Modifications include changing: the number of output nodes to one, their output function was to a sigmoid, and their main cost function to mean squared error. Typically the sigmoid output function is used in the context of logistic regression. The regression targets (percent $^{235}$U enrichment) exist on [0,1], allowing the sigmoid output function to be used. Pretrained simple and complete DAE and CAE models from Section \ref{section_autoencoder_archetectures} were also fine-tuned using the simulated uranium dataset.
 
 \section{Generalization Results - Simulated Data}
 
@@ -111,7 +115,7 @@ These sections describe how each trained model performed on simulated enriched u
 \label{table:default_sim_params_uranium}
 \begin{tabular}{cc}
 % \cline{2-3}
-Hyperparameter &  Value \\ \hline
+Simulation Parameter &  Value \\ \hline
 \multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 50.0\\ 
 \multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.0\\ 
 \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 200 keV Attenuated)\end{tabular}} & 0\% \\ 
@@ -127,8 +131,17 @@ Hyperparameter &  Value \\ \hline
 
 To test each model's generalization performance with respect to shielding, enriched uranium spectra were simulated with various amounts of shielding. The effect of each shielding is shown in Figure \ref{fig:simulated_uranium_shielding}. The outputs from each model on these cases are shown in Figure \ref{fig:simuranium-shielding}. In general for each case, the complete networks outperform the simple networks. This indicates that the reduced capacity of the simple networks is insufficient to properly perform uranium enrichment measurements using the provided dataset. At 93\% enrichment each model underpredicted the enrichment.
 
+
+
 The simple networks consistently overpredict the enrichment at 50\% and below and underpredict the enrichment at values over 50\%. This also shows that the simple network has too little capacity to fit the data. Because the range of enrichments in the training data are uniformly distributed from 0 - 100\%, the naive way to minimize the cost function is to output values near 50\%. The simple networks, except for the simple DAE, consistently underpredicted the enrichment in the case with 1.42 mm lead shielding. The complete models were largely unaffected by the various amounts of shielding.
 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{images/simulated_uranium_shielding.png}
+	\caption{Simulated 93\% enriched uranium spectra various amounts of shielding.}
+	\label{fig:simulated_uranium_shielding}
+\end{figure}
 
 \begin{figure}[H]
      \centering
@@ -164,15 +177,9 @@ The simple networks consistently overpredict the enrichment at 50\% and below an
 \end{figure}
 
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.8\linewidth]{images/simulated_uranium_shielding.png}
-	\caption{Simulated 93\% enriched uranium spectra various amounts of shielding.}
-	\label{fig:simulated_uranium_shielding}
-\end{figure}
 
 
-\subsection{Generalization Results on Changing Calibration}
+\subsection{Generalization Results on Changing Calibration} \label{section_uranium_sim_cal}
 
 To test each model's generalization performance with respect to calibration, enriched uranium spectra were simulated with various relative gains. The outputs from each model on these cases are shown in Figure \ref{fig:simuranium-cal}. Model performance at relative gains of 0.9 and 1.1 are similar to the case without a change in gains, shown in Figure \ref{fig:simuranium-noshield}.
 
@@ -234,9 +241,31 @@ At the extreme relative gain shifts of 0.8 and 1.2 performance for the models ch
 
 \section{Results - Measured Spectra}
 
+Spectra of various uranium enrichments from a variety of NaI detectors were collected and the each model's response was recorded. Measured spectra include a 13 kg 93\% enriched uranium metal sphere \cite{Rothe1997} and U$_{3}$O$_{8}$ measured at lower enrichments. The U$_{3}$O$_{8}$ spectra were measured with as part of an IAEA measurement exercises which did not measure energies above 1.3 MeV. This should have little effect on the regression because the models should have learned to ignore this region which contains no enrichment information. In addition to this, the calibration of the detectors were not the same. For testing purposes, each spectrum was manually recalibrated using gain correction to the 186 keV photopeak. These recalibrated spectra are shown in Figure \ref{fig:measured_uranium_plots}. Shielding, source-detector distance, and scattering environments are unknown for the U$_{3}$O$_{8}$ spectra.
 
+\begin{table}[H]
+\centering
+\caption{Uranium sample description.}
+\label{table:default_sim_params_uranium}
+\begin{tabular}{cccc}
+% \cline{2-3}
+Enrichment & $^{235}$U Mass (g) & Material & Live Time (s)   \\ \hline
+93.1\% & 12,000 & U Metal & 300 \\
+91.4\% & 903 & U$_{3}$O$_{8}$ &  226\\
+27.1\%  & 264 & U$_{3}$O$_{8}$ & 344 \\ 
+0.7\% & - & U$_{3}$O$_{8}$ & 97.4 \\
+\end{tabular}
+\end{table}
 
-Spectra of various uranium enrichments from a variety of source were collected and the each model's response was recorded. 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{images/measured_uranium_plots.png}
+	\caption{Enriched uranium spectra recalibrated to the 186 keV photopeak.}
+	\label{fig:measured_uranium_plots}
+\end{figure}
+
+Figure \ref{fig:measured_uranium} shows the output and variance of each model for each measured spectra. Similar to the simulated spectra, the simple architectures underpredicted enrichments over 50\% and overpredicted enrichments under 50\%. The simple DAE had a large output variance at lower enrichments while the rest of the networks did not have observable variance in their outputs. The complete architectures were more accurate than the simple architectures at above 90\% enrichment. At 27.1\% enrichment, each convolutional model overpredicted the enrichment while the dense models predicted closer to the true value. % This is due to the $^{235}$U features being the wrong size for the convolutional filters.
+
 
 
 \begin{figure}[H]
@@ -246,15 +275,54 @@ Spectra of various uranium enrichments from a variety of source were collected a
 	\label{fig:measured_uranium}
 \end{figure}
 
+To investigate how changing calibration effects each algorithm, the recalibrated spectra were recalibrated an additional time with the same gain settings explored in Section \ref{section_uranium_sim_cal}. 
+
+Similar to the simulated results, gain changes of 0.9 and 1.1 do not change significantly impact enrichment quantification for the complete networks. An exception to this is is the complete dense models underpredict enrichment in the 93\% enriched, 1.1 gain setting spectrum. This drop in predicted enrichment was also seen at a gain of 1.1 in the complete DAE. At a gain of 0.8, networks generally overpredicted the enrichment of lower enrichment samples. This is effect was observed to a smaller magnitude in simulated results.
+
+\begin{figure}[H]
+     \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/measured_uranium_08.png}
+         \caption{0.8}
+         \label{fig:measured_uranium_08}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/measured_uranium_09.png}
+         \caption{0.9}
+         \label{fig:measured_uranium_09}
+     \end{subfigure}
+
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/measured_uranium_11.png}
+         \caption{1.1}
+         \label{fig:measured_uranium_11}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=\textwidth]{images/measured_uranium_12.png}
+         \caption{1.2}
+         \label{fig:measured_uranium_12}
+     \end{subfigure}
+        \caption{Calibration gain generalization performance in recalibrated measured spectra for the DNN, CNN with and without autoencoder pretraining. The magnitude of the applied relative gain shift are shown below each figure.}
+        \label{fig:realuranium-cal}
+\end{figure}
+
 
 
 \section{Discussion and Conclusion}
 
-Other cases need to be added to the training dataset to make this work in practice. Additional examples need to $^{241}$Am, $^{239}$Pu, and $^{237}$Np from recycled uranium. 
+This chapter shows that the complete architectures outperform the simple architectures on uranium enrichment regression tasks. The also shows that the complete architectures are well suited to extend to other problems in gamma-ray spectroscopy. The chapter also demonstrated that autoencoders trained to reconstruct unrelated spectra are useful as pretraining for other spectroscopic tasks. The DAE was performed particularly well on simulated and measured data in various conditions. Dense models show promise in uranium enrichment regression. This may be because aspects of the feature extraction processes in the convolution architectures are tuned to general isotope identification. Uranium enrichment regression may require convolution window sizes smaller than those in the simple or complete dataset (8 and 16 channels) to better extract narrow photopeaks below 200 keV. 
 
-The $^{232}$U content could be modeled more accurately \cite{Peurrung2019}.
+While the current implementation can roughly differentiate between low and high enriched uranium, the training set would need to be expanded to achieve useful accuracy for international safeguards measurements or homeland security surveys. Additional scattering scenarios simulating cargo containers and small uranium samples that cannot be assumed to be infinitely thick at 186 keV could be added. Detector efficiency differences could be added. $^{232}$U content could also be modeled more accurately \cite{Peurrung2019}.
 
-Bremsstrahlung from the $^{234m}$Tl, a $^{238}$U daughter, could be added to the simulations to make low-enrichment measurements more accurate.
+% Additional examples need to $^{241}$Am, $^{239}$Pu, and $^{237}$Np from recycled uranium. 
+
+% Bremsstrahlung from the $^{234m}$Tl, a $^{238}$U daughter, could be added to the simulations to make low-enrichment measurements more accurate.
 
 
 
