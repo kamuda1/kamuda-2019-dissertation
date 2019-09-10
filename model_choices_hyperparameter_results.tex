@@ -1,10 +1,10 @@
-\chapter{Machine Learning Models Explored}
+\chapter{Machine Learning Models Explored} \label{ChapterMachineLearningModelsExplored}
 
 This section describes the process of choosing the architectural and regularization hyperparamers for the dense and 1D convolutional models explored in this work. This section also describes the datasets used to tune the hyperparameters.
 
 % Dense and convolutional models are explored for two different reasons. 
 
-\subsection{Training Templates Overview}
+\section{Training Templates Overview}
 
 The datasets used to train the models are created using templates of simulated gamma-ray spectra without Poisson noise. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF (Gamma Detector Response and Analysis Software - Detector Response Function), was used to generate these templates. This simulation code can be used to model physical conditions that affect spectra. For example, spectra change due to changes in measurement geometry. These geometry changes can include the source and detector distance from each other, the ground, and objects in the environment. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-to-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights off ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the shape of the Compton continuum, the peak-to-total ratio, and the magnitude of the backscatter peak. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different broadening parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
 
@@ -46,14 +46,15 @@ In addition to the parameters simulated by GADRAS-DRF, parameters are included t
 \centering
 \caption{Fixed GADRAS-DRF simulation parameters.}
 \begin{tabular}{cc}
-Parameter & Values \\ \hline
+\hline
+Simulation Parameter & Values \\ \hline
 \begin{tabular}[c]{@{}c@{}}source-detector height \\ off ground {[}cm{]}\end{tabular} & 50, 75, 100, 125, 150 \\ 
 \begin{tabular}[c]{@{}c@{}}source-detector\\ distance {[}cm{]}\end{tabular} & \multicolumn{1}{c}{50, 112.5, 175, 237.5, 300} \\ 
 \begin{tabular}[c]{@{}c@{}}Areal density of \\ solid aluminum {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.82, 4.18, 7.49, 13.16 \\ 
 \begin{tabular}[c]{@{}c@{}}Areal density of\\  solid iron {[}g/cm\textasciicircum{}2{]}\end{tabular} & 1.53, 3.5, 6.28, 11.02 \\ 
 \begin{tabular}[c]{@{}c@{}}Areal density of \\ solid lead {[}g/cm\textasciicircum{}2{]}\end{tabular} & 0.22, 0.51, 0.92, 1.61 \\ 
 \begin{tabular}[c]{@{}c@{}}FWHM at\\  662 keV {[}\%{]}\end{tabular} & \multicolumn{1}{c}{6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0} \\ 
-\begin{tabular}[c]{@{}c@{}}Background\\ Location \end{tabular} & \begin{tabular}[c]{@{}c@{}}Albuquerque, Atlanta, Austin,\\ Chicago , Knoxville , Miami\end{tabular}
+\begin{tabular}[c]{@{}c@{}}Background\\ Location \end{tabular} & \begin{tabular}[c]{@{}c@{}}Albuquerque, Atlanta, Austin,\\ Chicago , Knoxville , Miami\end{tabular} \\ \hline
 \end{tabular}
 \label{table:all_fixed_simulation_parameters}
 \end{table}
@@ -62,12 +63,13 @@ Parameter & Values \\ \hline
 \centering
 \caption{Default data augmentation parameters.}
 \begin{tabular}{c}
+\hline
 Parameter \\ \hline
 integration time \\ 
 background counts per second \\ 
 Signal to Background ratio \\ 
 Calibration - Offset \\ 
-Calibration - Gain \\ 
+Calibration - Gain \\ \hline
 \end{tabular}
 \label{table:all_variable_simulation_parameters}
 \end{table}
@@ -99,7 +101,8 @@ Independent hyperparameter searches were conducted for both datasets because dat
 \label{table:hyperparameter_dataset_easy_parameters}
 \begin{tabular}{ccc}
 % \cline{2-3}
- & Hyperparameter Range & Sampling \\ \hline
+\hline
+Hyperparameter & Hyperparameter Range & Sampling \\ \hline
 \multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 175 & N/A \\ 
 \multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 100 & N/A \\ 
 \multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.5 & N/A \\ 
@@ -108,7 +111,7 @@ Independent hyperparameter searches were conducted for both datasets because dat
 \multicolumn{1}{c}{Calibration - Offset (channels)} & 0 - 10 & Uniform \\ 
 \multicolumn{1}{c}{Calibration - Gain} & 0.9 - 1.1 & Uniform \\ 
 \multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 & Uniform \\ 
-\multicolumn{1}{c}{Background Counts Per Second} & 200 & Poisson \\ 
+\multicolumn{1}{c}{Background Counts Per Second} & 200 & Poisson \\ \hline
 \end{tabular}
 \end{table}
 
@@ -119,7 +122,8 @@ Independent hyperparameter searches were conducted for both datasets because dat
 \label{table:hyperparameter_dataset_full_parameters}
 \begin{tabular}{ccc}
 % \cline{2-3}
- & Hyperparameter Range & Sampling \\ \hline
+\hline
+Hyperparameter & Hyperparameter Range & Sampling \\ \hline
 \multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 50, 175, 300 & Uniform \\ 
 \multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 50, 100, 150 & Uniform \\ 
 \multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.0, 7.5, 8.0 & Uniform \\ 
@@ -128,7 +132,7 @@ Independent hyperparameter searches were conducted for both datasets because dat
 \multicolumn{1}{c}{Calibration - Offset (channels)} & 0 - 10 & Uniform \\ 
 \multicolumn{1}{c}{Calibration - Gain} & 0.8 - 1.2 & Uniform \\ 
 \multicolumn{1}{c}{Signal to Background Ratio} & 0.1 - 3.0 & Uniform \\ 
-\multicolumn{1}{c}{Background Counts Per Second} & 200 & Poisson \\ 
+\multicolumn{1}{c}{Background Counts Per Second} & 200 & Poisson \\ \hline
 \end{tabular}
 \end{table}
 
@@ -154,6 +158,7 @@ Architecture and training hyperparamters for the DNN are shown in Table \ref{tab
 \label{table:hyperparameter_dataset_parameters_DNN}
 \begin{tabular}{ccc}
 % \cline{2-3}
+\hline
 Hyperparameter & Hyperparameter Range & Sampling \\ \hline
 \multicolumn{1}{c}{Number of Layers} & 1 - 3 & Uniform \\
 \multicolumn{1}{c}{Nodes in Layer} & 2$^{5}$ - 2$^{10}$ & Power of Two \\
@@ -162,7 +167,7 @@ Hyperparameter & Hyperparameter Range & Sampling \\ \hline
 \multicolumn{1}{c}{Dropout Frequency} & 0 - 1 & Uniform \\
 \multicolumn{1}{c}{Batch Size} & 2$^{4}$ - 2$^{10}$ & Power of Two \\
 \multicolumn{1}{c}{Activation Function} & relu, tanh & Uniform \\
-\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\ sqrt-L1 norm,\\ log1p, log1p-max,\\ log1p-L1 norm\end{tabular} & Uniform \\
+\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\ sqrt-L1 norm,\\ log1p, log1p-max,\\ log1p-L1 norm\end{tabular} & Uniform \\ \hline
 \end{tabular}
 \end{table}
 
@@ -203,51 +208,66 @@ Sub-figures \ref{fig:dnn_scaler} shows the effect of feature preprocessing on pe
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/dnn_learning_rate.png}
-         \caption{Learning Rate}
+        %  \caption{Learning Rate}
+         \caption{}
          \label{fig:dnn_learning_rate}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/dnn_dropout.png}
-         \caption{Dropout Rate}
+        %  \caption{Dropout Rate}
+         \caption{}
          \label{fig:dnn_dropout}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/dnn_batch_size.png}
-         \caption{Batch Size}
+        %  \caption{Batch Size}
+         \caption{}
          \label{fig:dnn_batch_size}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/dnn_dense_layers_total.png}
-         \caption{Total Dense Layers}
+        %  \caption{Total Dense Layers}
+         \caption{}
          \label{fig:dnn_dense_layers_total}
      \end{subfigure}
 
     \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/dnn_l2_reg.png}
-         \caption{L2 Regularization Scale}
+        %  \caption{L2 Regularization Scale}
+         \caption{}
          \label{fig:dnn_l2_reg}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/dnn_dense_nodes_total.png}
-         \caption{Total Nodes}
+        %  \caption{Total Nodes}
+         \caption{}
          \label{fig:dnn_dense_nodes_total}
      \end{subfigure}     
 
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/dnn_scaler.png}
-         \caption{Feature Scaling}
-         \label{fig:dnn_scaler}
-     \end{subfigure}
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dnn_scaler.png}
+        % \caption{Feature Scaling}
+         \caption{}
+        \label{fig:dnn_scaler}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.49\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/dnn_activation_function.png}
+        % \caption{Activation Function}
+         \caption{}
+        \label{fig:dnn_activation_function}
+    \end{subfigure}
 
         \caption{Effect of hyperparameters on F1 score. Blue circles represent the simple dataset, green crosses are the complete dataset.}
         \label{fig:dense_hyperparameters_f1_score}
@@ -270,6 +290,7 @@ Sub-figures \ref{fig:dnn_scaler} shows the effect of feature preprocessing on pe
 \caption{Optimum DNN hyperparameter combination found for the simple and complete dataset.}
 \label{table:hyperparameter_opt_parameters_DNN}
 \begin{tabular}{ccc}
+\hline
 \multirow{2}{*}{Hyperparameter} & \multicolumn{2}{c}{Optimum Value} \\
  & Simple Dataset & Complete Dataset \\ \hline
 Dense Layer Structure & (64) & (32) \\
@@ -278,7 +299,7 @@ L2 Regularization Strength & 0.13 & 0.0097 \\
 Dropout Frequency & 0.023 & 0.16 \\
 Batch Size & 256 & 16 \\
 Activation Function & relu & relu \\
-Input Scaling & sqrt & sqrt-max
+Input Scaling & sqrt & sqrt-max \\ \hline
 \end{tabular}
 \end{table}
 
@@ -296,7 +317,8 @@ Architecture and training hyperparamters for the CNN are shown in Table \ref{tab
 \label{table:hyperparameter_dataset_parameters_CNN}
 \begin{tabular}{ccc}
 % \cline{2-3}
- & Hyperparameter Range & Sampling \\ \hline
+\hline
+Hyperparameter & Hyperparameter Range & Sampling \\ \hline
 \multicolumn{1}{c}{Number of Filter Kernels} & \begin{tabular}[c]{@{}c@{}}(4)   (8)   (16)    (32)\\ (4, 8)  (8, 16)  (16, 32)\\ (4, 8, 16)   (8, 16, 32)\end{tabular} & Uniform \\
 \multicolumn{1}{c}{Filter Kernel Length} & 2, 4, 8, 16 & Uniform \\
 \multicolumn{1}{c}{Pooling size} & 2, 4, 8, 16 & Uniform \\
@@ -307,7 +329,7 @@ Architecture and training hyperparamters for the CNN are shown in Table \ref{tab
 \multicolumn{1}{c}{Dropout Frequency} & 0 - 1 & Uniform \\
 \multicolumn{1}{c}{Batch Size} & 2$^{4}$ - 2$^{6}$ & Power of Two \\
 \multicolumn{1}{c}{Activation Function} & tanh, relu & Uniform \\
-\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\sqrt-L1 Norm,\\ log1p-None, log1p-max,\\ log1p-L1 Norm\end{tabular} & Uniform \\
+\multicolumn{1}{c}{Input Scaling} & \begin{tabular}[c]{@{}c@{}}sqrt, sqrt-max,\\sqrt-L1 Norm,\\ log1p-None, log1p-max,\\ log1p-L1 Norm\end{tabular} & Uniform \\ \hline
 \end{tabular}
 \end{table}
 
@@ -435,6 +457,7 @@ The effect of scaling on performance was similar to the DNN. Using $sqrt$ scalin
 \caption{Optimum CNN hyperparameter combination found for the simple and complete dataset.}
 \label{table:hyperparameter_opt_parameters_CNN}
 \begin{tabular}{ccc}
+\hline
 \multirow{2}{*}{Hyperparameter} & \multicolumn{2}{c}{Optimum Value} \\
  & Simple Dataset & Complete Dataset \\ \hline
 Filter Kernel Structure & (8, 16, 32) & (8, 16, 32) \\
@@ -446,7 +469,7 @@ L2 Regularization Strength & 0.0016 & 0.0097 \\
 Dropout Frequency & 0.32 & 0.16 \\
 Batch Size & 16 & 16 \\
 Activation Function & relu & relu \\
-Input Scaling & sqrt-max & sqrt-max
+Input Scaling & sqrt-max & sqrt-max \\ \hline
 \end{tabular}
 \end{table}
 

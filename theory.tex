@@ -89,12 +89,13 @@ The energy resolution of a radiation detector describes the width of a photopeak
 \begin{table}[H]
 \centering
 \begin{tabular}{cc}
+\hline
 Detector Type & \begin{tabular}[c]{@{}c@{}}Full Width at Half Maximum\\ (662 keV)\end{tabular} \\ \hline
 NaI(Tl) & 6 - 8 \% \\ % \hline
 LaBr & 2 - 4 \% \\ % \hline
 CeBr & 4 - 5 \% \\ % \hline
 CZT & 1 - 2 \% \\ % \hline
-HPGe & \textless 0.2 \% \\ % \hline
+HPGe & \textless 0.2 \% \\ \hline
 \end{tabular}
 \caption{Typical energy resolutions of common
 gamma-ray detector types (reproduced from \cite{RIIDMarketSurveyReport}).}
@@ -607,6 +608,32 @@ To analyze the performance of a random search, a random hyperparameter efficienc
 	\caption{Example random efficiency curves for a neural network \cite{Bergstra2012}.}
 	\label{fig:Bergstra_random_efficiency_curve_DNN}
 \end{figure}
+
+\section{ANNSA}
+
+As a part of this work we developed the software package ANNSA (Articifial Neural Networks for Spectroscopic Analysis). ANNSA is used to create datasets of gamma-ray spectra from spectral templates and train machine learning models for isotope identification. The machine learning models included in ANNSA are dense neural netoworks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs). The software stack use by ANNSA includes: tensorflow \cite{tensorflow2015-whitepaper}, numpy \cite{numpy}, scipy \cite{scipy}, pandas \cite{mckinney-proc-scipy-2010}, and scikit-learn \cite{scikit-learn}. ANNSA can be installed in a unix environment using the following commands:
+\begin{lstlisting}[language=bash, basicstyle={\small\ttfamily}]
+git clone https://github.com/arfc/annsa.git
+cd annsa
+python setup.py install
+\end{lstlisting}
+\subsection{Dataset Generation}
+
+Datasets were generated using the process outline in Figure \ref{fig:annsa_data_generation}. 
+
+\begin{figure}[H]
+\centering
+\includegraphics[trim=20 50 0 0,clip,width=0.99\linewidth]{images/annsa_data_generation.png}
+\caption{ANNSA dataset generation process.}
+\label{fig:annsa_data_generation}
+\end{figure}
+
+\subsection{Training}
+
+Each model was trained using a p2.8xlarge EC2 instance on Amazon Web Services. Models were created using TensorFlow \cite{tensorflow2015-whitepaper}. 
+
+\subsection{Verification}
+
 
 
 

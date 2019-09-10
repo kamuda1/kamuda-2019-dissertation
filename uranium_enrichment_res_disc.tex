@@ -71,11 +71,12 @@ The software package RadSrc was used to generate specific gamma-ray intensities 
 % \cline{2-3}
 % Isotope & photos/second/gram \\ \hline
 % Isotope & $\frac{photos}{s g}$ \\ \hline
+\hline
 Isotope & {\begin{tabular}[c]{@{}c@{}}Specific Gamma-ray\\ Intensities [$\gamma$/gram/second]\end{tabular}} \\ \hline
 % Isotope & Specific Gamma-ray Intensities [$\gamma$/gram/second] \\ \hline
 \multicolumn{1}{c}{$^{232}$U} & 1.20e12 \\ 
 \multicolumn{1}{c}{$^{235}$U} & 2.07e5 \\
-\multicolumn{1}{c}{$^{238}$U} & 3.80e3 \\ 
+\multicolumn{1}{c}{$^{238}$U} & 3.80e3 \\ \hline
 \end{tabular}
 \end{table}
 
@@ -90,7 +91,8 @@ $^{235}$U and $^{238}$U templates were combined based on the desired enrichment.
 \label{table:hyperparameter_dataset_full_parameters_enrichment}
 \begin{tabular}{ccc}
 % \cline{2-3}
- & Parameter Range & Sampling \\ \hline
+\hline
+Simulation Parameter & Parameter Range & Sampling \\ \hline
 \multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 25, 50, 100 & Uniform \\ % \hline
 \multicolumn{1}{c}{FWHM 662 keV [s]} & 6.0, 6.5, 7.0, 7.5 & N/A \\ % \hline
 \multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 200 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ % \hline
@@ -118,6 +120,7 @@ These sections describe how each trained model perform on simulated enriched ura
 \label{table:default_sim_params_uranium}
 \begin{tabular}{cc}
 % \cline{2-3}
+\hline
 Simulation Parameter &  Value \\ \hline
 \multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 50.0\\ 
 \multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.0\\ 
@@ -126,7 +129,7 @@ Simulation Parameter &  Value \\ \hline
 \multicolumn{1}{c}{Calibration - Offset (channels)} & 0 \\ 
 \multicolumn{1}{c}{Calibration - Gain} & 1.0 \\ 
 \multicolumn{1}{c}{Signal to Background Ratio} & 3.0 \\ 
-\multicolumn{1}{c}{Background Counts Per Second} & 200 \\ 
+\multicolumn{1}{c}{Background Counts Per Second} & 200 \\ \hline
 \end{tabular}
 \end{table}
 
@@ -249,12 +252,12 @@ Spectra of various uranium enrichments from a variety of NaI detectors were coll
 \caption{Uranium sample description.}
 \label{table:default_sim_params_uranium}
 \begin{tabular}{cccc}
-% \cline{2-3}
+\hline
 Enrichment & $^{235}$U Mass (g) & Material & Live Time (s)   \\ \hline
 93.1\% & 13,000 & U Metal & 300 \\
 91.4\% & 903 & U$_{3}$O$_{8}$ &  226\\
 27.1\%  & 264 & U$_{3}$O$_{8}$ & 344 \\ 
-0.7\% & - & U$_{3}$O$_{8}$ & 97.4 \\
+0.7\% & - & U$_{3}$O$_{8}$ & 97.4 \\ \hline
 \end{tabular}
 \end{table}
 
