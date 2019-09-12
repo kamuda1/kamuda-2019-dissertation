@@ -191,7 +191,7 @@ In this section, neural network architectures and parameters that affect trainin
 \subsection{General Neural Network Architecture}
 
 % Node/neruon, get this lingo straight here
-An \acrlong{ANN} is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}^M$ to $\mathbb{R}^N$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not observed by in the input or output. Each neuron in adjacent layers are connected by weights, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
+An ANN is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}{^M}$ to $\mathbb{R}{^N}$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not observed by in the input or output. Each neuron in adjacent layers are connected by weights, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
 
 
 
@@ -213,7 +213,7 @@ Similar to a biological neuron, the ANN neuron receives input stimuli, performs 
 	\label{fig:Node}
 \end{figure}
 
-As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A_1$, $A_2$, ... $A_N$}) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by finding a function, $f$, that solves
+As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A{_1}$, $A{_2}$, ... $A{_N}$) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by finding a function, $f$, that solves
 %
 \begin{align} \label{eq:argminW_Error}
 \underset{\mathbf{W}}{\text{argmin}} &{\text{ Error}}(f(\mathbf{Y} ; \mathbf{W} ) , \mathbf{T} ), \\
@@ -257,7 +257,7 @@ The classes in this example dataset are linearly separable, meaning lines can be
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.65\linewidth]{images/training_set_for_single_layer_hyperplane_v2}
-	\caption{One possible dataset describing a three class function. Each class is represented by a different color.}
+	\caption{A dataset describing a three class function. Each class is represented by a different color.}
 	\label{fig:training_set_one_layer}
 \end{figure}
 
@@ -308,7 +308,7 @@ The expression for $\frac{dE_{MSE}}{dy_i}$ is known from Equation \ref{dy_i/dw_i
 \frac{dy_i}{db_j} = \frac{d}{db_j} \tanh(\boldsymbol{w}'\boldsymbol{x}_i + b),
 \end{equation}
 %
-\begin{equation} \label{dE_{MSE}/dy_i}
+\begin{equation} \label{dy_i/db_j}
  = \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b).
 \end{equation}
 %
@@ -339,13 +339,13 @@ and
 where $\eta$ in Equations \ref{eq:update1} and \ref{eq:update2} represents the learning rate of the neural network. The learning rate and its effect on training will be discussed more thoroughly in section \ref{LearningRateSubsection}.
 
 Gradient descent can be applied to an ANN with multiple layers. The input to the the $l^{th}$ layer given some training example $\boldsymbol{x}$ in an L-layer network is 
-\begin{equation} \label{eq:CrossEntropy}
+\begin{equation}
 \boldsymbol{z}^{x,l} = \boldsymbol{w}^{l}  \boldsymbol{a}^{x,l-1} + \boldsymbol{b}^{l}
 \end{equation}
 %
 where the activation from the $(l-1)^{th}$ layer is
 %
-\begin{equation} \label{eq:CrossEntropy}
+\begin{equation}
 \boldsymbol{a}^{x,l-1} = f^{l-1}(\boldsymbol{z}^{x,l-1})
 \end{equation}
 \begin{align*}
@@ -356,13 +356,13 @@ where the activation from the $(l-1)^{th}$ layer is
 %
 Defining the output error as 
 %
-\begin{equation} \label{eq:CrossEntropy}
+\begin{equation}
 \delta^{x,L} = \frac{\partial C}{\partial a^{x,L}} \odot \frac{\partial f^{l-1}(\boldsymbol{z}^{x,l-1}) }{\partial \boldsymbol{z}^{x,l-1}}, 
 \end{equation}
 %
 where $\odot$ is the element-wise product, the output error can backpropagate to previous layers. For each $l=L-1,L-2,...,2$ an error can be defined by
 %
-\begin{equation} \label{eq:CrossEntropy}
+\begin{equation}
 \delta^{x,l} = ((\boldsymbol{w}^{l+1})^T \delta^{l+1}) \odot \frac{\partial f^{l}(\boldsymbol{z}^{x,l}) }{\partial \boldsymbol{z}^{x,l}}.
 \end{equation}
 %
@@ -592,7 +592,7 @@ Once a range of parameters is determined through a manual search, multiple metho
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.99\linewidth]{images/Bergstra12a_hyperparameter_grid_vs_random}
-	\caption{A comparison between a grid search and a random search for hyperparameter optimization when performance is strongly tied to one hyperparameter. The green function represents the effect of an important hyperparameter on a cost function while the yellow function represents the effect for an unimportant hyperparameter. Figure reproduced from [42].}
+	\caption{A comparison between a grid search and a random search for hyperparameter optimization. In this example, performance is strongly tied to one hyperparameter. The green function represents the effect of an important hyperparameter on a cost function while the yellow function represents the effect for an unimportant hyperparameter. Figure reproduced from [42].}
 	\label{fig:Bergstra12a_hyperparameter_grid_vs_random}
 \end{figure}
 
@@ -611,7 +611,7 @@ To analyze the performance of a random search, a random hyperparameter efficienc
 
 \section{ANNSA}
 
-As a part of this work we developed the software package ANNSA (Articifial Neural Networks for Spectroscopic Analysis). ANNSA is used to create datasets of gamma-ray spectra from spectral templates and train machine learning models for spectroscopic tasks. The machine learning models included in ANNSA are dense neural netoworks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs). The software stack use by ANNSA includes: tensorflow \cite{tensorflow2015-whitepaper}, numpy \cite{numpy}, scipy \cite{scipy}, pandas \cite{mckinney-proc-scipy-2010}, and scikit-learn \cite{scikit-learn}. ANNSA can be installed in a unix environment using the following commands:
+As a part of this work we developed the software package ANNSA (Articifial Neural Networks for Spectroscopic Analysis). ANNSA is used to create datasets of gamma-ray spectra from spectral templates and train machine learning models for spectroscopic tasks. The machine learning models included in ANNSA are dense neural netoworks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs). The software stack use by ANNSA includes: tensorflow \cite{tensorflow2015-whitepaper}, numpy \cite{numpy}, scipy \cite{scipy}, pandas \cite{mckinney-proc-scipy-2010}, and scikit-learn \cite{scikit-learn}. Unit tests are included to ensure new functionality does not interfere with ANNSA. ANNSA can be installed in a unix environment using the following commands:
 \begin{lstlisting}[language=bash, basicstyle={\small\ttfamily}]
 git clone https://github.com/arfc/annsa.git
 cd annsa
@@ -784,11 +784,16 @@ Similar to the DAE. ANNSA includes a function to extract the weights from the en
 
 Each model was trained using a p2.8xlarge EC2 (Elastic Compute Cloud) instance on Amazon Web Services using the Deep Learning AMI (Amazon Machine Image). The 
 
-\subsection{Verification}
-
-
-
 \section{Summary}
 
 In this chapter, the structure of multi-layer ANNs, methods to train and optimize them, and a method to create a training set for isotope identification and quantification have been described. In the following section an ANN will be presented using these concepts and its performance on a number of real and simulated spectra will be discussed. 
+
+
+
+
+
+
+
+
+
 
