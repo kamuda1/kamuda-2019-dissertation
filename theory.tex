@@ -191,7 +191,7 @@ In this section, neural network architectures and parameters that affect trainin
 \subsection{General Neural Network Architecture}
 
 % Node/neruon, get this lingo straight here
-An ANN is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}{^M}$ to $\mathbb{R}{^N}$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not observed by in the input or output. Each neuron in adjacent layers are connected by weights, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
+An \acrlong{ANN} is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}^M$ to $\mathbb{R}^N$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not observed by in the input or output. Each neuron in adjacent layers are connected by weights, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
 
 
 
@@ -213,7 +213,7 @@ Similar to a biological neuron, the ANN neuron receives input stimuli, performs 
 	\label{fig:Node}
 \end{figure}
 
-As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A{_1}$, $A{_2}$, ... $A{_N}$) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by finding a function, $f$, that solves
+As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A_1$, $A_2$, ... $A_N$}) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by finding a function, $f$, that solves
 %
 \begin{align} \label{eq:argminW_Error}
 \underset{\mathbf{W}}{\text{argmin}} &{\text{ Error}}(f(\mathbf{Y} ; \mathbf{W} ) , \mathbf{T} ), \\
@@ -257,7 +257,7 @@ The classes in this example dataset are linearly separable, meaning lines can be
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.65\linewidth]{images/training_set_for_single_layer_hyperplane_v2}
-	\caption{A dataset describing a three class function. Each class is represented by a different color.}
+	\caption{One possible dataset describing a three class function. Each class is represented by a different color.}
 	\label{fig:training_set_one_layer}
 \end{figure}
 
@@ -308,7 +308,7 @@ The expression for $\frac{dE_{MSE}}{dy_i}$ is known from Equation \ref{dy_i/dw_i
 \frac{dy_i}{db_j} = \frac{d}{db_j} \tanh(\boldsymbol{w}'\boldsymbol{x}_i + b),
 \end{equation}
 %
-\begin{equation} \label{dy_i/db_j}
+\begin{equation} \label{dE_{MSE}/dy_i}
  = \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b).
 \end{equation}
 %
@@ -339,13 +339,13 @@ and
 where $\eta$ in Equations \ref{eq:update1} and \ref{eq:update2} represents the learning rate of the neural network. The learning rate and its effect on training will be discussed more thoroughly in section \ref{LearningRateSubsection}.
 
 Gradient descent can be applied to an ANN with multiple layers. The input to the the $l^{th}$ layer given some training example $\boldsymbol{x}$ in an L-layer network is 
-\begin{equation}
+\begin{equation} \label{eq:CrossEntropy}
 \boldsymbol{z}^{x,l} = \boldsymbol{w}^{l}  \boldsymbol{a}^{x,l-1} + \boldsymbol{b}^{l}
 \end{equation}
 %
 where the activation from the $(l-1)^{th}$ layer is
 %
-\begin{equation}
+\begin{equation} \label{eq:CrossEntropy}
 \boldsymbol{a}^{x,l-1} = f^{l-1}(\boldsymbol{z}^{x,l-1})
 \end{equation}
 \begin{align*}
@@ -356,13 +356,13 @@ where the activation from the $(l-1)^{th}$ layer is
 %
 Defining the output error as 
 %
-\begin{equation}
+\begin{equation} \label{eq:CrossEntropy}
 \delta^{x,L} = \frac{\partial C}{\partial a^{x,L}} \odot \frac{\partial f^{l-1}(\boldsymbol{z}^{x,l-1}) }{\partial \boldsymbol{z}^{x,l-1}}, 
 \end{equation}
 %
 where $\odot$ is the element-wise product, the output error can backpropagate to previous layers. For each $l=L-1,L-2,...,2$ an error can be defined by
 %
-\begin{equation}
+\begin{equation} \label{eq:CrossEntropy}
 \delta^{x,l} = ((\boldsymbol{w}^{l+1})^T \delta^{l+1}) \odot \frac{\partial f^{l}(\boldsymbol{z}^{x,l}) }{\partial \boldsymbol{z}^{x,l}}.
 \end{equation}
 %
@@ -592,7 +592,7 @@ Once a range of parameters is determined through a manual search, multiple metho
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.99\linewidth]{images/Bergstra12a_hyperparameter_grid_vs_random}
-	\caption{A comparison between a grid search and a random search for hyperparameter optimization. In this example, performance is strongly tied to one hyperparameter. The green function represents the effect of an important hyperparameter on a cost function while the yellow function represents the effect for an unimportant hyperparameter. Figure reproduced from [42].}
+	\caption{A comparison between a grid search and a random search for hyperparameter optimization when performance is strongly tied to one hyperparameter. The green function represents the effect of an important hyperparameter on a cost function while the yellow function represents the effect for an unimportant hyperparameter. Figure reproduced from [42].}
 	\label{fig:Bergstra12a_hyperparameter_grid_vs_random}
 \end{figure}
 
@@ -611,7 +611,7 @@ To analyze the performance of a random search, a random hyperparameter efficienc
 
 \section{ANNSA}
 
-As a part of this work we developed the software package ANNSA (Articifial Neural Networks for Spectroscopic Analysis). ANNSA is used to create datasets of gamma-ray spectra from spectral templates and train machine learning models for various spectroscopic tasks. The machine learning models included in ANNSA are dense neural netoworks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs). ANNSA was designed to be modular, allowing for the addition of extra machine learning models and spectroscopic dataset construction methods. Unit tests are included to ensure new functionality can safely be incorporated into ANNSA. The software stack used by ANNSA includes: tensorflow \cite{tensorflow2015-whitepaper}, numpy \cite{numpy}, scipy \cite{scipy}, pandas \cite{mckinney-proc-scipy-2010}, and scikit-learn \cite{scikit-learn}. ANNSA can be installed in a unix environment using the following commands:
+As a part of this work we developed the software package ANNSA (Articifial Neural Networks for Spectroscopic Analysis). ANNSA is used to create datasets of gamma-ray spectra from spectral templates and train machine learning models for spectroscopic tasks. The machine learning models included in ANNSA are dense neural netoworks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs). The software stack use by ANNSA includes: tensorflow \cite{tensorflow2015-whitepaper}, numpy \cite{numpy}, scipy \cite{scipy}, pandas \cite{mckinney-proc-scipy-2010}, and scikit-learn \cite{scikit-learn}. ANNSA can be installed in a unix environment using the following commands:
 \begin{lstlisting}[language=bash, basicstyle={\small\ttfamily}]
 git clone https://github.com/arfc/annsa.git
 cd annsa
@@ -619,11 +619,9 @@ python setup.py install
 \end{lstlisting}
 \subsection{Dataset Generation}
 
-Datasets are generated using the process outline in Figure \ref{fig:annsa_data_generation}. The dataset generation process begins by creating a dataset of noiseless template spectra. These templates are generated by a gamma-ray transport code and a code that simulates the response from a gamma-ray detector. The gamma-ray transport code simulates how photons from each isotope scatter in an environment to reach the detector. Examples of transport code that could be used for this are GADRAS-DRF \cite{mitchell2014}, MCNP \cite{Goorley2016}, or GEANT4 \cite{geant4}. The detector response code accounts for the calibration and Gaussian energy broadening of the detector. ANNSA uses csv formatted template spectra with columns corresponding to simulation settings. An example of a row from a spectral template csv file in the format used by ANNSA is shown in Figure \ref{fig:template_csv}.
+Datasets are generated using the process outline in Figure \ref{fig:annsa_data_generation}. The dataset generation process begins by creating a dataset of noiseless template spectra. These templates are generated by a gamma-ray transport code and a code that simulates the response from a gamma-ray detector. The gamma-ray transport code simulates how photons from each isotope scatter in the environment to reach the detector. Examples of transport code that could be used for this are GADRAS-DRF \cite{mitchell2014}, MCNP \cite{Goorley2016}, or GEANT4 \cite{geant4}. The detector response code accounts for the calibration and Gaussian energy broadening of the detector. 
 
-Noiseless templates enable the generation of a wide variety of realistic gamma-ray spectra without rerunning computationally expensive transport codes. Spectra with various source-to-background ratios can be simulated by combining source and background templates in desired amounts. Noiseless spectra can be sampled using a Poisson distribution to yield spectra with realistic counting statistics. The ANNSA \verb|template_sampling| module contains a function, \verb|make_random_spectrum|, that generates source and background spectra and a function, \verb|make_uenriched_spectrum|, that generates enriched uranium spectra. These functions take a dataset of template spectra and additional parameters to create new spectra. Parameters for these functions choose templates based on settings in the template dataset and combine templates based on desired parameters like integration time, calibration, and source-to-background ratio. These spectra and machine learning target values (which isotope is in a spectrum, relative quantities of each isotope in a spectral mixture, $^{235}$U \% enrichment) can be stored and saved in a numpy array for future machine learning training.
-
-This workflow is designed to be flexible and allow for quick dataset prototyping. The workflow can be used for multiple gamma-ray transport and detector response codes. Dataset simulation functions can be added or modified in the \verb|template_sampling| module to extend ANNSA's capabilities.
+The noiseless templates allows for the computationally cheap generation of realistic gamma-ray spectra. Spectra with various source-to-background ratios can be simulated by combining source and background templates in desired amounts. Noiseless spectra can be sampled using a Poisson distribution, yielding spectra with realistic counting statistics. This workflow allows for quick dataset construction and prototyping. This workflow is also flexible, working for multiple gamma-ray transport and detector response codes.
 
 % trim left bottom right top
 
@@ -634,20 +632,15 @@ This workflow is designed to be flexible and allow for quick dataset prototyping
 \label{fig:annsa_data_generation}
 \end{figure}
 
-\begin{figure}[H]
-\centering
-\includegraphics[trim=0 0 0 0,clip,width=1.0\linewidth]{images/template_csv.png}
-\caption{Example spectral template csv entry.}
-\label{fig:template_csv}
-\end{figure}
-
 \subsection{Machine Learning Models}
 
-ANNSA includes based Python classes in the \verb|model_classes| module that create DNNs, 1D CNNs, DAEs, and 1D CAEs. Each model inherits from the Keras model base class. ANNSA also includes a module, \verb|load_pretrained_network|, that contains functions to load weights from pretrained autoencoders into a dense classification model. In this way the encoding portion of the autoencoder can be used as a pretrained feature extractor. This section outlines the architectures available in ANNSA.
+ANNSA includes Python classes that create DNNs, 1D CNNs, DAEs, and 1D CAEs. ANNSA also includes a function to load weights from pretrained autoencoders into a dense classification model. In this way the encoding portion of the autoencoder can be used as a pretrained feature extractor. This section outlines the architectures available in ANNSA.
 
 \subsubsection{Dense Neural Network}
 
-DNNs in ANNSA are created by stacking dense-dropout layers between user defined input and output vectors. An outline of this architecture is shown in Figure \ref{fig:annsa_dnn}. The number of dense-dropout layers and the nodes in each layer is defined by a list of nodes provided by the user. The shape of the output is also user defined, allowing for the training of different sized libraries for classification or training on a single regression target. The length of the input vector is also defined by the user. Additional parameters the user needs to choose are shown in Table \ref{table:annsa_dnn_params}.
+DNNs in ANNSA are created by stacking dense-dropout layers between user defined input and output vectors. An outline of this architecture is shown in Figure \ref{fig:annsa_dnn}. The number of dense-dropout layers, and the nodes in each layer is defined by a list of nodes provided by the user. The shape of the output is also user defined, allowing for the training of different sized libraries for classification or training on a single regression target. Additional parameters the user needs to choose are shown in Table \ref{table:annsa_dnn_params}. 
+
+The DNN class also includes functions to calculate the forward pass of data through the network and the loss function used by the network. The flexibility of this class allows for easy modification of the model's architecture and the loss function.
 
 \begin{figure}[H]
 \centering
@@ -677,9 +670,11 @@ Output Activation \\ \hline
 
 \subsubsection{Convolutional Neural Network} \label{annsa_section_conv_neural_network}
 
-The convolution architecture included in ANNSA is based on a 1D convolution followed by a pooling operation. Two 1D convolution-pooling operations are illustrated in Figure \ref{fig:annsa_cnn_fine}. In the convolution, three filters are used. These filters will be referred to as blue, red, and green. Each filter is a vector of the same length, defined by the user. Each filter is convolved along the input and the result is placed in convolutional layer one. This process is illustrated for a single convolution using the red filter. Padding is included at the ends of the input signal to ensure the resulting convolution has the same length as the input. The pooling operation is indicated by a black box with a white boarder. Pooling is performed along the output of each filter. In this example max pooling is used with a stride of two. Max pooling takes the maximum value in the pooling length and places it in the next layer. Using a pooling stride of two moves the filter by two places before the pooling operation is performed, reducing the output size by a factor of two. Pooling in ANNSA includes padding by default to ensure the output is the same size as the input for a padding of one.
+The convolution architecture included in ANNSA is based on a 1D convolution followed by a pooling operation. Two 1D convolution-pooling operations are illustrated in Figure \ref{fig:annsa_cnn_fine}. In the convolution, three filters are used. For clarity, these filters will be referred to as blue, red, and green. Each filter is a vector of the same filter length. Each filter is convolved along the input and the result is placed in the first convolutional layer. This process is illustrated for a single convolution using the red filter. Padding is included at the ends of the input signal to ensure the resulting convolution has the same length as the input. The pooling operation is illustrated by a black box with white boarder. Pooling is performed in the output of each filter. In this example max pooling is used with a stride of two. Max pooling takes the maximum value in the pooling length and places it in the next layer. Using a pooling stride of two moves the filter by two places before the pooling operation is performed, reducing the output size by a factor of two. Pooling in ANNSA includes padding by default to ensure the output is the same size as the input for a padding of one.
 
-Subsequent convolution-pooling layers also use 1D convolutions. In Figure \ref{fig:annsa_cnn_fine}, a second convolution operation is performed using purple and light blue filters. The filters in each convolutional layer have a depth equal to the number of filters in the previous layer. In our example, this means filters in the second convolutional layer have a depth of 3. The filter length in each convolutional layer are mutually independent and defined by the user.
+Subsequent convolution-pooling layers also use 1D convolutions. In Figure \ref{fig:annsa_cnn_fine}, a second convolutional operation is performed using purple and light blue filters. The filters in each subsequent convolutional layer have a depth equal to the number of filters in the previous layer. In our example, this means filters in the second convolutional layer have a depth of 3 and some user-defined filter length. The filter lengths in each convolutional layer are mutually independent.
+
+
 
 \begin{figure}[H]
 \centering
@@ -688,7 +683,9 @@ Subsequent convolution-pooling layers also use 1D convolutions. In Figure \ref{f
 \label{fig:annsa_cnn_fine}
 \end{figure}
 
-1D CNNs in ANNSA are created by stacking convolutional-pooling layers followed by dense-dropout layers, demonstrated in Figure \ref{fig:annsa_cnn}. The outputs from the last convolutional layer are flattened before being input into the dense layers. Parameters related to the convolutional architecture are shown in Table \ref{table:annsa_cnn_params}. Dropout and L2 regularization are only applied to the dense layers of this network.
+1D CNNs in ANNSA are created by stacking convolutional-pooling layers followed by dense-dropout layers, demonstrated in Figure \ref{fig:annsa_cnn}. The outputs from the last convolutional layer are flattened before being input into the dense layers. Parameters related to the convolutional architecture provided by the are shown in Table \ref{table:annsa_cnn_params}. 
+
+As with the DNN class, the CNN class also includes functions to calculate the forward pass of data through the network and the loss function used by the network. The L2 loss is only calculated in the dense layers of the network.
 
 \begin{figure}[H]
 \centering
@@ -725,7 +722,7 @@ Output Activation \\ \hline
 
 ANNSA includes a class to create DAEs. The DAE class contains an encoder and decoder function. Both functions contain a user defined number of dense-dropout layers and nodes in each layer. Using this, encoders and decoders with different dense architectures can be constructed. Parameters required by the DAE class are shown in Table \ref{table:annsa_dae_params}. An example of an autoencoder with a two-hidden layer encoder, a single hidden-layer decoder, and no dropout is shown in Figure \ref{fig:annsa_dae}. The final layer in the encoder is referred to as the encoding. This example demonstrates a background subtracting denoising autoencoder: the input is a Poisson sampled source and background spectrum and the output is the source spectrum without Poisson sampling. By changing the input and output, autoencoders can be trained to extract various features from input signals.
 
-ANNSA includes a function in the \verb|load_pretrained_network| module to extract the weights from the encoder of a trained DAE into a DNN. This process is shown in Figure \ref{fig:annsa_daednn}. This pretrained network can additionally trained in a process called fine tuning.
+ANNSA includes a function to extract the weights from the encoder of a trained DAE into a DNN. This process is shown in Figure \ref{fig:annsa_daednn}. This pretrained network can trained for different tasks.
 
 \begin{figure}[H]
 \centering
@@ -764,9 +761,9 @@ Output Activation \\ \hline
 
 \subsubsection{Convolutional Autoencoder}
 
-ANNSA includes a class to create CAEs. Like the DAE, the CAE class contains an encoder and decoder function. The CAE uses parameters from the 1D CNN (Table \ref{fig:annsa_cnn}) with the exception of the dense network regularizers (L2 regularization strength, dropout rate). The encoder is constructed using stacked 1D convolutional-pooling layers. As with the CNNs described in section \ref{annsa_section_conv_neural_network}, the CAEs use padding to keep the input and output sizes the same when strides are set to one. CAE encoder pooling strides in ANNSA are two by default, making each convolutional-pooling layer reduce the length of the input by a factor of two. The decoder uses resize-convolutional layers to increase the dimension of the encoding. The resize layer doubles the length of the input signal using bilinear interpolation. The final decoding convolutional layer must have one output filter to ensure the output from the autoencoder is a vector. A summary of this operation is shown in Figure \ref{fig:annsa_cae}.
+ANNSA includes a class to create CAEs. Like the DAE, the CAE class contains an encoder and decoder function. The CAE uses the parameters from the 1D CNN (Table \ref{fig:annsa_cnn}) with the exception of the dense network regularizers (L2 regularization strength, dropout rate). The encoder is constructed using stacked 1D convolutional-pooling layers. As with the CNNs described in section \ref{annsa_section_conv_neural_network}, the CAEs use padding to keep the input and output sizes the same when strides are set to one. Encoder pooling strides in ANNSA are two by default, making each convolutional-pooling layer reduce the length of the input by a factor of two. To increase the dimension of the encoding, the decoder uses resize-convolutional layers. The resize layer doubles the length of the input signal using bilinear interpolation. The final decoding convolutional layer must have one output filter to ensure the output from the autoencoder is a vector. A summary of this operation is shown in Figure \ref{fig:annsa_cae}.
 
-Similar to the DAE. ANNSA includes a function in the \verb|load_pretrained_network| module to extract the weights from the encoder of a trained CAE into a CNN. This process is shown in Figure \ref{fig:annsa_caednn}.
+Similar to the DAE. ANNSA includes a function to extract the weights from the encoder of a trained CAE into a DNN. This process is shown in Figure \ref{fig:annsa_caednn}.
 
 \begin{figure}[H]
 \centering
@@ -778,17 +775,20 @@ Similar to the DAE. ANNSA includes a function in the \verb|load_pretrained_netwo
 \begin{figure}[H]
 \centering
 \includegraphics[trim=0 0 0 0,clip,width=0.9\linewidth]{images/annsa_caednn.png}
-\caption{An example of a CAE's encoding being loaded into a CNN.}
+\caption{ANNSA CAE structure.}
 \label{fig:annsa_caednn}
 \end{figure}
 
 
 \subsection{Training}
 
-Each model machine learning in ANNSA inherits from the Keras model class. The Keras model class includes functions involved with training. Jupyter notebooks used for each experiment in this thesis are availabel at \verb|https :// github.com/arfc/annsa/examples|.
+Each model was trained using a p2.8xlarge EC2 (Elastic Compute Cloud) instance on Amazon Web Services using the Deep Learning AMI (Amazon Machine Image). The 
 
-Each model was trained using a p2.8xlarge EC2 (Elastic Compute Cloud) instance on Amazon Web Services using the Deep Learning AMI (Amazon Machine Image). Training on multiple GPU's enabled simultaneous training of experiments.
+\subsection{Verification}
+
+
 
 \section{Summary}
 
-In this chapter we described how photons interact with detectors to create gamma-ray spectra, the theory behind ANNs, how to train ANNs, and the structure of the python package used in this dissertation. In the following section an ANN will be presented using these concepts and its performance on a number of real and simulated spectra will be discussed. 
+In this chapter, the structure of multi-layer ANNs, methods to train and optimize them, and a method to create a training set for isotope identification and quantification have been described. In the following section an ANN will be presented using these concepts and its performance on a number of real and simulated spectra will be discussed. 
+
