@@ -189,7 +189,7 @@ Models trained on the simple dataset did not generalize well to low signal-to-ba
     50 cm & \blackline & 100 cm & \blackdotline & 150 cm & \blackdashdotline
     \end{tabular}
     
-        \caption{Height-off-ground generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Each model's generalization performance with respect to the height-off-ground parameter. Networks were trained with a fixed-size dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_height_fixeddataset}
 \end{figure}
 
@@ -230,7 +230,7 @@ The performance using online data augmentation are shown in Figure \ref{fig:gene
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     50 cm & \blackline & 100 cm & \blackdotline & 150 cm & \blackdashdotline
     \end{tabular}
-        \caption{Height-off-ground generalization performance of each model trained using data augmentation. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Each model's generalization performance with respect to the height-off-ground parameter. Networks were trained with online data augmentation. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_height_augdataset}
 \end{figure}
 
@@ -277,7 +277,7 @@ As seen in Figure \ref{fig:generalization_dist_fixeddataset}, general trends see
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     50 cm & \blackline & 175 cm & \blackdotline & 300 cm & \blackdashdotline
     \end{tabular}
-        \caption{Standoff distance generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Each model's generalization performance with respect to the source-detector distance parameter. Networks were trained using fixed-size datasets. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_dist_fixeddataset}
 \end{figure}
 
@@ -330,7 +330,7 @@ Training with online data augmentation again reduced performance in all models e
 
 In this section we analyze the generalization performance of each network on changes in detector resolution. An example of these changes can be seen in Figure \ref{fig:sim_spectra_FWHM_comparison}.
 
-Changes in resolution do not significantly impact performance of any model. General trends are similar to distance and height generalization.
+Changes in resolution do not significantly impact performance of the models. General trends are similar to distance and height generalization.
 
 
 \begin{figure}[H]
@@ -368,7 +368,7 @@ Changes in resolution do not significantly impact performance of any model. Gene
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     7.0 & \blackline & 7.5 & \blackdotline & 8.0 & \blackdashdotline
     \end{tabular}
-        \caption{Resolution generalization performance of each model trained using a fixed dataset. Resolutions in legend are measured at 662 keV. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Each model's generalization performance with respect to the detector resolution. Networks were trained using fixed-size datasets. Resolutions in legend are measured at 662 keV. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_fwhm_fixeddataset}
 \end{figure}
 
@@ -410,7 +410,7 @@ Changes in resolution do not significantly impact performance of any model. Gene
     \begin{tabular}{r@{: }l r@{: }l r@{: }l}
     7.0 & \blackline & 7.5 & \blackdotline & 8.0 & \blackdashdotline
     \end{tabular}
-        \caption{Resolution generalization performance of each model trained using data augmentation. Resolutions in legend are measured at 662 keV. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
+        \caption{Each model's generalization performance with respect to the detector resolution. Networks were trained using online data augmentation. Resolutions in legend are measured at 662 keV. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
         \label{fig:generalization_fwhm_augdataset}
 \end{figure}
 
@@ -466,9 +466,9 @@ The complete models perform better in the low signal-to-background spectra. Both
 \end{figure}
 
 
-Performance for the data augmented models was similar to the fixed dataset models at the lower signal-to-background ratio and simple dataset. At the higher signal-to-background ratio performance dropped, especially for the CAE whose F1 score was near zero throughout the range of integration times. This shows that the CAE overtrained to the patterns in the simple dataset and did not generalize to new shielding configurations.
+Performance in data augmented models was similar to the fixed dataset models at the lower signal-to-background ratio and simple dataset. At the higher signal-to-background ratio performance dropped, especially for the CAE whose F1 score was near zero throughout the range of integration times. This shows that the CAE overtrained to the patterns in the simple dataset and did not generalize to new shielding configurations.
 
-Performance for the data augmented models on data simulated with complete parameters was mostly similar to the fixed dataset models at the low signal-to-background ratio and comparable at the higher signal-to-background ratio. The main difference was the improved performance of the complete CNN at the lower signal-to-background ratio.
+Performance for the data augmented models on data simulated with complete parameters was similar to the fixed dataset models at the low signal-to-background ratio and comparable at the higher signal-to-background ratio. The main difference was the improved performance of the complete CNN at the lower signal-to-background ratio.
 
 
 
@@ -899,7 +899,7 @@ The DNN is heavily effected by shielding even when trained on the complete datas
     light & \blackline & medium & \blackdotline & heavy & \blackdashdotline
     \end{tabular}
         \caption{Shielding generalization performance in real $^{60}$Co spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, The Figure on the right and left are trained using the simple and complete dataset.}
-        \label{fig:generalization_cal_augdataset}
+        \label{fig:shielding_co60}
 \end{figure}
 
 Due to the relatively low gamma-ray energies of $^{133}$Ba compared to the other spectra in this section, aluminum with thicknesses of 6.56 mm, 25.5 mm, and 51.0 mm were used for the light, medium, and heavy settings. When trained on the simple dataset, the CAE performed best. Unlike the previous isotopes, the DAE trained on the simple dataset did not perform well on shielded $^{133}$Ba. Even when trained on the complete dataset, the CAE outperformed the DAE. Characteristic $^{133}$Ba photons have relatively low energy - particularly the photopeaks at 31 and 81 keV. Shielding significantly distorts the spectrum because these photons are easily attenuated. Features like the Compton continuum from the higher energy photopeaks may provide more signal when identifying these isotopes in shielded case. These features are also better exploited in the networks trained on the complete dataset. The dense architectures perform poorly even when trained on the complete dataset. The variance of the posterior probability for the convolutional architectures are lower than the DAE, showing they are more consistent.

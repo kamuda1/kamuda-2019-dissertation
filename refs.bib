@@ -9,7 +9,18 @@
 @STRING{IEEE_J_IA         = "{IEEE} Trans. Ind. Applicat."}
 @STRING{IEEE_J_AntProp    = "{IEEE} Trans. Ant. and Prop."}
 
-
+@article{geant4,
+      author         = "Agostinelli, S. and others",
+      title          = "{GEANT4: A Simulation toolkit}",
+      collaboration  = "GEANT4",
+      journal        = "Nucl. Instrum. Meth.",
+      volume         = "A506",
+      year           = "2003",
+      pages          = "250-303",
+      doi            = "10.1016/S0168-9002(03)01368-8",
+      reportNumber   = "SLAC-PUB-9350, FERMILAB-PUB-03-339",
+      SLACcitation   = "%%CITATION = NUIMA,A506,250;%%"
+}
 
 @article{scikit-learn,
  title={Scikit-learn: Machine Learning in {P}ython},
@@ -52,11 +63,10 @@
     title = {MGAU: A new analysis code for measuring {sup 235}U enrichments in arbitrary samples},
     author = {Gunnink, R. and Ruhter, W.D. and Miller, P. and Goerten, J. and Swinhoe, M. and Wagner, H. and Verplancke, J. and Bickel, M. and Abousahl, S.},
     abstractNote = {We have developed a computerized analysis method for determining {sup 235}U enrichment in uranium items where no suitable reference standards exist or where nonreproducible conditions make calibration impossible. The method requires no calibrations and is capable of accuracies of 1--2% in only a few minutes.},
-    doi = {},
-    journal = {},
-    number = ,
-    volume = ,
     place = {United States},
+    journal = {INIS},
+    volume = {25},
+    issue = {13},
     year = {1994},
     month = {1}
 }
@@ -285,8 +295,8 @@ keywords = "NaI(Tl), LaCl and LaBr scintillators, Thermal instability of light o
 @misc{USGS,
       author = "USGS",
       year = 2013,
-      title = "Open-File Report 2005-1413: Terrestrial Radioactivity and Gamma-ray Exposure in the United States and Canada"
-      howpublished = http://pubs.usgs.gov/of/2005/1413/maps.htm
+      title = "Open-File Report 2005-1413: Terrestrial Radioactivity and Gamma-ray Exposure in the United States and Canada",
+      howpublished = "http://pubs.usgs.gov/of/2005/1413/maps.htm",
 }
 
 @article{KULISEK2015,
@@ -434,25 +444,16 @@ abstract = "Helicopter-mounted gamma-ray detectors can provide law enforcement o
 }
 
 
-
-
-
-
-
-
-
-
 @misc{origin,
       author = "OriginLab",
-      title = "Curve Fitting Functions: Gaussamp"
-      howpublished = http://www.originlab.de/doc/
+      title = "Curve Fitting Functions: Gaussamp",
+      howpublished = "http://www.originlab.de/doc/",
 }
 
 @misc{RIIDMarketSurveyReport,
     author = {National Urban Security and Technology Laboratory},
-    title = "Handheld Radionuclide Identification
-    Devices (RIDs) Market Survey Report",
-    howpublished = https://www.dhs.gov/sites/default/files/publications/HHRID-MSR_0915-508.pdf
+    title = "Handheld Radionuclide Identification Devices (RIDs) Market Survey Report",
+    howpublished = {https://www.dhs.gov/sites/default/files/publications/HHRID-MSR\_0915-508.pdf},
 };
 
 
@@ -590,14 +591,6 @@ issn = "0168-9002",
 publisher = "Elsevier",
 }
 
-@article{Sullivan2010,
-author = {Rawool-Sullivan, Mohini and Bounds, J.A. and Brumby, Steven and Prasad, Lakshman and Sullivan, John},
-year = {2010},
-month = {02},
-pages = {},
-publisher= {Los Alamos National Lab},
-title = {Steps Toward Automated Gamma Ray Spectroscopy Steps Toward Automated Gamma Ray Spectroscopy: How a Spectroscopist Deciphers an Unknown Spectrum to Reveal the Radioactive Source}
-}
 
 @mastersthesis{kamudaThesis2017,
     author={Kamuda, Mark},
@@ -744,11 +737,10 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   title = {Discriminating Nuclear Threats from Benign Sources in Gamma-Ray Spectra Using a Spectral Comparison Ratio Method},
   journal = {Journal of Radioanalytical and Nuclear Chemistry},
   year = {2008},
-%  month={},
- volume={276},
- number = {3},
- pages = {713--718},
-%  keywords={}
+  month={June},
+  volume={276},
+  number = {3},
+  pages = {713--718},
 };
 
 
@@ -761,27 +753,30 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   year = {2007}
 };
 
-@ARTICLE{batdorf2009,
-  author = {Batdorf, Michael T. and Hensley, Walter K. and Seifert, Carolyn E. and Kirihara, Leslie J. and Erikson, Luke E. and Jordan, David V.},
-  title = {Isotope Identification in the Gamma-Tracker Handheld Radioisotope Identifier},
-  journal = {IEEE Nuclear Science Symposium Record},
-  year = {2009},
-%  month={},
-%  volume={},
-  pages = {868--872},
-%  keywords={}
-};
+@INPROCEEDINGS{batdorf2009,
+    author={M. T. {Batdorf} and W. K. {Hensley} and C. E. {Seifert} and L. J. {Kirihara} and L. E. {Erikson} and D. V. {Jordan}},
+    booktitle={2009 IEEE Nuclear Science Symposium Conference Record (NSS/MIC)},
+    title={Isotope identification in the GammaTracker handheld radioisotope identifier},
+    year={2009},
+    volume={},
+    number={},
+    pages={868-872},
+    keywords={isotope detection;position sensitive particle detectors;semiconductor counters;isotope identification;GammaTracker;radioisotope identifier;position sensitive CdZnTe crystals;peak-based method;run-time optimized algorithms;gamma-ray sources;Isotopes;Radioactive materials;Filters;Crystals;Energy resolution;Runtime;Packaging;Libraries;Energy measurement;Polynomials},
+    doi={10.1109/NSSMIC.2009.5402463},
+    ISSN={},
+    month={Oct},
+}
+
 
 @ARTICLE{berlizov2007,
   author = {Berlizov, A.N.},
   title = {Limits of Detection in the Presence of the Correlated Background},
   journal = {Journal of Radioanalytical and Nuclear Chemistry},
   year = {2007},
-%  month={},
+  month={February},
  volume={271},
  number = {2},
  pages = {363--370},
-%  keywords={}
 };
 
 
@@ -801,11 +796,8 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
 };
 
 
-
-
 @ARTICLE{RawoolSullivan2010,
-  title = {Steps Toward Automated Gamma Ray
-  Spectroscopy: How a Spectroscopist Deciphers an Unknown Spectrum to Reveal the Radioactive Source},
+  title = {Steps Toward Automated Gamma Ray Spectroscopy: How a Spectroscopist Deciphers an Unknown Spectrum to Reveal the Radioactive Source},
   journal = {LA-UR-10-01009},
   author = {Rawool-Sullivan, Mohini and Bounds, John and Brumby, Steven and Prasad, Lakshman and Sullivan, John},
   month = {February},
@@ -821,12 +813,14 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   year = {2003}
 };
 
+
 @inproceedings{blackadar2004,
   title={Continuing evaluation of isotope identifiers},
   author={Blackadar, JM and Sullivan, CJ and Rees, BG and Garner, SE and Mercer, DJ},
   booktitle={Proceedings of INMM 45th Annual Meeting, Orlando, FL},
   year={2004}
 };
+
 
 @ARTICLE{blackadar2005, 
   author = {J.M. Blackadar},
@@ -846,8 +840,8 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   title = {Statistical Evaluation of {FRAM} Gamma-Ray Isotopic Analysis Data},
   journal = {Applied Radiation and Isotopes},
   year = {2005},
-%  volume = {2},
-  number={62},
+  volume = {62},
+  issue={6},
   pages = {931-940}
 };
 
@@ -892,7 +886,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   volume={45},
   number={3},
   pages = {1022--1028},
-%  keywords={}
 };
 
 @ARTICLE{estep2008,
@@ -900,11 +893,9 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   title = {The Multiple Isotope Material Basis Set ({MIMBS}) method for Isotope Identification with Low- and Medium-Resolution Gamma-Ray Detectors},
   journal = {Journal of Radioanalytical and Nuclear Chemistry},
   year = {2008},
-%  month={},
   volume={276},
   number={3},
   pages = {737--741},
-%  keywords={}
 };
 
 
@@ -935,9 +926,7 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   year = {2004},
   month={January},
   volume={213},
-%  number={451},
   pages = {87--99},
-%  keywords={}
 };
 
 
@@ -950,7 +939,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   volume={95},
   number={451},
   pages = {795--806},
-%  keywords={}
 };
 
 @ARTICLE{hengartner2002,
@@ -960,7 +948,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   year = {2002},
   volume={64},
   pages = {1--14},
-%  keywords={}
 };
 
 
@@ -970,10 +957,8 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   title = {A Comparison of Simple Algorithms for Gamma-Ray Spectrometers in Radioactive Source Search Applications},
   journal = {Applied Radiation and Isotopes},
   year = {2007},
-%  month={},
   volume={66},
   pages = {362--371},
-%  keywords={}
 };
 
 @ARTICLE{kadane2004,
@@ -985,7 +970,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   volume={99},
   number={465},
   pages = {279--290},
-%  keywords={}
 };
 
 @ARTICLE{kass1995,
@@ -997,7 +981,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   volume={90},
   number={430},
   pages = {773--795},
-%  keywords={}
 };
 
 @ARTICLE{labov2004,
@@ -1006,9 +989,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   journal = {},
   year = {2004},
   month={October},
-%  volume={},
-  %pages = {--},
-%  keywords={}
 };
 
 @ARTICLE{lavigne2008,
@@ -1018,9 +998,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   year = {2008},
   month={April},
   doi={doi:10.1117/12.777295}
-%  volume={},
-  %pages = {--},
-%  keywords={}
 };
 
 @ARTICLE{madigan1994,
@@ -1031,7 +1008,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   month={},
   volume={},
   pages = {--},
-%  keywords={}
 };
 
 @ARTICLE{mariscotti1967,
@@ -1041,7 +1017,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   year = {1967},
   volume={50},
   pages = {309--320},
-%  keywords={}
 };
 
 @ARTICLE{mattingly2010,
@@ -1053,6 +1028,7 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   number={6},
   pages = {3734-3743}
 };
+
 @ARTICLE{meng2000,
   author = {Meng, L.J. and Ramsden, D.},
   title = {An Inter-comparison of Three Spectral-Deconvolution Algorithms for Gamma-Ray Spectroscopy},
@@ -1080,7 +1056,6 @@ abstract = "NaI(Tl) and LaBr3(Ce) detectors are frequently operated under unstab
   volume={101},
   number={473},
   pages = {9--17},
-%  keywords={}
 };
 
 @ARTICLE{pibida2004,
@@ -1208,17 +1183,15 @@ ISSN={1082-3654}
     author    = {Gilmore, Goron R.},
     title     = {Practical Gamma-ray Spectrometry},
     publisher = {{J}ohn {W}iley and {S}ons},
-    edition  = {{2nd}},
+    edition  = {2nd},
     year      = {2008}
-    %month    = "",
-    %note     = "",
 };
 
 @book{cowles,
     author    = {Cowles, Mary Kathryn},
     title     = {Applied Bayesian Statistics},
     publisher = {Springer},
-    edition  = {{1st}},
+    edition  = {1st},
     year      = {2013}
 };
 
@@ -1226,15 +1199,8 @@ ISSN={1082-3654}
     author    = {Knoll, Glenn},
     title     = {Radiation Detection and Measurement},
     publisher = {{J}ohn {W}iley and {S}ons},
-    edition  = {{4th}},
+    edition  = {4th},
     year      = {2010}
-        %volume   = "",
-    %number   = "",
-    %series   = "",
-    %address  = "",
-
-    %month    = "",
-    %note     = "",
 };
 
 
@@ -1244,14 +1210,7 @@ ISSN={1082-3654}
     author    = {Kruschke, John K.},
     title     = {Doing Bayes`ian Sata Analysis},
     publisher = {Elsevier Science},
-    %volume   = "",
-    %number   = "",
-    %series   = "",
-    %address  = "",
-    %edition  = "",
     year      = {2010}
-    %month    = "",
-    %note     = "",
 };
 
 @book{monahan,
@@ -1272,7 +1231,6 @@ ISSN={1082-3654}
 
 
 
-% theses
 @mastersthesis{kong2014,
     author={Kong, Xianliang},
     title={Advanced Adaptive Library for Gamma-Ray Spectrometers},
@@ -1309,12 +1267,9 @@ ISSN={1082-3654}
   author = {Nielsen, Michael A.}
 };
 
-
-
-% Other
 @misc{origin,
       author = "OriginLab",
-      title = "Curve Fitting Functions: Gaussamp"
+      title = "Curve Fitting Functions: Gaussamp",
       howpublished = http://www.originlab.de/doc/
 };
 
@@ -1383,7 +1338,7 @@ Year = {2010}
 @ARTICLE{Jeyanthia2015,
 	author = {Jeyanthia, S.  and Maheswaria, N. and  Venkatesh, R.},
 	title = {Neural network based automatic fingerprint recognition system for overlapped latent images},
-	journal = {Journal of Intelligent & Fuzzy Systems},
+	journal = {Journal of Intelligent \& Fuzzy Systems},
 	year = {2015},
 	volume={28}
 };
@@ -1393,24 +1348,15 @@ Year = {2010}
 @TECHREPORT{Krizhevsky2009,
     author = {Alex Krizhevsky},
     title = {Learning multiple layers of features from tiny images},
-    institution = {},
-    year = {2009}
+    year = {2009},
+    institution = {University of Toronto},
 }
-
-@ARTICLE{Krizhevsky2012,
-	author = {Krizhevsky, A. and Sutskever, I. and Hinton, G.E},
-	title = {Imagenet classification with deep convolutional neural networks},
-	journal = {Annual Conference on Neural Information Processing Systems},
-	year = {2012},
-	pages = {1097-1105}
-};
-
 
 
 @ARTICLE{Rababaah2015,
 	author = {Rababaah,  A. and Sharma. D.},
 	title = {Integration of Two Different Signal Processing Techniques With Artificial Neural Network for Stock Market Forecasting},
-	journal = {Academy of Information & Management Sciences Journal},
+	journal = {Academy of Information \& Management Sciences Journal},
 	year = {2015},
 	volume = {18},
 	issue = {2},
@@ -1616,14 +1562,6 @@ author={
 
 
 
-@inbook{LeCun1998,
-  author={LeCun, Yann and Bottou, Leon and B. Orr, Genevieve and Muller, Klaus-Robert},
-  year= 1998, 
-  chapter={Efficient BackProp}, 
-  title= {Neural Networks, Tricks of the Trade}, 
-  publisher= {Springer},
-};
-
 @ARTICLE{Phillips1976,
   author = {Phillips, Gary W. and Marlow, Keith W.},
   title = {Automatic Analysis of Gamma-ray Spectra from Germanium Detectors},
@@ -1631,7 +1569,6 @@ author={
   year = {1976},
   volume={137},
   pages = {525--536},
-%  keywords={}
 };
 
 
@@ -1643,7 +1580,6 @@ author={
   year = {1996},
   volume={391},
   pages = {275--288}
-%  keywords={}
 };
 
 
@@ -1657,7 +1593,6 @@ author={
   volume={65},
   number = {6},
   pages = {386--408},
-%  keywords={}
 };
 
 
@@ -1669,7 +1604,6 @@ author={
   year = {1943},
   volume={5},
   pages = {115--133},
-%  keywords={}
 };
 
 
@@ -1690,7 +1624,6 @@ author={
   year = {2012},
   volume={13},
   pages = {281--305},
-%  keywords={}
 };
 
 
@@ -1700,13 +1633,12 @@ author={
   journal = {Proceedings of the 24$^{th}$ international conference on Machine learning},
   year = {2007},
   pages = {473--480},
-%  keywords={}
 };
 
 @book{Hebb1949,
     author    = {Hebb, Donald O.},
     title     = {The Organization of Behavior},
-    publisher = {John Wiley & Sons, Inc.},
+    publisher = {John Wiley \& Sons, Inc.},
     year      = {1949}
 };
 
@@ -1734,7 +1666,6 @@ author={
   volume = {323},
   year = {1986},
   pages = {533--536},
-%  keywords={}
 };
 
 @article{Murtagh1991,
@@ -1760,7 +1691,7 @@ keywords = "function approximation "
     title    = {Beyond Regression: New Tools for Prediction and Analysis in the Behavioral Sciences},
     school   = {Harvard University},
     author   = {Werbos, Paul J.},
-    year     = {1974} %other attributes omitted
+    year     = {1974}
 }
 
 
@@ -1769,10 +1700,10 @@ keywords = "function approximation "
     author = {Bridle, John S.},
     title = {Probabilistic Interpretation of Feedforward Classification Network Outputs, with Relationships to Statistical Pattern Recognition},
     journal = {Neurocomputing},
-    Series = {F: Computer and Systems Sciences}
-    volume = {68},
-    year = {1990},
-    pages = {227--236}
+    series = {F: Computer and Systems Sciences},
+    volume = 68,
+    year = 1990,
+    pages = {227--236},
 };
 
 
@@ -1799,7 +1730,7 @@ keywords = "function approximation "
     Author = {Hassan-Esfahani, Leila and Torres-Rua, Alfonso and Jensen, Austin and McKee, Mac},
     ISSN = {20724292},
     Journal = {Remote Sensing},
-    Keywords = {Remote sensing -- Equipment & supplies, High resolution imaging, Soil moisture, Neural networks (Computer science), Drone aircraft, Artificial Neural Network, high-resolution, multi-spectral, remote sensing, soil moisture, UAV},
+    Keywords = {Remote sensing -- Equipment \& supplies, High resolution imaging, Soil moisture, Neural networks (Computer science), Drone aircraft, Artificial Neural Network, high-resolution, multi-spectral, remote sensing, soil moisture, UAV},
     Number = {3},
     Pages = {2627 - 2646},
     Title = {Assessment of Surface Soil Moisture Using High-Resolution Multi-Spectral Imagery and Artificial Neural Networks.},
@@ -1812,7 +1743,7 @@ keywords = "function approximation "
     Abstract = {A proposed real coded genetic algorithm based radial basis function neural network classifier is employed to perform effective classification of healthy and cancer affected lung images. Real Coded Genetic Algorithm (RCGA) is proposed to overcome the Hamming Cliff problem encountered with the Binary Coded Genetic Algorithm (BCGA). Radial Basis Function Neural Network (RBFNN) classifier is chosen as a classifier model because of its Gaussian Kernel function and its effective learning process to avoid local and global minima problem and enable faster convergence. This paper specifically focused on tuning the weights and bias of RBFNN classifier employing the proposed RCGA. The operators used in RCGA enable the algorithm flow to compute weights and bias value so that minimum Mean Square Error (MSE) is obtained. With both the lung healthy and cancer images from Lung Image Database Consortium (LIDC) database and Real time database, it is noted that the proposed RCGA based RBFNN classifier h},
     Author = {Selvakumari Jeya, I. Jasmine and Deepa, S. N.},
     ISSN = {1748670X},
-    Journal = {Computational & Mathematical Methods in Medicine},
+    Journal = {Computational \& Mathematical Methods in Medicine},
     Keywords = {Lungs -- Cancer, Tumors -- Classification, Genetic algorithms, Radial basis functions, Neural networks (Computer science)},
     Pages = {1 - 15},
     Title = {Lung Cancer Classification Employing Proposed Real Coded Genetic Algorithm Based Radial Basis Function Neural Network Classifier.},
@@ -1863,13 +1794,6 @@ keywords = "function approximation "
 };
 
 
-@book{Jolliffe2002,
-    author    = {Jolliffe I. T.},
-    title     = {Principal Component Analysis},
-    publisher = {Springer New York},
-    year      = {2002}
-};
-
 @article{Ely2006,
 title = "The use of energy windowing to discriminate {SNM} from {NORM} in radiation portal monitors ",
 journal = "Nuclear Instruments and Methods in Physics Research Section A: Accelerators, Spectrometers, Detectors and Associated Equipment ",
@@ -1912,7 +1836,7 @@ month={Sep},};
 @inbook {Fletcher2000,
 title = {Newton-Like Methods},
 author = {Fletcher, R.},
-publisher = {John Wiley & Sons, Ltd},
+publisher = {John Wiley \& Sons, Ltd},
 isbn = {9781118723203},
 doi = {10.1002/9781118723203.ch3},
 pages = {44--79},
