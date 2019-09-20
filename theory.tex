@@ -56,6 +56,8 @@ E_{\gamma}' = \frac{E_{\gamma}}{1 + \frac{E_{\gamma}}{m_{0} c^2} (1-cos\theta)}
 
 depends on the scattering angle, $\theta$, the incident photon's energy, E$_{\gamma}$, and the rest mass of the electron, m$_{o}$c$^{2}$. A photon scattering at an angle of 180$^{o}$ deposits its maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed at $\theta$ = 180$^{o}$, seen in the solid line in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies known as the Compton continuum. Accounting for the binding energy of electrons in a medium produces a Compton continuum more similar to the dotted line in Figure \ref{fig:ideal_compton}.
 
+The Compton continuum of higher-energy photons will add to lower-energy photopeaks, adding noise to and changing the baseline of lower-energy photons' signals. The geometry between the source and detector changes the Compton continuum's shape, making the Compton continuum's signal difficult to incorporate into an identification algorithm. This signal can be incorporated into template matching or ANN based algorithms by including library or training set examples with various source-detector geometries.
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\linewidth]{images/ideal_compton}
