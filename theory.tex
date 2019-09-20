@@ -8,31 +8,35 @@ In this section, the physics responsible for the features in gamma-ray spectra a
 
 \subsection{Energy Deposition Mechanisms}
 
-When a photon interacts with some radiation detection medium (e.g. a NaI(Tl) crystal), it deposits some or all of its energy into the material. There are three main methods of interaction: the photoelectric effect, Compton scattering, and pair production. These effects are energy dependent, as seen in Figure \ref{fig:energy_dependence_interactions}.
+When a photon interacts with a radiation detection medium (e.g. a NaI(Tl) crystal), it deposits some or all of its energy into the material. There are three main methods of interaction: the photoelectric effect, Compton scattering, and pair production. These effects are energy dependent, as seen in Figure \ref{fig:energy_dependence_interactions}.
 
-If all of the photon's energy is deposited in the detector, a count is recorded in the spectrum's photopeak. If the photon deposits only a part of its energy and escapes the detector, a count will be recorded somewhere below the full-energy photopeak.  The following sections describe intrinsic mechanisms that remove counts from the full-energy peak. % Absolute efficiency is also affected by shielding material and source-to-detector distance.
+If the photon's total energy is deposited in the detector, a count is recorded in the spectrum's photopeak. If the photon deposits only a part of its energy and escapes the detector, a count will be recorded somewhere below the full-energy photopeak.  The following sections describe intrinsic mechanisms that remove counts from the full-energy peak. % Absolute efficiency is also affected by shielding material and source-to-detector distance.
+
 
 \subsubsection{Photoelectric Absorption}
+% knoll pg 323
 
-Photoelectric absorption is a process that can occur when a photon with energy greater than the binding energy of a bound electron, $E_{b}$, is absorbed by an atom. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron
+Photoelectric absorption is a process that can occur when a photon with energy, $E_{\gamma}$, greater than the binding energy of a bound electron, $E_{b}$, is absorbed by an atom. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron
 %
-\begin{equation} \label{eq:photoelectric_effect}
-% \gamma 
-E_{e^{-}} = h\nu - E_{b}
-\end{equation}
+\begin{align} \label{eq:photoelectric_effect}
+E_{e^{-}} &= E_{\gamma} - E_{b} \\
+&= h\nu - E_{b} \\
+\text{where } h &= \text{Planks Constant} \quad [J \cdot s] \nonumber \\
+\nu &= \text{The Photon's Frequency} \quad [\frac{1}{\text{s}}] \nonumber \\
+\end{align}
 %
-where $h\nu$ is the energy of the incident photon. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates an electron vacancy in the original atom. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
+where $E_{\gamma}$ = $h\nu$ is the incident photon's energy. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates an electron vacancy in the original atom. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\linewidth]{images/energy_dependence_interactions}
-\caption{Energy dependence for gamma-ray interactions in NaI(Tl) \cite{knoll}.}
+\caption{Energy dependence for gamma-ray interactions in NaI(Tl). Reproduced from \cite{knoll}.}
 \label{fig:energy_dependence_interactions}
 \end{figure}
 
 \subsubsection{Compton scattering}
 
-Compton scattering and absorption is the interaction of a gamma-ray photon with an electron in some absorbing material. This interaction is illustrated in Figure \ref{fig:compton_scatter}. 
+Compton scattering is the interaction of a gamma-ray photon with an electron in absorbing material. This interaction is illustrated in Figure \ref{fig:compton_scatter}.
 
 
 % This is the main energy deposition mechanism in the range of energies useful for gamma-ray spectroscopy.
@@ -47,15 +51,15 @@ Compton scattering and absorption is the interaction of a gamma-ray photon with 
 The energy of a photon scattered off a free electron
 
 \begin{equation} \label{eq:compton_scatter}
-E' = \frac{E}{1 + \frac{E}{m_{0} c^2} (1-cos\theta)}
+E_{\gamma}' = \frac{E_{\gamma}}{1 + \frac{E_{\gamma}}{m_{0} c^2} (1-cos\theta)}
 \end{equation}
 
-depends on the scattering angle, $\theta$, the incident photon's energy, E, and the rest mass of the electron, m$_{o}$c$^{2}$. A photon scattering at an angle of 180$^{o}$ deposits it's maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed at $\theta$ = 180$^{o}$, seen in the solid line in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies known as the Compton continuum. Accounting for the binding energy of electrons in a medium produces a Compton continuum closer to the dotted line in Figure \ref{fig:ideal_compton}.
+depends on the scattering angle, $\theta$, the incident photon's energy, E$_{\gamma}$, and the rest mass of the electron, m$_{o}$c$^{2}$. A photon scattering at an angle of 180$^{o}$ deposits its maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed at $\theta$ = 180$^{o}$, seen in the solid line in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies known as the Compton continuum. Accounting for the binding energy of electrons in a medium produces a Compton continuum more similar to the dotted line in Figure \ref{fig:ideal_compton}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\linewidth]{images/ideal_compton}
-\caption{Diagram of energy absorbed in an idealized Compton scattering event \cite{gilmore}.}
+\caption{Diagram of energy absorbed in an idealized Compton scattering event. Reproduced from \cite{gilmore}.}
 \label{fig:ideal_compton}
 \end{figure}
 
@@ -217,7 +221,7 @@ As seen in Figure \ref{fig:Node}, each neuron operates by summing the products o
 %
 \begin{align} \label{eq:argminW_Error}
 \underset{\mathbf{W}}{\text{argmin}} &{\text{ Error}}(f(\mathbf{Y} ; \mathbf{W} ) , \mathbf{T} ), \\
-\text{where } \mathbf{W} &= \text{network weights} \nonumber \\
+\text{where } \mathbf{W}  \text{network weights} \nonumber \\
 \mathbf{T} &= \text{target values in a dataset} \nonumber \\
 \mathbf{Y} &= \text{training data in a dataset.} \nonumber
 \end{align}
