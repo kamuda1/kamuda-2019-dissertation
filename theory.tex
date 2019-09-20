@@ -224,7 +224,7 @@ As seen in Figure \ref{fig:Node}, each neuron operates by summing the products o
 %
 \begin{align} \label{eq:argminW_Error}
 \underset{\mathbf{W}}{\text{argmin}} &{\text{ Error}}(f(\mathbf{Y} ; \mathbf{W} ) , \mathbf{T} ), \\
-\text{where Error } &= \text{the error metric} \\
+\text{where Error } &= \text{the error metric} \nonumber \\
 \mathbf{W} &= \text{weight matrix} \nonumber \\
 \mathbf{T} &= \text{matrix of target values} \nonumber \\
 \mathbf{Y} &= \text{matrix of input data.} \nonumber
@@ -263,11 +263,10 @@ The classes in this example dataset are linearly separable, meaning lines can be
 
 \subsection{Neural Network Training}
 
-One of the most common methods of training an ANN is through error backpropagation, a method used to minimize an error function with respect to a set of weights connecting neurons. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function on the network previously described, we would apply the chain rule to find an expression for
+One of the most common methods of training an ANN is through error backpropagation, a method used to minimize an error function with respect to a set of weights connecting neurons. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function, E$_{MSE}$, on the network described in Equation \ref{eq:single_layer_eq_sum}, we would apply the chain rule to find an expression for
 %
 \begin{align} \label{eq:dMSE}
-\frac{dE_{MSE}}{dw_j} &= \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j} \\
-\text{where }  E_{MSE} &= \text{mean squared error function} \\
+\frac{dE_{MSE}}{dw_j} &= \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}
 \end{align}
 %
 with training data defined as %
@@ -335,7 +334,7 @@ and
 \Delta b_{j} = - \eta \frac{dE_{MSE}}{db_j}
 \end{equation}
 %
-where $\eta$ in Equations \ref{eq:update1} and \ref{eq:update2} represents the learning rate of the neural network. The learning rate and its effect on training will be discussed more thoroughly in section \ref{LearningRateSubsection}.
+where $\eta$ represents the learning rate of the neural network. The learning rate and its effect on training will be discussed more thoroughly in section \ref{LearningRateSubsection}.
 
 Gradient descent can be applied to an ANN with multiple layers. The input to the the $l^{th}$ layer given some training example $\boldsymbol{x}$ in an L-layer network is 
 \begin{equation}
@@ -348,9 +347,9 @@ where the activation from the $(l-1)^{th}$ layer is
 \boldsymbol{a}^{x,l-1} = f^{l-1}(\boldsymbol{z}^{x,l-1})
 \end{equation}
 \begin{align*}
-  \text{and where } \boldsymbol{w}^{l} &= l^{th} \text{ layer's weight matrix,} \\
-  \boldsymbol{b}^{l} &= l^{th} \text{ layer's bias vector,} \\
-  f^{l-1} &= \text{ non-linear activation function used in the $(l-1)^{th}$-layer}
+  \text{and where } \boldsymbol{w}^{l} &= \text{weight matrix of layer l,} \\
+  \boldsymbol{b}^{l} &= \text{bias vector of layer l,} \\
+  f^{l-1} &= \text{non-linear activation function used in layer (l-1).}
 \end{align*}
 %
 Defining the output error as 
@@ -377,7 +376,7 @@ and
 \frac{\partial E}{\partial b_j} = \delta^l_j.
 \end{equation}
 %
-Using Equations \ref{eq:CrossEntropy1} and \ref{eq:CrossEntropy2}, the weights can be updated for a single iteration of backpropogation. 
+Using Equations \ref{eq:CrossEntropy1} and \ref{eq:CrossEntropy2}, the weights can be updated for a single backpropogation iteration. 
 
 % Other early stopping methods include 
 
@@ -395,7 +394,7 @@ ANNs require some stopping condition to conclude training. Early stopping works 
 
 \subsection{Convolutional Neural Networks}
 
-Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors (e.g. manually creating features using edge and line detectors for face recognition) and a simple trainable classifier like a linear model or naive Bayes. There are a number of issues with creating and using custom feature extractors. Robust feature extraction algorithms often require extensive domain knowledge - making them expensive to create. There is often little guarantee that these features will be optimal for classification or regression tasks. A classifier created around suboptimal features has the potential to perform poorly in real-world conditions or similar problems.
+Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors (e.g. manually creating features using edge and line detectors for face recognition) and a simple trainable classifier like a linear model or naive Bayes. There are a number of issues with creating and using custom feature extractors. Robust feature extraction algorithms often require extensive domain knowledge - making them expensive to create. There is rarely a guarantee that these features will be optimal for classification or regression tasks. A classifier created around suboptimal features has the potential to perform poorly in real-world conditions or similar problems.
 
 Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolutional layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared among classes. This weight sharing decreases the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
 
@@ -433,7 +432,7 @@ Other commonly used feature extraction methods are principal component analysis 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\linewidth]{images/Autoencoder_structure}
-\caption{An example of an autoencoder \cite{wiki:AutoencoderStructure}.}
+\caption{An example of an autoencoder. Image reproduced from \cite{wiki:AutoencoderStructure}.}
 \label{fig:Autoencoder_structure}
 \end{figure}
 
@@ -446,7 +445,7 @@ Other commonly used feature extraction methods are principal component analysis 
 
 \subsection{Hyperparameters}
 
-In addition to the weights connecting neurons, \textit{hyperparameters} can modify ANN behavior. Hyperparameters determine both the networks structure (number of layers, number of nodes in each layer, activation function for each layer) and how the model learns (learning rate, momentum, loss function). The following section discusses various hyperparameters and their effects on ANN learning.
+In addition to the weights connecting neurons, \textit{hyperparameters} can modify ANN behavior. Hyperparameters determine both the network's structure (number of layers, number of nodes in each layer, activation function for each layer) and how the model learns (learning rate, momentum, loss function). The following section discusses various hyperparameters and their effects on ANN learning.
 
 \subsubsection{Learning Rate} \label{LearningRateSubsection}
 
@@ -470,7 +469,7 @@ Another method to speed up learning is to add a momentum hyperparameter, $\mu$, 
 \Delta w_{ij}(n) = - \eta \frac{dE_{MSE}}{dw_j} +\mu \Delta w_{ij}(n-1).
 \end{equation}
 %
-Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when the weights are updated at large steps, far from an optima, but will decrease near an optima, allowing slower learning near an optimum. 
+Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when the weights are updated at large steps, far from an optima, but will decrease near an optimum, allowing slower learning near an optimum. 
  
 \subsubsection{Training Algorithms}
 
@@ -487,7 +486,7 @@ is the estimate of the mean of the gradient at iteration $t$ and
 \begin{equation} \label{eq:adam2}
 v_t = \beta_2 v_{t-1} + (1 - \beta_2) g_t^2
 \end{equation}
-is the estimate of the variance of the gradient at iteration $t$. For the following, the variables $\beta_1$ and $\beta_2$ are parameters called decay rates, $\epsilon$ is included for numerical stability, and $\theta_t$ represents the network parameters at iteration $t$. As described by Kingma and Lei Ba, The default values for $\beta_1$, $\beta_2$, and $\epsilon$ are 0.9, 0.999, and $10^{-8}$ respectively \cite{Kingma2015}. These values were seen to work well for a variety of problems. While these hyperparameters can also be tuned, it has been shown that the default values work well for a variety of network architectures and datasets \cite{Kingma2015}. The bias-corrected first moment estimate is given by
+is the estimate of the variance of the gradient at iteration $t$. For the following, the variables $\beta_1$ and $\beta_2$ are parameters called decay rates, $\epsilon$ is included for numerical stability, and $\theta_t$ represents the network parameters at iteration $t$. As described by Kingma and Lei Ba, the default values for $\beta_1$, $\beta_2$, and $\epsilon$ are 0.9, 0.999, and $10^{-8}$ respectively \cite{Kingma2015}. These values were seen to work well for a variety of problems. While these hyperparameters can also be tuned, it has been shown that the default values work well for a variety of network architectures and datasets \cite{Kingma2015}. The bias-corrected first moment estimate is given by
 \begin{equation} \label{eq:adam3}
 \hat{m}_t = \dfrac{m_t}{1 - \beta^t_1}
 \end{equation}
@@ -511,9 +510,12 @@ Finally, the weight update equation is computed as
 
 The choice of cost function to train against depends on the targets the network is attempting to learn. One of the simplest error functions is the binary accuracy for classification, 
 %
-\begin{equation} \label{eq:Binary_accuracy}
-E_{Binary} = {\frac{1} N} \sum_{n=1}^N \mathds{1}[\hat{y}_n \neq y_n ],
-\end{equation}
+\begin{align} \label{eq:Binary_accuracy}
+E_{Binary} &= {\frac{1} N} \sum_{n=1}^N \mathds{1}[\hat{y}_n \neq y_n ], \\
+\text{where } N &= \text{ number of output neurons} \nonumber \\
+y_n &= n^{th} \text{ output's ground truth.} \nonumber
+y_n &= n^{th} \text{ output's ground truth.} \nonumber
+\end{align}
 %
 where N is the total number of output neurons, $y_n$ is the ground truth of the n$^{th}$ output, and $\hat{y}_n$ is the ANN output of the n$^{th}$ output neuron. While this is a simple function, it cannot be used to train a gradient descent algorithm because it is discontinuous (there is no incremental indication that a model is improving).
 
