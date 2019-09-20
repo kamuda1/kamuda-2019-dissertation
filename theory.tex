@@ -44,7 +44,7 @@ Compton scattering is the interaction of a gamma-ray photon with an electron in 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.7\linewidth]{images/compton_scatter}
-\caption{Diagram of a Compton scattering event \cite{knoll}.}
+\caption{Diagram of a Compton scattering event. Reproduced from \cite{knoll}.}
 \label{fig:compton_scatter}
 \end{figure}
 
@@ -61,7 +61,7 @@ The Compton continuum of higher-energy photons will add to lower-energy photopea
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\linewidth]{images/ideal_compton}
-\caption{Diagram of energy absorbed in an idealized Compton scattering event. Reproduced from \cite{gilmore}.}
+\caption{Diagram of energy absorbed in an idealized Compton scattering event. The solid and dashed line represent idealized spectra with and without including electron binding energy. Reproduced from \cite{gilmore}.}
 \label{fig:ideal_compton}
 \end{figure}
 
@@ -69,34 +69,35 @@ The Compton continuum of higher-energy photons will add to lower-energy photopea
 
 \subsubsection{Pair Production}
 
-When a photon with energy above 1022 keV interacts with the Coulomb field of a nucleus, there is a probability that the photon will disappear and be replaced by an electron-positron pair. The positron will then annihilate with an electron in the medium, creating two 511 keV photons. This process is illustrated in Figure \ref{fig:pair_production}. If one or both of these annihilation photons escape the detector, they produce single or double escape peaks in a gamma-ray spectrum. As seen in Figure \ref{fig:pair_production_spectra}, single escape peaks occur at 511 keV below the full-energy peak and double escape peaks occur at 1022 keV below this peak. These 511 keV photons may also be measured by the detector, producing an annihilation radiation signal in the spectrum.
+When a photon with energy above 1022 keV (two times the rest mass energy of an electron) interacts with the Coulomb field of a nucleus, there is a probability that the photon will disappear and be replaced by an electron-positron pair. The positron will then annihilate with an electron in the medium, creating two 511 keV photons. This process is illustrated in Figure \ref{fig:pair_production}. If one or both of these annihilation photons escape the detector, they produce single or double escape peaks in a gamma-ray spectrum. As seen in Figure \ref{fig:pair_production_spectra}, single escape peaks occur at 511 keV below the full-energy peak and double escape peaks occur at 1022 keV below this peak. These 511 keV photons may also be measured by the detector, producing an annihilation radiation signal in the spectrum.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{images/pair_production}
-\caption{Diagram of pair production \cite{gilmore}.}
+\caption{Diagram of pair production. Reproduced from \cite{gilmore}.}
 \label{fig:pair_production}
 \end{figure}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.6\linewidth]{images/pair_production_spectra}
-\caption{Theoretical spectrum from pair production \cite{knoll}.}
+\caption{Theoretical spectrum from pair production. Reproduced from \cite{knoll}.}
 \label{fig:pair_production_spectra}
 \end{figure}
 
 
 \subsection{Energy Resolution} \label{subsection_energy_resolution}
 
-The energy resolution of a radiation detector describes the width of a photopeak's distribution at a location in a spectrum. The resolution is based on the full width of the Gaussian at half of its maximum value (FWHM). The FWHM is measured either in units of energy or as a percent of the peak's energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. The variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as a standard for comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are compared in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum as measured by scintillation and semiconductor detectors. 
+The energy resolution of a radiation detector determines the photopeak's distribution, specifically the full width of its Gaussian peak at half of its maximum value (FWHM), at a location in a spectrum. The FWHM is measured either in units of energy or as a percent of the peak's energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. The variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit \cite{knoll}. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as a standard for comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are compared in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum as measured by scintillation and semiconductor detectors. 
+
+Low resolution detectors 
 
 % pg 345 knoll
-
 \begin{table}[H]
 \centering
 \begin{tabular}{cc}
 \hline
-Detector Type & \begin{tabular}[c]{@{}c@{}}Full Width at Half Maximum\\ (662 keV)\end{tabular} \\ \hline
+\textbf{Detector Type} & \begin{tabular}[c]{@{}c@{}}\textbf{Full Width at Half Maximum}\\ \textbf{(662 keV)}\end{tabular} \\ \hline
 NaI(Tl) & 6 - 8 \% \\ % \hline
 LaBr & 2 - 4 \% \\ % \hline
 CeBr & 4 - 5 \% \\ % \hline
@@ -104,15 +105,16 @@ CZT & 1 - 2 \% \\ % \hline
 HPGe & \textless 0.2 \% \\ \hline
 \end{tabular}
 \caption{Typical energy resolutions of common
-gamma-ray detector types (reproduced from \cite{RIIDMarketSurveyReport}).}
+gamma-ray detector types. Reproduced from \cite{RIIDMarketSurveyReport}.}
 \label{table:detector_resolutions}
 \end{table}
 
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.99\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
-\caption{$^{133}$Ba spectrum measured using common detector materials \cite{RIIDMarketSurveyReport}.}
+\includegraphics[trim=0 0 0 0, clip, width=1.0\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
+% \includegraphics[width=0.99\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
+\caption{$^{133}$Ba spectrum measured using common detector materials.  Reproduced from \cite{RIIDMarketSurveyReport}.}
 \label{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report}
 \end{figure}
 
@@ -127,7 +129,7 @@ A significant challenge to automated gamma-ray spectroscopy is the stochastic na
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.8\linewidth]{images/background_components}
-\caption{Monte Carlo simulations of background component spectra in NaI(Tl) \cite{KULISEK2015}.}
+\caption{Monte Carlo simulations of background component spectra in NaI(Tl). Reproduced from \cite{KULISEK2015}.}
 \label{fig:background_components}
 \end{figure}
 
@@ -139,22 +141,22 @@ Background also changes over time, largely due to the decay products of $^{222}$
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{images/USGS_u_conc}
-\caption{Map of uranium concentrations in the United States (Reproduced from \cite{USGS}).}
+\includegraphics[trim=10 0 5 0, clip, width=1.0\linewidth]{images/USGS_u_conc}
+\caption{Map of uranium concentrations in the United States. Reproduced from \cite{USGS}.}
 \label{fig:USGS_u_conc}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{images/USGS_th_conc}
-\caption{Map of thorium concentrations in the United States (Reproduced from \cite{USGS}).}
+\includegraphics[trim=10 0 5 0, clip, width=1.0\linewidth]{images/USGS_th_conc}
+\caption{Map of thorium concentrations in the United States. Reproduced from \cite{USGS}.}
 \label{fig:USGS_th_conc}
 \end{figure}
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\linewidth]{images/USGS_k_conc}
-\caption{Map of potassium concentrations in the United States (Reproduced from \cite{USGS}).}
+\includegraphics[trim=10 0 5 0, clip, width=1.0\linewidth]{images/USGS_k_conc}
+\caption{Map of potassium concentrations in the United States. Reproduced from \cite{USGS}.}
 \label{fig:USGS_k_conc}
 \end{figure}
 
