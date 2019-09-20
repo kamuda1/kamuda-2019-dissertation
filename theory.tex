@@ -22,7 +22,7 @@ Photoelectric absorption is a process that can occur when a photon with energy, 
 E_{e^{-}} &= E_{\gamma} - E_{b} \\
 &= h\nu - E_{b} \\
 \text{where } h &= \text{Planks Constant} \quad [J \cdot s] \nonumber \\
-\nu &= \text{The Photon's Frequency} \quad [\frac{1}{\text{s}}] \nonumber \\
+\nu &= \text{The Photon's Frequency} \quad \left[\frac{1}{\text{s}}\right] \nonumber \\
 \end{align}
 %
 where $E_{\gamma}$ = $h\nu$ is the incident photon's energy. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates an electron vacancy in the original atom. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
@@ -511,18 +511,24 @@ Finally, the weight update equation is computed as
 The choice of cost function to train against depends on the targets the network is attempting to learn. One of the simplest error functions is the binary accuracy for classification, 
 %
 \begin{align} \label{eq:Binary_accuracy}
-E_{Binary} &= {\frac{1} N} \sum_{n=1}^N \mathds{1}[\hat{y}_n \neq y_n ], \\
+E_{Binary} &= {\frac{1} N} \sum_{n=1}^N \mathds{1}_[\hat{y}_n \neq y_n ], \\
 \text{where } N &= \text{ number of output neurons} \nonumber \\
-y_n &= n^{th} \text{ output's ground truth.} \nonumber
-y_n &= n^{th} \text{ output's ground truth.} \nonumber
+y_n &= n^{th} \text{ output neuron's ground truth.} \nonumber \\
+\hat{y}_n &= n^{th} \text{ output neuron's value} \nonumber \\
+\mathds{1}_A &= \text{indicator function} \nonumber \\
+&= \nonumber
+	\begin{cases}
+	1  & \quad \text{if } A \text{ is True}\\
+	0  & \quad \text{if } A \text{ is False.}
+	\end{cases} \nonumber
 \end{align}
-%
-where N is the total number of output neurons, $y_n$ is the ground truth of the n$^{th}$ output, and $\hat{y}_n$ is the ANN output of the n$^{th}$ output neuron. While this is a simple function, it cannot be used to train a gradient descent algorithm because it is discontinuous (there is no incremental indication that a model is improving).
+% where N is the total number of output neurons, $y_n$ is the ground truth of the n$^{th}$ output, and $\hat{y}_n$ is the ANN output of the n$^{th}$ output neuron. 
+While this is a simple function, it cannot be used to train a gradient descent algorithm because it is discontinuous (there is no incremental indication that a model is improving).
 
-A simple differentiable cost function is the mean squared error (MSE) function,
+A simple differentiable cost function is the mean squared error function,
 %
 \begin{equation} \label{eq:MSE_error}
-E_{Binary} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2.
+E_{MSE} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2.
 \end{equation}
 %
 Because this function is differentiable, it can be used to train a gradient descent algorithm. The MSE function is appropriate when targets are any real number, as in a regression problem. 
@@ -538,8 +544,8 @@ can be used. Cross entropy measures the similarity between the distributions $y_
 Because the softmax function,
 %
 \begin{equation} \label{eq:softmax}
-softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)}.
-\end{equation},
+softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)},
+\end{equation}
 %
 can be used for classification, it is traditionally used as the output function for the model when using the cross entropy cost function. The softmax function is used in binary classification problems to calculate posterior class probabilities \cite{Bridle1990}.
 
