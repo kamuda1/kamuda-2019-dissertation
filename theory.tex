@@ -90,7 +90,7 @@ When a photon with energy above 1022 keV (two times the rest mass energy of an e
 
 The energy resolution of a radiation detector determines the photopeak's distribution, specifically the full width of its Gaussian peak at half of its maximum value (FWHM), at a location in a spectrum. The FWHM is measured either in units of energy or as a percent of the peak's energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. The variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit \cite{knoll}. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as a standard for comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are compared in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum as measured by scintillation and semiconductor detectors. 
 
-Low resolution detectors 
+Gamma-ray spectroscopy tasks in low resolution detectors, such as NaI(Tl), are complicated by overlapping photopeak signals.
 
 % pg 345 knoll
 \begin{table}[H]
@@ -119,12 +119,13 @@ gamma-ray detector types. Reproduced from \cite{RIIDMarketSurveyReport}.}
 \end{figure}
 
 
+
+
 \subsection{Background Radiation}
 
 % In contrast, it is extremely difficult to measure a trustworthy background spectrum in the field. Moving or reorienting the detector to obtain a source7free background measurement will frequently produce a measurement that will likely differ significantly, and sometimes even exceeding, the true background at the source position. It is not at all unusual for environmental background to vary significantly over distances of a few meters. As a result, we typically confine our analyses to the foreground spectrum, as generally reflected in this paper. https://e-reports-ext.llnl.gov/pdf/770028.pdf
 
-
-A significant challenge to automated gamma-ray spectroscopy is the stochastic nature of the background radiation field. Background radiation comes from cosmic radiation and radioisotopes naturally distributed in soil and building materials. Isotopes in the soil primarily come from the uranium decay series, thorium  decay series, and $^{40}$K. The gamma-ray spectra from each of these sources are shown in Figure \ref{fig:background_components}. 
+A significant challenge to automated gamma-ray spectroscopy is the stochastic nature of the background radiation field. Background radiation comes from many sources including cosmic radiation and radioisotopes naturally distributed in soil and building materials. Isotopes in the soil primarily come from the uranium decay series, thorium  decay series, and $^{40}$K. The gamma-ray spectra from each of these sources are shown in Figure \ref{fig:background_components}. These background signals span the range of energies useful to gamma-ray spectroscopy, adding multiple sources of independent noise and complicating analysis.
 
 \begin{figure}[H]
 \centering
@@ -165,7 +166,7 @@ Background also changes over time, largely due to the decay products of $^{222}$
 % [Online]. Available: http://pubs.usgs.gov/of/2005/1413/maps.htm
 
 
-\subsection{Affect of Temperature on Calibration and Resolution}
+\subsection{Effect of Temperature on Calibration and Resolution}
 
 % https://www.pnnl.gov/main/publications/external/technical_reports/pnnl-14735.pdf
 
@@ -185,7 +186,7 @@ While automated gain stabilization methods exist, many require a clear photopeak
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.95\linewidth]{images/temp-dependence-resolution-moszynski}
-\caption{The energy resolution of 662 keV $\gamma$-rays measured with a 25mm × 30mm NaI(Tl) crystal using 2 $\mu$s and 12 $\mu$s peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
+\caption{The energy resolution of 662 keV $\gamma$-rays measured with a 25mm x 30mm NaI(Tl) crystal using 2 $\mu$s and 12 $\mu$s peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
 
 
 % \caption{The energy resolution measured for 662 keV $\gamma$-rays with a 25mm × 30mm NaI(Tl) crystal at 2 and 12 $\mu$s peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
@@ -199,15 +200,13 @@ In this section, neural network architectures and parameters that affect trainin
 \subsection{General Neural Network Architecture}
 
 % Node/neruon, get this lingo straight here
-An ANN is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}{^M}$ to $\mathbb{R}{^N}$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not observed by in the input or output. Each neuron in adjacent layers are connected by weights, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
-
-
+An artificial neural network (ANN0 is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}{^M}$ to $\mathbb{R}{^N}$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not directly observed in the input or output layers. Each neuron in adjacent layers is connected by a weight matrix, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
 
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.75\linewidth]{images/Network}
-\caption{Example ANN with input neurons $A_n$, hidden neurons $B_j$, and output neurons $C_k$.}
+\caption{Example ANN with input neurons $A_n$, hidden neurons $B_j$, and output neurons $C_k$ \cite{kamuda2017}.}
 \label{fig:Network}
 \end{figure}
 
@@ -217,7 +216,7 @@ Similar to a biological neuron, the ANN neuron receives input stimuli, performs 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.75\linewidth]{images/Node_ABC_2}
-	\caption{Summary of the operation of a single neuron.}
+	\caption{Summary of the operation of a single neuron \cite{kamuda2017}.}
 	\label{fig:Node}
 \end{figure}
 
@@ -225,9 +224,10 @@ As seen in Figure \ref{fig:Node}, each neuron operates by summing the products o
 %
 \begin{align} \label{eq:argminW_Error}
 \underset{\mathbf{W}}{\text{argmin}} &{\text{ Error}}(f(\mathbf{Y} ; \mathbf{W} ) , \mathbf{T} ), \\
-\text{where } \mathbf{W}  \text{network weights} \nonumber \\
-\mathbf{T} &= \text{target values in a dataset} \nonumber \\
-\mathbf{Y} &= \text{training data in a dataset.} \nonumber
+\text{where Error } &= \text{the error metric} \\
+\mathbf{W} &= \text{weight matrix} \nonumber \\
+\mathbf{T} &= \text{matrix of target values} \nonumber \\
+\mathbf{Y} &= \text{matrix of input data.} \nonumber
 \end{align}
 %
 Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analytically. Numerical methods for solving this equation include gradient descent through the back-propagation of errors \cite{Rumelhart1986}, genetic learning algorithms \cite{Yao1999}, and Newton's method \cite{Fletcher2000}.
@@ -235,7 +235,7 @@ Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analyti
 
 \subsection{Simple Neural Network Example}
 
-An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN takes two inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron will be represented by $w_{ij}$. An extra node, called the bias, is added to make the model affine. The bias is set to a constant value of 1, allows the bias to be effectively trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range from -1 to 1. Using this function, if an input results in the $y_{j}^{th}$ output neuron rising above zero, that input can be classified as part of the ${j}^{th}$ class (or as not a part of the ${j}^{th}$ class if the output is below zero). The equation for the output corresponding to the $j^{th}$ class is 
+An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN is a function that takes two real-valued inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron are represented by $w_{ij}$. An extra node, called the bias, is added to make the model affine. The bias activation is set to a constant value of 1, allowing the bias to be trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range [-1, 1]. Using this function, if an input results in the $y_{j}^{th}$ output neuron rising above zero, that input can be classified as part of the ${j}^{th}$ class (or as not a part of the ${j}^{th}$ class if the output is below zero). Other functions that map outputs values to arbitrary bounds (e.g. other sigmoid functions or an unbounded linear function) can be used. The equation for the output corresponding to the $j^{th}$ class is 
 %
 \begin{align} \label{eq:single_layer_eq_sum}
 y_j &= \tanh(\sum_i x_i w_{ij} + b_j), \\
@@ -243,10 +243,6 @@ y_j &= \tanh(\sum_i x_i w_{ij} + b_j), \\
 x_i &= i^{th} \text{ input from the previous layer} \nonumber \\
 b_j &= \text{weight connecting the } j^{th} \text{ output to the bias neuron.} \nonumber
 \end{align}
-
-To more clearly understand the geometry of the network's operation, consider the dataset in Figure \ref{fig:training_set_one_layer}. This dataset is composed of three classes: red, green, and blue. The axes that define this dataset are the inputs to the single layer network in Figure \ref{fig:one_layer_net}, ($x_1$,$x_2$). If $\mathbf{W}$ is defined to be a vector with elements ($w_{11}$, $w_{21}$), a line can be defined perpendicular to $\mathbf{W}$ and shifted by $\frac{b_1}{||\mathbf{W}||}$ from the origin in the direction of $\mathbf{W}$. Given appropriate values for $w_{11}$, $w_{21}$, and $b_1$, a line that separates the blue class from the non-blue class can be created. Any point on the -$\mathbf{W}$ side of the line will have $y_1 < 0$, allowing for classification. Similarly, a separating line for the red class using $w_{12}$, $w_{22}$, and $b_2$ and a separating line for the green class using $w_{13}$, $w_{23}$, and $b_3$ can be constructed. 
-
-The classes in this example dataset are linearly separable, meaning lines can be drawn completely separating each class. If the classes were not linearly separable, additional hidden layers would be necessary to compute the function. It has been shown that additional hidden layers allow the creation of arbitrary decision boundaries \cite{Hornik1991}. 
 %
 \begin{figure}[H]
 	\centering
@@ -254,14 +250,8 @@ The classes in this example dataset are linearly separable, meaning lines can be
 	\caption{Example of a single-layer neural network with two inputs ($x_{1}$ and $x_{2}$), three classes ($y_{1}$, $y_{2}$, $y_{3}$), and a bias neuron set to one.}
 	\label{fig:one_layer_net}
 \end{figure}
-% Change these to diff objects to get around grey-scale thesis...?
-%The neural network described in Figure \ref{fig:one_layer_net} has two inputs, so its decision boundaries are lines. If the network had three inputs each decision boundary is a plane. Given $N$ inputs, each decision boundary is a $N$-dimensional hyperplane. 
-
-
-% \cite{Hornik1991} is universal approx theory for ANNs
-
-% pics side by side better? Before and after hyperplane addition?
-
+%
+The geometry of the above network's operation is illustrated for an example dataset in Figure \ref{fig:training_set_one_layer}. This dataset is composed of three classes: red, green, and blue. The axes that define this dataset are the inputs to the single layer network in Figure \ref{fig:one_layer_net}, ($x_1$,$x_2$). If $\mathbf{W}$ is defined to be a vector with elements ($w_{11}$, $w_{21}$), a line can be defined perpendicular to $\mathbf{W}$ and shifted by $\frac{b_1}{||\mathbf{W}||}$ from the origin in the direction of $\mathbf{W}$. Given appropriate values for $w_{11}$, $w_{21}$, and $b_1$, a line that separates the blue class from the non-blue class can be created. Any point on the -$\mathbf{W}$ side of the line will have $y_1 < 0$, allowing for classification. Similarly, a separating line for the red class using $w_{12}$, $w_{22}$, and $b_2$ and a separating line for the green class using $w_{13}$, $w_{23}$, and $b_3$ can be constructed. 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.65\linewidth]{images/training_set_for_single_layer_hyperplane_v2}
@@ -269,22 +259,23 @@ The classes in this example dataset are linearly separable, meaning lines can be
 	\label{fig:training_set_one_layer}
 \end{figure}
 
+The classes in this example dataset are linearly separable, meaning lines can be drawn completely separating each class. If the classes were not linearly separable, additional hidden layers would be necessary to compute the function. It has been shown that additional hidden layers allow the creation of arbitrary decision boundaries \cite{Hornik1991}. 
+
 \subsection{Neural Network Training}
 
-One of the most common methods of training an ANN is through error backpropagation, a method used to minimize an error function with respect to a set of weights connecting neurons. It can be applied as seen in Equation \ref{eq:dMSE}. % If the error function is convex with respect to the network weights, the error with respect to the weights in the network can be minimized using its derivative. THIS IS WRONG. ANN with no hidden layers will have a purely convex error fctn wrt weights, add layers and we get local minima/maxima
-
-Training a single-layer ANN requires finding an expression for \ref{eq:dMSE} \cite{Nielsen2015}. For the following section, let $y_i$ be defined as in Equation \ref{eq:single_layer_eq_sum}, $E_{MSE}$ be defined as the mean squared error function, and training data be defined as %
+One of the most common methods of training an ANN is through error backpropagation, a method used to minimize an error function with respect to a set of weights connecting neurons. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function on the network previously described, we would apply the chain rule to find an expression for
+%
+\begin{align} \label{eq:dMSE}
+\frac{dE_{MSE}}{dw_j} &= \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j} \\
+\text{where }  E_{MSE} &= \text{mean squared error function} \\
+\end{align}
+%
+with training data defined as %
 \begin{align} \label{eq:train_data_D}
 D&={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}, \\
 \text{where } \boldsymbol{x}_{n} &= n^{th} \text{ training example} \nonumber \\
 t_n &= n^{th} \text{ training target.} \nonumber
 \end{align}
-%
-Note, this derivation would need to be repeated for different error functions. By the chain rule,
-%
-\begin{equation} \label{eq:dMSE}
-\frac{dE_{MSE}}{dw_j} = \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}
-\end{equation}
 %
 Equation \ref{eq:dMSE} can be solved by first evaluating $\frac{dE_{MSE}}{dy_i}$,
 %
