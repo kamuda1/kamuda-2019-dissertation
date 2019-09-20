@@ -571,15 +571,21 @@ In Equation \ref{eq:L2_Reg}, $w_i$ is the weight between each neuron in the ANN 
 
 \subsubsection{Neuron Dropout}
 
-Another method to reduce model complexity is by adding a \textit{neuron dropout rate} hyperparameter. Neuron dropout is the process of temporarily removing a random set of neuron from the ANN architecture during each training iteration \cite{Srivastava2014}. By randomly removing neurons from an ANN during training, heavy local codependency between neurons that could lead to the ANN becoming stuck in a local minimum in the error function - and thus overtraining - is discouraged. The frequency with which neurons are removed is called the neuron dropout rate.
+Another method to reduce model complexity is by adding a \textit{neuron dropout rate} hyperparameter. Neuron dropout is the process of temporarily removing a random set of neuron from the ANN architecture during each training iteration \cite{Srivastava2014}.
 
-Almost always, taking the average output of more than one separately trained ANN improves the performance of the ANN \cite{Srivastava2014}. By applying dropout at each neuron with the same probability throughout training, the ANN's architecture changes every iteration. The makes neuron dropout a cost efficient way to effectively average many different ANN architectures, improving performance.
+Almost always, taking the average output of more than one separately trained ANN improves the performance of the ANN \cite{Srivastava2014}. By applying dropout at each neuron with the same probability throughout training, the ANN's architecture changes every iteration. This makes neuron dropout a cost efficient way to effectively average many different ANN architectures, improving performance. 
+
+% Without dropout, local codependency between neurons that could lead to the ANN becoming stuck in a local minimum in the error function. By randomly removing neurons from an ANN during training, - and thus overtraining - is discouraged. The frequency with which neurons are removed is called the neuron dropout rate.
+
+
 
 \subsubsection{Data Augmentation}
 
-Machine learning algorithms perform better with more data. To increase the effective amount of data available during training, existing data can be augmented using physically realistic transformations in a process called \textit{data augmentation}. For example, a training dataset of images can be rotated, flipped, blurred, or color augmented during training. An example of horizontal flip and a blur augmentation are seen in Figure \ref{fig:cat}. Both the augmentation method and parameters of the method (e.g. degrees rotated, Gaussian blur variance) are hyperparameters.
+Machine learning algorithms perform better with more data. To increase the amount of data available, before each training iteration the input data can be randomly modified using physically realistic transformations. This process is called online \textit{data augmentation}. Data augmentation can be performed either online or offline. Online data augmentation refers to applying the augmentation during each training batch, ensuring the network never sees the same data twice. If augmenting the data is computationally expensive, this method can slow training - potentially prohibitively. Offline data augmentation is used to expand the dataset before training. This can be used to reduce computational costs during training at the expense of storing the additional data.
 
-Data augmentation can be performed either online or offline. Online data augmentation refers to applying the augmentation during each training batch, ensuring the network never sees the same data twice. If augmenting the data is computationally expensive, this method can slow training - potentially prohibitively. Offline data augmentation is used to expand the dataset before training. This can be used to reduce computational costs during training at the expense of storing the additional data.
+For example, a training dataset of images can be rotated, flipped, blurred, or brightened during training. An example of horizontal flip and a blur augmentation are seen in Figure \ref{fig:cat}. Both the augmentation method and parameters of the method (e.g. degrees rotated, Gaussian blur variance) are hyperparameters.
+
+
 
 \begin{figure}[H]
 	\centering
