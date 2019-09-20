@@ -2,6 +2,7 @@
 
 This section describes the process of choosing the architectural and regularization hyperparamers for the dense and 1D convolutional models explored in this work. This section also describes the datasets used to tune the hyperparameters.
 
+
 % Dense and convolutional models are explored for two different reasons. 
 
 \section{Training Templates Overview}
@@ -199,6 +200,8 @@ Sub-figures \ref{fig:dnn_dense_nodes_total} and \ref{fig:dnn_dense_layers_total}
 
 Sub-figures \ref{fig:dnn_scaler} shows the effect of feature preprocessing on performance. L1 normalization performs very poorly due to the numerical scale of the features. Gradients computed with learning rates explored by the hyperparameter search are too small to significantly update the weights because the features are on the order 10$^{-3}$. Features explored by the other methods are typically between 10$^{0}$ - 10$^{2}$. Scaling spectra using the $sqrt$ of their features makes networks perform well for both datasets. In particular, using $sqrt-max$ scaling moves the most models to high F1 scores.
 
+\newcommand{\bluecircle}{\raisebox{2pt}{\tikz{\filldraw[color=blue!60, fill=blue!60, very thick] circle (1.5mm);}}}
+\definecolor{darkgreen}{rgb}{0,0.3,0}
 
 \begin{figure}[H]
      \centering
@@ -257,8 +260,10 @@ Sub-figures \ref{fig:dnn_scaler} shows the effect of feature preprocessing on pe
          \caption{}
         \label{fig:dnn_activation_function}
     \end{subfigure}
-
-        \caption{Effect of hyperparameters on F1 score. Blue circles represent the simple dataset, green crosses are the complete dataset.}
+        \begin{tabular}{r@{ : }l r@{ : }l}
+			\textcolor{darkgreen}{\textbf{\large{X}}} & Complete Dataset & \bluecircle & Simple Dataset \\
+		\end{tabular}
+        \caption{Effect of hyperparameters on F1 score.}
         \label{fig:dense_hyperparameters_f1_score}
 \end{figure}
 
@@ -407,7 +412,10 @@ The effect of scaling on performance was similar to the DNN. Using $sqrt$ scalin
          \caption{Total Convolution Layers}
          \label{fig:cnn_num_conv_layers}
      \end{subfigure}  
-    \caption{Effect of CNN hyperparameters on F1 score. Blue circles represent the simple dataset, green crosses are the complete dataset.}
+	\begin{tabular}{r@{ : }l r@{ : }l}
+		\textcolor{darkgreen}{\textbf{\large{X}}} & Complete Dataset & \bluecircle & Simple Dataset \\
+	\end{tabular}
+    \caption{Effect of CNN hyperparameters on F1 score.}
 \end{figure}
 
 \begin{figure} \ContinuedFloat
@@ -435,8 +443,10 @@ The effect of scaling on performance was similar to the DNN. Using $sqrt$ scalin
         \caption{Total Dense Layers}
         \label{fig:cnn_dense_layers_total}
     \end{subfigure}
-
-        \caption{Effect of CNN hyperparameters on F1 score. Blue circles represent the simple dataset, green crosses are the complete dataset (cont.).}
+		\begin{tabular}{r@{ : }l r@{ : }l}
+			\textcolor{darkgreen}{\textbf{\large{X}}} & Complete Dataset & \bluecircle & Simple Dataset \\
+		\end{tabular}
+        \caption{Effect of CNN hyperparameters on F1 score (cont.).}
         \label{fig:cnn_hyperparameters_f1_score}
 \end{figure}
 
