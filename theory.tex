@@ -419,7 +419,7 @@ There are many methods to modify $\eta$ to encourage more efficient learning. On
 There are many ANN training algorithms that employ various learning rate schedules and momentum functions. These algorithms include but are not limited to: Nesterov's accelerated gradient \cite{nesterov1983}, simulated annealing \cite{Kirkpatrick1983}, ADADELTA (An Adaptive Learning Rate Method) \cite{ADADELTA}, and Adam (Adaptive Moment Estimation) \cite{Kingma2015}. 
 
 % Adam incorporates of parts of RMSprop and AdaGrad.
-In this thesis, the Adam optimizer was chosen as the training algorithm. The Adam optimizer is widely used due to training speedups and performance improvements on popular benchmark datasets like MNIST \cite{lecun98}, IMDB movie reviews \cite{Maas2011}, and CIFAR-10 \cite{Krizhevsky2009}. Another benefit of Adam is the introduction of effectively only one hyperparameter, the learning rate.
+In this thesis, the Adam optimizer as implemented by TensorFlow \cite{tensorflow2015-whitepaper} was chosen as the training algorithm. The Adam optimizer is widely used due to training speedups and performance improvements on popular benchmark datasets like MNIST \cite{lecun98}, IMDB movie reviews \cite{Maas2011}, and CIFAR-10 \cite{Krizhevsky2009}. Another benefit of Adam is the introduction of effectively only one hyperparameter, the learning rate.
 
 The ADAM optimizer update rule is described below. For the following, $g_t$ is the gradient of the error function with respect to the network parameters at iteration $t$, 
 \begin{equation} \label{eq:adam1}
@@ -449,7 +449,7 @@ Finally, the weight update equation is computed as
 
 %Another method is to randomly perturbing the weights during training using a simulated annealing technique \cite{Kirkpatrick1983}. Simulated annealing mimics how crystal lattices bond together in cooling metal to achieve a low energy state. As metal cools, its crystal lattice will orient itself to lower its total bond energy, but occasionally due to statistical heating sections will jump to a higher energy level. This encourages a global low energy state, as many local low energy state regions are discouraged. This process can be mimicked in a learning algorithm by randomly perturbing the weights during learning. As learning continues the network 'cools' and the frequency of weight perturbation decreases. It can be shown that given a long enough annealing schedule, the global optimum solution for a problem is guaranteed to be found \cite{Granville1994}.
 
-\subsubsection{Cost Function}
+\subsubsection{Cost Functions and Performance Metrics}
 
 The choice of cost function to train against depends on the targets the network is attempting to learn. One of the simplest error functions is the binary accuracy for classification, 
 %
@@ -476,10 +476,10 @@ E_{MSE} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2.
 %
 Because this function is differentiable, it can be used to train a gradient descent algorithm. The MSE function is appropriate when targets are any real number, as in a regression problem. This cost function can also be used to 
 
-For classification problems, the mean cross entropy, 
+For classification problems, the mean multi-class cross entropy,
 %
 \begin{equation} \label{eq:CrossEntropy}
-E_{MCE} = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n) +  (1-y_n) \log(1-\hat{y}_n), 
+E_{MCE} = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n), 
 \end{equation}
 %
 can be used. Cross entropy measures the similarity between the distributions $y_n$ and $\hat{y}_n$. Because the cross entropy treats $y_n$ and $\hat{y}_n$ as probability distributions, they are required to exist in [0,1].
