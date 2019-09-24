@@ -186,7 +186,7 @@ While automated gain stabilization methods exist, many require a clear photopeak
 
 \section{Machine Learning}
 
-In this section we describe the neural network architectures included in \verb|annsa| and parameters that affect their training.
+In this section we describe the general theory behind how neural networks operate and how we train them. We also give an overview of the neural network architectures included in \verb|annsa| and parameters that affect their training.
 
 \subsection{General Neural Network Architecture}
 
@@ -213,15 +213,56 @@ Similar to a biological neuron, the ANN neuron receives input stimuli, performs 
 As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A{_1}$, $A{_2}$, ... $A{_N}$) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by finding a function, $f$, that solves
 %
 \begin{align} \label{eq:argminW_Error}
-\underset{\mathbf{W}}{\text{argmin}} &{\text{ Error}}(f(\mathbf{Y} ; \mathbf{W} ) , \mathbf{T} ), \\
-\text{where Error } &= \text{the error metric} \nonumber \\
+\underset{\mathbf{W}}{\text{argmin}} &{\text{ E}}(f(\mathbf{X} ; \mathbf{W} ) , \mathbf{T} ) \\
+\text{where E} &= \text{error metric} \nonumber \\
 \mathbf{W} &= \text{weight matrix} \nonumber \\
-\mathbf{T} &= \text{matrix of target values} \nonumber \\
-\mathbf{Y} &= \text{matrix of input data.} \nonumber
+\mathbf{T} &= \text{target values} \nonumber \\
+\mathbf{X} &= \text{input data.} \nonumber
 \end{align}
 %
 Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analytically. Numerical methods for solving this equation include gradient descent through the back-propagation of errors \cite{Rumelhart1986}, genetic learning algorithms \cite{Yao1999}, and Newton's method \cite{Fletcher2000}. In this work, we use a gradient descent implementation called Adam \cite{Kingma2015}. Adam is described in section \ref{section_training_algs}.
 
+\subsection{Neural Network Training}
+
+The most common ANN training method is applying gradient descent to the backpropagation of errors. The gradient we attempt to minimize is the derivative of an error metric with respect to the network's weights and biases. These gradients show how the networks weights and biases need to change,
+%
+\begin{align}
+\Delta w_{j} &= - \eta \frac{dE(D)}{dw_j} \label{eq:update1} \\
+\Delta b_{j} &= - \eta \frac{dE(D)}{db_j} \label{eq:update2} \\
+\text{where E} &= \text{error metric} \nonumber \\
+\eta &= \text{learning rate,} \nonumber
+\end{align}
+% The learning rate determines the update step's size.
+to reduce the error metric for some training data,
+%
+\begin{align} \label{eq:train_data_D}
+D&={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}, \\
+\text{where } \boldsymbol{x}_{n} &= n^{th} \text{ training example} \nonumber \\
+t_n &= n^{th} \text{ training target.} \nonumber
+\end{align}
+%
+The learning rate and its affect on training are discussed further in section \ref{LearningRateSubsection}. Using these equations, the gradients can be repeatedly measured to iteratively update the weights. Updating the network with the entire dataset only once is referred to as one training epoch. Due to computational constraints involving memory, it is often infeasible to calculate the update rules in Equations \ref{eq:update1} and \ref{eq:update2} for the entire training dataset. A common technique used to train on large datasets is to iteratively update weights using disjoint subsets of the training data, called minibatches.
+
+Training occurs until an early stopping condition is met. Early stopping works by first removing a portion of the training data and defining it as testing data. The ANN is trained using the new training data while we monitor an error metric for the training and testing datasets. Early stopping conditions include ending training when a threshold on an error metric measured in the testing dataset is reached or when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs, called the early stopping patience. 
+
+Early stopping is needed to end training when the model begins to overfit or learning plateaus. Overfitting occurs when the testing dataset's error increases and the training dataset's error decreases, illustrated in Figure \ref{fig:training_testing_error}. This indicates that the model is memorizing the training data and not generalizing to examples not seen during training. Generalization is a term used to describe a model's performance on unseen data. Learning can also plateau when the ANN's weight updates are not large enough to escape a minimum in the error metric measured on the training dataset.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.65\linewidth]{images/training_testing_error_v2}
+	\caption{Example training and testing error curves.}
+	\label{fig:training_testing_error}
+\end{figure}
+
+A common technique for choosing training and testing data is k-folds cross validation, illustrated in Figure \ref{fig:kfolds}. In this process, 
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 140 310 0,clip,width=0.7\linewidth]{images/kfolds}
+	\caption{An example of k-folds cross validation.}
+	\label{fig:kfolds}
+\end{figure}
 
 \subsection{Simple Neural Network Example}
 
@@ -251,30 +292,8 @@ The geometry of the above network's operation is illustrated for an example data
 
 The classes in this example dataset are linearly separable, meaning lines can be drawn completely separating each class. If the classes were not linearly separable, additional hidden layers would be necessary to compute the function. It has been shown that additional hidden layers allow the creation of arbitrary decision boundaries \cite{Hornik1991}. 
 
-\subsection{Neural Network Training}
 
-The most common ANN training method is applying gradient descent to the backpropagation of errors. The gradient we attempt to minimize is the derivative of an error metric with respect to the network's weights and biases. These gradients show how the networks weights and biases need to change,
-%
-\begin{align}
-\Delta w_{j} &= - \eta \frac{dE}{dw_j} \label{eq:update1} \\
-\Delta b_{j} &= - \eta \frac{dE}{db_j} \label{eq:update2} \\
-\text{where E} &= \text{error metric} \nonumber \\
-\eta &= \text{learning rate,} \nonumber
-\end{align}
-% The learning rate determines the update step's size.
-to reduce the error metric for some data. The learning rate and its affect on training are discussed further in section \ref{LearningRateSubsection}. Through reducing the error, the network learns a task for some data.
-
-Backpropagation uses the chain rule to find these derivatives for some training data and target, 
-%
-\begin{align} \label{eq:train_data_D}
-D&={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}, \\
-\text{where } \boldsymbol{x}_{n} &= n^{th} \text{ training example} \nonumber \\
-t_n &= n^{th} \text{ training target.} \nonumber
-\end{align}
-%
-Due to computational constraints, it is often infeasible to calculate the update rules in Equations \ref{eq:update1} and \ref{eq:update2} for the entire training dataset.
- 
-Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function, E$_{MSE}$, on the network described in Equation \ref{eq:single_layer_eq_sum}, we apply the chain rule to find an expression for
+Backpropagation uses the chain rule to find these derivatives for some training data and target. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function, E$_{MSE}$, on the network described in Equation \ref{eq:single_layer_eq_sum}, we apply the chain rule to find an expression for
 %
 \begin{align} \label{eq:dMSE}
 \frac{dE_{MSE}}{dw_j} &= \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}.
@@ -304,7 +323,7 @@ The update rule for the bias is found using
 \frac{dE_{MSE}}{db_j} = \frac{dE_{MSE}}{dy_i} \frac{dy_i}{db_j}.
 \end{equation}
 %
-The expression for $\frac{dE_{MSE}}{dy_i}$ is known from Equation \ref{dy_i/dw_i}. Evaluating the other derivative in \ref{eq:dE_MSE/db_j} we find 
+The expression for $\frac{dE_{MSE}}{dy_i}$ is known from Equation \ref{dy_i/dw_i}. Evaluating the other derivative in \ref{eq:dE_MSE/db_j} we find
 %
 \begin{align}
 \frac{dy_i}{db_j} &= \frac{d}{db_j} \tanh(\boldsymbol{w}'\boldsymbol{x}_i + b) \\
@@ -364,19 +383,6 @@ and
 %
 Using Equations \ref{eq:CrossEntropy1} and \ref{eq:CrossEntropy2}, the weights can be updated for a single backpropogation iteration. 
 
-% Other early stopping methods include 
-
-
-% Where this simple accuracy test is not applicable, such as for regression training sets, a condition based on the ANN training error metric can be used.
-
-ANNs require some stopping condition to conclude training. Early stopping works by first removing a small portion of the training data and defining it as testing data. The ANN is trained using the new training data while some error metric for both the training and testing set are recorded. As training progresses, the ANN likely will overfit to the training data, leading to an increase in error for the testing dataset. This process is illustrated in Figure \ref{fig:training_testing_error}. Stopping conditions include ending training when a threshold on an error metric is reached or ending training when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs. Early stopping has the benefit of preventing overfitting and encouraging generalization.
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.85\linewidth]{images/training_testing_error_v2}
-	\caption{Ideal training and testing error curves.}
-	\label{fig:training_testing_error}
-\end{figure}
 
 \subsection{Convolutional Neural Networks}
 
