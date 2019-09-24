@@ -243,18 +243,18 @@ t_n &= n^{th} \text{ training target.} \nonumber
 %
 The learning rate and its affect on training are discussed further in section \ref{LearningRateSubsection}. Using these equations, the gradients can be repeatedly measured to iteratively update the weights. Updating the network with the entire dataset only once is referred to as one training epoch. Due to computational constraints involving memory, it is often infeasible to calculate the update rules in Equations \ref{eq:update1} and \ref{eq:update2} for the entire training dataset. A common technique used to train on large datasets is to iteratively update weights using disjoint subsets of the training data, called minibatches.
 
-Training occurs until an early stopping condition is met. Early stopping works by first removing a portion of the training data and defining it as testing data. The ANN is trained using the new training data while we monitor an error metric for the training and testing datasets. Early stopping conditions include ending training when a threshold on an error metric measured in the testing dataset is reached or when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs, called the early stopping patience. 
+Training occurs until an early stopping condition is met. Early stopping works by first removing a portion of the training data and defining it as validation data. The ANN is trained using the new training data while we monitor an error metric for the training and validation datasets. Early stopping conditions include ending training when a threshold on an error metric measured in the validation dataset is reached or when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs, called the early stopping patience. 
 
-Early stopping is needed to end training when the model begins to overfit or learning plateaus. Overfitting occurs when the testing dataset's error increases and the training dataset's error decreases, illustrated in Figure \ref{fig:training_testing_error}. This indicates that the model is memorizing the training data and not generalizing to examples not seen during training. Generalization is a term used to describe a model's performance on unseen data. Learning can also plateau when the ANN's weight updates are not large enough to escape a minimum in the error metric measured on the training dataset.
+Early stopping is needed to end training when the model begins to overfit or learning plateaus. Overfitting occurs when the validation dataset's error increases and the training dataset's error decreases, illustrated in Figure \ref{fig:training_testing_error}. This indicates that the model is memorizing the training data and not generalizing to examples not seen during training. Generalization is a term used to describe a model's performance on unseen data. Learning can also plateau when the ANN's weight updates are not large enough to escape a minimum in the error metric measured on the training dataset.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.65\linewidth]{images/training_testing_error_v2}
-	\caption{Example training and testing error curves.}
+	\includegraphics[trim=0 190 390 0,clip,width=0.65\linewidth]{images/training_testing_error_v2}
+	\caption{Example training and validation error curves.}
 	\label{fig:training_testing_error}
 \end{figure}
 
-A common technique for choosing training and testing data is k-folds cross validation, illustrated in Figure \ref{fig:kfolds}. In this process, 
+A common technique for choosing training and validation data is k-folds cross validation, illustrated in Figure \ref{fig:kfolds}. In this process, $\frac{1}{k}$ of all available data is split into a validation dataset and the rest is defined as the training dataset. The model is then trained using the training data and the error metric for the validation dataset is recorded. The process of splitting the dataset is repeated k times and the average error metric of the validation dataset is used to measure the generalization 
 
 
 \begin{figure}[H]
