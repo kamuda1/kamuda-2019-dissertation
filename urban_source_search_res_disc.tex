@@ -55,15 +55,6 @@ Figure \ref{fig:learning_curves_easy} shows the learning curves for each simple 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\linewidth]{images/learning_curves_easy}
-	\begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l}
-    Testing Error & \blackline & Training Error & \blackdotline
-    \end{tabular}
-    \begin{tabular}{r@{: }l}
-    Online Data Augmentation Error & \blackdashdotline
-    \end{tabular}
 	\caption{Learning curves for each simple model.}
 	\label{fig:learning_curves_easy}
 \end{figure}
@@ -78,15 +69,6 @@ The training errors for the autoencoder models do not saturate as quickly as the
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\linewidth]{images/learning_curves_full}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l}
-    Testing Error & \blackline & Training Error & \blackdotline
-    \end{tabular}
-    \begin{tabular}{r@{: }l}
-    Online Data Augmentation Error & \blackdashdotline
-    \end{tabular}
 	\caption{Learning curves for each complete model.}
 	\label{fig:learning_curves_full}
 \end{figure}
@@ -101,19 +83,17 @@ In this section we analyze the generalization performance of each machine learni
 \centering
 \caption{Default parameters used for all generalization datasets.}
 \label{table:default_sim_params}
-\begin{tabular}{cc}
+\begin{tabular}{ll}
 % \cline{2-3}
 \hline
-Hyperparameter &  Value \\ \hline
-\multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 175.0\\ 
-\multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 100.0\\ 
-\multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.0\\ 
-\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 200 keV Attenuated)\end{tabular}} & 0\% \\ 
-% \multicolumn{1}{c}{Integration Time {[}s{]}} & 60 - 600 \\ 
-\multicolumn{1}{c}{Calibration - Offset (channels)} & 0 \\ 
-\multicolumn{1}{c}{Calibration - Gain} & 1.0 \\ 
-% \multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 \\ 
-\multicolumn{1}{c}{Background Counts Per Second} & 200 \\ \hline 
+\textbf{Simulation Parameter} &  \textbf{Value} \\ \hline
+Source-Detector Distance [cm] & 175.0\\ 
+Source-Detector Height [cm] & 100.0\\ 
+FWHM 662 keV [s] & 7.0\\ 
+Shielding [\% 200 keV Attenuated] & 0\% \\ 
+Calibration - Offset [channels] & 0 \\ 
+Calibration - Gain & 1.0 \\ 
+Background Counts Per Second & 200 \\ \hline 
 \end{tabular}
 \end{table}
 
