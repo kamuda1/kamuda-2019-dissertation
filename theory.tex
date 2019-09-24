@@ -186,7 +186,7 @@ While automated gain stabilization methods exist, many require a clear photopeak
 
 \section{Machine Learning}
 
-In this section we describe the general theory behind how neural networks operate and how we train them. We also give an overview of the neural network architectures included in \verb|annsa| and parameters that affect their training.
+In this section we describe the general theory behind how neural networks operate, how to train them, and how to optimize their architectures for a task. We also give an overview of the neural network architectures studied in this work and parameters that affect their training.
 
 \subsection{General Neural Network Architecture}
 
@@ -249,12 +249,12 @@ Early stopping is needed to end training when the model begins to overfit or lea
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[trim=0 190 390 0,clip,width=0.65\linewidth]{images/training_testing_error_v2}
+	\includegraphics[trim=0 190 390 0,clip,width=0.7\linewidth]{images/training_testing_error_v2}
 	\caption{Example training and validation error curves.}
 	\label{fig:training_testing_error}
 \end{figure}
 
-A common technique for choosing training and validation data is k-folds cross validation, illustrated in Figure \ref{fig:kfolds}. In this process, $\frac{1}{k}$ of all available data is split into a validation dataset and the rest is defined as the training dataset. The model is then trained using the training data and the error metric for the validation dataset is recorded. The process of splitting the dataset is repeated k times and the average error metric of the validation dataset is used to measure the generalization 
+A common technique for choosing training and validation data is k-folds cross validation. Figure \ref{fig:kfolds} illustrates 5-folds cross validation. In this process, $\frac{1}{k}$ of all available data is split into a validation dataset and the rest is defined as the training dataset. The model is then trained using the training data and the validation dataset's error is recorded. The process of splitting the dataset is repeated k times. The average error metric of each trained model on the validation dataset is used to estimate the generalization capabilities of the overall model. In this work, we use 5-folds cross validation to 
 
 
 \begin{figure}[H]
@@ -384,60 +384,11 @@ and
 Using Equations \ref{eq:CrossEntropy1} and \ref{eq:CrossEntropy2}, the weights can be updated for a single backpropogation iteration. 
 
 
-\subsection{Convolutional Neural Networks}
-
-Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors (e.g. manually creating features using edge and line detectors for face recognition) and a simple trainable classifier like a linear model or naive Bayes. There are a number of issues with creating and using custom feature extractors. Robust feature extraction algorithms often require extensive domain knowledge - making them expensive to create. There is rarely a guarantee that these features will be optimal for classification or regression tasks. A classifier created around suboptimal features has the potential to perform poorly in real-world conditions or similar problems.
-
-Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolutional layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared among classes. This weight sharing decreases the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
-
-Figure \ref{fig:cnn_mnist_lecun98} shows one of the first successful CNN architectures, LeNet-5 \cite{Lecun1998}, which classified 32x32 images of handwritten digits using two convolution and average pooling layers followed by two dense layers and an output. This was the first example of a machine learning algorithm creating custom filters and a classification model for the MNIST dataset.
-
-% AlexNet \cite{Krizhevsky2012} was the first exploration into wider and deeper CNNs. 
-
-% Much more work has been done furthering CNNs. VGG \cite{Simonyan2014} showed that smaller filter sizes are good. 
-
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.85\linewidth]{images/cnn_mnist_lecun98}
-	\caption{Architecture of LeNet-5, a CNN created for digit recognition. Image reproduced from \cite{Lecun1998}}
-	\label{fig:cnn_mnist_lecun98}
-\end{figure}
-
-\section{Autoencoders} \label{Autoencoders}
-% \cite{CHARTE2018} is a practical guide to autoencoders. Great resource.
-
-Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an \textit{encoding network} and a \textit{decoding network}. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and reproduces the input signal, $X'$. Once trained, the encoder can pre-train other neural networks or serve as a feature extractor \cite{Erhan2010,CHARTE2018}. 
-
-Methods to encourage the network to learn useful features include forcing the autoencoder to perform denoising \cite{Vincent2008, Vincent2010} and by using an encoding smaller than the input signal (also called an undercomplete autoencoder). Denoising autoencoders corrupt their input with noise, making the autoencoder learn more robust features than those used for simply copying the input. 
-
-% \cite{Masci2011} demonstrated that stacking convolution layers made a good autoencoder.
-
-Other commonly used feature extraction methods are principal component analysis (PCA) \cite{Jolliffe2002}, and linear discriminant analysis (LDA) \cite{Welling2007}. PCA attempts to reduce the dimensionality of a dataset into linearly uncorrelated variables. Using a few of these principle components, the data may be represented in a reduced space that contains most of the information present in the original data. Another linear feature extraction method is LDA. LDA is a supervised feature extraction method that finds linear combinations of features that can be used to separate classes. Non-linear feature extraction methods, such as kernel PCA, also exist. Kernel PCA applies a non-linear transform to the input space and applies PCA to the data in this transformed space. For kernel PCA to perform well, the correct kernel must be chosen for a given problem, which is a non-trivial task.
-
-% While autoencoders were touched on in the uranium enrichment work, they have not been explored thoroughly. There is some evidence that the autoencoder was overtrained to the A special case of denoising autoencoders will be explored for the ANSI dataset. 
-
-
-
-% In addition to using fully connected autoencoders, a 1-D convolutional autoencoder will also be explored. A DNN does not assume the input has local spatial structure, while a CNN does. Because gamma-ray spectra have local spatial structure in the form of photopeaks and Compton continua, it may be better to use a CNN over a DNN \cite{CHARTE2018}. To test this, the experiment described above will be repeated using a 1-D convolutional autoencoder.
-
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\linewidth]{images/Autoencoder_structure}
-\caption{An example of an autoencoder. Image reproduced from \cite{wiki:AutoencoderStructure}.}
-\label{fig:Autoencoder_structure}
-\end{figure}
-
-
-% Fully connected ANNs do not assume there is local spatial structure in a signal, so the fully connected ANN would need to learn that there is local structure. Convolutional ANNs assume there is local structure, and the extent of this structure can be changed by changing the length of the convolutional ANNs filters.
-
-% Once the autoencoder is trained, the hidden layer and output layer (representing the reconstructed spectrum) will be used to train a separate ANN for isotope identification and quantification. The performance of these ANNs will be compared.
-
-
-
 \subsection{Hyperparameters}
 
 In addition to the weights connecting neurons, \textit{hyperparameters} can modify ANN behavior. Hyperparameters determine both the network's structure (number of layers, number of nodes in each layer, activation function for each layer) and how the model learns (learning rate, momentum, loss function). The following section discusses various hyperparameters and their effects on ANN learning.
+
+The hyperparameters and their ranges used to optimize dense and convolutional models in this dissertation are shown in Tables \ref{table:hyperparameter_dataset_parameters_DNN} and \ref{table:hyperparameter_dataset_parameters_CNN}, respectively. Methods for hyperparameter  optimization are discussed in Section \ref{section_hp_opt}. The hyperparameter ranges explored in this dissertation are base on our published work \cite{kamuda2017, kamuda2018, kamudaThesis2017}.
 
 \subsubsection{Learning Rate} \label{LearningRateSubsection}
 
@@ -462,7 +413,7 @@ Another method to speed up learning is to add a momentum hyperparameter, $\mu$, 
 \end{equation}
 %
 Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when the weights are updated at large steps, far from an optima, but will decrease near an optimum, allowing slower learning near an optimum. 
- 
+
 \subsubsection{Training Algorithms} \label{section_training_algs}
 
 There are many ANN training algorithms that employ various learning rate schedules and momentum functions. These algorithms include but are not limited to: Nesterov's accelerated gradient \cite{nesterov1983}, simulated annealing \cite{Kirkpatrick1983}, ADADELTA (An Adaptive Learning Rate Method) \cite{ADADELTA}, and Adam (Adaptive Moment Estimation) \cite{Kingma2015}. 
@@ -505,14 +456,14 @@ The choice of cost function to train against depends on the targets the network 
 \begin{align} \label{eq:Binary_accuracy}
 E_{Binary} &= {\frac{1} N} \sum_{n=1}^N \mathds{1}_[\hat{y}_n \neq y_n ], \\
 \text{where } N &= \text{ number of output neurons} \nonumber \\
-y_n &= n^{th} \text{ output neuron's ground truth.} \nonumber \\
+y_n &= n^{th} \text{ output neuron's ground truth} \nonumber \\
 \hat{y}_n &= n^{th} \text{ output neuron's value} \nonumber \\
 \mathds{1}_A &= \text{indicator function} \nonumber \\
 &= \nonumber
-	\begin{cases}
-	1  & \quad \text{if } A \text{ is True}\\
-	0  & \quad \text{if } A \text{ is False.}
-	\end{cases} \nonumber
+\begin{cases}
+1  & \quad \text{if } A \text{ is True}\\
+0  & \quad \text{if } A \text{ is False.}
+\end{cases} \nonumber
 \end{align}
 % where N is the total number of output neurons, $y_n$ is the ground truth of the n$^{th}$ output, and $\hat{y}_n$ is the ANN output of the n$^{th}$ output neuron. 
 While this is a simple function, it cannot be used to train a gradient descent algorithm because it is discontinuous (there is no incremental indication that a model is improving).
@@ -523,12 +474,12 @@ A simple differentiable cost function is the mean squared error function,
 E_{MSE} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2.
 \end{equation}
 %
-Because this function is differentiable, it can be used to train a gradient descent algorithm. The MSE function is appropriate when targets are any real number, as in a regression problem. 
+Because this function is differentiable, it can be used to train a gradient descent algorithm. The MSE function is appropriate when targets are any real number, as in a regression problem. This cost function can also be used to 
 
-For classification problems, the average cross entropy, 
+For classification problems, the mean cross entropy, 
 %
 \begin{equation} \label{eq:CrossEntropy}
-E = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n) +  (1-y_n) \log(1-\hat{y}_n), 
+E_{MCE} = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n) +  (1-y_n) \log(1-\hat{y}_n), 
 \end{equation}
 %
 can be used. Cross entropy measures the similarity between the distributions $y_n$ and $\hat{y}_n$. Because the cross entropy treats $y_n$ and $\hat{y}_n$ as probability distributions, they are required to exist in [0,1].
@@ -586,13 +537,13 @@ For example, a training dataset of images can be rotated, flipped, blurred, or b
 	\label{fig:cat}
 \end{figure}
 
-\subsection{Hyperparameter Optimization}
+\subsection{Hyperparameter Optimization} \label{section_hp_opt}
 
 In general, ANNs have many hyperparameters that require optimization. Optimizing these hyperparameters will lead to more efficient training and more accurate performance when training is concluded. There are several different methods to perform hyperparameter optimization for an ANN. These methods include manual optimization, exhaustive grid search, and random parameter search.
 
 Manually optimizing parameters is necessary when developing a novel algorithm. This involves changing hyperparameters and observing training performance and validation dataset error. Ideally, the ANN should train quickly and have a low error on a validation dataset. For many parameters `rule of thumb' values exist that can be used to find parameters that work to some degree. Due to the large hyperparameter space, a manual search is cost prohibitive if further optimization is desired.
 
-Once a range of parameters is determined through a manual search, multiple methods are available to explore the parameter space for an optimal solution. One method is an exhaustive grid search. In a grid search the parameter space is divided into a uniform grid and the joint performance of all parameters is tested. The grid search method is ineffective for two reasons. First, neural networks may have a large number of hyperparameters that need to be explored, and the computational requirement to explore the hyperparameter space increases exponentially with increasing hyperparamters. Second, in practice only a few hyperparameters dominate performance, but the dominating hyperparameters are different for different applications. A grid search may under represent the importance of key hyperparamters, as seen in Figure \ref{fig:Bergstra12a_hyperparameter_grid_vs_random}.  While this method works, it has been shown that a random search in the hyperparameter target domain finds better hyperparameters quicker than testing equally distributed points in the chosen range \cite{Bergstra2012}. It can also be shown that given 60 random samples over some space with a finite minimum, the minimum of those 60 random samples is within 5\% of the true minimum with 95\% probability \cite{Zheng2015}.% This means that given a range of hyperparameters, the best performing hyperparameter combination out of 60 randomly sampled points is very likely to be close to optimal.
+Once a range of parameters is determined through a manual search, multiple methods are available to explore the parameter space for an optimal solution. One method is an exhaustive grid search. In a grid search the parameter space is divided into a uniform grid and the joint performance of all parameters is tested. The grid search method is ineffective for two reasons. First, neural networks may have a large number of hyperparameters that need to be explored, and the computational requirement to explore the hyperparameter space increases exponentially with increasing hyperparamters. Second, in practice only a few hyperparameters dominate performance, but the dominating hyperparameters are different for different applications. A grid search may under represent the importance of key hyperparamters, as seen in Figure \ref{fig:Bergstra12a_hyperparameter_grid_vs_random}.  While this method works, it has been shown that a random search in the hyperparameter target domain finds better hyperparameters quicker than testing equally distributed points in the chosen range \cite{Bergstra2012}. It can also be shown that given 60 random samples over some space with a finite minimum, the minimum of those 60 random samples is within 5\% of the true minimum with 95\% probability \cite{Zheng2015}.
 
 \begin{figure}[H]
 	\centering
@@ -613,6 +564,62 @@ To analyze the performance of a random search, a random hyperparameter efficienc
 	\caption{Example random efficiency curves for a neural network \cite{Bergstra2012}.}
 	\label{fig:Bergstra_random_efficiency_curve_DNN}
 \end{figure}
+
+\subsection{Additional Machine Learning Models}
+
+In addition to dense models, we also include convolutional and autoencoder models in this work.
+
+\subsubsection{Convolutional Neural Networks}
+
+Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors (e.g. manually creating features using edge and line detectors for face recognition) and a simple trainable classifier like a linear model or naive Bayes. There are a number of issues with creating and using custom feature extractors. Robust feature extraction algorithms often require extensive domain knowledge - making them expensive to create. There is rarely a guarantee that these features will be optimal for classification or regression tasks. A classifier created around suboptimal features has the potential to perform poorly in real-world conditions or similar problems.
+
+Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolutional layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared among classes. This weight sharing decreases the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
+
+Figure \ref{fig:cnn_mnist_lecun98} shows one of the first successful CNN architectures, LeNet-5 \cite{Lecun1998}, which classified 32x32 images of handwritten digits using two convolution and average pooling layers followed by two dense layers and an output. This was the first example of a machine learning algorithm creating custom filters and a classification model for the MNIST dataset.
+
+% AlexNet \cite{Krizhevsky2012} was the first exploration into wider and deeper CNNs. 
+
+% Much more work has been done furthering CNNs. VGG \cite{Simonyan2014} showed that smaller filter sizes are good. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\linewidth]{images/cnn_mnist_lecun98}
+	\caption{Architecture of LeNet-5, a CNN created for digit recognition. Image reproduced from \cite{Lecun1998}}
+	\label{fig:cnn_mnist_lecun98}
+\end{figure}
+
+\subsubsection{Autoencoders} \label{Autoencoders}
+% \cite{CHARTE2018} is a practical guide to autoencoders. Great resource.
+
+Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an \textit{encoding network} and a \textit{decoding network}. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and reproduces the input signal, $X'$. Once trained, the encoder can pre-train other neural networks or serve as a feature extractor \cite{Erhan2010,CHARTE2018}. 
+
+Methods to encourage the network to learn useful features include forcing the autoencoder to perform denoising \cite{Vincent2008, Vincent2010} and by using an encoding smaller than the input signal (also called an undercomplete autoencoder). Denoising autoencoders corrupt their input with noise, making the autoencoder learn more robust features than those used for simply copying the input. 
+
+% \cite{Masci2011} demonstrated that stacking convolution layers made a good autoencoder.
+
+Other commonly used feature extraction methods are principal component analysis (PCA) \cite{Jolliffe2002}, and linear discriminant analysis (LDA) \cite{Welling2007}. PCA attempts to reduce the dimensionality of a dataset into linearly uncorrelated variables. Using a few of these principle components, the data may be represented in a reduced space that contains most of the information present in the original data. Another linear feature extraction method is LDA. LDA is a supervised feature extraction method that finds linear combinations of features that can be used to separate classes. Non-linear feature extraction methods, such as kernel PCA, also exist. Kernel PCA applies a non-linear transform to the input space and applies PCA to the data in this transformed space. For kernel PCA to perform well, the correct kernel must be chosen for a given problem, which is a non-trivial task.
+
+% While autoencoders were touched on in the uranium enrichment work, they have not been explored thoroughly. There is some evidence that the autoencoder was overtrained to the A special case of denoising autoencoders will be explored for the ANSI dataset. 
+
+
+
+% In addition to using fully connected autoencoders, a 1-D convolutional autoencoder will also be explored. A DNN does not assume the input has local spatial structure, while a CNN does. Because gamma-ray spectra have local spatial structure in the form of photopeaks and Compton continua, it may be better to use a CNN over a DNN \cite{CHARTE2018}. To test this, the experiment described above will be repeated using a 1-D convolutional autoencoder.
+
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.8\linewidth]{images/Autoencoder_structure}
+\caption{An example of an autoencoder. Image reproduced from \cite{wiki:AutoencoderStructure}.}
+\label{fig:Autoencoder_structure}
+\end{figure}
+
+
+% Fully connected ANNs do not assume there is local spatial structure in a signal, so the fully connected ANN would need to learn that there is local structure. Convolutional ANNs assume there is local structure, and the extent of this structure can be changed by changing the length of the convolutional ANNs filters.
+
+% Once the autoencoder is trained, the hidden layer and output layer (representing the reconstructed spectrum) will be used to train a separate ANN for isotope identification and quantification. The performance of these ANNs will be compared.
+
+
+
 
 \section{ANNSA}
 
