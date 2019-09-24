@@ -404,15 +404,15 @@ The learning rate , $\eta$, affects the magnitude of each weight update. If $\et
 
 There are many methods to modify $\eta$ to encourage more efficient learning. One method to increase the speed of learning is to start with a large $\eta$ and decrease $\eta$ as a function of iteration number. Ideally, this method would lead to quick initial learning when far from an optima and slower learning near an optima to more finely explore it. The difficulty with this method is the requirement for a function that slows the learning rate efficiently for a given problem.
 
-\subsubsection{Learning Momentum}
+% \subsubsection{Learning Momentum}
 
-Another method to speed up learning is to add a momentum hyperparameter, $\mu$, to the weight update algorithm \cite{Yu1997}, 
+% Another method to speed up learning is to add a momentum hyperparameter, $\mu$, to the weight update algorithm \cite{Yu1997}, 
 %
-\begin{equation} \label{eq:update_momentum}
-\Delta w_{ij}(n) = - \eta \frac{dE_{MSE}}{dw_j} +\mu \Delta w_{ij}(n-1).
-\end{equation}
+% \begin{equation} \label{eq:update_momentum}
+% \Delta w_{ij}(n) = - \eta \frac{dE_{MSE}}{dw_j} +\mu \Delta w_{ij}(n-1).
+% \end{equation}
 %
-Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when the weights are updated at large steps, far from an optima, but will decrease near an optimum, allowing slower learning near an optimum. 
+% Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when % the weights are updated at large steps, far from an optima, but will decrease near an optimum, allowing slower learning near an optimum. 
 
 \subsubsection{Training Algorithms} \label{section_training_algs}
 
