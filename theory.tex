@@ -90,8 +90,6 @@ When a photon with energy above 1022 keV (two times the rest mass energy of an e
 
 The energy resolution of a radiation detector determines the photopeak's distribution, specifically the full width of its Gaussian peak at half of its maximum value (FWHM), at a location in a spectrum. The FWHM is measured either in units of energy or as a percent of the peak's energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. The variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit \cite{knoll}. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as a standard for comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are compared in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum as measured by scintillation and semiconductor detectors. 
 
-Gamma-ray spectroscopy tasks in low resolution detectors, such as NaI(Tl), are complicated by overlapping photopeak signals.
-
 % pg 345 knoll
 \begin{table}[H]
 \centering
@@ -113,19 +111,19 @@ gamma-ray detector types. Reproduced from \cite{RIIDMarketSurveyReport}.}
 \begin{figure}[H]
 \centering
 \includegraphics[trim=0 0 0 0, clip, width=1.0\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
-% \includegraphics[width=0.99\linewidth]{images/Ba133_spectrum_different_detector_materials_Market_Survey_Report}
-\caption{$^{133}$Ba spectrum measured using common detector materials.  Reproduced from \cite{RIIDMarketSurveyReport}.}
+\caption{$^{133}$Ba spectrum measured using common detector materials. Reproduced from \cite{RIIDMarketSurveyReport}.}
 \label{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report}
 \end{figure}
 
-
+Gamma-ray spectroscopy tasks in low resolution detectors, such as NaI(Tl), are complicated by overlapping photopeaks. Without well distinguished photopeaks, the signal from a source may be indistinguishable from noise or background. For example, in Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} the two photopeaks around 600 keV are only clearly distinguishable in the high resolution HPGe detector. Wide photopeaks are also more likely to overlap with neighbors, potentially making them indistinguishable from each other, further complicating identification.
 
 
 \subsection{Background Radiation}
 
 % In contrast, it is extremely difficult to measure a trustworthy background spectrum in the field. Moving or reorienting the detector to obtain a source7free background measurement will frequently produce a measurement that will likely differ significantly, and sometimes even exceeding, the true background at the source position. It is not at all unusual for environmental background to vary significantly over distances of a few meters. As a result, we typically confine our analyses to the foreground spectrum, as generally reflected in this paper. https://e-reports-ext.llnl.gov/pdf/770028.pdf
 
-A significant challenge to automated gamma-ray spectroscopy is the stochastic nature of the background radiation field. Background radiation comes from many sources including cosmic radiation and radioisotopes naturally distributed in soil and building materials. Isotopes in the soil primarily come from the uranium decay series, thorium  decay series, and $^{40}$K. The gamma-ray spectra from each of these sources are shown in Figure \ref{fig:background_components}. These background signals span the range of energies useful to gamma-ray spectroscopy, adding multiple sources of independent noise and complicating analysis.
+A significant challenge to automated gamma-ray spectroscopy is the stochastic nature of the background radiation field. 
+Spatial and temporal changes in background alter a gamma-ray spectrum's continuum and add a source of unwanted photopeaks. Background radiation comes from many sources including cosmic radiation and radioisotopes naturally distributed in soil and building materials. Isotopes in the soil primarily come from the uranium decay series, thorium  decay series, and $^{40}$K. The gamma-ray spectra from each of these sources are shown in Figure \ref{fig:background_components}. These background signals span the range of energies useful to gamma-ray spectroscopy, adding multiple sources of independent noise and complicating analysis.
 
 \begin{figure}[H]
 \centering
@@ -161,10 +159,6 @@ Background also changes over time, largely due to the decay products of $^{222}$
 \label{fig:USGS_k_conc}
 \end{figure}
 
-% \USGS Open-File Report 2005-1413: Terrestrial Radioactivity and
-%Gamma-ray Exposure in the United States and Canada," 2013.
-% [Online]. Available: http://pubs.usgs.gov/of/2005/1413/maps.htm
-
 
 \subsection{Effect of Temperature on Calibration and Resolution}
 
@@ -187,20 +181,16 @@ While automated gain stabilization methods exist, many require a clear photopeak
 \centering
 \includegraphics[width=0.95\linewidth]{images/temp-dependence-resolution-moszynski}
 \caption{The energy resolution of 662 keV $\gamma$-rays measured with a 25mm x 30mm NaI(Tl) crystal using 2 $\mu$s and 12 $\mu$s peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
-
-
-% \caption{The energy resolution measured for 662 keV $\gamma$-rays with a 25mm × 30mm NaI(Tl) crystal at 2 and 12 $\mu$s peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
 \label{fig:temp-dependence-resolution-moszynski}
 \end{figure}
 
 \section{Machine Learning}
 
-In this section, neural network architectures and parameters that affect training will be described. Models will include dense, convolutional, and autoencoder architectures. 
+In this section we describe the neural network architectures included in \verb|annsa| and parameters that affect their training.
 
 \subsection{General Neural Network Architecture}
 
-% Node/neruon, get this lingo straight here
-An artificial neural network (ANN0 is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}{^M}$ to $\mathbb{R}{^N}$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not directly observed in the input or output layers. Each neuron in adjacent layers is connected by a weight matrix, represented in Figure \ref{fig:Network} by arrows connecting neurons. 
+An artificial neural network (ANN) is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}{^M}$ to $\mathbb{R}{^N}$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not directly observed in the input or output layers. Each neuron in adjacent layers is connected by a weight matrix, represented in Figure \ref{fig:Network} by arrows connecting neurons.
 
 
 \begin{figure}[H]
@@ -230,12 +220,12 @@ As seen in Figure \ref{fig:Node}, each neuron operates by summing the products o
 \mathbf{Y} &= \text{matrix of input data.} \nonumber
 \end{align}
 %
-Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analytically. Numerical methods for solving this equation include gradient descent through the back-propagation of errors \cite{Rumelhart1986}, genetic learning algorithms \cite{Yao1999}, and Newton's method \cite{Fletcher2000}.
+Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analytically. Numerical methods for solving this equation include gradient descent through the back-propagation of errors \cite{Rumelhart1986}, genetic learning algorithms \cite{Yao1999}, and Newton's method \cite{Fletcher2000}. In this work, we use a gradient descent implementation called Adam \cite{Kingma2015}. Adam is described in section \ref{section_training_algs}.
 
 
 \subsection{Simple Neural Network Example}
 
-An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN is a function that takes two real-valued inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron are represented by $w_{ij}$. An extra node, called the bias, is added to make the model affine. The bias activation is set to a constant value of 1, allowing the bias to be trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range [-1, 1]. Using this function, if an input results in the $y_{j}^{th}$ output neuron rising above zero, that input can be classified as part of the ${j}^{th}$ class (or as not a part of the ${j}^{th}$ class if the output is below zero). Other functions that map outputs values to arbitrary bounds (e.g. other sigmoid functions or an unbounded linear function) can be used. The equation for the output corresponding to the $j^{th}$ class is 
+An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN is a function that takes two real-valued inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron are represented by $w_{ij}$. An extra node, called the bias, is added to make the layer affine. Without the bias, the layer would be linear, meaning an input vector of zeros could only be mapped to another vector of zeros. The bias allows for more expressive mappings, adding to the representational power of the model. The bias activation is set to a constant value of 1, allowing the bias to be trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range [-1, 1]. Using this function, if an input results in the $y_{j}^{th}$ output neuron rising above zero, that input can be classified as part of the ${j}^{th}$ class (or as not a part of the ${j}^{th}$ class if the output is below zero). Other functions that map outputs values to arbitrary bounds (e.g. other sigmoid functions or an unbounded linear function) can be used. The equation for the output corresponding to the $j^{th}$ class is 
 %
 \begin{align} \label{eq:single_layer_eq_sum}
 y_j &= \tanh(\sum_i x_i w_{ij} + b_j), \\
@@ -263,17 +253,18 @@ The classes in this example dataset are linearly separable, meaning lines can be
 
 \subsection{Neural Network Training}
 
-One of the most common methods of training an ANN is through error backpropagation, a method used to minimize an error function with respect to a set of weights connecting neurons. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function, E$_{MSE}$, on the network described in Equation \ref{eq:single_layer_eq_sum}, we would apply the chain rule to find an expression for
+One of the most common ANN training method is applying gradient descent to the backpropagation of errors. The gradient we attempt to minimize is the derivative of an error metric with respect to the network's weights. Backpropagation uses the chain rule to find this derivative for some training data and target, 
 %
-\begin{align} \label{eq:dMSE}
-\frac{dE_{MSE}}{dw_j} &= \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}
-\end{align}
-%
-with training data defined as %
 \begin{align} \label{eq:train_data_D}
 D&={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}, \\
 \text{where } \boldsymbol{x}_{n} &= n^{th} \text{ training example} \nonumber \\
 t_n &= n^{th} \text{ training target.} \nonumber
+\end{align}
+%
+This gradient shows which direction the networks weights need to move to reduce the error metric for some data. Through reducing the error, the network learns. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function, E$_{MSE}$, on the network described in Equation \ref{eq:single_layer_eq_sum}, we would apply the chain rule to find an expression for
+%
+\begin{align} \label{eq:dMSE}
+\frac{dE_{MSE}}{dw_j} &= \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}
 \end{align}
 %
 Equation \ref{eq:dMSE} can be solved by first evaluating $\frac{dE_{MSE}}{dy_i}$,
@@ -471,7 +462,7 @@ Another method to speed up learning is to add a momentum hyperparameter, $\mu$, 
 %
 Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when the weights are updated at large steps, far from an optima, but will decrease near an optimum, allowing slower learning near an optimum. 
  
-\subsubsection{Training Algorithms}
+\subsubsection{Training Algorithms} \label{section_training_algs}
 
 There are many ANN training algorithms that employ various learning rate schedules and momentum functions. These algorithms include but are not limited to: Nesterov's accelerated gradient \cite{nesterov1983}, simulated annealing \cite{Kirkpatrick1983}, ADADELTA (An Adaptive Learning Rate Method) \cite{ADADELTA}, and Adam (Adaptive Moment Estimation) \cite{Kingma2015}. 
 
