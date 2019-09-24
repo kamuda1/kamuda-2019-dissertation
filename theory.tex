@@ -253,7 +253,16 @@ The classes in this example dataset are linearly separable, meaning lines can be
 
 \subsection{Neural Network Training}
 
-One of the most common ANN training method is applying gradient descent to the backpropagation of errors. The gradient we attempt to minimize is the derivative of an error metric with respect to the network's weights. Backpropagation uses the chain rule to find this derivative for some training data and target, 
+One of the most common ANN training method is applying gradient descent to the backpropagation of errors. The gradient we attempt to minimize is the derivative of an error metric with respect to the network's weights and biases. These gradients show how the networks weights and biases need to change,
+%
+\begin{align}
+\Delta w_{j} &= - \eta \frac{dE}{dw_j} \label{eq:update1} \\
+\Delta b_{j} &= - \eta \frac{dE}{db_j} \label{eq:update2} \\
+\text{where E} &= \text{error metric} \nonumber \\
+\eta &= \text{learning rate,} \nonumber
+\end{align}
+%
+to reduce the error metric for some data. Through reducing the error, the network learns. The learning rate and its effect on training will be discussed more thoroughly in section \ref{LearningRateSubsection}. Backpropagation uses the chain rule to find these derivatives for some training data and target, 
 %
 \begin{align} \label{eq:train_data_D}
 D&={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}, \\
@@ -261,10 +270,10 @@ D&={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_
 t_n &= n^{th} \text{ training target.} \nonumber
 \end{align}
 %
-This gradient shows which direction the networks weights need to move to reduce the error metric for some data. Through reducing the error, the network learns. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function, E$_{MSE}$, on the network described in Equation \ref{eq:single_layer_eq_sum}, we would apply the chain rule to find an expression for
+Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function, E$_{MSE}$, on the network described in Equation \ref{eq:single_layer_eq_sum}, we apply the chain rule to find an expression for
 %
 \begin{align} \label{eq:dMSE}
-\frac{dE_{MSE}}{dw_j} &= \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}
+\frac{dE_{MSE}}{dw_j} &= \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}.
 \end{align}
 %
 Equation \ref{eq:dMSE} can be solved by first evaluating $\frac{dE_{MSE}}{dy_i}$,
@@ -312,20 +321,6 @@ and a single bias,
 \begin{equation} \label{eq:dE_{MSE}/db_j_final}
 \frac{dE_{MSE}}{db_j} =  -2 \sum_i  (t_i - y_i) \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b).
 \end{equation}
-%
-The derivative in Equations \ref{eq:dE_{MSE}/dw_j_final} and \ref{eq:dE_{MSE}/db_j_final} can used to update each weight and bias in the network as defined by 
-%
-\begin{equation} \label{eq:update1}
-\Delta w_{j} = - \eta \frac{dE_{MSE}}{dw_j}
-\end{equation}
-%
-and 
-%
-\begin{equation} \label{eq:update2}
-\Delta b_{j} = - \eta \frac{dE_{MSE}}{db_j}
-\end{equation}
-%
-where $\eta$ represents the learning rate of the neural network. The learning rate and its effect on training will be discussed more thoroughly in section \ref{LearningRateSubsection}.
 
 Gradient descent can be applied to an ANN with multiple layers. The input to the the $l^{th}$ layer given some training example $\boldsymbol{x}$ in an L-layer network is 
 \begin{equation}
