@@ -7,18 +7,25 @@ This section describes the process of choosing the architectural and regularizat
 
 \section{Training Templates Overview}
 
-The datasets used to train the models are created using templates of simulated gamma-ray spectra without Poisson noise. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF (Gamma Detector Response and Analysis Software - Detector Response Function) \cite{mitchell2014}, was used to generate these templates. This simulation code can be used to model physical conditions that affect spectra. The GADRAS-DRF GUI showing the detector parameters used in this work is shown in Figure \ref{fig:gadras_parameters}. These parameters are from an Ortec 905-3 NaI(Tl) detector included in the Department of Homeland Security's Algorithm Improvement Program (AIP) software package \cite{DHSAIP}. To simulate our template spectra, the detector model's default energy calibration was modified to include an offset of zero (Order 0 in E) and a linear calibration that made the last channel in the spectrum correspond to an energy of 3.5 MeV. The default number of channels was also changed to 1194, calibrating the 1024$^{th}$ channel - the default spectrum length used in this work - to an energy of 3 MeV. This ensures that isotopic signatures higher than 3 MeV are included in the training dataset when a template's calibration is modified to include these energies.
+The datasets used to train the models are created using templates of simulated gamma-ray spectra without Poisson noise. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF (Gamma Detector Response and Analysis Software - Detector Response Function) \cite{mitchell2014}, was used to generate these templates. This simulation code is used to model a radiation detector's response considering environmental scattering and a specific  detector's properties. The GADRAS-DRF GUI in Figure \ref{fig:gadras_parameters} shows the detector parameters used in this work. These parameters are from an Ortec 905-3 NaI(Tl) detector included in the Department of Homeland Security's Algorithm Improvement Program (AIP) software package \cite{DHSAIP}. To simulate our template spectra, the detector model's default energy calibration was modified so the detector measured energies from 0 MeV to 3.5 MeV. This was accomplished by setting the calibration offset (Order 0 in E) to zero and the calibration's gain (Order 1 in E) to 3500. The default number of channels was also changed to 1194, calibrating the 1024$^{th}$ channel - the default spectrum length used in this work - to an energy of 3 MeV. This ensures that isotopic signatures higher than 3 MeV are included in the training dataset when a template's calibration is modified to include these energies.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[trim=0 0 390 0,clip,width=0.7\linewidth]{images/gadras_parameters}
-	\caption{GADRAS GUI showing parameters used to simulate the Ortec 905-3 2x2-in NaI(Tl) detector used in this work.}
+	\caption{GADRAS-DRF GUI showing parameters used to simulate the Ortec 905-3 2x2-in NaI(Tl) detector used in this work.}
 	\label{fig:gadras_parameters}
 \end{figure}
 
 
 GADRAS-DRF was also used to simulate spectral changes associated with measurement geometry. These geometry changes can include the source and detector distance from each other, the ground, and objects in the environment. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-to-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights off ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the shape of the Compton continuum, the peak-to-total ratio, and the magnitude of the backscatter peak. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different broadening parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 0 180 0,clip,width=0.9\linewidth]{images/gadras_measurement_setup}
+	\caption{GADRAS-DRF measurement diagram. Environmental scatter is approximated using the photon scatter terms from Figure \ref{fig:gadras_parameters}.}
+	\label{fig:gadras_measurement_setup}
+\end{figure}
 
 
 
