@@ -474,29 +474,24 @@ A simple differentiable cost function is the mean squared error function,
 E_{MSE} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2.
 \end{equation}
 %
-Because this function is differentiable, it can be used to train a gradient descent algorithm. The MSE function is appropriate when targets are any real number, as in a regression problem. This cost function can also be used to 
+Because this function is differentiable, it can be used to train a gradient descent algorithm. The MSE function is appropriate when targets are any real number, as in a regression problem. The MSE cost function is used in the uranium enrichment regression problem in Chapter \ref{uranium-enrichment}. This cost function is also used when training autoencoders. An autoencoder is an ANN that attempts to reconstruct an input signal. Autoencoders are described in more detail in Section \ref{Autoencoders}. The autoencoders used in this work employ the MSE cost function.
 
-For classification problems, the mean multi-class cross entropy,
+For multi-class classification problems, the mean cross entropy,
 %
 \begin{equation} \label{eq:CrossEntropy}
 E_{MCE} = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n), 
 \end{equation}
 %
-can be used. Cross entropy measures the similarity between the distributions $y_n$ and $\hat{y}_n$. Because the cross entropy treats $y_n$ and $\hat{y}_n$ as probability distributions, they are required to exist in [0,1].
-
-Because the softmax function,
+can be used as a cost function. Cross entropy measures the similarity between two probability distributions. By using cross entropy with the softmax output function,
 %
 \begin{equation} \label{eq:softmax}
 softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)},
 \end{equation}
 %
-can be used for classification, it is traditionally used as the output function for the model when using the cross entropy cost function. The softmax function is used in binary classification problems to calculate posterior class probabilities \cite{Bridle1990}.
+we can calculate the posterior probability of each class \cite{Bridle1990}. The cross entropy cost function and softmax output function are used in the source interdiction classification problem analyzed in Chapters \ref{ChapterMachineLearningModelsExplored} and \ref{UrbanSourceIdentificationResultsandDiscussion}.
 
 
-
-
-%% This part is kinda total butts
-%It is important to note that for a single layer neural network with the MSE cost function, the one minimum in $MSE(W)$ is the global minimum. When the number of layers increases beyond one there may be many more local minima in the cost function. Care must be taken when training a neural network to either find the global minimum in the cost function with respect to the weights or to find a minimum that reduces the error below a desired value. Care must also be taken to avoid stuck training, or having the optimization algorithm find a local minimum and not move from it. A proper optimization technique must account for these pitfalls. 
+% The softmax function normalizes an input vector into a probability distribution. Softmax is used as the output function for classification problems with multiple independent classes.
 
 \subsubsection{Weight Regularization}
 
@@ -512,6 +507,8 @@ Common values for $n$ are 1 and 2. Adding weight regularization allows the magni
 
 In Equation \ref{eq:L2_Reg}, $w_i$ is the weight between each neuron in the ANN and $\lambda$ is the regularization strength hyperparameter. A larger $\lambda$ will force the ANN to prefer smaller weights connecting the neurons. If the parameter $\lambda$ is too small, the unbounded model complexity may fit only the training data. If the parameter $\lambda$ is too large, the ANN will only minimize the $L_n$ error, failing to learn.
 
+In this dissertation, $L_2$ weight regularization is added to the densely connected portions of the classification networks. In our published work, we employed $L_2$ weight regularization as a hyperparameter to regularize our models.
+
 \subsubsection{Neuron Dropout}
 
 Another method to reduce model complexity is by adding a \textit{neuron dropout rate} hyperparameter. Neuron dropout is the process of temporarily removing a random set of neuron from the ANN architecture during each training iteration \cite{Srivastava2014}.
@@ -520,6 +517,7 @@ Almost always, taking the average output of more than one separately trained ANN
 
 % Without dropout, local codependency between neurons that could lead to the ANN becoming stuck in a local minimum in the error function. By randomly removing neurons from an ANN during training, - and thus overtraining - is discouraged. The frequency with which neurons are removed is called the neuron dropout rate.
 
+In this dissertation, neuron dropout is added to the densely connected portions of the classification networks. In our published work, we employed neuron dropout as a hyperparameter to regularize our models.
 
 
 \subsubsection{Data Augmentation}
