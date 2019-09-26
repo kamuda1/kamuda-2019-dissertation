@@ -464,14 +464,19 @@ The complete models performed better with changing gain, but still struggled wit
 
 \subsection{Results on Measured Spectra}
 
-This section shows performance over integration time for different calibration settings and shielding amounts in real gamma-ray spectra. Sources include $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. 
+This section shows performance over integration time for different calibration settings and shielding amounts in real gamma-ray spectra. Sources include $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. A diagram of the laboratory setup used for these measurements is shown in Figure \ref{fig:shielding_measurment_diagram}. The radioactive sources, 1 inch diameter by 1/8 inch thick plastic disks containing radioactive material, were measured on a wooden desk approximately one meter from the nearest wall to reduce radiation backscatter. We used a 2x2 inch Ortec NaI detector to measure the sources. Blocks of shielding material were added for the measurements in Section \ref{real_shielding_performance}. Measurements in Section \ref{real_calibration_performance} used no shielding material.
 
-% To investigate how each model identified real spectra behind shielding and spectra with different calibrations, real spectra were measured. 
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 200 210 0,clip,width=0.9\linewidth]{images/shielding_measurment_diagram}
+	\caption{Diagram of the laboratory setup used to measure radioactive sources.}
+	\label{fig:shielding_measurment_diagram}
+\end{figure}
 
 
-\subsubsection{Asymptotic Model Performance on Changing Voltage}
+\subsubsection{Asymptotic Model Performance on Changing Voltage} \label{real_calibration_performance}
 
-To test the dependence of performance of each model to changes in calibration, spectra with different voltages were recorded and the posterior probability of the measured isotope found by each model is observed over integration time. A 2x2 Ortec NaI detector was used to measure spectra with detector calibrations of 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V gave the detector an energy range extending to 3 MeV. Reported relative gain settings are calibrated to the 662 keV photopeak defining the 770 V calibration as the reference. Sources measured include $\mu$Ci level $^{137}$Cs, $^{60}$Co, $^{152}$Eu, and $^{133}$Ba. The standoff distance of each source was adjusted to keep the counts-per-second from the source equal-to and one-half-of the counts-per-second from background.
+To test the dependence of performance of each model to changes in calibration, spectra with different voltages were recorded and the posterior probability of the measured isotope found by each model is observed over integration time. The detector's calibrations was varied by changing the PMT voltage to 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V calibrated the detector's 1024$^{th}$ channel to 3 MeV. Reported relative gain settings are calibrated to the 662 keV photopeak defining the 770 V calibration as the reference. Sources measured include $\mu$Ci level $^{137}$Cs, $^{60}$Co, $^{152}$Eu, and $^{133}$Ba. The standoff distance of each source was adjusted to keep the counts-per-second from the source equal-to and one-half-of the counts-per-second from background.
 
 The figures in \ref{fig:gain_cs137} show trained ANN performance when identifying $^{137}$Cs. Models trained on the simple dataset, Figures \ref{fig:realspectra-cal-cs137-0-easy} and \ref{fig:realspectra-cal-cs137-1-easy}, did not generalize well to calibrations outside the training set. When trained on both the simple and complete dataset, The CNN performed well. Both CNNs identified $^{137}$Cs with a 100\% posterior probability after 50 seconds in both signal-to-background ratios.% The simple DNN and DAE achieve a posterior probability of above 50 \% after 60 seconds of integration time show some potential to generalize to calibrations outside the training set.
 
@@ -521,9 +526,9 @@ The improvement in the convolutional models for $^{152}$Eu identification occurs
 	\label{fig:realspectra-cal-eu152}
 \end{figure}
 
-\subsubsection{Asymptotic Model Performance with Respect to Shielding}
+\subsubsection{Asymptotic Model Performance with Respect to Shielding} \label{real_shielding_performance}
 
-To investigate the generalization performance of the model to increased shielding, spectra were measured with light, medium, and a heavy amount of shielding. 
+To investigate the generalization performance of the model to increased shielding, spectra of $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu were measured with increasing thicknesses of shielding material. Iron or aluminum blocks were 
 
 Identification performance for $^{137}$Cs was not heavily effected by varying shielding in either training dataset. This is due to shielding not dramatically affecting the single photopeak of $^{137}$Cs. The CNN performs very well in both datasets. The complete DNN performs comparably to complete CNN. The DNN and DAE are affected by increased shielding when trained on the simple dataset, showing that slight changes in spectral shapes affect performance in dense models when they are not exposed to a variety of spectral patterns. When trained on the complete dataset, networks without autoencoder pretraining outperform networks with pretraining.
 
@@ -532,35 +537,17 @@ Identification performance for $^{137}$Cs was not heavily effected by varying sh
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{images/shielded_cs137}
-	\caption{Shielded $^{137}$Cs spectra.}
+	\caption{Spectra of $^{137}$Cs shielded with increasing amounts of iron.}
 	\label{fig:shielded_cs137}
 \end{figure}
 
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-cs137-easy.png}
-         \caption{}
-         \label{fig:iron-cs137-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-cs137-full.png}
-         \caption{}
-         \label{fig:iron-cs137-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    light & \blackline & medium & \blackdotline & heavy & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance in real $^{137}$Cs spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, The Figure on the right and left are trained using the simple and complete dataset.}
-        \label{fig:shielding_cs137}
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/iron_co60}	\caption{Shielding generalization performance in real $^{137}$Cs spectra.}
+	\label{fig:iron_cs137}
 \end{figure}
+
 
 The effect of shielding is more significant in $^{60}$Co. As expected, when trained on the simple dataset each model performs worse with heavier shielding. The convolutional models and autoencoders outperform the DNN after 120 seconds of integration time. The DAE performs the best on the highest shielded spectra.  
 
@@ -568,70 +555,32 @@ The DNN is heavily effected by shielding even when trained on the complete datas
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/shielded_co60}
-	\caption{Shielded $^{60}$Co spectra}
+	\includegraphics[width=1.0\linewidth]{images/shielded_co60}	\caption{Spectra of $^{60}$Co shielded with increasing amounts of iron.}
 	\label{fig:shielded_co60}
 \end{figure}
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-co60-easy.png}
-         \caption{}
-         \label{fig:iron-co60-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-co60-full.png}
-         \caption{}
-         \label{fig:iron-co60-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    light & \blackline & medium & \blackdotline & heavy & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance in real $^{60}$Co spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, The Figure on the right and left are trained using the simple and complete dataset.}
-        \label{fig:shielding_co60}
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/iron_co60}	\caption{Shielding generalization performance in real $^{60}$Co spectra.}
+	\label{fig:iron_co60}
 \end{figure}
+
 
 Due to the relatively low gamma-ray energies of $^{133}$Ba compared to the other spectra in this section, aluminum with thicknesses of 6.56 mm, 25.5 mm, and 51.0 mm were used for the light, medium, and heavy settings. When trained on the simple dataset, the CAE performed best. Unlike the previous isotopes, the DAE trained on the simple dataset did not perform well on shielded $^{133}$Ba. Even when trained on the complete dataset, the CAE outperformed the DAE. Characteristic $^{133}$Ba photons have relatively low energy - particularly the photopeaks at 31 and 81 keV. Shielding significantly distorts the spectrum because these photons are easily attenuated. Features like the Compton continuum from the higher energy photopeaks may provide more signal when identifying these isotopes in shielded case. These features are also better exploited in the networks trained on the complete dataset. The dense architectures perform poorly even when trained on the complete dataset. The variance of the posterior probability for the convolutional architectures are lower than the DAE, showing they are more consistent.
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/shielded_ba133}
-	\caption{Shielded $^{133}$Ba spectra.}
+	\includegraphics[width=1.0\linewidth]{images/shielded_ba133}	\caption{Spectra of $^{133}$Ba shielded with increasing amounts of aluminum.}
 	\label{fig:shielded_ba133}
 \end{figure}
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/alum-ba133-easy.png}
-         \caption{}
-         \label{fig:alum-ba133-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/alum-ba133-full.png}
-         \caption{}
-         \label{fig:alum-ba133-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    light & \blackline & medium & \blackdotline & heavy & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance in real $^{133}$Ba spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, The Figure on the right and left are trained using the simple and complete dataset.}
-        \label{fig:shielding_ba133}
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/alum_ba133}	\caption{Shielding generalization performance in real $^{133}$Ba spectra.}
+	\label{fig:alum_ba133}
 \end{figure}
+
 
 
 The simple DAE performs well generalizing to shielded $^{152}$Eu while the simple CNN generalizes poorly. The simple CAE and DNN both perform similarly across the full range of shielding. 
@@ -643,34 +592,15 @@ The complete CNN identifies lightly and moderately shielded $^{152}$Eu with a hi
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{images/shielded_eu152}
-	\caption{Shielded $^{152}$Eu spectra.}
+	\caption{Spectra of $^{152}$Eu shielded with increasing amounts of iron.}
 	\label{fig:shielded_eu152}
 \end{figure}
 
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-eu152-easy.png}
-         \caption{}
-         \label{fig:iron-eu152-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-eu152-full.png}
-         \caption{}
-         \label{fig:iron-eu152-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    light & \blackline & medium & \blackdotline & heavy & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance in real $^{152}$Eu spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, The Figure on the right and left are trained using the simple and complete dataset.}
-        \label{fig:shielding_eu152}
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/iron_eu152}	\caption{Shielding generalization performance in real $^{152}$Eu spectra.}
+	\label{fig:iron_eu152}
 \end{figure}
 
 \section{Chapter Discussion and Conclusion}
