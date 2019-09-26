@@ -1,6 +1,6 @@
 \chapter{Machine Learning Models Explored} \label{ChapterMachineLearningModelsExplored}
 
-This section describes the process of choosing the architectural and regularization hyperparamers for the dense and 1D convolutional models explored in this work. This section also describes the datasets used to tune the hyperparameters.
+This chapter investigates which parameters affect the convolutional and dense model's performance for datasets of different complexity. Analyzing which hyperparameters most influence performance informs future research into applying machine learning to gamma-ray spectroscopy. To accomplish this, we ran hyperparameter searches using two datasets: a complete dataset with a wide range of simulated parameters and a simple dataset with smaller parameter ranges. This section describes these datasets and the architectural and regularization hyperparameters choices for the dense and convolutional models. This section concludes with a discussion on the insights obtained from the hyperparameter searches.
 
 
 % Dense and convolutional models are explored for two different reasons. 
@@ -17,7 +17,7 @@ The datasets used to train the models are created using templates of simulated g
 \end{figure}
 
 
-GADRAS-DRF was also used to simulate spectral changes associated with measurement geometry. These geometry changes can include the source and detector distance from each other, the ground, and objects in the environment. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-to-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights off ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the shape of the Compton continuum, the peak-to-total ratio, and the magnitude of the backscatter peak. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different broadening parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
+GADRAS-DRF was also used to simulate spectral changes associated with measurement geometry. The measurement scenario used by GADRAS-DRF is illustrated in Figure \ref{fig:gadras_measurement_setup}. Using GADRAS-DRF, we can simulate changes in source-detector distance, the source and detector's mutual height from the ground, and optional shielding material between the source and detector. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the Compton continuum's shape, the peak-to-total ratio, and the backscatter peak's magnitude. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different broadening parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
 
 
 \begin{figure}[H]
@@ -108,8 +108,20 @@ Calibration - Gain \\ \hline
 % \label{table:all_variable_simulation_parameters}
 % \end{table}
 
+\section{Hyperparameter Search}
 
-\section{Datasets Used for the Hyperparameter Search}
+To investigate which parameters affect the convolutional and dense model's performance on simple and more complicated datasets, two separate hyperparameter searches are employed for each model. The hyperparameter search is illustrated in Figure \ref{fig:hyperparameter_search_workflow}. For each dataset, 256 sets of random hyperparameters are chosen and 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/hyperparameter_search_workflow}
+	\caption{Hyperparameter search workflow.}
+	\label{fig:hyperparameter_search_workflow}
+\end{figure}
+
+
+
+\subsection{Datasets Used for the Hyperparameter Search}
 
 To investigate which parameters affect generalization performance, networks were trained using a simple and complete set of template simulation parameters. The parameters used for the simplified dataset are shown in Table \ref{table:hyperparameter_dataset_easy_parameters} and parameters used for the complete dataset are shown in Table \ref{table:hyperparameter_dataset_full_parameters}. Both datasets are comprised of pure background templates and the following isotopes from ANSI N42-34-2006 \cite{ANSI}: $^{241}$Am, $^{133}$Ba, $^{57}$Co, $^{60}$Co, $^{51}$Cr, $^{137}$Cs, $^{152}$Eu, $^{67}$Ga, $^{123}$I, $^{125}$I, $^{131}$I, $^{111}$In, $^{192}$Ir, $^{177m}$Lu, $^{99}$Mo, $^{237}$Np, $^{103}$Pd, $^{239}$Pu, $^{240}$Pu, $^{226}$Ra, $^{75}$Se, $^{153}$Sm, $^{99m}$Tc, $^{201}$Tl, $^{204}$Tl, $^{233}$U, $^{235}$U, $^{238}$U, and $^{133}$Xe.
 
@@ -168,7 +180,10 @@ To determine an optimum combination of hyperparameters, a random hyperparameter 
 
 \subsection{Dense Architecture}
 
-The architecture and training hyperparameters used to construct DNN's are shown in Table \ref{table:hyperparameter_dataset_parameters_DNN}. The number of densely connected nodes decreases for each subsequent layer. The input scaling is read left-to-right. For example, the $sqrt-max$ scaling would first take the square root of the each channel in the spectrum and then normalized the spectrum by its maximum value. The $L1-norm$ normalizes a spectrum by its L1 norm. The $log1p$ function is the base 10 logarithm of the input plus one.
+The architecture and training hyperparameters used to construct DNN's are shown in Table \ref{table:hyperparameter_dataset_parameters_DNN}. The number of densely connected nodes decreases for each subsequent layer. The input scaling is read left-to-right. For example, the $sqrt-max$ scaling would first take the square root of the each channel in the spectrum and then normalized the spectrum by its maximum value. The $L1-norm$ normalizes a spectrum by its L1 norm. The $log1p$ function is defined as 
+\begin{align} \label{eq:single_layer_eq_sum}
+log1p(x) := log_{10}(x+1) \\
+\end{align}
 
 \begin{table}[H]
 \centering
