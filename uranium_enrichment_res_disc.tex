@@ -11,21 +11,26 @@ This chapter applies machine learning algorithms to measuring the $^{235}$U enri
 
 \section{Uranium Enrichment Measurement Background}
 
-Verifying the enrichment of HEU through passive nondestructive analysis is important for nuclear safeguard applications and homeland security tasks. Passive nondestructive analysis, such as gamma-ray spectroscopy, is preferred to more accurate destructive methods due to its ability to operate quickly, preserve forensic evidence, and allow for remote measurements. The enriched uranium gamma-ray signatures visible in low-resolution detectors come from the decay of $^{238}$U, $^{235}$U, $^{232}$U, and the daughters of these isotopes. An example of a 27\% enriched uranium spectrum where $^{238}$U and $^{235}$U photopeaks are clear is shown in Figure \ref{fig:enriched_u_peaks_displayed}. In low-resolution detectors, The primary photopeaks from $^{235}$U are at 144 keV, 163 keV, and 186 keV. The $^{238}$U daughter $^{234m}$Pa produces two main photopeaks at 766 keV and 1001 keV. $^{232}$U, only present in reprocessed uranium, produces a photopeak at 2.6 MeV from its $^{208}$Tl daughter.
+Verifying the enrichment of HEU through passive nondestructive analysis is important for nuclear safeguard applications and homeland security tasks. Passive nondestructive analysis, such as gamma-ray spectroscopy, is preferred to more accurate destructive methods due to its ability to operate quickly, preserve forensic evidence, and allow for remote measurements. The enriched uranium gamma-ray signatures visible in low-resolution detectors come from the decay of $^{238}$U, $^{235}$U, $^{232}$U, and the daughters of these isotopes. Figure \ref{fig:enriched_u_peaks_displayed} shows an example of a 27\% enriched uranium spectrum that displays $^{238}$U and $^{235}$U photopeaks. In low-resolution detectors, The primary photopeaks from $^{235}$U are at 144 keV, 163 keV, and 186 keV. The $^{238}$U daughter $^{234m}$Pa produces two main photopeaks at 766 keV and 1001 keV. $^{232}$U, only present in reprocessed uranium, produces a photopeak at 2.6 MeV from its $^{208}$Tl daughter.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/enriched_u_peaks_displayed}
-	\caption{27\% enriched uranium spectra measured with a NaI detector.}.
+	\caption{27\% enriched uranium spectrum measured with a NaI detector.}.
 	\label{fig:enriched_u_peaks_displayed}
 \end{figure}
 
-Traditionally, the enrichment meter method is used to measure uranium enrichment in NaI spectra \cite{Reilly1970}. This method exploits the proportionality between the activity of the 186 keV photon and the enrichment of $^{235}$U. The enrichment meter method works by finding calibration constants that relate counts in two ROI's,
+Traditionally, the enrichment meter method is used to measure uranium enrichment in NaI spectra \cite{Reilly1970}. This method exploits the proportionality between the activity of the 186 keV photon and the enrichment of $^{235}$U. The enrichment meter method works by finding calibration constants that relate counts in two ROIs,
 %
-\begin{equation} \label{eq:enrichment_meter_principle}
-E = A * ROI1 + B * ROI2,
-\end{equation}
+\begin{align} \label{eq:enrichment_meter_principle}
+E &= A  C_{ROI1} + B C_{ROI2} \nonumber \\
+\text{where } C_{ROI1} &= \text{counts in ROI1 [\# counts]} \nonumber \\
+C_{ROI2} &= \text{counts in ROI2 [\# counts]} \nonumber \\
+A &= \text{calibration constant} \nonumber \\
+B &= \text{calibration constant} \nonumber \\
+\end{align}
 %
+
 to the enrichment of the measured material. These ROIs are placed around the 186 keV peak and in the background region to the right of the peak. Finding these constants requires measuring two different uranium enrichment standards in the same configuration (shielding, scattering environment, source-detector distance). Once these calibration constants are measured, they can only be used in the same configuration as the reference standards. It is possible to extend this method to other shielding configurations, but this introduces a risk of adding systematic errors. An automated version of this method called NaIGEM (NaI Gamma Enrichment Measurements) is included in the HM-5 instrument used by the IAEA \cite{MORTREAU2004}. Enrichment measurements of uranium without contaminants using low-resolution detectors can achieve 1\% precision for arbitrary enrichments while  contamination by minor uranium isotopes have a biasing effect of 5-10\% \cite{SPRINKLE1997}. Measurements of materials with unknown enrichment, shielding, and geometry are typically performed with high resolution HPGe detectors using the Multi-Group Analysis for Uranium (MGAU) software \cite{MGAU1994}.
 
 % Measuring uranium enrichment with a NaI detector in an unknown configuration is difficult.
@@ -51,7 +56,7 @@ To investigate how well a machine learning algorithm can learn to perform uraniu
 
 \subsection{Training Dataset Details}
 
-A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid uranium sphere of radius 5.5 cm. The MCNP code was used to calculate the physics due to self attenuation in the uranium and GADRAS-DRF was used to model the gamma-ray spectrum from this source in a 2'' x 2'' NaI detector. The universe in the MCNP simulation, shown in Figure \ref{fig:mcnp_diagram}, was empty except for a 19 cm concrete block fixed at 180 cm from the origin, a 5.5 cm radius sphere of bare uranium fixed at the origin, and a bare 2'' x 2'' NaI cylinder located between them. The concrete block was added to include backscatter radiation from the source in the MCNP simulation. A total of 10$^{8}$ particles were simulated for each configuration.
+A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid uranium sphere of radius 5.5 cm. The MCNP code was used to calculate the physics due to self attenuation in the uranium and GADRAS-DRF was used to model the gamma-ray spectrum from this source in a 2'' x 2'' NaI detector. The universe in the MCNP simulation, shown in Figure \ref{fig:mcnp_diagram}, was empty except for a 19 cm concrete block fixed at 180 cm from the origin, a 5.5 cm radius sphere of bare uranium fixed at the origin, and a bare 2'' x 2'' NaI cylinder located between them. The concrete block was added to incorporate backscatter radiation in the MCNP simulation. A total of 10$^{8}$ particles were simulated for each configuration.
 
 \begin{figure}[H]
 	\centering
