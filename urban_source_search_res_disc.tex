@@ -24,7 +24,7 @@ Different sized training datasets were sampled from both master datasets using s
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[trim=0 70 160 0,clip,width=1.0\linewidth]{images/learning_curve_training_diagram}
+	\includegraphics[trim=0 0 0 0,clip,width=1.0\linewidth]{images/learning_curve_training_diagram}
 	\caption{Training process used to train models for the learning curves.}
 	\label{fig:learning_curve_training_diagram}
 \end{figure}
@@ -38,7 +38,6 @@ The validation dataset's F1 score was used to construct learning curves for each
 	\caption{Learning curves for each simple model.}
 	\label{fig:learning_curves_easy}
 \end{figure}
-
 
 The validation dataset error curves in Figure \ref{fig:learning_curves_full} are less steep than those in the simple learning curve plot. This shows that the patterns in the complete dataset are more complex and models require more examples to generalize to unseen complete dataset examples. The learning curve for the complete model shows the CNN and DNN converging to near one after 5 x 10$^{3}$ and 1.5 x 10$^{4}$ examples. The testing and training F1 score curves for the CNN and DNN also show low-bias and low-variance, indicating the hyperparameter search found appropriate values for the complexity of the complete dataset.
 
@@ -56,7 +55,14 @@ The training errors for the autoencoder models do not saturate as quickly as the
 
 \section{Generalization Performance Evaluation}
 
-In this section we analyze the generalization performance of each machine learning model and the simple and complete training datasets. To quantify performance on a range of spectral qualities, the F1-scores are averaged for each model trained on a dataset of 10000 examples. Testing data are simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. To reduce variance, ten spectra are generated for each isotope and simulated parameter combination. Models trained on the simple and complete datasets are referred to as simple models and complete models.
+In this section we analyze the generalization performance of each machine learning model and the simple and complete training datasets. To quantify performance on a range of spectral qualities, the F1-scores are averaged for each model trained on a dataset of 10000 examples. Testing data are simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. To reduce variance, ten spectra are generated for each isotope and simulated parameter combination. Models trained on the simple and complete datasets are referred to as simple and complete models.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 0 210 0,clip,width=1.0\linewidth]{images/generalization_performance_diagram}
+	\caption{Model averaging process used to evaluate models for testing datasets.}
+	\label{fig:generalization_performance_diagram}
+\end{figure}
 
 \begin{table}[H]
 \centering
