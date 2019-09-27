@@ -118,44 +118,10 @@ Models trained on the simple dataset did not generalize well to low signal-to-ba
 
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-easy-01.png}
-         \caption{}
-         \label{fig:generalization-height-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-easy-05.png}
-         \caption{}
-         \label{fig:generalization-height-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-full-01.png}
-         \caption{}
-         \label{fig:generalization-height-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-full-05.png}
-         \caption{}
-         \label{fig:generalization-height-full-05}
-     \end{subfigure}
-    % \begin{tabular}{r@{: }l r@{: }l}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    50 cm & \blackline & 100 cm & \blackdotline & 150 cm & \blackdashdotline
-    \end{tabular}
-    
-        \caption{Each model's generalization performance with respect to the height-off-ground parameter. Networks were trained with a fixed-size dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_height_fixeddataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-height}
+	\caption{Height generalization.}
+	\label{fig:sim-generalization-height}
 \end{figure}
 
 
@@ -167,45 +133,13 @@ As seen in Figure \ref{fig:generalization_dist_fixeddataset}, general trends see
 % that the models are acting more similarly to a  than a ROI approach. 
 
 
+
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-easy-01.png}
-         \caption{}
-         \label{fig:generalization-dist-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-easy-05.png}
-         \caption{}
-         \label{fig:generalization-dist-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-full-01.png}
-         \caption{}
-         \label{fig:generalization-dist-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-full-05.png}
-         \caption{}
-         \label{fig:generalization-dist-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    50 cm & \blackline & 175 cm & \blackdotline & 300 cm & \blackdashdotline
-    \end{tabular}
-        \caption{Each model's generalization performance with respect to the source-detector distance parameter. Networks were trained using fixed-size datasets. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_dist_fixeddataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-dist}
+	\caption{Distance generalization.}
+	\label{fig:sim-generalization-dist}
 \end{figure}
-
 
 
 
@@ -213,44 +147,11 @@ As seen in Figure \ref{fig:generalization_dist_fixeddataset}, general trends see
 
 In this section we analyze the generalization performance of each network on changes in detector resolution. An example of these changes can be seen in Figure \ref{fig:sim_spectra_FWHM_comparison}. Changes in resolution do not significantly impact performance of the models. General trends are similar to distance and height generalization.
 
-
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-easy-01.png}
-         \caption{}
-         \label{fig:generalization-fwhm-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-easy-05.png}
-         \caption{}
-         \label{fig:generalization-fwhm-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-full-01.png}
-         \caption{}
-         \label{fig:generalization-fwhm-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-full-05.png}
-         \caption{}
-         \label{fig:generalization-fwhm-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    7.0 & \blackline & 7.5 & \blackdotline & 8.0 & \blackdashdotline
-    \end{tabular}
-        \caption{Each model's generalization performance with respect to the detector resolution. Networks were trained using fixed-size datasets. Resolutions in legend are measured at 662 keV. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_fwhm_fixeddataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-fwhm}
+	\caption{Resolutions generalization.}
+	\label{fig:sim-generalization-fwhm}
 \end{figure}
 
 
@@ -262,95 +163,12 @@ As seen previously, simple models do not generalize to the lower signal-to-backg
 
 The complete models perform better in the low signal-to-background spectra. Both complete convolutional models perform comparatively and outperform the complete dense models. Each network's performance on 40\% and 60\% attenuated spectra were comparable, while the 80\% attenuation reduced performance more significantly. Similar trends are seen in higher signal-to-background spectra. 
 
-
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-easy-01.png}
-         \caption{}
-         \label{fig:generalization-shielding-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-easy-05.png}
-         \caption{}
-         \label{fig:generalization-shielding-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-full-01.png}
-         \caption{}
-         \label{fig:generalization-shielding-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-full-05.png}
-         \caption{}
-         \label{fig:generalization-shielding-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    40\% & \blackline & 60\% & \blackdotline & 80\% & \blackdashdotline
-    \end{tabular}
-    
-    
-        \caption{Shielding generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_shielding_fixeddataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-ironshield}
+	\caption{Calibration gain generalization.}
+	\label{fig:sim-generalization-ironshield}
 \end{figure}
-
-
-Performance in data augmented models was similar to the fixed dataset models at the lower signal-to-background ratio and simple dataset. At the higher signal-to-background ratio performance dropped, especially for the CAE whose F1 score was near zero throughout the range of integration times. This shows that the CAE overtrained to the patterns in the simple dataset and did not generalize to new shielding configurations.
-
-Performance for the data augmented models on data simulated with complete parameters was similar to the fixed dataset models at the low signal-to-background ratio and comparable at the higher signal-to-background ratio. The main difference was the improved performance of the complete CNN at the lower signal-to-background ratio.
-
-
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-aug-easy-01.png}
-         \caption{}
-         \label{fig:generalization-shielding-aug-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-aug-easy-05.png}
-         \caption{}
-         \label{fig:generalization-shielding-aug-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-aug-full-01.png}
-         \caption{}
-         \label{fig:generalization-shielding-aug-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-aug-full-05.png}
-         \caption{}
-         \label{fig:generalization-shielding-aug-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    40\% & \blackline & 60\% & \blackdotline & 80\% & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance of each model trained using data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_shielding_augdataset}
-\end{figure}
-
-
 
 \subsection{Generalization Dependence on Gain}
 
@@ -360,45 +178,13 @@ At the higher signal-to-background ratio the simple models begin generalizing to
 
 The complete models performed better with changing gain, but still struggled with the 0.8 relative gain.  Compared to other complete models, the complete CNN performed the best on each relative gain setting.
 
-
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-easy-01.png}
-         \caption{}
-         \label{fig:generalization-cal-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-easy-05.png}
-         \caption{}
-         \label{fig:generalization-cal-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-full-01.png}
-         \caption{}
-         \label{fig:generalization-cal-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-full-05.png}
-         \caption{}
-         \label{fig:generalization-cal-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    0.8 & \blackline & 1.0 & \blackdotline & 1.2 & \blackdashdotline
-    \end{tabular}
-        \caption{Calibration gain generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_cal_fixeddataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-cal}
+	\caption{Calibration gain generalization.}
+	\label{fig:sim-generalization-cal}
 \end{figure}
+
 
 
 % \subsection{Generalization Dependence on Changing Background.}
