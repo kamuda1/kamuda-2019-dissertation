@@ -65,54 +65,53 @@ A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was u
 	\label{fig:mcnp_diagram}
 \end{figure}
 
-The software package RadSrc was used to generate specific gamma-ray intensities for the $^{235}$U, $^{238}$U, and $^{232}$U templates \cite{Hiller2007}. RadSrc, developed at Lawrence Livermore National Laboratory, uses Bateman equations to calculate daughter in-growth and their respective specific gamma-ray intensities. Isotopes in enriched uranium reach secular equilibrium in about six months. To account for this, RadSrc was used to find specific gamma-ray intensities for 50 year old uranium species. The specific activities for each species are found in Table \ref{table:specific_activities_radsrc}.
+The software package RadSrc was used to generate specific gamma-ray intensities for the $^{235}$U, $^{238}$U, and $^{232}$U templates \cite{Hiller2007}. RadSrc, developed at Lawrence Livermore National Laboratory, uses the Bateman equations to calculate daughter in-growth and their respective specific gamma-ray intensities. Isotopes in enriched uranium reach secular equilibrium in about six months. To account for this, RadSrc was used to find specific gamma-ray intensities for 50 year old uranium isotopes and their ingrown daughters. The specific activities for each isotope are found in Table \ref{table:specific_activities_radsrc}.
 
 \begin{table}[H]
 \centering
-\caption{Specific activities for 50 year old uranium species.}
+\caption{Specific activities for 50 year old uranium isotopes and their ingrown daughters.}
 \label{table:specific_activities_radsrc}
-\begin{tabular}{cc}
+\begin{tabular}{ll}
 % \cline{2-3}
 % Isotope & photos/second/gram \\ \hline
 % Isotope & $\frac{photos}{s g}$ \\ \hline
 \hline
-Isotope & {\begin{tabular}[c]{@{}c@{}}Specific Gamma-ray\\ Intensities [$\gamma$/gram/second]\end{tabular}} \\ \hline
-% Isotope & Specific Gamma-ray Intensities [$\gamma$/gram/second] \\ \hline
-\multicolumn{1}{c}{$^{232}$U} & 1.20e12 \\ 
-\multicolumn{1}{c}{$^{235}$U} & 2.07e5 \\
-\multicolumn{1}{c}{$^{238}$U} & 3.80e3 \\ \hline
+% Isotope & {\begin{tabular}[c]{@{}c@{}}Specific Gamma-ray\\ Intensities [$\gamma$/gram/second]\end{tabular}} \\ \hline
+\textbf{Isotope} & \textbf{Specific Gamma-ray Activity [$\frac{\gamma}{g s}$]} \\ \hline
+$^{232}$U & 1.20 x 10$^{12}$ \\ 
+$^{235}$U & 2.07 x 10$^{5}$ \\
+$^{238}$U & 3.80 x 10$^{3}$ \\ \hline
 \end{tabular}
 \end{table}
 
 
 % (for example: burn-up conditions in the recycled material, enrichment process, )
 
-$^{235}$U and $^{238}$U templates were combined based on the desired enrichment. To account for factors that change the $^{232}$U content, each sample that included $^{232}$U used a mass fraction uniformly chosen between 4e-9 and 2e-8 \cite{Peurrung2019}. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was one half. Complete simulation parameters for the coupled MCNP and GADRAS-DRF code are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
+$^{235}$U and $^{238}$U templates were combined based on the desired enrichment. To account for factors that change the $^{232}$U content, each sample that included $^{232}$U used a mass fraction uniformly chosen between 4 x 10$^{-9}$ and 2 x 10$^{-8}$ \cite{Peurrung2019}. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was one half. Complete simulation parameters for the coupled MCNP and GADRAS-DRF code are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
 
 \begin{table}[H]
 \centering
 \caption{Range of parameters used for the uranium enrichment dataset.}
 \label{table:hyperparameter_dataset_full_parameters_enrichment}
-\begin{tabular}{ccc}
-% \cline{2-3}
+\begin{tabular}{lll}
 \hline
-Simulation Parameter & Parameter Range & Sampling \\ \hline
-\multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 25, 50, 100 & Uniform \\ % \hline
-\multicolumn{1}{c}{FWHM 662 keV [s]} & 6.0, 6.5, 7.0, 7.5 & N/A \\ % \hline
-\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 200 keV Attenuated)\end{tabular}} & 0\%, 20\%, 40\%, 60\% & Uniform \\ % \hline
-\multicolumn{1}{c}{Integration Time [s]} & 30 - 3600 & Log-Uniform \\ % \hline
-\multicolumn{1}{c}{Calibration Offset [channels]} & -10 - 10 & Uniform \\ % \hline
-\multicolumn{1}{c}{Calibration Gain} & 0.8 - 1.2 & Uniform \\ % \hline
-\multicolumn{1}{c}{$^{235}$U Enrichment [\%]} & 0 - 100 & Uniform \\ % \hline
-\multicolumn{1}{c}{Background Counts per Second} & 150 - 250 & Uniform \\ % \hline
-\multicolumn{1}{c}{Signal to Background Ratio} & 0.1 - 4.0 & Uniform \\ \hline
+\textbf{Simulation Parameter} & \textbf{Range} & \textbf{Sampling} \\ \hline
+Source-Detector Distance [cm] & 25, 50, 100 & Uniform \\ % \hline
+FWHM 662 keV [s] & 6.0, 6.5, 7.0, 7.5 & N/A \\ % \hline
+Shielding (\% 200 keV Attenuated) & 0\%, 20\%, 40\%, 60\% & Uniform \\ % \hline
+Integration Time [s] & 30 - 3600 & Log-Uniform \\ % \hline
+Calibration Offset [channels] & -10 - 10 & Uniform \\ % \hline
+Calibration Gain & 0.8 - 1.2 & Uniform \\ % \hline
+$^{235}$U Enrichment [\%] & 0 - 100 & Uniform \\ % \hline
+Background Counts per Second & 150 - 250 & Uniform \\ % \hline
+Signal to Background Ratio & 0.1 - 4.0 & Uniform \\ \hline
 \end{tabular}
 \end{table}
 
 
 \subsection{Training Outline}
 
-Simple and complete model architectures discussed in Sections \ref{table:hyperparameter_opt_parameters_DNN} and \ref{table:hyperparameter_opt_parameters_CNN} were trained on a simulated dataset of 10$^{5}$ uranium spectra. Model architectures were modified to perform regression. Modifications include changing: the number of output nodes to one, their output function to a sigmoid, and their main cost function to mean squared error. Typically the sigmoid output function is used in the context of logistic regression. In our case the regression targets (percent $^{235}$U enrichment) exist on [0,1], allowing for use of the sigmoid output function. Pretrained simple and complete DAE and CAE models from Section \ref{section_autoencoder_archetectures} were also fine-tuned using the simulated uranium dataset. Convolutional models were trained using 20 maximum epochs and a 5 epoch early stopping patience. Dense models were trained using 500 maximum epochs and a 50 epoch early stopping patience.
+Simple and complete model architectures discussed in Sections \ref{table:hyperparameter_opt_parameters_DNN} and \ref{table:hyperparameter_opt_parameters_CNN} were trained on a simulated dataset of 10$^{5}$ uranium spectra. Model architectures were modified to perform regression. Modifications include changing: the number of output nodes to one, their output function to a sigmoid, and their main cost function to mean squared error. Typically the sigmoid output function is used in the context of logistic regression. In our case the regression targets (percent $^{235}$U enrichment) exist on [0,1], allowing use of the sigmoid output function. Pretrained simple and complete DAE and CAE models from Section \ref{section_autoencoder_archetectures} were also fine-tuned using the simulated uranium dataset. Convolutional models were trained using 20 maximum epochs and a 5 epoch early stopping patience. Dense models were trained using 500 maximum epochs and a 50 epoch early stopping patience.
 
 \section{Generalization Results - Simulated Data}
 
@@ -122,18 +121,17 @@ These sections describe how each trained model perform on simulated enriched ura
 \centering
 \caption{Default parameters used for all generalization datasets.}
 \label{table:default_sim_params_uranium}
-\begin{tabular}{cc}
-% \cline{2-3}
+\begin{tabular}{ll}
 \hline
-Simulation Parameter &  Value \\ \hline
-\multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 50.0\\ 
-\multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.0\\ 
-\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 200 keV Attenuated)\end{tabular}} & 0\% \\ 
-\multicolumn{1}{c}{Integration Time {[}s{]}} & 600 \\ 
-\multicolumn{1}{c}{Calibration - Offset (channels)} & 0 \\ 
-\multicolumn{1}{c}{Calibration - Gain} & 1.0 \\ 
-\multicolumn{1}{c}{Signal to Background Ratio} & 3.0 \\ 
-\multicolumn{1}{c}{Background Counts Per Second} & 200 \\ \hline
+\textbf{Simulation Parameter} &  \textbf{Value} \\ \hline
+Source-Detector Distance [cm] & 50.0\\ 
+FWHM 662 keV [s] & 7.0\\
+Shielding (\% 200 keV Attenuated) & 0\% \\ 
+Integration Time [s] & 600 \\ 
+Calibration - Offset (channels) & 0 \\ 
+Calibration - Gain & 1.0 \\ 
+Signal to Background Ratio & 3.0 \\ 
+Background Counts Per Second & 200 \\ \hline
 \end{tabular}
 \end{table}
 
@@ -285,7 +283,7 @@ Figure \ref{fig:measured_uranium} shows the mean and variance of each model and 
 
 To investigate how changing calibration effects each algorithm, the recalibrated spectra were additionally recalibrated with the same gain settings explored in Section \ref{section_uranium_sim_cal}. 
 
-Similar to the simulated results, gain changes of 0.9 and 1.1 do not change significantly impact enrichment quantification for the complete networks. An exception to this is is the complete dense models underpredict enrichment in the 93\% enriched, 1.1 gain setting spectrum. At a gain of 0.8, networks generally overpredicted the enrichment of lower enrichment samples. This is effect was observed to a smaller magnitude in simulated results.
+Similar to the simulated results, gain changes of 0.9 and 1.1 do not significantly impact enrichment quantification for the complete networks. An exception to this is the complete dense models underpredict enrichment in the 93\% enriched, 1.1 gain setting spectrum. At a gain of 0.8, networks generally overpredicted the enrichment of lower enrichment samples. This effect was observed to a smaller magnitude in simulated results.
 
 \begin{figure}[H]
      \centering
