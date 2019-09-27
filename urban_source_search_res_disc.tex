@@ -11,39 +11,25 @@
 
 \newcommand{\blackdottedline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dotted,line width = 1.1pt](0,0) -- (6mm,0);}}}
 
-% \section{Problem Description and Training Dataset Overview}
-
 This chapter applies machine learning algorithms to solve the problem of identifying a radioactive source in an urban environment. This scenario is applicable when performing source interdiction searching cargo containers, vehicles at boarder crossings, or surveying high profile events. 
 % Urban environments present unique challenges to gamma-ray spectroscopy. Background radiation can change over city blocks due to different concentrations of uranium and thorium in building materials. Sources may be purposely shielded by unknown amounts of material to obscure their gamma-ray signal.
 
 
 
-
-
-% \section{Data Augmentation Implementation}
-
-% Because simulating a dataset with sufficient combinations of available data augmentation - seen in Tables \ref{table:all_fixed_simulation_parameters} and \ref{table:all_variable_simulation_parameters} - online data augmentation techniques are employed. Online data augmentation has the benefit of implicitly regularizing the models.
-
-% Steps in the data augmentation process are:
-% \begin{enumerate}
-%   \item Randomly choose a background template with the same FWHM as the source template
-%   \item Rebin source and background template with a random calibration
-%   \item Apply the LLD to both templates
-%   \item Normalize both templates by the sum of their respective counts 
-%   \item Scale both signals by their respective total counts
-%   \begin{itemize}
-%      \item Counts defined by randomly chosen background counts per second, integration time, and signal to background ratio
-%   \end{itemize}
-%   \item Add both signals 
-%   \item Poisson sample the resulting signal
-% \end{enumerate}
-
-
 \section{Learning Curve Analysis}
 
-In this section we use learning curves to determine a sufficient number of training dataset examples for the simple and complete networks. To create the learning curves, a dataset of 3 x 10$^{8}$ spectra (1 x 10$^{4}$ examples per class) were generated for both the simple and complete dataset parameters (Tables \ref{table:hyperparameter_dataset_easy_parameters} and \ref{table:hyperparameter_dataset_full_parameters}). For each number of training examples, five random subsets of the total spectra were used as training sets. Stratified sampling was used to keep the number of examples per class in each subset as equal as possible. A separate holdout dataset of 300 total spectra (10 examples per class) was used as a testing dataset set. Training was ended after an early stopping condition with a patience of 100 epochs was reached.
+In this section we use learning curves to determine a sufficient number of training dataset examples for the simple and complete networks. Two separate datasets were constructed for this chapter: one using simple dataset parameters, Tables \ref{table:hyperparameter_dataset_easy_parameters}, and the other using complete dataset parameters from Table \ref{table:hyperparameter_dataset_full_parameters}. The datasets include isotopes from the ANSI N42-34-2006 standard, shown in Section \ref{datasets_used_hyperparam_search}. Each dataset contains 1 x 10$^{4}$ randomly generated spectra for each isotope. These datasets will be referred to as the simple and complete master dataset.
 
-Figure \ref{fig:learning_curves_easy} shows the learning curves for each simple model's F1 score asymptotes to one past 5000 examples. This shows that each model is well suited to generalize within the simple parameter space. Training was rerun on one CAE model at 1 x 10$^{4}$ and 2 x 10$^{4}$ samples due to the error not decreasing during training. This can be attributed to a poor CAE pretraining.
+Different sized training datasets were sampled from both master datasets using stratified sampling without replacement. Stratified sampling keeps the number of isotopes in each sampled subset as equal as possible. Training dataset sizes included 50, 100, 500, 1000, 5000, 10000, 15000, and 20000. For each training dataset size, five sampled subsets of a master dataset were used as training datasets.Figure \ref{fig:learning_curve_training_diagram}. ANN's were trained using these dataset. A separate holdout validation dataset of 300 spectra (10 examples per class) was used to end training when its F1 score did not improve using an early stopping patience of 10 epochs.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 70 160 0,clip,width=1.0\linewidth]{images/learning_curve_training_diagram}
+	\caption{Training process used to train models for the learning curves.}
+	\label{fig:learning_curve_training_diagram}
+\end{figure}
+
+The validation dataset's F1 score was used to construct learning curves for each model. Figure \ref{fig:learning_curves_easy} shows the learning curves for each simple model's F1 score asymptotes to one past 5000 examples. This shows that each model is well suited to generalize within the simple parameter space. Training was rerun on one CAE model at 1 x 10$^{4}$ and 2 x 10$^{4}$ samples due to the error not decreasing during training. This can be attributed to a poor CAE pretraining.
 
 
 \begin{figure}[H]
@@ -54,10 +40,9 @@ Figure \ref{fig:learning_curves_easy} shows the learning curves for each simple 
 \end{figure}
 
 
-The testing set error curves in Figure \ref{fig:learning_curves_full} are less steep than those in the simple learning curve plot. This shows that the patterns in the complete dataset are more complex and models require more examples to generalize to unseen complete dataset examples. The learning curve for the complete model shows the CNN and DNN converging to near one after 5 x 10$^{3}$ and 1.5 x 10$^{4}$ examples. The testing and training F1 score curves for the CNN and DNN also show low-bias and low-variance, indicating the hyperparameter search found appropriate values for the complexity of the complete dataset.
+The validation dataset error curves in Figure \ref{fig:learning_curves_full} are less steep than those in the simple learning curve plot. This shows that the patterns in the complete dataset are more complex and models require more examples to generalize to unseen complete dataset examples. The learning curve for the complete model shows the CNN and DNN converging to near one after 5 x 10$^{3}$ and 1.5 x 10$^{4}$ examples. The testing and training F1 score curves for the CNN and DNN also show low-bias and low-variance, indicating the hyperparameter search found appropriate values for the complexity of the complete dataset.
 
 The training errors for the autoencoder models do not saturate as quickly as the training errors for the CNN and DNN. This shows that either the pretraining has a large effect on learning or the pretrained models need regularization during fine-tuning. Both the DAE and CAE saturate past 1 x 10$^{4}$ examples. Similar to the simple training curve, training was rerun on one CAE model at 1.5 x 10$^{4}$ and 2 x 10$^{4}$.
-
 
 
 \begin{figure}[H]
@@ -71,7 +56,7 @@ The training errors for the autoencoder models do not saturate as quickly as the
 
 \section{Generalization Performance Evaluation}
 
-In this section we analyze the generalization performance of each machine learning model and the simple and complete training datasets. To quantify performance on a range of spectral qualities, the F1-scores are averaged for each model trained on a dataset of 10000 examples. Testing data are simulated over integration times log-uniformly sampled from one seconds to an hour and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. To reduce variance, ten spectra are generated for each isotope and simulated parameter combination. Models trained on the simple and complete datasets are referred to as simple models and complete models.
+In this section we analyze the generalization performance of each machine learning model and the simple and complete training datasets. To quantify performance on a range of spectral qualities, the F1-scores are averaged for each model trained on a dataset of 10000 examples. Testing data are simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. To reduce variance, ten spectra are generated for each isotope and simulated parameter combination. Models trained on the simple and complete datasets are referred to as simple models and complete models.
 
 \begin{table}[H]
 \centering
@@ -172,7 +157,7 @@ Models trained on the simple dataset did not generalize well to low signal-to-ba
 
 In this section we analyze the generalization performance of each network on changes in source-detector standoff distance. This tests if each model is sensitive to larger changes in the Compton continuum compared to those associated with changes in source-detector height. An example of these changes can be seen in Figure \ref{fig:sim_spectra_distance_comparison}.
 
-As seen in Figure \ref{fig:generalization_dist_fixeddataset}, general trends seen in the source-detector height generalization, such as superior performance of the CNN and the poor DAE encoding, are observed in source-detector distance generalization. Changing the source-detector distance changes performance more noticeably compared to changes in standoff distance. This was especially noticeable for the shorter standoff distance of 50 cm. At this distance, the peak-to-total ratio increases significantly, which emphasizes the peak information while reducing the Compton continuum. At the lower signal-to-background ratio the closer standoff distance improves performance in each network while at the higher signal-to-background ratio this trend is reversed. A higher peak-to-total ratio makes identification easier for algorithms that focus on photopeaks. The reduced performance of each model on high peak-to-total ratio spectra on the higher signal-to-background data shows performance expected from a template matching or pattern recognition algorithm.
+As seen in Figure \ref{fig:generalization_dist_fixeddataset}, general trends seen in the source-detector height generalization, such as superior performance of the CNN and the poor DAE encoding, are observed in source-detector distance generalization. Changing the source-detector distance changes performance more noticeably compared to changes in standoff distance. This was especially noticeable for the shorter standoff distance of 50 cm. At this distance, the peak-to-total ratio increases significantly, which emphasizes the peak information while reducing the Compton continuum. At the lower signal-to-background ratio, the closer standoff distance improves performance in each network while at the higher signal-to-background ratio this trend is reversed. A higher peak-to-total ratio makes identification easier for algorithms that focus on photopeaks. The reduced performance of each model on high peak-to-total ratio spectra on the higher signal-to-background data shows performance expected from a template matching or pattern recognition algorithm.
 % that the models are acting more similarly to a  than a ROI approach. 
 
 
@@ -220,9 +205,7 @@ As seen in Figure \ref{fig:generalization_dist_fixeddataset}, general trends see
 
 \subsection{Generalization Dependence on Resolution}
 
-In this section we analyze the generalization performance of each network on changes in detector resolution. An example of these changes can be seen in Figure \ref{fig:sim_spectra_FWHM_comparison}.
-
-Changes in resolution do not significantly impact performance of the models. General trends are similar to distance and height generalization.
+In this section we analyze the generalization performance of each network on changes in detector resolution. An example of these changes can be seen in Figure \ref{fig:sim_spectra_FWHM_comparison}. Changes in resolution do not significantly impact performance of the models. General trends are similar to distance and height generalization.
 
 
 \begin{figure}[H]
@@ -269,7 +252,7 @@ Changes in resolution do not significantly impact performance of the models. Gen
 
 In this section we analyze the generalization performance of each network on changes in shielding. Spectra were simulated with iron shielding that shields 40\%, 60\%, and 80\% of the intensity of a 200 keV gamma-ray.
 
-As seen previously, simple models do not generalize to the lower signal-to-background spectra. Simple models, which only uses unshielded and 20\% shielded templates, do generalize to other shielding thicknesses in higher signal-to-background spectra. Each simple model achieves and F1 score above 80\% after 2000 seconds for the 40\% attenuated spectra. Only the CAE achieves similar performance for the 40\% attenuated spectra. All other models and shielding settings attain F1 scores between 50\% and 75\%.
+As seen previously, simple models do not generalize to the lower signal-to-background spectra. Simple models, which only use unshielded and 20\% shielded templates, do generalize to other shielding thicknesses in higher signal-to-background spectra. Each simple model achieves an F1 score above 80\% after 2000 seconds for the 40\% attenuated spectra. Only the CAE achieves similar performance for the 40\% attenuated spectra. All other models and shielding settings attain F1 scores between 50\% and 75\%.
 
 The complete models perform better in the low signal-to-background spectra. Both complete convolutional models perform comparatively and outperform the complete dense models. Each network's performance on 40\% and 60\% attenuated spectra were comparable, while the 80\% attenuation reduced performance more significantly. Similar trends are seen in higher signal-to-background spectra. 
 
@@ -365,7 +348,7 @@ Performance for the data augmented models on data simulated with complete parame
 
 \subsection{Generalization Dependence on Gain}
 
-In this section we analyze the generalization performance of each network on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. The 1.0 gain setting calibrates the 1024$^{th}$ channel of the spectrum to 3 Mev.
+In this section we analyze the generalization performance of each network on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. The 1.0 gain setting calibrates the 1024$^{th}$ channel of the spectrum to 3 MeV.
 
 At the higher signal-to-background ratio the simple models begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
 
@@ -464,7 +447,7 @@ The complete models performed better with changing gain, but still struggled wit
 
 \subsection{Results on Measured Spectra}
 
-This section shows performance over integration time for different calibration settings and shielding amounts in real gamma-ray spectra. Sources include $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. A diagram of the laboratory setup used for these measurements is shown in Figure \ref{fig:shielding_measurment_diagram}. The radioactive sources, 1 inch diameter by 1/8 inch thick plastic disks containing radioactive material, were measured on a wooden desk approximately one meter from the nearest wall to reduce radiation backscatter. We used a 2x2 inch Ortec NaI detector to measure the sources. Blocks of shielding material were added for the measurements in Section \ref{real_shielding_performance}. Measurements in Section \ref{real_calibration_performance} used no shielding material.
+This section shows performance over integration time for different calibration settings and shielding amounts in real gamma-ray spectra. Sources include $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. A diagram of the laboratory setup used for these measurements is shown in Figure \ref{fig:shielding_measurment_diagram}. The radioactive sources, 1 inch diameter by 1/8 inch thick plastic disks containing $\mu$Ci quantities of radioactive material, were measured on a wooden desk approximately one meter from the nearest wall to reduce radiation backscatter. We used a 2x2 inch Ortec NaI detector to measure the sources. We measured the source-detector from the source disk's face to the detector's face. Blocks of shielding material were added for the measurements in Section \ref{real_shielding_performance}. Measurements in Section \ref{real_calibration_performance} used no shielding material. 
 
 \begin{figure}[H]
 	\centering
@@ -476,7 +459,7 @@ This section shows performance over integration time for different calibration s
 
 \subsubsection{Asymptotic Model Performance on Changing Voltage} \label{real_calibration_performance}
 
-To test the dependence of performance of each model to changes in calibration, spectra with different voltages were recorded and the posterior probability of the measured isotope found by each model is observed over integration time. The detector's calibrations was varied by changing the PMT voltage to 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V calibrated the detector's 1024$^{th}$ channel to 3 MeV. Reported relative gain settings are calibrated to the 662 keV photopeak defining the 770 V calibration as the reference. Sources measured include $\mu$Ci level $^{137}$Cs, $^{60}$Co, $^{152}$Eu, and $^{133}$Ba. The standoff distance of each source was adjusted to keep the counts-per-second from the source equal-to and one-half-of the counts-per-second from background.
+To test the dependence of performance of each model to changes in calibration, spectra with different voltages were recorded and the posterior probability of the measured isotope found by each model is observed over integration time. The detector's calibrations was varied by changing the PMT voltage to 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V calibrated the detector's 1024$^{th}$ channel to 3 MeV. Reported relative gain settings are calibrated to the 662 keV photopeak defining the 770 V calibration as the reference. Sources measured include $\mu$Ci level $^{137}$Cs, $^{60}$Co, $^{152}$Eu, and $^{133}$Ba. The source-detector distance of each source was adjusted to keep the counts-per-second from the source equal-to and one-half-of the counts-per-second from background.
 
 The figures in \ref{fig:gain_cs137} show trained ANN performance when identifying $^{137}$Cs. Models trained on the simple dataset, Figures \ref{fig:realspectra-cal-cs137-0-easy} and \ref{fig:realspectra-cal-cs137-1-easy}, did not generalize well to calibrations outside the training set. When trained on both the simple and complete dataset, The CNN performed well. Both CNNs identified $^{137}$Cs with a 100\% posterior probability after 50 seconds in both signal-to-background ratios.% The simple DNN and DAE achieve a posterior probability of above 50 \% after 60 seconds of integration time show some potential to generalize to calibrations outside the training set.
 
