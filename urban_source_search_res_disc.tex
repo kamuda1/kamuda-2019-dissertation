@@ -114,7 +114,7 @@ In this section we analyze the generalization performance of each network on cha
 As seen in Figure \ref{fig:generalization_height_fixeddataset}, the performance of each network was not significantly changed with changes to source-detector height. This shows that performance is not impacted by the relatively small changes in the Compton continuum caused by varying the source-detector height. Each CNN - except the simple CNN identifying the lower signal-to-background ratio spectra - had the highest F1 score. Figure \ref{fig:generalization-height-easy-05} also shows that the simple dataset generalized to changes in source-detector height in higher signal-to-background ratio spectra. The complete DAE performed particularly poorly while the complete CAE and DNN performed similarly.
 % , indicating that either the pretraining produced a poor encoding that was difficult to fine-tune through further training.
 
-Models trained on the simple dataset did not generalize well to low signal-to-background data, shown in \ref{fig:generalization-height-easy-01}. The simple DNN outperformed the other models in this dataset. This is consistent with the thought that the DNN is using a ROI approach to identification and the CNN is using more abstract features. The scale of abstract features (like those associated with the Compton continuum) are different at a signal-to-background ratio of 0.1 compared to 0.5. This difference makes the features used by the simple CNN different from those required by the complete CNN.
+Models trained on the simple dataset did not generalize well to low signal-to-background data, shown in \ref{fig:generalization-height-easy-01}. The simple DNN outperformed the other models in this dataset. This is consistent with the expectation that the DNN uses an ROI approach for identification and the CNN uses more abstract features over a wider range of the spectrum. The scale of abstract features (like those associated with the Compton continuum) are different at a signal-to-background ratio of 0.1 compared to 0.5. This difference makes the features used by the simple CNN different from those required by the complete CNN.
 
 
 \begin{figure}[H]
@@ -174,9 +174,9 @@ The complete models perform better in the low signal-to-background spectra. Both
 
 In this section we analyze the generalization performance of each network on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. The 1.0 gain setting calibrates the 1024$^{th}$ channel of the spectrum to 3 MeV.
 
-At the higher signal-to-background ratio the simple models begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
+At the higher signal-to-background ratio the simple models begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the input signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
 
-The complete models performed better with changing gain, but still struggled with the 0.8 relative gain.  Compared to other complete models, the complete CNN performed the best on each relative gain setting.
+The complete models performed better with changing gain, but still struggled with the 0.8 relative gain for the reasons outline in the previous paragraph. Compared to other complete models, the complete CNN performed the best on each relative gain setting.
 
 \begin{figure}[H]
 	\centering
