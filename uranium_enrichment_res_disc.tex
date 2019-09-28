@@ -54,6 +54,10 @@ To investigate how well a machine learning algorithm can learn to perform uraniu
 
 % FRAM application to U and Pu isotopics https://www.lanl.gov/orgs/n/n1/appnotes/LA-14018-M.pdf
 
+\subsection{Training Outline}
+
+Simple and complete model architectures discussed in Sections \ref{table:hyperparameter_opt_parameters_DNN} and \ref{table:hyperparameter_opt_parameters_CNN} were trained on a simulated dataset of 10$^{5}$ uranium spectra. Model architectures were modified to perform regression. Modifications include changing: the number of output nodes to one, their output function to a sigmoid, and their main cost function to mean squared error. Typically the sigmoid output function is used in the context of logistic regression. In our case the regression targets (percent $^{235}$U enrichment) exist on [0,1], allowing use of the sigmoid output function. Pretrained simple and complete DAE and CAE models from Section \ref{section_autoencoder_archetectures} were also fine-tuned using the simulated uranium dataset. Convolutional models were trained using 20 maximum epochs and a 5 epoch early stopping patience. Dense models were trained using 500 maximum epochs and a 50 epoch early stopping patience.
+
 \subsection{Training Dataset Details}
 
 A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid uranium sphere of radius 5.5 cm. The MCNP code was used to calculate the physics due to self attenuation in the uranium and GADRAS-DRF was used to model the gamma-ray spectrum from this source in a 2'' x 2'' NaI detector. The universe in the MCNP simulation, shown in Figure \ref{fig:mcnp_diagram}, was empty except for a 19 cm concrete block fixed at 180 cm from the origin, a 5.5 cm radius sphere of bare uranium fixed at the origin, and a bare 2'' x 2'' NaI cylinder located between them. The concrete block was added to incorporate backscatter radiation in the MCNP simulation. A total of 10$^{8}$ particles were simulated for each configuration.
@@ -109,11 +113,7 @@ Signal to Background Ratio & 0.1 - 4.0 & Uniform \\ \hline
 \end{table}
 
 
-\subsection{Training Outline}
-
-Simple and complete model architectures discussed in Sections \ref{table:hyperparameter_opt_parameters_DNN} and \ref{table:hyperparameter_opt_parameters_CNN} were trained on a simulated dataset of 10$^{5}$ uranium spectra. Model architectures were modified to perform regression. Modifications include changing: the number of output nodes to one, their output function to a sigmoid, and their main cost function to mean squared error. Typically the sigmoid output function is used in the context of logistic regression. In our case the regression targets (percent $^{235}$U enrichment) exist on [0,1], allowing use of the sigmoid output function. Pretrained simple and complete DAE and CAE models from Section \ref{section_autoencoder_archetectures} were also fine-tuned using the simulated uranium dataset. Convolutional models were trained using 20 maximum epochs and a 5 epoch early stopping patience. Dense models were trained using 500 maximum epochs and a 50 epoch early stopping patience.
-
-\section{Generalization Results - Simulated Data}
+\section{Generalization Dependence Results - Simulated Data}
 
 These sections describe how each trained model perform on simulated enriched uranium. To investigate the generalization performance, spectra are simulated with enrichments of 3\%, 25\%, 50\%, 75\%, and 93\% in different conditions. For each spectrum, the average output from five bagged trained models are recorded. To observe the output variance, 10 spectra are simulated for each enrichment value and their average output and variance are displayed. Default simulation parameters are shown in Table \ref{table:default_sim_params_uranium}. Changes to these defaults are indicated for each generalization experiment.
 
@@ -135,7 +135,7 @@ Background Counts Per Second & 200 \\ \hline
 \end{tabular}
 \end{table}
 
-\subsection{Generalization Results on Shielding}
+\subsection{Generalization Dependence on Shielding}
 
 To test each model's generalization performance with respect to shielding, enriched uranium spectra were simulated with various amounts of shielding. The effect of each shielding is shown in Figure \ref{fig:simulated_uranium_shielding}. The outputs from each model on these cases are shown in Figure \ref{fig:simuranium-shielding}. In general for each case, the complete networks outperform the simple networks. This indicates that the reduced capacity of the simple networks is insufficient to properly perform uranium enrichment measurements using the provided dataset. At 93\% enrichment each model underpredicted the enrichment.
 
@@ -185,7 +185,7 @@ The simple networks consistently overpredict the enrichment at and below 50\%. T
 
 
 
-\subsection{Generalization Results on Changing Calibration} \label{section_uranium_sim_cal}
+\subsection{Generalization Dependence on Changing Calibration} \label{section_uranium_sim_cal}
 
 To test each model's generalization performance with respect to calibration, enriched uranium spectra were simulated with various relative gains. The outputs from each model on these cases are shown in Figure \ref{fig:simuranium-cal}. Model performance at relative gains of 0.9 and 1.1 are similar to the reference gain case, shown in Figure \ref{fig:simuranium-noshield}.
 
