@@ -393,56 +393,56 @@ The effect of scaling on performance was similar to the DNN. Using $sqrt$ scalin
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/cnn_learning_rate.png}
-         \caption{Learning Rate}
+         \caption{}
          \label{fig:cnn_learning_rate}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/cnn_dropout.png}
-         \caption{Dropout Rate}
+         \caption{}
          \label{fig:cnn_dropout}
      \end{subfigure}
 
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/cnn_batch_size.png}
-         \caption{Batch Size}
+         \caption{}
          \label{fig:cnn_batch_size}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/cnn_pooling_size.png}
-         \caption{CNN Pooling Size}
+         \caption{}
          \label{fig:cnn_pooling_size}
      \end{subfigure}
 
     \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/cnn_l2_reg.png}
-         \caption{L2 Regularization Scale}
+         \caption{}
          \label{fig:cnn_l2_reg}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/cnn_dense_nodes_total.png}
-         \caption{Total Dense Nodes}
+         \caption{}
          \label{fig:cnn_dense_nodes_total}
      \end{subfigure}  
      
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/cnn_kernel_length.png}
-         \caption{Convolution Kernel Length}
+         \caption{}
          \label{fig:cnn_kernel_length}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=\textwidth]{images/cnn_num_conv_layers.png}
-         \caption{Total Convolution Layers}
+         \caption{}
          \label{fig:cnn_num_conv_layers}
      \end{subfigure}  
 	\begin{tabular}{r@{ : }l r@{ : }l}
@@ -459,23 +459,31 @@ The effect of scaling on performance was similar to the DNN. Using $sqrt$ scalin
         % \raisebox{-0.49cm}{
         \includegraphics[width=\textwidth]{images/cnn_scaler.png}
         % }
-        \caption{Feature Scaling}
+        \caption{}
         \label{fig:cnn_scaler}
     \end{subfigure}
     \hfill
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/cnn_filter_structure.png}
-        \caption{Number of Convolutional Filters}
+        \caption{}
         \label{fig:cnn_filter_structure}
     \end{subfigure}
     
     \begin{subfigure}[t]{0.49\textwidth}
         \centering
         \includegraphics[width=\textwidth]{images/cnn_dense_layers_total.png}
-        \caption{Total Dense Layers}
+        \caption{}
         \label{fig:cnn_dense_layers_total}
     \end{subfigure}
+	\hfill
+	\begin{subfigure}[t]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/cnn_activation_function.png}
+		\caption{}
+		\label{fig:cnn_activation_function}
+	\end{subfigure}
+
 		\begin{tabular}{r@{ : }l r@{ : }l}
 			\textcolor{darkgreen}{\textbf{\large{X}}} & Complete Dataset & \bluecircle & Simple Dataset \\
 		\end{tabular}
@@ -491,15 +499,15 @@ The effect of scaling on performance was similar to the DNN. Using $sqrt$ scalin
 \hline
 \multirow{2}{*}{\textbf{Hyperparameter}} & \multicolumn{2}{l}{\textbf{Optimum Value}} \\
  & \textbf{Simple Dataset} & \textbf{Complete Dataset} \\ \hline
-Filter Kernels in Each Layer & 8 - 16 - 32 & 8 - 16 - 32 \\
-Filter Kernel Length & 8 & 16 \\
-Pooling size & 2 & 16 \\
-Dense Layer Structure & 64 & 16 \\
-Initial Learning Rate & 0.010 & 0.00024 \\
-L2 Regularization Strength & 0.0016 & 0.0097 \\
-Dropout Frequency & 0.32 & 0.16 \\
-Batch Size & 16 & 16 \\
-Activation Function & relu & relu \\
+Filter Kernels in Each Layer & 4 - 8 - 16 & 8 - 16 - 32 \\
+Filter Kernel Length & 16 & 16 \\
+Pooling size & 4 & 8 \\
+Dense Layer Structure & 128 - 64 & 128 - 64 \\
+Initial Learning Rate & 0.0014 & 0.00010 \\
+L2 Regularization Strength & 0.0044 & 0.0015 \\
+Dropout Frequency & 0.042 & 0.045 \\
+Batch Size & 16 & 32 \\
+Activation Function & tanh & tanh \\
 Input Scaling & sqrt-max & sqrt-max \\ \hline
 \end{tabular}
 \end{table}
