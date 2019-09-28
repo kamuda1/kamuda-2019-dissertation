@@ -1,12 +1,6 @@
 \chapter{Urban Source Identification Results and Discussion} \label{UrbanSourceIdentificationResultsandDiscussion}
 
-% Compare how well we identify shielded/unshielded isotopes when training set has shielding, doesn't have shielding. 
-
-% Compare how well we identify isotopes over different distances if training set has one vs many distances
-
-% Compare how well we identify isotopes with different calibration sampling granularity 
-
-% https://e-reports-ext.llnl.gov/pdf/312592.pdf holy shit they show common false positive isotopes and we see a lot of overlap
+% https://e-reports-ext.llnl.gov/pdf/312592.pdf they show common false positive isotopes and we see a lot of overlap
 
 
 \newcommand{\blackline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,solid,line width = 1.1pt](0,0) -- (6mm,0);}}}
@@ -17,76 +11,41 @@
 
 \newcommand{\blackdottedline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dotted,line width = 1.1pt](0,0) -- (6mm,0);}}}
 
-% \section{Problem Description and Training Dataset Overview}
-
-This chapter applies machine learning algorithms to solve the problem of identifying a radioactive source in an urban environment. This scenario is applicable when performing source interdiction searching cargo containers, vehicles at boarder crossings, or surveying high profile events. 
-% Urban environments present unique challenges to gamma-ray spectroscopy. Background radiation can change over city blocks due to different concentrations of uranium and thorium in building materials. Sources may be purposely shielded by unknown amounts of material to obscure their gamma-ray signal.
+This chapter applies machine learning algorithms to solve the problem of identifying a radioactive source in an urban environment. This scenario is applicable when performing source interdiction searching cargo containers, vehicles at boarder crossings, or surveying high profile events. Urban environments present unique challenges to gamma-ray spectroscopy. Background radiation can change over city blocks due to different concentrations of uranium and thorium in building materials. Sources may be purposely shielded by unknown amounts of material to obscure their gamma-ray signal.
 
 
 
+\section{Learning Curve Analysis}
 
+In this section we use learning curves to determine a sufficient number of training dataset examples for the simple and complete networks. Two separate datasets were constructed for this chapter: one using simple dataset parameters, Tables \ref{table:hyperparameter_dataset_easy_parameters}, and the other using complete dataset parameters from Table \ref{table:hyperparameter_dataset_full_parameters}. The datasets include isotopes from the ANSI N42-34-2006 standard, shown in Section \ref{datasets_used_hyperparam_search}. Each dataset contains 1 x 10$^{4}$ randomly generated spectra for each isotope. These datasets will be referred to as the simple and complete master dataset.
 
-% \section{Data Augmentation Implementation}
+Different sized training datasets were sampled from both master datasets using stratified sampling without replacement. Stratified sampling keeps the number of isotopes in each sampled subset as equal as possible. Training dataset sizes included 50, 100, 500, 1000, 5000, 10000, 15000, and 20000. For each training dataset size, five sampled subsets of a master dataset were used as training datasets.Figure \ref{fig:learning_curve_training_diagram}. ANN's were trained using these dataset. A separate holdout validation dataset of 300 spectra (10 examples per class) was used to end training when its F1 score did not improve using an early stopping patience of 10 epochs.
 
-% Because simulating a dataset with sufficient combinations of available data augmentation - seen in Tables \ref{table:all_fixed_simulation_parameters} and \ref{table:all_variable_simulation_parameters} - online data augmentation techniques are employed. Online data augmentation has the benefit of implicitly regularizing the models.
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 0 0 0,clip,width=1.0\linewidth]{images/learning_curve_training_diagram}
+	\caption{Training process used to train models for the learning curves.}
+	\label{fig:learning_curve_training_diagram}
+\end{figure}
 
-% Steps in the data augmentation process are:
-% \begin{enumerate}
-%   \item Randomly choose a background template with the same FWHM as the source template
-%   \item Rebin source and background template with a random calibration
-%   \item Apply the LLD to both templates
-%   \item Normalize both templates by the sum of their respective counts 
-%   \item Scale both signals by their respective total counts
-%   \begin{itemize}
-%      \item Counts defined by randomly chosen background counts per second, integration time, and signal to background ratio
-%   \end{itemize}
-%   \item Add both signals 
-%   \item Poisson sample the resulting signal
-% \end{enumerate}
-
-
-\section{Learning Curve Comparison for Fixed-size Datasets and Online Data Augmentation Datasets}
-
-In this section we use learning curves to determine a sufficient number of training dataset examples and quantify if online data augmentation improves the testing error. To create the learning curves, a dataset of 3 x 10$^{8}$ spectra (1 x 10$^{4}$ examples per class) were generated for both the simple and complete dataset parameters (Tables \ref{table:hyperparameter_dataset_easy_parameters} and \ref{table:hyperparameter_dataset_full_parameters}). For each number of training examples, five random subsets of the total spectra were used as training sets. Stratified sampling was used to keep the number of examples per class in each subset as equal as possible. A separate holdout dataset of 300 total spectra (10 examples per class) was used as a testing dataset set. Training was ended after an early stopping condition with a patience of 100 epochs was reached. Online data augmentation was also implemented using an early stopping patience of 50 and 100 for the simple and complete models.
-
-Figure \ref{fig:learning_curves_easy} shows the learning curves for each simple model's F1 score saturates to one past 5000 examples. This shows that each model is well suited to generalize within the simple parameter space. Training was rerun on one CAE model at 1 x 10$^{4}$ and 2 x 10$^{4}$ samples due to the error not decreasing during training. This can be attributed to a poor CAE pretraining. This poor pretraining can also be seen in the CAE's poor online data augmentation performance. The performance of each network trained with online data augmentation was worse than the fixed-size networks.
+The validation dataset's F1 score was used to construct learning curves for each model. Figure \ref{fig:learning_curves_easy} shows the learning curves for each simple model's F1 score asymptotes to one past 5000 examples. This shows that each model is well suited to generalize within the simple parameter space. Training was rerun on one CAE model at 1 x 10$^{4}$ and 2 x 10$^{4}$ samples due to the error not decreasing during training. This can be attributed to a poor CAE pretraining.
 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\linewidth]{images/learning_curves_easy}
-	\begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l}
-    Testing Error & \blackline & Training Error & \blackdotline
-    \end{tabular}
-    \begin{tabular}{r@{: }l}
-    Online Data Augmentation Error & \blackdashdotline
-    \end{tabular}
 	\caption{Learning curves for each simple model.}
 	\label{fig:learning_curves_easy}
 \end{figure}
 
-
-The testing set error curves in Figure \ref{fig:learning_curves_full} are less steep than those in the simple learning curve plot. This shows that the patterns in the complete dataset are more complex and models require more examples to generalize to unseen complete dataset examples. The learning curve for the complete model shows the CNN and DNN converging to near one after 5 x 10$^{3}$ and 1.5 x 10$^{4}$ examples. The testing and training F1 score curves for the CNN and DNN also show low-bias and low-variance, indicating the hyperparameter search found appropriate values for the complexity of the complete dataset.
+The validation dataset error curves in Figure \ref{fig:learning_curves_full} are less steep than those in the simple learning curve plot. This shows that the patterns in the complete dataset are more complex and models require more examples to generalize to unseen complete dataset examples. The learning curve for the complete model shows the CNN and DNN converging to near one after 5 x 10$^{3}$ and 1.5 x 10$^{4}$ examples. The testing and training F1 score curves for the CNN and DNN also show low-bias and low-variance, indicating the hyperparameter search found appropriate values for the complexity of the complete dataset.
 
 The training errors for the autoencoder models do not saturate as quickly as the training errors for the CNN and DNN. This shows that either the pretraining has a large effect on learning or the pretrained models need regularization during fine-tuning. Both the DAE and CAE saturate past 1 x 10$^{4}$ examples. Similar to the simple training curve, training was rerun on one CAE model at 1.5 x 10$^{4}$ and 2 x 10$^{4}$.
-
 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.9\linewidth]{images/learning_curves_full}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l}
-    Testing Error & \blackline & Training Error & \blackdotline
-    \end{tabular}
-    \begin{tabular}{r@{: }l}
-    Online Data Augmentation Error & \blackdashdotline
-    \end{tabular}
 	\caption{Learning curves for each complete model.}
 	\label{fig:learning_curves_full}
 \end{figure}
@@ -95,25 +54,30 @@ The training errors for the autoencoder models do not saturate as quickly as the
 
 \section{Generalization Performance Evaluation}
 
-In this section we analyze the generalization performance of each machine learning model and the simple and complete training datasets. To quantify performance on a range of spectral qualities, the F1-scores are averaged for each model trained on a dataset of 10000 examples and models trained using online data augmentation. Testing data are simulated over integration times log-uniformly sampled from one seconds to an hour and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. To reduce variance, ten spectra are generated for each isotope and simulated parameter combination. Models trained on the simple and complete datasets are referred to as simple models and complete models.
+In this section we analyze the generalization performance of each machine learning model and the simple and complete training datasets. To quantify performance on a range of spectral qualities, the F1-scores are averaged for each model trained on a dataset of 10000 examples. Testing data are simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. To reduce variance, ten spectra are generated for each isotope and simulated parameter combination. Models trained on the simple and complete datasets are referred to as simple and complete models.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 0 210 0,clip,width=1.0\linewidth]{images/generalization_performance_diagram}
+	\caption{Model averaging process used to evaluate models for testing datasets.}
+	\label{fig:generalization_performance_diagram}
+\end{figure}
 
 \begin{table}[H]
 \centering
 \caption{Default parameters used for all generalization datasets.}
 \label{table:default_sim_params}
-\begin{tabular}{cc}
+\begin{tabular}{ll}
 % \cline{2-3}
 \hline
-Hyperparameter &  Value \\ \hline
-\multicolumn{1}{c}{Source-Detector Distance {[}cm{]}} & 175.0\\ 
-\multicolumn{1}{c}{Source-Detector Height {[}cm{]}} & 100.0\\ 
-\multicolumn{1}{c}{FWHM 662 keV {[}s{]}} & 7.0\\ 
-\multicolumn{1}{c}{\begin{tabular}[c]{@{}c@{}}Shielding\\ (Percent 200 keV Attenuated)\end{tabular}} & 0\% \\ 
-% \multicolumn{1}{c}{Integration Time {[}s{]}} & 60 - 600 \\ 
-\multicolumn{1}{c}{Calibration - Offset (channels)} & 0 \\ 
-\multicolumn{1}{c}{Calibration - Gain} & 1.0 \\ 
-% \multicolumn{1}{c}{Signal to Background Ratio} & 0.5 - 2.0 \\ 
-\multicolumn{1}{c}{Background Counts Per Second} & 200 \\ \hline 
+\textbf{Simulation Parameter} &  \textbf{Value} \\ \hline
+Source-Detector Distance [cm] & 175.0\\ 
+Source-Detector Height [cm] & 100.0\\ 
+FWHM 662 keV [s] & 7.0\\ 
+Shielding [\% 200 keV Attenuated] & 0\% \\ 
+Calibration - Offset [channels] & 0 \\ 
+Calibration - Gain & 1.0 \\ 
+Background Counts Per Second & 200 \\ \hline 
 \end{tabular}
 \end{table}
 
@@ -149,269 +113,44 @@ In this section we analyze the generalization performance of each network on cha
 As seen in Figure \ref{fig:generalization_height_fixeddataset}, the performance of each network was not significantly changed with changes to source-detector height. This shows that performance is not impacted by the relatively small changes in the Compton continuum caused by varying the source-detector height. Each CNN - except the simple CNN identifying the lower signal-to-background ratio spectra - had the highest F1 score. Figure \ref{fig:generalization-height-easy-05} also shows that the simple dataset generalized to changes in source-detector height in higher signal-to-background ratio spectra. The complete DAE performed particularly poorly while the complete CAE and DNN performed similarly.
 % , indicating that either the pretraining produced a poor encoding that was difficult to fine-tune through further training.
 
-Models trained on the simple dataset did not generalize well to low signal-to-background data, shown in \ref{fig:generalization-height-easy-01}. The simple DNN outperformed the other models in this dataset. This is consistent with the thought that the DNN is using a ROI approach to identification and the CNN is using more abstract features. The scale of abstract features (like those associated with the Compton continuum) are different at a signal-to-background ratio of 0.1 compared to 0.5. This difference makes the features used by the simple CNN different from those required by the complete CNN.
+Models trained on the simple dataset did not generalize well to low signal-to-background data, shown in \ref{fig:generalization-height-easy-01}. The simple DNN outperformed the other models in this dataset. This is consistent with the expectation that the DNN uses an ROI approach for identification and the CNN uses more abstract features over a wider range of the spectrum. The scale of abstract features (like those associated with the Compton continuum) are different at a signal-to-background ratio of 0.1 compared to 0.5. This difference makes the features used by the simple CNN different from those required by the complete CNN.
 
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-easy-01.png}
-         \caption{}
-         \label{fig:generalization-height-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-easy-05.png}
-         \caption{}
-         \label{fig:generalization-height-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-full-01.png}
-         \caption{}
-         \label{fig:generalization-height-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-full-05.png}
-         \caption{}
-         \label{fig:generalization-height-full-05}
-     \end{subfigure}
-    % \begin{tabular}{r@{: }l r@{: }l}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    50 cm & \blackline & 100 cm & \blackdotline & 150 cm & \blackdashdotline
-    \end{tabular}
-    
-        \caption{Each model's generalization performance with respect to the height-off-ground parameter. Networks were trained with a fixed-size dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_height_fixeddataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-height}
+	\caption{Height generalization.}
+	\label{fig:sim-generalization-height}
 \end{figure}
 
-The performance using online data augmentation are shown in Figure \ref{fig:generalization_height_augdataset}. General trends in performance, such as the CNN performing very well and the DAE trained on the complete dataset performing poorly, are similar between models trained with a fixed-dataset and models trained with online data augmentation. The main difference is the reduced performance for most models.
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-aug-easy-01.png}
-         \caption{}
-         \label{fig:generalization-height-aug-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-aug-easy-05.png}
-         \caption{}
-         \label{fig:generalization-height-aug-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-aug-full-01.png}
-         \caption{}
-         \label{fig:generalization-height-aug-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-height-aug-full-05.png}
-         \caption{}
-         \label{fig:generalization-height-aug-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    50 cm & \blackline & 100 cm & \blackdotline & 150 cm & \blackdashdotline
-    \end{tabular}
-        \caption{Each model's generalization performance with respect to the height-off-ground parameter. Networks were trained with online data augmentation. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_height_augdataset}
-\end{figure}
 
 \subsection{Generalization Performance on Source-Detector Standoff Distance}
 
 In this section we analyze the generalization performance of each network on changes in source-detector standoff distance. This tests if each model is sensitive to larger changes in the Compton continuum compared to those associated with changes in source-detector height. An example of these changes can be seen in Figure \ref{fig:sim_spectra_distance_comparison}.
 
-As seen in Figure \ref{fig:generalization_dist_fixeddataset}, general trends seen in the source-detector height generalization, such as superior performance of the CNN and the poor DAE encoding, are observed in source-detector distance generalization. Changing the source-detector distance changes performance more noticeably compared to changes in standoff distance. This was especially noticeable for the shorter standoff distance of 50 cm. At this distance, the peak-to-total ratio increases significantly, which emphasizes the peak information while reducing the Compton continuum. At the lower signal-to-background ratio the closer standoff distance improves performance in each network while at the higher signal-to-background ratio this trend is reversed. A higher peak-to-total ratio makes identification easier for algorithms that focus on photopeaks. The reduced performance of each model on high peak-to-total ratio spectra on the higher signal-to-background data shows performance expected from a template matching or pattern recognition algorithm.
+As seen in Figure \ref{fig:generalization_dist_fixeddataset}, general trends seen in the source-detector height generalization, such as superior performance of the CNN and the poor DAE encoding, are observed in source-detector distance generalization. Changing the source-detector distance changes performance more noticeably compared to changes in standoff distance. This was especially noticeable for the shorter standoff distance of 50 cm. At this distance, the peak-to-total ratio increases significantly, which emphasizes the peak information while reducing the Compton continuum. At the lower signal-to-background ratio, the closer standoff distance improves performance in each network while at the higher signal-to-background ratio this trend is reversed. A higher peak-to-total ratio makes identification easier for algorithms that focus on photopeaks. The reduced performance of each model on high peak-to-total ratio spectra on the higher signal-to-background data shows performance expected from a template matching or pattern recognition algorithm.
 % that the models are acting more similarly to a  than a ROI approach. 
 
 
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-easy-01.png}
-         \caption{}
-         \label{fig:generalization-dist-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-easy-05.png}
-         \caption{}
-         \label{fig:generalization-dist-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-full-01.png}
-         \caption{}
-         \label{fig:generalization-dist-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-full-05.png}
-         \caption{}
-         \label{fig:generalization-dist-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    50 cm & \blackline & 175 cm & \blackdotline & 300 cm & \blackdashdotline
-    \end{tabular}
-        \caption{Each model's generalization performance with respect to the source-detector distance parameter. Networks were trained using fixed-size datasets. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_dist_fixeddataset}
-\end{figure}
-
-
-Training with online data augmentation again reduced performance in all models except the CNN. The CNN's performance improved significantly at a low signal-to-background ratio at a standoff distance of 50 cm, seen in Figure \ref{fig:generalization-dist-aug-easy-01}. This boost in performance tied with the CNN performance not reducing like the other models trained using online data augmentation shows that the CNN can benefit from this aggressive training technique.
-
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-aug-easy-01.png}
-         \caption{}
-         \label{fig:generalization-dist-aug-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-aug-easy-05.png}
-         \caption{}
-         \label{fig:generalization-dist-aug-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-aug-full-01.png}
-         \caption{}
-         \label{fig:generalization-dist-aug-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-dist-aug-full-05.png}
-         \caption{}
-         \label{fig:generalization-dist-aug-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    50 cm & \blackline & 175 cm & \blackdotline & 300 cm & \blackdashdotline
-    \end{tabular}
-        \caption{Standoff distance generalization performance of each model trained using data augmentation. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_dist_augdataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-dist}
+	\caption{Distance generalization.}
+	\label{fig:sim-generalization-dist}
 \end{figure}
 
 
 
 \subsection{Generalization Dependence on Resolution}
 
-In this section we analyze the generalization performance of each network on changes in detector resolution. An example of these changes can be seen in Figure \ref{fig:sim_spectra_FWHM_comparison}.
-
-Changes in resolution do not significantly impact performance of the models. General trends are similar to distance and height generalization.
-
+In this section we analyze the generalization performance of each network on changes in detector resolution. An example of these changes can be seen in Figure \ref{fig:sim_spectra_FWHM_comparison}. Changes in resolution do not significantly impact performance of the models. General trends are similar to distance and height generalization.
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-easy-01.png}
-         \caption{}
-         \label{fig:generalization-fwhm-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-easy-05.png}
-         \caption{}
-         \label{fig:generalization-fwhm-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-full-01.png}
-         \caption{}
-         \label{fig:generalization-fwhm-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-full-05.png}
-         \caption{}
-         \label{fig:generalization-fwhm-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    7.0 & \blackline & 7.5 & \blackdotline & 8.0 & \blackdashdotline
-    \end{tabular}
-        \caption{Each model's generalization performance with respect to the detector resolution. Networks were trained using fixed-size datasets. Resolutions in legend are measured at 662 keV. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_fwhm_fixeddataset}
-\end{figure}
-
-
-
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-aug-easy-01.png}
-         \caption{}
-         \label{fig:generalization-fwhm-aug-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-aug-easy-05.png}
-         \caption{}
-         \label{fig:generalization-fwhm-aug-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-aug-full-01.png}
-         \caption{}
-         \label{fig:generalization-fwhm-aug-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-fwhm-aug-full-05.png}
-         \caption{}
-         \label{fig:generalization-fwhm-aug-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    7.0 & \blackline & 7.5 & \blackdotline & 8.0 & \blackdashdotline
-    \end{tabular}
-        \caption{Each model's generalization performance with respect to the detector resolution. Networks were trained using online data augmentation. Resolutions in legend are measured at 662 keV. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_fwhm_augdataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-fwhm}
+	\caption{Resolutions generalization.}
+	\label{fig:sim-generalization-fwhm}
 \end{figure}
 
 
@@ -419,189 +158,33 @@ Changes in resolution do not significantly impact performance of the models. Gen
 
 In this section we analyze the generalization performance of each network on changes in shielding. Spectra were simulated with iron shielding that shields 40\%, 60\%, and 80\% of the intensity of a 200 keV gamma-ray.
 
-As seen previously, simple models do not generalize to the lower signal-to-background spectra. Simple models, which only uses unshielded and 20\% shielded templates, do generalize to other shielding amounts in higher signal-to-background spectra. Each simple model achieves and F1 score above 80\% after 2000 seconds for the 40\% attenuated spectra. Only the CAE achieves similar performance for the 40\% attenuated spectra. All other models and shielding settings attain F1 scores between 50\% and 75\%.
+As seen previously, simple models do not generalize to the lower signal-to-background spectra. Simple models, which only use unshielded and 20\% shielded templates, do generalize to other shielding thicknesses in higher signal-to-background spectra. Each simple model achieves an F1 score above 80\% after 2000 seconds for the 40\% attenuated spectra. Only the CAE achieves similar performance for the 40\% attenuated spectra. All other models and shielding settings attain F1 scores between 50\% and 75\%.
 
 The complete models perform better in the low signal-to-background spectra. Both complete convolutional models perform comparatively and outperform the complete dense models. Each network's performance on 40\% and 60\% attenuated spectra were comparable, while the 80\% attenuation reduced performance more significantly. Similar trends are seen in higher signal-to-background spectra. 
 
-
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-easy-01.png}
-         \caption{}
-         \label{fig:generalization-shielding-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-easy-05.png}
-         \caption{}
-         \label{fig:generalization-shielding-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-full-01.png}
-         \caption{}
-         \label{fig:generalization-shielding-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-full-05.png}
-         \caption{}
-         \label{fig:generalization-shielding-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    40\% & \blackline & 60\% & \blackdotline & 80\% & \blackdashdotline
-    \end{tabular}
-    
-    
-        \caption{Shielding generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_shielding_fixeddataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-ironshield}
+	\caption{Calibration gain generalization.}
+	\label{fig:sim-generalization-ironshield}
 \end{figure}
-
-
-Performance in data augmented models was similar to the fixed dataset models at the lower signal-to-background ratio and simple dataset. At the higher signal-to-background ratio performance dropped, especially for the CAE whose F1 score was near zero throughout the range of integration times. This shows that the CAE overtrained to the patterns in the simple dataset and did not generalize to new shielding configurations.
-
-Performance for the data augmented models on data simulated with complete parameters was similar to the fixed dataset models at the low signal-to-background ratio and comparable at the higher signal-to-background ratio. The main difference was the improved performance of the complete CNN at the lower signal-to-background ratio.
-
-
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-aug-easy-01.png}
-         \caption{}
-         \label{fig:generalization-shielding-aug-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-aug-easy-05.png}
-         \caption{}
-         \label{fig:generalization-shielding-aug-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-aug-full-01.png}
-         \caption{}
-         \label{fig:generalization-shielding-aug-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-shielding-aug-full-05.png}
-         \caption{}
-         \label{fig:generalization-shielding-aug-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    40\% & \blackline & 60\% & \blackdotline & 80\% & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance of each model trained using data augmentation, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_shielding_augdataset}
-\end{figure}
-
-
 
 \subsection{Generalization Dependence on Gain}
 
-In this section we analyze the generalization performance of each network on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. The 1.0 gain setting calibrates the 1024$^{th}$ channel of the spectrum to 3 Mev.
+In this section we analyze the generalization performance of each network on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. The 1.0 gain setting calibrates the 1024$^{th}$ channel of the spectrum to 3 MeV.
 
-At the higher signal-to-background ratio the simple models begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
+At the higher signal-to-background ratio the simple models begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the input signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
 
-The complete models performed better with changing gain, but still struggled with the 0.8 relative gain.  Compared to other complete models, the complete CNN performed the best on each relative gain setting.
-
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-easy-01.png}
-         \caption{}
-         \label{fig:generalization-cal-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-easy-05.png}
-         \caption{}
-         \label{fig:generalization-cal-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-full-01.png}
-         \caption{}
-         \label{fig:generalization-cal-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-full-05.png}
-         \caption{}
-         \label{fig:generalization-cal-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    0.8 & \blackline & 1.0 & \blackdotline & 1.2 & \blackdashdotline
-    \end{tabular}
-        \caption{Calibration gain generalization performance of each model trained using a fixed dataset. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_cal_fixeddataset}
-\end{figure}
-
-Online augmentation did not significantly improve the performance of the simple models. The F1 score for the complete CNN and DNN increased for all shielding settings except the higher signal-to-background spectra with a 0.8 relative gain.
-
+The complete models performed better with changing gain, but still struggled with the 0.8 relative gain for the reasons outline in the previous paragraph. Compared to other complete models, the complete CNN performed the best on each relative gain setting.
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-aug-easy-01.png}
-         \caption{}
-         \label{fig:generalization-cal-aug-easy-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-aug-easy-05.png}
-         \caption{}
-         \label{fig:generalization-cal-aug-easy-05}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-aug-full-01.png}
-         \caption{}
-         \label{fig:generalization-cal-aug-full-01}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/generalization-cal-aug-full-05.png}
-         \caption{}
-         \label{fig:generalization-cal-aug-full-05}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    0.8 & \blackline & 1.0 & \blackdotline & 1.2 & \blackdashdotline
-    \end{tabular}
-        \caption{Calibration gain generalization performance of each model trained using data augmentation. Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.1 and 0.5, respectively.}
-        \label{fig:generalization_cal_augdataset}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-cal}
+	\caption{Calibration gain generalization.}
+	\label{fig:sim-generalization-cal}
 \end{figure}
+
+
 
 % \subsection{Generalization Dependence on Changing Background.}
 
@@ -655,100 +238,41 @@ Online augmentation did not significantly improve the performance of the simple 
 
 \subsection{Results on Measured Spectra}
 
-This section shows performance over integration time for different calibration settings and shielding amounts in real gamma-ray spectra. Sources include $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. 
-
-% To investigate how each model identified real spectra behind shielding and spectra with different calibrations, real spectra were measured. 
-
-
-\subsubsection{Asymptotic Model Performance on Changing Voltage}
-
-To test the generalization performance of each model to changes in calibration, spectra with different voltages were recorded and the posterior probability of the measured isotope found by each model is observed over integration time. A 2x2 Ortec NaI detector was used to measure spectra with detector calibrations of 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V gave the detector an energy range extending to 3 MeV. Reported relative gain settings are calibrated to the 662 keV photopeak defining the 770 V calibration as the reference. Sources measured include $\mu$Ci level $^{137}$Cs, $^{60}$Co, $^{152}$Eu, and $^{133}$Ba. The standoff distance of each source was adjusted to keep the counts-per-second from the source equal-to and one-half-of the counts-per-second from background.
-
-The figures in \ref{fig:gain_cs137} show performance when identifying $^{137}$Cs. Models trained on the simple dataset, Figures \ref{fig:realspectra-cal-cs137-0-easy} and \ref{fig:realspectra-cal-cs137-1-easy}, did not generalize well to calibrations outside the training set. The CNN performed well, identifying $^{137}$Cs with a 100\% posterior probability after 50 seconds in both signal-to-background ratios.% The simple DNN and DAE achieve a posterior probability of above 50 \% after 60 seconds of integration time show some potential to generalize to calibrations outside the training set.
-
-Figures \ref{fig:realspectra-cal-cs137-0-full} and \ref{fig:realspectra-cal-cs137-1-full} show performance on models trained with the full dataset. Again, the CNN performs well, identifying $^{137}$Cs with a 100\% posterior in all cases except in the spectra with the most extreme gain change. Even at a relative gain change of 1.27 - outside the training dataset's parameters - the CNN outperforms the other datasets with a 100\% posterior. This shows that the convolution operation provides a stronger gain invariance than dense architectures. 
+This section shows performance over integration time for different calibration settings and shielding amounts in real gamma-ray spectra. Sources include $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. A diagram of the laboratory setup used for these measurements is shown in Figure \ref{fig:shielding_measurment_diagram}. The radioactive sources, 1 inch diameter by 1/8 inch thick plastic disks containing $\mu$Ci quantities of radioactive material, were measured on a wooden desk approximately one meter from the nearest wall to reduce radiation backscatter. We used a 2x2 inch Ortec NaI detector to measure the sources. We measured the source-detector from the source disk's face to the detector's face. Blocks of shielding material were added for the measurements in Section \ref{real_shielding_performance}. Measurements in Section \ref{real_calibration_performance} used no shielding material. 
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-cs137-0-easy.png}
-         \caption{}
-         \label{fig:realspectra-cal-cs137-0-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-cs137-1-easy.png}
-         \caption{}
-         \label{fig:realspectra-cal-cs137-1-easy}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-cs137-0-full.png}
-         \caption{}
-         \label{fig:realspectra-cal-cs137-1-full}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-cs137-1-full.png}
-         \caption{}
-         \label{fig:realspectra-cal-cs137-0-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    0.59 & \blackline & 0.78 & \blackdotline & 1.0 & \blackdashdotline & 1.27 & \blackdottedline
-    \end{tabular}
-        \caption{Calibration gain generalization performance in real $^{137}$Cs spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.5 and 0.1, respectively.}
-        \label{fig:gain_cs137}
+	\centering
+	\includegraphics[trim=0 200 210 0,clip,width=0.9\linewidth]{images/shielding_measurment_diagram}
+	\caption{Diagram of the laboratory setup used to measure radioactive sources.}
+	\label{fig:shielding_measurment_diagram}
 \end{figure}
+
+
+\subsubsection{Asymptotic Model Performance on Changing Voltage} \label{real_calibration_performance}
+
+To test the dependence of performance of each model to changes in calibration, spectra with different voltages were recorded and the posterior probability of the measured isotope found by each model is observed over integration time. The detector's calibrations was varied by changing the PMT voltage to 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V calibrated the detector's 1024$^{th}$ channel to 3 MeV. Reported relative gain settings are calibrated to the 662 keV photopeak defining the 770 V calibration as the reference. Sources measured include $\mu$Ci level $^{137}$Cs, $^{60}$Co, $^{152}$Eu, and $^{133}$Ba. The source-detector distance of each source was adjusted to keep the counts-per-second from the source equal-to and one-half-of the counts-per-second from background.
+
+The figures in \ref{fig:gain_cs137} show trained ANN performance when identifying $^{137}$Cs. Models trained on the simple dataset, Figures \ref{fig:realspectra-cal-cs137-0-easy} and \ref{fig:realspectra-cal-cs137-1-easy}, did not generalize well to calibrations outside the training set. When trained on both the simple and complete dataset, The CNN performed well. Both CNNs identified $^{137}$Cs with a 100\% posterior probability after 50 seconds in both signal-to-background ratios.% The simple DNN and DAE achieve a posterior probability of above 50 \% after 60 seconds of integration time show some potential to generalize to calibrations outside the training set.
+
+Figures \ref{fig:realspectra-cal-cs137-0-full} and \ref{fig:realspectra-cal-cs137-1-full} show performance on models trained with the full dataset. Again, the CNN performs well, identifying $^{137}$Cs with a 100\% posterior in all cases except in the spectra with the most extreme gain change. Even at a relative gain change of 1.27, outside the training dataset's parameters, the CNN outperforms the other datasets with a 100\% posterior. This shows that the convolution operation provides a stronger gain invariance than dense architectures. 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/realspectra-cal-cs137}
+	\caption{Calibration gain generalization performance in real $^{137}$Cs spectra for the DNN, CNN with and without autoencoder pretraining.}
+	\label{fig:realspectra-cal-cs137}
+\end{figure}
+
 
 The figures in \ref{fig:gain_co60} show performance when identifying $^{60}$Co. Some models exhibit improved generalization performance when using the simple dataset over $^{137}$Cs identification. The autoencoders' performance improves for a range of calibrations while the performance of the DNN and CNN improves slightly. The performance of the autoencoders show that pretraining on simulated spectra did have a positive effect on the final network. This also shows that the dense encoding is particularly well suited to changes in calibration.
 
 Performance is degraded when using the full dataset. This is likely due to the models trained on the full dataset assigning higher contributions to other isotopes. Because the spectra for each isotope can look significantly different from each other in the full dataset, the models are more likely to assign higher probabilities to all isotopes.
 
-
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-co60-0-easy.png}
-         \caption{}
-         \label{fig:realspectra-cal-co60-0-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-co60-1-easy.png}
-         \caption{}
-         \label{fig:realspectra-cal-co60-1-easy}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-co60-0-full.png}
-         \caption{}
-         \label{fig:realspectra-cal-co60-1-full}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-co60-1-full.png}
-         \caption{}
-         \label{fig:realspectra-cal-co60-0-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    0.59 & \blackline & 0.78 & \blackdotline & 1.0 & \blackdashdotline & 1.27 & \blackdottedline
-    \end{tabular}
-        \caption{Calibration gain generalization performance in real $^{60}$Co spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.5 and 0.1, respectively.}
-        \label{fig:gain_co60}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/realspectra-cal-co60}
+	\caption{Calibration gain generalization performance in real $^{60}$Co spectra for the DNN, CNN with and without autoencoder pretraining.}
+	\label{fig:realspectra-cal-co60}
 \end{figure}
 
 Subfigures \ref{fig:realspectra-cal-ba133-0-easy} and \ref{fig:realspectra-cal-ba133-1-easy} show that performance on the simple dataset drops significantly when identifying $^{133}$Ba. The drop in performance is attributed to the lack of spectral variety in the simple dataset. For generalization to real spectra, spectral variety in a training set is required for complicated spectra like $^{133}$Ba. Despite this, the models that performed best were convolutional.
@@ -756,179 +280,81 @@ Subfigures \ref{fig:realspectra-cal-ba133-0-easy} and \ref{fig:realspectra-cal-b
 Performance improved in complete models. Again, both convolutional models outperformed the purely dense models, with the CNN outperforming the CAE at the higher signal-to-background ratio. All models only generalized to the relative gain settings of 0.78 and 1.0,  
 
 
-
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-ba133-0-easy.png}
-         \caption{}
-         \label{fig:realspectra-cal-ba133-0-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-ba133-1-easy.png}
-         \caption{}
-         \label{fig:realspectra-cal-ba133-1-easy}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-ba133-0-full.png}
-         \caption{}
-         \label{fig:realspectra-cal-ba133-1-full}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-ba133-1-full.png}
-         \caption{}
-         \label{fig:realspectra-cal-ba133-0-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    0.59 & \blackline & 0.78 & \blackdotline & 1.0 & \blackdashdotline & 1.27 & \blackdottedline
-    \end{tabular}
-        \caption{Calibration gain generalization performance in real $^{133}$Ba spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.5 and 0.1, respectively.}
-        \label{fig:gain_ba133}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/realspectra-cal-ba133}
+	\caption{Calibration gain generalization performance in real $^{133}$Ba spectra for the DNN, CNN with and without autoencoder pretraining.}
+	\label{fig:realspectra-cal-ba133}
 \end{figure}
+
 
 Figures in \ref{fig:gain_eu152} show performance when identifying $^{152}$Eu. For the first time, convolutional architectures did not outperform the dense models. This performance change only occurred in the simple dataset. As explained above, because of the lack of spectral variety in the simple dataset, generalization to real spectra is more difficult. $^{152}$Eu has many more identifiable photopeaks in a larger range of energies compared to $^{133}$Ba. Because of this, using the channel-based approach (dense architectures) would lead to better performance over approaches that use a form of feature extraction.
 
 The improvement in the convolutional models for $^{152}$Eu identification occurs when more spectral variety is available in the complete dataset. With the complete dataset, all gain settings except 0.59 are identified with high posterior probability above 100 seconds of integration time. 
 
 
-
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-eu152-0-easy.png}
-         \caption{}
-         \label{fig:realspectra-cal-eu152-0-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-eu152-1-easy.png}
-         \caption{}
-         \label{fig:realspectra-cal-eu152-1-easy}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-eu152-0-full.png}
-         \caption{}
-         \label{fig:realspectra-cal-eu152-1-full}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/realspectra-cal-eu152-1-full.png}
-         \caption{}
-         \label{fig:realspectra-cal-eu152-0-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    0.59 & \blackline & 0.78 & \blackdotline & 1.0 & \blackdashdotline & 1.27 & \blackdottedline
-    \end{tabular}
-        \caption{Calibration gain generalization performance in real $^{152}$Eu spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, Figures in the top and bottom row are trained using the simple and complete dataset and Figures in the first and second column are use spectra with signal-to-background ratios of 0.5 and 0.1, respectively.}
-        \label{fig:gain_eu152}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/realspectra-cal-eu152}
+	\caption{Calibration gain generalization performance in real $^{152}$Eu spectra for the DNN, CNN with and without autoencoder pretraining.}
+	\label{fig:realspectra-cal-eu152}
 \end{figure}
 
-\subsubsection{Asymptotic Model Performance on Shielding}
+\subsubsection{Asymptotic Model Performance with Respect to Shielding} \label{real_shielding_performance}
 
-To investigate the generalization performance of the model to increased shielding, spectra were measured with light, medium, and a heavy amount of shielding. 
+To investigate the generalization performance of the model to increased shielding, spectra of $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu were measured with increasing thicknesses of shielding material. Iron or aluminum blocks were 
 
-Identifications on $^{137}$Cs was not heavily effected by varying shielding in either training dataset. This is due to shielding not dramatically affecting the single photopeak of $^{137}$Cs. The CNN performs very well in both datasets. The complete DNN performs comparably to complete CNN. The DNN and DAE are affected by increased shielding when trained on the simple dataset, showing that slight changes in spectral shapes will affect performance in dense models when they are not exposed to a variety of spectral patterns. The networks with autoencoder pretraining perform worse than networks without pretraining when trained on the complete dataset.
+Identification performance for $^{137}$Cs was not heavily effected by varying shielding in either training dataset. This is due to shielding not dramatically affecting the single photopeak of $^{137}$Cs. The CNN performs very well in both datasets. The complete DNN performs comparably to complete CNN. The DNN and DAE are affected by increased shielding when trained on the simple dataset, showing that slight changes in spectral shapes affect performance in dense models when they are not exposed to a variety of spectral patterns. When trained on the complete dataset, networks without autoencoder pretraining outperform networks with pretraining.
+
 
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-cs137-easy.png}
-         \caption{}
-         \label{fig:iron-cs137-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-cs137-full.png}
-         \caption{}
-         \label{fig:iron-cs137-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    light & \blackline & medium & \blackdotline & heavy & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance in real $^{137}$Cs spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, The Figure on the right and left are trained using the simple and complete dataset.}
-        \label{fig:shielding_cs137}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/shielded_cs137}
+	\caption{Spectra of $^{137}$Cs shielded with increasing amounts of iron.}
+	\label{fig:shielded_cs137}
 \end{figure}
+
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/iron_co60}	\caption{Shielding generalization performance in real $^{137}$Cs spectra.}
+	\label{fig:iron_cs137}
+\end{figure}
+
 
 The effect of shielding is more significant in $^{60}$Co. As expected, when trained on the simple dataset each model performs worse with heavier shielding. The convolutional models and autoencoders outperform the DNN after 120 seconds of integration time. The DAE performs the best on the highest shielded spectra.  
 
 The DNN is heavily effected by shielding even when trained on the complete dataset. The CNN performs very well, with the DAE performing well over a range of shielding amounts. The DNN was the most drastically affected by the shielding. Compared to the other networks, the DNN has a relatively large variance in its posterior probability for each shielding amount.
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-co60-easy.png}
-         \caption{}
-         \label{fig:iron-co60-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-co60-full.png}
-         \caption{}
-         \label{fig:iron-co60-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    light & \blackline & medium & \blackdotline & heavy & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance in real $^{60}$Co spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, The Figure on the right and left are trained using the simple and complete dataset.}
-        \label{fig:shielding_co60}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/shielded_co60}	\caption{Spectra of $^{60}$Co shielded with increasing amounts of iron.}
+	\label{fig:shielded_co60}
 \end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/iron_co60}	\caption{Shielding generalization performance in real $^{60}$Co spectra.}
+	\label{fig:iron_co60}
+\end{figure}
+
 
 Due to the relatively low gamma-ray energies of $^{133}$Ba compared to the other spectra in this section, aluminum with thicknesses of 6.56 mm, 25.5 mm, and 51.0 mm were used for the light, medium, and heavy settings. When trained on the simple dataset, the CAE performed best. Unlike the previous isotopes, the DAE trained on the simple dataset did not perform well on shielded $^{133}$Ba. Even when trained on the complete dataset, the CAE outperformed the DAE. Characteristic $^{133}$Ba photons have relatively low energy - particularly the photopeaks at 31 and 81 keV. Shielding significantly distorts the spectrum because these photons are easily attenuated. Features like the Compton continuum from the higher energy photopeaks may provide more signal when identifying these isotopes in shielded case. These features are also better exploited in the networks trained on the complete dataset. The dense architectures perform poorly even when trained on the complete dataset. The variance of the posterior probability for the convolutional architectures are lower than the DAE, showing they are more consistent.
 
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/alum-ba133-easy.png}
-         \caption{}
-         \label{fig:alum-ba133-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/alum-ba133-full.png}
-         \caption{}
-         \label{fig:alum-ba133-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    light & \blackline & medium & \blackdotline & heavy & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance in real $^{133}$Ba spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, The Figure on the right and left are trained using the simple and complete dataset.}
-        \label{fig:shielding_ba133}
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/shielded_ba133}	\caption{Spectra of $^{133}$Ba shielded with increasing amounts of aluminum.}
+	\label{fig:shielded_ba133}
 \end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/alum_ba133}	\caption{Shielding generalization performance in real $^{133}$Ba spectra.}
+	\label{fig:alum_ba133}
+\end{figure}
+
 
 
 The simple DAE performs well generalizing to shielded $^{152}$Eu while the simple CNN generalizes poorly. The simple CAE and DNN both perform similarly across the full range of shielding. 
@@ -936,37 +362,24 @@ The simple DAE performs well generalizing to shielded $^{152}$Eu while the simpl
 The complete CNN identifies lightly and moderately shielded $^{152}$Eu with a high posterior probability. The DNN performs second best, identifying these spectra with a slightly lower posterior probability. The complete DNN operates consistently over a range of integration times for the heavily shielded $^{152}$Eu. Only after 150 seconds of integration time does the CNN perform similarly on heavily shielded $^{152}$Eu. % The complete CAE performs worse.
 
 
-% Because the gamma-ray energies of $^{152}$Eu are spread out 
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/shielded_eu152}
+	\caption{Spectra of $^{152}$Eu shielded with increasing amounts of iron.}
+	\label{fig:shielded_eu152}
+\end{figure}
 
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-eu152-easy.png}
-         \caption{}
-         \label{fig:iron-eu152-easy}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/iron-eu152-full.png}
-         \caption{}
-         \label{fig:iron-eu152-full}
-     \end{subfigure}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l r@{: }l}
-    DNN & Green & CNN & Red & DAE & Yellow & CAE & Blue\\
-    \end{tabular}
-    \begin{tabular}{r@{: }l r@{: }l r@{: }l}
-    light & \blackline & medium & \blackdotline & heavy & \blackdashdotline
-    \end{tabular}
-        \caption{Shielding generalization performance in real $^{152}$Eu spectra for the DNN, CNN with and without autoencoder pretraining. F1 score shown in averaged over five networks trained with fixed-size datasets, The Figure on the right and left are trained using the simple and complete dataset.}
-        \label{fig:shielding_eu152}
+	\centering
+	\includegraphics[width=0.9\linewidth]{images/iron_eu152}	\caption{Shielding generalization performance in real $^{152}$Eu spectra.}
+	\label{fig:iron_eu152}
 \end{figure}
 
 \section{Chapter Discussion and Conclusion}
 
-This chapter shows that CNN's trained on the complete dataset generalize very well to simulated and real gamma-ray spectra. When trained on the simple dataset CNN's often also perform well when identifying spectra outside the simple dataset's parameters, but struggle with real spectra. The autoencoders perform poorly in the simulated spectra, but generalize well to parameters outside the simple training set - particularly DAEs. There is also some evidence that CAEs generalize better to isotopes with predominately low energy photopeaks in real spectra. Occasionally, at the lower signal-to-background ratio, the DNN outperforms the CNN. Because the dense architecture is more suited to comparing counts in different regions, it should be more robust against changes in Compton continua as it compares counts in photopeak areas. Despite this, DNN's offer unpredictable performance. Due to the large number of inputs, the DNN's are likely overtraining to specific combinations of noise in the training datasets.
+This chapter shows that CNNs trained on the complete dataset generalize very well to simulated and real gamma-ray spectra. When trained on the simple dataset CNNs often also perform well when identifying spectra outside the simple dataset's parameters, but struggle with real spectra. The autoencoders perform poorly in the simulated spectra, but generalize well to parameters outside the simple training set - particularly DAEs. There is also some evidence that CAEs generalize better to isotopes with predominately low energy photopeaks in real spectra. Occasionally, at the lower signal-to-background ratio, the DNN outperforms the CNN. Because the dense architecture is more suited to comparing counts in different regions, it should be more robust against changes in Compton continua as it compares counts in photopeak areas. Despite this, DNN's offer unpredictable performance. Due to the large number of inputs, the DNN's are likely overtraining to specific combinations of noise in the training datasets.
 
 In addition to the above, the results also shown that using datasets of fixed sizes should be preferred over using online data augmentation. Online data augmentation usually reduced performance in each network. There is some evidence that the CNN generalizes better when trained with online data augmentation. This may be due to the larger capacity of the CNN compared to the DNN. 
 
