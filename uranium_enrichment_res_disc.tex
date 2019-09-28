@@ -48,7 +48,9 @@ to the enrichment of the measured material. These ROIs are placed around the 186
 
 \section{Problem Description and Training Dataset Overview}
 
-To investigate how well a machine learning algorithm can learn to perform uranium enrichment measurements, machine learning architectures found in Chapter \ref{ChapterMachineLearningModelsExplored} were trained using a dataset of simulated enriched uranium spectra.
+To investigate how well a machine learning algorithm can learn to perform uranium enrichment measurements, machine learning architectures found in Chapter \ref{ChapterMachineLearningModelsExplored} were trained using a dataset of simulated enriched uranium spectra. 
+
+
 
 % u232 production reactions from uranium species https://www.pnnl.gov/main/publications/external/technical_reports/PNNL-12075.pdf
 
@@ -115,7 +117,7 @@ Signal to Background Ratio & 0.1 - 4.0 & Uniform \\ \hline
 
 \section{Generalization Dependence Results - Simulated Data}
 
-These sections describe how each trained model perform on simulated enriched uranium. To investigate the generalization performance, spectra are simulated with enrichments of 3\%, 25\%, 50\%, 75\%, and 93\% in different conditions. For each spectrum, the average output from five bagged trained models are recorded. To observe the output variance, 10 spectra are simulated for each enrichment value and their average output and variance are displayed. Default simulation parameters are shown in Table \ref{table:default_sim_params_uranium}. Changes to these defaults are indicated for each generalization experiment.
+These sections describe how each trained model perform on simulated enriched uranium. To investigate the generalization performance, spectra are simulated with enrichments of 3\%, 25\%, 50\%, 75\%, and 93\% in different conditions. For each spectrum, the average enrichment predicted from five bagged trained models were recorded. To observe the enrichment prediction's variance, 10 spectra are simulated for each enrichment value and their average and variance are displayed. Default simulation parameters are shown in Table \ref{table:default_sim_params_uranium}. Changes to these defaults are indicated for each generalization experiment.
 
 \begin{table}[H]
 \centering
@@ -137,9 +139,9 @@ Background Counts Per Second & 200 \\ \hline
 
 \subsection{Generalization Dependence on Shielding}
 
-To test each model's generalization performance with respect to shielding, enriched uranium spectra were simulated with various amounts of shielding. The effect of each shielding is shown in Figure \ref{fig:simulated_uranium_shielding}. The outputs from each model on these cases are shown in Figure \ref{fig:simuranium-shielding}. In general for each case, the complete networks outperform the simple networks. This indicates that the reduced capacity of the simple networks is insufficient to properly perform uranium enrichment measurements using the provided dataset. At 93\% enrichment each model underpredicted the enrichment.
+To test each model's generalization performance with respect to shielding, enriched uranium spectra were simulated with various amounts of shielding. The effect of each shielding is shown in Figure \ref{fig:simulated_uranium_shielding}. The predicted enrichments from each model on these cases are shown in Figure \ref{fig:simuranium-shielding}. In general for each case, the complete networks outperform the simple networks. This indicates that the reduced capacity of the simple networks is insufficient to properly perform uranium enrichment measurements using the provided dataset. At 93\% enrichment each model underpredicted the enrichment.
 
-The simple networks consistently overpredict the enrichment at and below 50\%. The simple models also underpredict the enrichment at values over 50\%. This reinforces the conclusion that the simple network has too little capacity to fit the data. Because the range of enrichments in the training data are uniformly distributed from 0 - 100\%, the naive method to minimize the cost function is to output values near 50\%. The simple networks, except for the simple DAE, consistently underpredicted the enrichment in the case with 1.42 mm lead shielding. The complete models were largely unaffected by the various amounts of shielding.
+The simple networks consistently overpredict the enrichment at and below 50\%. The simple models also underpredict the enrichment at values over 50\%. This reinforces the conclusion that the simple network has too little capacity to fit the data. Because the range of enrichments in the training data are uniformly distributed from 0 - 100\%, the naive method to minimize the cost function is predict enrichments near 50\%. The simple networks, except for the simple DAE, consistently underpredicted the enrichment in the case with 1.42 mm lead shielding. The complete models were largely unaffected by the various amounts of shielding.
 
 
 \begin{figure}[H]
@@ -187,9 +189,9 @@ The simple networks consistently overpredict the enrichment at and below 50\%. T
 
 \subsection{Generalization Dependence on Changing Calibration} \label{section_uranium_sim_cal}
 
-To test each model's generalization performance with respect to calibration, enriched uranium spectra were simulated with various relative gains. The outputs from each model on these cases are shown in Figure \ref{fig:simuranium-cal}. Model performance at relative gains of 0.9 and 1.1 are similar to the reference gain case, shown in Figure \ref{fig:simuranium-noshield}.
+To test each model's generalization performance with respect to calibration, enriched uranium spectra were simulated with various relative gains. The predict enrichments from each model on these cases are shown in Figure \ref{fig:simuranium-cal}. Model performance at relative gains of 0.9 and 1.1 are similar to the reference gain case, shown in Figure \ref{fig:simuranium-noshield}.
 
-At the extreme relative gain shifts of 0.8 and 1.2 performance for the models changes. At a relative gain shift of 0.8, the dense models display a large variance in output values while the convolutional models do not. Convolutional models are effected less by the large change in gain because of their inherent shift invariance. At a relative gain shift of 0.8, the 186 keV peak from $^{235}$U is shifted to the 225 keV region as seen in Figure \ref{fig:simulated_uranium_calibration_93pct}. In this region there is little spectral information about enrichment. Because of this, this peak - which is the main source of enrichment information - may be ignored. Because the 186 keV peak is ignored the dense networks underpredict enrichment at a 0.8 relative gain shift. At a gain shift of 1.2 each model overpredicts enrichment for enrichments at and below 50\%. Because the 1.2 relative shift moves the 766 keV and 1001 keV $^{238}$U peaks into regions of little importance for the spectra without gain shift, seen in Figure \ref{fig:simulated_uranium_calibration_10pct}, these peaks are ignored and the enrichment is overpredicted.
+At the extreme relative gain shifts of 0.8 and 1.2 performance for the models changes. At a relative gain shift of 0.8, the dense models display a large variance in predict enrichments while the convolutional models do not. Convolutional models are effected less by the large change in gain because of their inherent shift invariance. At a relative gain shift of 0.8, the 186 keV peak from $^{235}$U is shifted to the 225 keV region as seen in Figure \ref{fig:simulated_uranium_calibration_93pct}. In this region there is little spectral information about enrichment. Because of this, this peak - which is the main source of enrichment information - may be ignored. Because the 186 keV peak is ignored the dense networks underpredict enrichment at a 0.8 relative gain shift. At a gain shift of 1.2 each model overpredicts enrichment for enrichments at and below 50\%. Because the 1.2 relative shift moves the 766 keV and 1001 keV $^{238}$U peaks into regions of little importance for the spectra without gain shift, seen in Figure \ref{fig:simulated_uranium_calibration_10pct}, these peaks are ignored and the enrichment is overpredicted.
 
 % Also, because the shifted peak is wider, more nodes connected to this region would need to update to extract useful information. 
 
@@ -270,7 +272,7 @@ Enrichment & $^{235}$U Mass (g) & Material & Live Time (s)   \\ \hline
 	\label{fig:measured_uranium_plots}
 \end{figure}
 
-Figure \ref{fig:measured_uranium} shows the mean and variance of each model and each measured spectrum. Similar to the simulated spectra, the simple architectures underpredicted enrichments over 50\% and overpredicted enrichments under 50\%. The simple DAE had a visible output variance at lower enrichments while the rest of the networks did not have observable variance in their outputs. The complete architectures were more accurate than the simple architectures above 20\% enrichment. At 27.1\% enrichment, each convolutional model overpredicted the enrichment while the dense models predicted closer to the true value. % This is due to the $^{235}$U features being the wrong size for the convolutional filters.
+Figure \ref{fig:measured_uranium} shows the mean and variance of each model and each measured spectrum. Similar to the simulated spectra, the simple architectures underpredicted enrichments over 50\% and overpredicted enrichments under 50\%. The simple DAE's predict enrichment variance was visible at lower enrichments while the rest of the networks did not have observable variance in their predictions. The complete architectures were more accurate than the simple architectures above 20\% enrichment. At 27.1\% enrichment, each convolutional model overpredicted the enrichment while the dense models predicted closer to the true value. % This is due to the $^{235}$U features being the wrong size for the convolutional filters.
 
 
 
