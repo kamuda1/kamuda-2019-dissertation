@@ -59,14 +59,15 @@ E_{\gamma}' = \frac{E_{\gamma}}{1 + \frac{E_{\gamma}}{m_{0} c^2} (1-cos\theta)},
 
 depends on the scattering angle, $\theta$, the incident photon's energy, E$_{\gamma}$, and the rest mass of the electron, m$_{o}$c$^{2}$. A photon scattering at an angle of 180$^{o}$ deposits its maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed at $\theta$ = 180$^{o}$, seen in the solid line in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies known as the Compton continuum. Accounting for the binding energy of electrons in a medium produces a Compton continuum more similar to the dotted line in Figure \ref{fig:ideal_compton}.
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{images/ideal_compton}
+	\caption{Diagram of energy absorbed in an idealized Compton scattering event. The solid and dashed line represent idealized spectra with and without including electron binding energy. Reproduced from \cite{gilmore}.}
+	\label{fig:ideal_compton}
+\end{figure}
+
 The Compton continuum of higher-energy photons will add to lower-energy photopeaks, adding noise to and changing the baseline of lower-energy photons' signals. The geometry between the source and detector changes the Compton continuum's shape, making the Compton continuum's signal difficult to incorporate into an identification algorithm. This signal can be incorporated into template matching or ANN based algorithms by including library or training set examples with various source-detector geometries.
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\linewidth]{images/ideal_compton}
-\caption{Diagram of energy absorbed in an idealized Compton scattering event. The solid and dashed line represent idealized spectra with and without including electron binding energy. Reproduced from \cite{gilmore}.}
-\label{fig:ideal_compton}
-\end{figure}
 
 
 
@@ -193,7 +194,12 @@ While automated gain stabilization methods exist, many require a clear photopeak
 
 \section{Machine Learning}
 
+Machine learning models can be though of like black box functions that transform some input into some output given a provided training dataset. An ANNs capacity describes how complicated this function can be. High capacity models can learn complicated relationships between inputs and outputs, but are sensitive to overtraining. Overtraining occurs when the model memorizes a training dataset and loses the ability to correctly map inputs from outside the training dataset to correct outputs. Low capacity models fail to learn the relationship between a given input and output dataset. A model's capacity is related to the number of its free parameters. Rigorously determining a model's capacity is an active area of machine learning research. 
+
+Machine learning tasks often require different architectural and training hyperparameters for optimal performance on a tasks of different complexity \cite{Bergstra2012}. To investigate how hyperparameters differ for gamma-ray spectroscopy, in Chapter \ref{ChapterMachineLearningModelsExplored} we optimize architectures for isotope classification tasks of increasing difficulty. Analyzing optimal hyperparamters also allows us to determine model capacity requirements for increasingly difficult problems.
+
 In this section we describe the general theory behind how neural networks operate, how to train them, and how to optimize their architectures for a task. We also give an introduction to neural network architectures studied in this work and describe parameters that affect their training.
+
 
 \subsection{General Neural Network Architecture}
 
@@ -227,7 +233,7 @@ As seen in Figure \ref{fig:Node}, each neuron operates by summing the products o
 \mathbf{X} &= \text{input data.} \nonumber
 \end{align}
 %
-Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analytically. Numerical methods for solving this equation include gradient descent through the back-propagation of errors \cite{Rumelhart1986}, genetic learning algorithms \cite{Yao1999}, and Newton's method \cite{Fletcher2000}. In this work, we use a gradient descent implementation called Adam \cite{Kingma2015}. Adam is described in section \ref{section_training_algs}.
+Except in simple cases, Equation \ref{eq:argminW_Error} cannot be solved analytically. Numerical methods for solving this equation include gradient descent through the back-propagation of errors \cite{Rumelhart1986}, genetic learning algorithms \cite{Yao1999}, and Newton's method \cite{Fletcher2000}. In this work, we use a gradient descent implementation called Adam (adaptive moment estimation) \cite{Kingma2015}. Adam is described in section \ref{section_training_algs}.
 
 \subsection{Neural Network Training}
 
@@ -261,7 +267,7 @@ Early stopping is needed to end training when the model begins to overfit or lea
 	\label{fig:training_testing_error}
 \end{figure}
 
-A common technique for choosing training and validation data is k-folds cross validation. Figure \ref{fig:kfolds} illustrates 5-folds cross validation. In this process, $\frac{1}{k}$ of all available data is split into a validation dataset and the rest is defined as the training dataset. The model is then trained using the training data and the validation dataset's error is recorded. The process of splitting the dataset is repeated k times. The average error metric of each trained model on the validation dataset is used to estimate the generalization capabilities of the overall model. In this work, we use 5-folds cross validation to 
+A common technique for choosing training and validation data is k-folds cross validation. Figure \ref{fig:kfolds} illustrates 5-folds cross validation. In this process, $\frac{1}{k}$ of all available data is split into a validation dataset and the rest is defined as the training dataset. The model is then trained using the training data and the validation dataset's error is recorded. The process of splitting the dataset is repeated k times. The average error metric of each trained model on the validation dataset is used to estimate the generalization capabilities of the overall model. In this work, we use 5-folds cross validation in our hyperparameter searches and final model training.
 
 
 \begin{figure}[H]
@@ -300,7 +306,13 @@ The geometry of the above network's operation is illustrated for an example data
 The classes in this example dataset are linearly separable, meaning lines can be drawn completely separating each class. If the classes were not linearly separable, additional hidden layers would be necessary to compute the function. It has been shown that additional hidden layers allow the creation of arbitrary decision boundaries \cite{Hornik1991}. 
 
 
-Backpropagation uses the chain rule to find these derivatives for some training data and target. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error function, E$_{MSE}$, on the network described in Equation \ref{eq:single_layer_eq_sum}, we apply the chain rule to find an expression for
+Backpropagation uses the chain rule to find these derivatives for some training data and target. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error (MSE) function,
+%
+\begin{equation} \label{eq:MSE_error}
+E_{MSE} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2,
+\end{equation}
+%
+on the network described in Equation \ref{eq:single_layer_eq_sum}, we apply the chain rule to find an expression for
 %
 \begin{align} \label{eq:dMSE}
 \frac{dE_{MSE}}{dw_j} &= \frac{dE_{MSE}}{dy_i} \frac{dy_i}{dw_j}.
@@ -395,7 +407,8 @@ Using Equations \ref{eq:CrossEntropy1} and \ref{eq:CrossEntropy2}, the weights c
 
 In addition to the weights connecting neurons, \textit{hyperparameters} can modify ANN behavior. Hyperparameters determine both the network's structure (number of layers, number of nodes in each layer, activation function for each layer) and how the model learns (learning rate, momentum, loss function). The following section discusses various hyperparameters and their effects on ANN learning.
 
-The hyperparameters and their ranges used to optimize dense and convolutional models in this dissertation are shown in Tables \ref{table:hyperparameter_dataset_parameters_DNN} and \ref{table:hyperparameter_dataset_parameters_CNN}, respectively. Methods for hyperparameter  optimization are discussed in Section \ref{section_hp_opt}. The hyperparameter ranges explored in this dissertation are base on our published work \cite{kamuda2017, kamuda2018, kamudaThesis2017}.
+% The hyperparameters and their ranges used to optimize dense and convolutional models in this dissertation are shown in Tables \ref{table:hyperparameter_dataset_parameters_DNN} and \ref{table:hyperparameter_dataset_parameters_CNN}, respectively. 
+Methods for hyperparameter optimization are discussed in Section \ref{section_hp_opt}. The hyperparameter ranges explored in this dissertation are base on ranged used in our published work \cite{kamuda2017, kamuda2018, kamudaThesis2017}.
 
 \subsubsection{Learning Rate} \label{LearningRateSubsection}
 
@@ -411,24 +424,24 @@ The learning rate , $\eta$, affects the magnitude of each weight update. If $\et
 
 There are many methods to modify $\eta$ to encourage more efficient learning. One method to increase the speed of learning is to start with a large $\eta$ and decrease $\eta$ as a function of iteration number. Ideally, this method would lead to quick initial learning when far from an optima and slower learning near an optima to more finely explore it. The difficulty with this method is the requirement for a function that slows the learning rate efficiently for a given problem.
 
-% \subsubsection{Learning Momentum}
+\subsubsection{Learning Momentum}
 
-% Another method to speed up learning is to add a momentum hyperparameter, $\mu$, to the weight update algorithm \cite{Yu1997}, 
-%
-% \begin{equation} \label{eq:update_momentum}
-% \Delta w_{ij}(n) = - \eta \frac{dE_{MSE}}{dw_j} +\mu \Delta w_{ij}(n-1).
-% \end{equation}
-%
-% Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when % the weights are updated at large steps, far from an optima, but will decrease near an optimum, allowing slower learning near an optimum. 
+Another method to speed up learning is to add a momentum hyperparameter, $\mu$, to the weight update algorithm \cite{Yu1997}, 
+
+\begin{equation} \label{eq:update_momentum}
+\Delta w_{ij}(n) = - \eta \frac{dE_{MSE}}{dw_j} +\mu \Delta w_{ij}(n-1).
+\end{equation}
+
+Similar to the goal of slowing learning over time described above, the momentum term attempts to slow learning near optima. The momentum will be large when the weights are updated at large steps, far from an optima, but will decrease near an optimum, allowing slower learning near an optimum. The learning momentum term is employed by the Adam optimizer, which is described in the following section.
 
 \subsubsection{Training Algorithms} \label{section_training_algs}
 
-There are many ANN training algorithms that employ various learning rate schedules and momentum functions. These algorithms include but are not limited to: Nesterov's accelerated gradient \cite{nesterov1983}, simulated annealing \cite{Kirkpatrick1983}, ADADELTA (An Adaptive Learning Rate Method) \cite{ADADELTA}, and Adam (Adaptive Moment Estimation) \cite{Kingma2015}. 
+There are many ANN training algorithms that employ various learning rate schedules and momentum functions. These algorithms include but are not limited to: Nesterov's accelerated gradient \cite{nesterov1983}, simulated annealing \cite{Kirkpatrick1983}, ADADELTA (An Adaptive Learning Rate Method) \cite{ADADELTA}, and Adam \cite{Kingma2015}. 
 
 % Adam incorporates of parts of RMSprop and AdaGrad.
 In this thesis, the Adam optimizer as implemented by TensorFlow \cite{tensorflow2015-whitepaper} was chosen as the training algorithm. The Adam optimizer is widely used due to training speedups and performance improvements on popular benchmark datasets like MNIST \cite{lecun98}, IMDB movie reviews \cite{Maas2011}, and CIFAR-10 \cite{Krizhevsky2009}. Another benefit of Adam is the introduction of effectively only one hyperparameter, the learning rate.
 
-The ADAM optimizer update rule is described below. For the following, $g_t$ is the gradient of the error function with respect to the network parameters at iteration $t$, 
+The Adam optimizer update rule is described below. For the following, $g_t$ is the gradient of the error function with respect to the network parameters at iteration $t$, 
 \begin{equation} \label{eq:adam1}
 m_t = \beta_1 m_{t-1} + (1 - \beta_1) g_t,
 \end{equation}
@@ -458,51 +471,29 @@ Finally, the weight update equation is computed as
 
 \subsubsection{Cost Functions and Performance Metrics}
 
-The choice of cost function to train against depends on the targets the network is attempting to learn. One of the simplest error functions is the binary accuracy for classification, 
-%
-\begin{align} \label{eq:Binary_accuracy}
-E_{Binary} &= {\frac{1} N} \sum_{n=1}^N \mathds{1}_[\hat{y}_n \neq y_n ], \\
-\text{where } N &= \text{ number of output neurons} \nonumber \\
-y_n &= n^{th} \text{ output neuron's ground truth} \nonumber \\
-\hat{y}_n &= n^{th} \text{ output neuron's value} \nonumber \\
-\mathds{1}_A &= \text{indicator function} \nonumber \\
-&= \nonumber
-\begin{cases}
-1  & \quad \text{if } A \text{ is True}\\
-0  & \quad \text{if } A \text{ is False.}
-\end{cases} \nonumber
-\end{align}
-% where N is the total number of output neurons, $y_n$ is the ground truth of the n$^{th}$ output, and $\hat{y}_n$ is the ANN output of the n$^{th}$ output neuron. 
-While this is a simple function, it cannot be used to train a gradient descent algorithm because it is discontinuous (there is no incremental indication that a model is improving).
-
-A simple differentiable cost function is the mean squared error function,
-%
-\begin{equation} \label{eq:MSE_error}
-E_{MSE} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2.
-\end{equation}
-%
-Because this function is differentiable, it can be used to train a gradient descent algorithm. The MSE function is appropriate when targets are any real number, as in a regression problem. The MSE cost function is used in the uranium enrichment regression problem in Chapter \ref{uranium-enrichment}. This cost function is also used when training autoencoders. An autoencoder is an ANN that attempts to reconstruct an input signal. Autoencoders are described in more detail in Section \ref{Autoencoders}. The autoencoders used in this work employ the MSE cost function.
-
-For multi-class classification problems, the mean cross entropy,
+The choice of cost function used in an ANN depends on the task the network is attempting to learn. Tasks that require the network's output be real numbers typically use the MSE function and multi-class classification tasks use the mean cross entropy (MCE),
 %
 \begin{equation} \label{eq:CrossEntropy}
-E_{MCE} = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n), 
+E_{MCE} = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n).
 \end{equation}
 %
-can be used as a cost function. Cross entropy measures the similarity between two probability distributions. By using cross entropy with the softmax output function,
+
+The MSE function is appropriate when targets are any real number, as in a regression problem. The MSE cost function is used in the uranium enrichment regression problem in Chapter \ref{uranium-enrichment}. This cost function is also used when training the autoencoders in this work. Autoencoders, described in more detail in Section \ref{Autoencoders}, are ANNs that attempts to reconstruct an input signal.
+
+Cross entropy measures the similarity between two probability distributions. By using cross entropy with the softmax output function,
 %
 \begin{equation} \label{eq:softmax}
 softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)},
 \end{equation}
 %
-we can calculate the posterior probability of each class \cite{Bridle1990}. The cross entropy cost function and softmax output function are used in the source interdiction classification problem analyzed in Chapters \ref{ChapterMachineLearningModelsExplored} and \ref{UrbanSourceIdentificationResultsandDiscussion}.
+we can calculate the posterior probability of each class in a classification problem \cite{Bridle1990}. The cross entropy cost function and softmax output function are used in the source interdiction classification problem analyzed in Chapters \ref{ChapterMachineLearningModelsExplored} and \ref{UrbanSourceIdentificationResultsandDiscussion}.
 
 
 % The softmax function normalizes an input vector into a probability distribution. Softmax is used as the output function for classification problems with multiple independent classes.
 
 \subsubsection{Weight Regularization}
 
-Weight regularization is a hyperparameter that penalizes the ANN when the magnitude of the weights increases. Because the magnitude of the weights is tied to the complexity of the model, adding weight regularization attempts to limit complexity and the probability of overfitting.
+Weight regularization is a hyperparameter that penalizes the ANN based on the magnitude of its weights. Weight magnitudes are related to the complexity of the ANN. Adding weight regularization attempts to limit complexity and the probability of overfitting.
 
 A common method of incorporating weight regularization is by adding an $L_n$ regularization term to the error function, 
 %
@@ -514,7 +505,7 @@ Common values for $n$ are 1 and 2. Adding weight regularization allows the magni
 
 In Equation \ref{eq:L2_Reg}, $w_i$ is the weight between each neuron in the ANN and $\lambda$ is the regularization strength hyperparameter. A larger $\lambda$ will force the ANN to prefer smaller weights connecting the neurons. If the parameter $\lambda$ is too small, the unbounded model complexity may fit only the training data. If the parameter $\lambda$ is too large, the ANN will only minimize the $L_n$ error, failing to learn.
 
-In this dissertation, $L_2$ weight regularization is added to the densely connected portions of the classification networks. In our published work, we employed $L_2$ weight regularization as a hyperparameter to regularize our models.
+In this dissertation, $L_2$ weight regularization is added to the densely connected portions of the non-autoencoder networks.
 
 \subsubsection{Neuron Dropout}
 
@@ -524,16 +515,12 @@ Almost always, taking the average output of more than one separately trained ANN
 
 % Without dropout, local codependency between neurons that could lead to the ANN becoming stuck in a local minimum in the error function. By randomly removing neurons from an ANN during training, - and thus overtraining - is discouraged. The frequency with which neurons are removed is called the neuron dropout rate.
 
-In this dissertation, neuron dropout is added to the densely connected portions of the classification networks. In our published work, we employed neuron dropout as a hyperparameter to regularize our models.
+In this dissertation, neuron dropout is added to the densely connected portions of the non-autoencoder networks.
 
 
 \subsubsection{Data Augmentation}
 
-Machine learning algorithms perform better with more data. To increase the amount of data available, before each training iteration the input data can be randomly modified using physically realistic transformations. This process is called online \textit{data augmentation}. Data augmentation can be performed either online or offline. Online data augmentation refers to applying the augmentation during each training batch, ensuring the network never sees the same data twice. If augmenting the data is computationally expensive, this method can slow training - potentially prohibitively. Offline data augmentation is used to expand the dataset before training. This can be used to reduce computational costs during training at the expense of storing the additional data.
-
-For example, a training dataset of images can be rotated, flipped, blurred, or brightened during training. An example of horizontal flip and a blur augmentation are seen in Figure \ref{fig:cat}. Both the augmentation method and parameters of the method (e.g. degrees rotated, Gaussian blur variance) are hyperparameters.
-
-
+Machine learning algorithms perform better with more data. To increase the amount of data available, before each training iteration the input data can be randomly modified using physically realistic transformations. This process is called online \textit{data augmentation}. Data augmentation can be performed either online or offline. Online data augmentation refers to applying the augmentation during each training batch, ensuring the network never sees the same data twice. If augmenting the data is computationally expensive, this method can slow training - potentially prohibitively. Offline data augmentation is used to expand the dataset before training. An example data augmentation applied to an image of a cat is shown in Figure \ref{fig:cat}.
 
 \begin{figure}[H]
 	\centering
@@ -542,13 +529,16 @@ For example, a training dataset of images can be rotated, flipped, blurred, or b
 	\label{fig:cat}
 \end{figure}
 
+In this work we offline data augmentation to expand a dataset of gamma-ray spectra obtained from a photon transport software. We augment data by changing the detectors calibration, ratio of source to background counts, background count rate, and measurement time.
+
+
 \subsection{Hyperparameter Optimization} \label{section_hp_opt}
 
-In general, ANNs have many hyperparameters that require optimization. Optimizing these hyperparameters will lead to more efficient training and more accurate performance when training is concluded. There are several different methods to perform hyperparameter optimization for an ANN. These methods include manual optimization, exhaustive grid search, and random parameter search.
+ANNs hyperparameters require optimization. Optimizing these hyperparameters leads to more efficient training and better generalization performance. There are several different methods to perform hyperparameter optimization for an ANN. These methods include manual optimization, exhaustive grid search, and random parameter search.
 
 Manually optimizing parameters is necessary when developing a novel algorithm. This involves changing hyperparameters and observing training performance and validation dataset error. Ideally, the ANN should train quickly and have a low error on a validation dataset. For many parameters `rule of thumb' values exist that can be used to find parameters that work to some degree. Due to the large hyperparameter space, a manual search is cost prohibitive if further optimization is desired.
 
-Once a range of parameters is determined through a manual search, multiple methods are available to explore the parameter space for an optimal solution. One method is an exhaustive grid search. In a grid search the parameter space is divided into a uniform grid and the joint performance of all parameters is tested. The grid search method is ineffective for two reasons. First, neural networks may have a large number of hyperparameters that need to be explored, and the computational requirement to explore the hyperparameter space increases exponentially with increasing hyperparamters. Second, in practice only a few hyperparameters dominate performance, but the dominating hyperparameters are different for different applications. A grid search may under represent the importance of key hyperparamters, as seen in Figure \ref{fig:Bergstra12a_hyperparameter_grid_vs_random}.  While this method works, it has been shown that a random search in the hyperparameter target domain finds better hyperparameters quicker than testing equally distributed points in the chosen range \cite{Bergstra2012}. It can also be shown that given 60 random samples over some space with a finite minimum, the minimum of those 60 random samples is within 5\% of the true minimum with 95\% probability \cite{Zheng2015}.
+Once a range of parameters is determined through a manual search, multiple methods are available to explore the parameter space for an optimal solution. One method is an exhaustive grid search. In a grid search the parameter space is divided into a uniform grid and the joint performance of all parameters is tested. The grid search method is ineffective for two reasons. First, neural networks may have a large number of hyperparameters that need to be explored, and the computational requirement to explore the hyperparameter space increases exponentially with increasing hyperparamters. Second, in practice only a few hyperparameters dominate performance, but the dominating hyperparameters are different for different applications. A grid search may under represent the importance of key hyperparamters, as seen in Figure \ref{fig:Bergstra12a_hyperparameter_grid_vs_random}.  While this method works, it has been shown that a random search in the hyperparameter target domain finds better hyperparameters quicker than testing equally distributed points in the chosen range \cite{Bergstra2012}. It can also be shown that given 60 random samples over some space with a finite minimum, the minimum of those 60 random samples is within 5\% of the true minimum with 95\% probability \cite{Zheng2015}. In this work, we employ random hyperparameter searches using 256 randomly chosen hyperparameters to ensure this condition is met.
 
 \begin{figure}[H]
 	\centering
@@ -558,21 +548,25 @@ Once a range of parameters is determined through a manual search, multiple metho
 \end{figure}
 
 
-The ability for an ANN to solve a problem depends on the network structure, teaching method, and the training dataset to be learned. In the following section, a method for generating a training dataset for isotope identification and quantification is described.
+% The ability for an ANN to solve a problem depends on the network structure, teaching method, and the training dataset to be learned. In the following section, a method for generating a training dataset for isotope identification and quantification is described.
 
-To analyze the performance of a random search, a random hyperparameter efficiency curve, example shown in Figure \ref{fig:Bergstra_random_efficiency_curve_DNN} can be used. In the figure, 256 hyperparameter searches are run. These trials are split into experiments with sizes of increasing powers of two. The best performing trial from each experiment is determined and shown using a box plot.
+% To analyze the performance of a random search, a random hyperparameter efficiency curve, example shown in Figure \ref{fig:Bergstra_random_efficiency_curve_DNN} can be used. In the figure, 256 hyperparameter searches are run. These trials are split into experiments with sizes of increasing powers of two. The best performing trial from each experiment is determined and shown using a box plot.
 
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=0.9\linewidth]{model_choice_hyperparameter_search_images/Bergstra12_random_efficiency_curve}
-	\caption{Example random efficiency curves for a neural network \cite{Bergstra2012}.}
-	\label{fig:Bergstra_random_efficiency_curve_DNN}
-\end{figure}
+% \begin{figure}[H]
+% 	\centering
+% 	\includegraphics[width=0.9\linewidth]{model_choice_hyperparameter_search_images/Bergstra12_random_efficiency_curve}
+% 	\caption{Example random efficiency curves for a neural network \cite{Bergstra2012}.}
+%	\label{fig:Bergstra_random_efficiency_curve_DNN}
+% \end{figure}
 
 \subsection{Additional Machine Learning Models}
 
-In addition to dense models, we also include convolutional and autoencoder models in this work. Convolutional models 
+In addition to dense models, we also include convolutional and autoencoder models in this work.
+
+Convolutional models are used in this work because they assume the input data have local structure. Local structure refers to the fact that values around a given point in some data are related. In gamma-ray spectra local structure manifests itself in the shape of peaks and Compton continua.
+
+Autoencoders, machine learning models that attempt to reconstruct their input, are included to investigate their use for model pretraining. By training autoencoders to reconstruct gamma-ray spectra, we pretrain their weights for gamma-ray spectroscopy. This pretraining may allow the networks to learn a task more effectively.
 
 \subsubsection{Convolutional Neural Networks}
 
@@ -581,10 +575,6 @@ Before the popularization of machine learning, many pattern recognition algorith
 Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolutional layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared among classes. This weight sharing decreases the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
 
 Figure \ref{fig:cnn_mnist_lecun98} shows one of the first successful CNN architectures, LeNet-5 \cite{Lecun1998}, which classified 32x32 images of handwritten digits using two convolution and average pooling layers followed by two dense layers and an output. This was the first example of a machine learning algorithm creating custom filters and a classification model for the MNIST dataset. 
-
-% AlexNet \cite{Krizhevsky2012} was the first exploration into wider and deeper CNNs. 
-
-% Much more work has been done furthering CNNs. VGG \cite{Simonyan2014} showed that smaller filter sizes are good. 
 
 \begin{figure}[H]
 	\centering
@@ -823,7 +813,7 @@ Similar to the DAE, \verb|annsa| includes a function in the \verb|load_pretraine
 Each model was trained using a p2.8xlarge EC2 (Elastic Compute Cloud) instance on Amazon Web Services using the Deep Learning AMI (Amazon Machine Image). Training on multiple GPUs enabled simultaneous training of experiments. Jupyter notebooks used for experiments in this thesis are available at \verb|https://github.com/arfc/annsa/examples|.
 
 
-\section{Summary}
+\section{Chapter Conclusions}
 
 In this chapter we described the physical processes responsible for signals in gamma-ray spectrometers and how multi-layer ANNs can be trained to solve diverse tasks. We also introduced \verb|annsa|, the Python package we developed and used to create training datasets and train a variety of machine learning models for tasks in gamma-ray spectroscopy. 
 
