@@ -1,22 +1,32 @@
-\chapter{Theory}
+\chapter{Theory} \label{theory}
+
+This chapter covers how radiation detectors convert gamma-rays into spectroscopic signals, the theory behind machine learning with artificial neural networks, and the open source Python package, \verb|annsa| (Artificial Neural Networks for Spectroscopic Analysis) \cite{annsa}, we created to facilitate the coupling of gamma-ray spectra simulation software and machine learning algorithms.
 
 \section{Gamma-ray Spectroscopy}
 
-In this section, the physics responsible for the features in gamma-ray spectra are described. Also described are factors that complicate gamma-ray spectroscopy, including changing background radiation fields and temperature effects on detector calibration.
+In this section, we describe the physical processes responsible for features in gamma-ray spectra and how some of these features complicate gamma-ray spectroscopy. Section \ref{section_dataset_gen} covers how we used gamma-ray transport software to simulate NaI(Tl) spectra with these features to create datasets for machine learning.
 
 % https://sites.fas.harvard.edu/~phys191r/Bench_Notes/B1/NAI_catalog.pdf page 20 has efficiency uncertainty information
 
 \subsection{Energy Deposition Mechanisms}
 
-When a photon interacts with a radiation detection medium (e.g. a NaI(Tl) crystal), it deposits some or all of its energy into the material. There are three main methods of interaction: the photoelectric effect, Compton scattering, and pair production. These effects are energy dependent, as seen in Figure \ref{fig:energy_dependence_interactions}.
+When a photon interacts with a radiation detection medium (e.g. a NaI(Tl) crystal), it deposits some or all of its energy into the material. There are three main methods of interaction: the photoelectric effect, Compton scattering, and pair production. These effects are energy dependent, as seen in Figure \ref{fig:energy_dependence_interactions}. After energy is deposited in the material, scintillation light produced bt the crystal is collected and amplified by the detector's electronics. This amplified signal is sent to a computer where it is recorded in a gamma-ray spectrum. The detector's signal at low energies (below 30 keV) is dominated by noise. To remove this noise from the spectrum, a low level discriminator is often used to reject the signal below a certain number of channels. In this work, we apply a low level discriminator by setting the first 10 channels' counts in each spectrum to zero. This low level discriminator removes energies below 30 keV in a detector with 1024 channels calibrated ]with a maximum energy of 3 MeV.
 
-If the photon's total energy is deposited in the detector, a count is recorded in the spectrum's photopeak. If the photon deposits only a part of its energy and escapes the detector, a count will be recorded somewhere below the full-energy photopeak.  The following sections describe intrinsic mechanisms that remove counts from the full-energy peak. % Absolute efficiency is also affected by shielding material and source-to-detector distance.
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.75\linewidth]{images/energy_dependence_interactions}
+	\caption{Energy dependence for gamma-ray interactions in NaI(Tl). Reproduced from \cite{knoll}.}
+	\label{fig:energy_dependence_interactions}
+\end{figure}
+
+If the photon's total energy is deposited in the detector, a count is recorded in the spectrum's photopeak. If the photon deposits only a part of its energy and escapes the detector, a count will be recorded somewhere below the full-energy photopeak.  The following sections describe intrinsic mechanisms that add and remove counts from the full-energy peak.
 
 
-\subsubsection{Photoelectric Absorption}
+
+\subsubsection{Photoelectric Effect}
 % knoll pg 323
 
-Photoelectric absorption is a process that can occur when a photon with energy, $E_{\gamma}$, greater than the binding energy of a bound electron, $E_{b}$, is absorbed by an atom. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron
+Photoelectric effect is a process that can occur when a photon with energy, $E_{\gamma}$, greater than the binding energy of a bound electron, $E_{b}$, is absorbed by an atom. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron
 %
 \begin{align} \label{eq:photoelectric_effect}
 E_{e^{-}} &= E_{\gamma} - E_{b} \\
@@ -26,13 +36,6 @@ E_{e^{-}} &= E_{\gamma} - E_{b} \\
 \end{align}
 %
 where $E_{\gamma}$ = $h\nu$ is the incident photon's energy. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates an electron vacancy in the original atom. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
-
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.75\linewidth]{images/energy_dependence_interactions}
-\caption{Energy dependence for gamma-ray interactions in NaI(Tl). Reproduced from \cite{knoll}.}
-\label{fig:energy_dependence_interactions}
-\end{figure}
 
 \subsubsection{Compton scattering}
 
@@ -48,10 +51,10 @@ Compton scattering is the interaction of a gamma-ray photon with an electron in 
 \label{fig:compton_scatter}
 \end{figure}
 
-The energy of a photon scattered off a free electron
+The energy of a photon scattered off a free electron,
 
 \begin{equation} \label{eq:compton_scatter}
-E_{\gamma}' = \frac{E_{\gamma}}{1 + \frac{E_{\gamma}}{m_{0} c^2} (1-cos\theta)}
+E_{\gamma}' = \frac{E_{\gamma}}{1 + \frac{E_{\gamma}}{m_{0} c^2} (1-cos\theta)},
 \end{equation}
 
 depends on the scattering angle, $\theta$, the incident photon's energy, E$_{\gamma}$, and the rest mass of the electron, m$_{o}$c$^{2}$. A photon scattering at an angle of 180$^{o}$ deposits its maximum amount of energy into a medium. Photons that escape after this energy deposition create the Compton edge observed at $\theta$ = 180$^{o}$, seen in the solid line in Figure \ref{fig:ideal_compton}. Photons that escape the detector after single or multiple Compton scatter events at angles less than 180$^{o}$ create the continuum of energies known as the Compton continuum. Accounting for the binding energy of electrons in a medium produces a Compton continuum more similar to the dotted line in Figure \ref{fig:ideal_compton}.
@@ -117,6 +120,7 @@ gamma-ray detector types. Reproduced from \cite{RIIDMarketSurveyReport}.}
 
 Gamma-ray spectroscopy tasks in low resolution detectors, such as NaI(Tl), are complicated by overlapping photopeaks. Without well distinguished photopeaks, the signal from a source may be indistinguishable from noise or background. For example, in Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} the two photopeaks around 600 keV are only clearly distinguishable in the high resolution HPGe detector. Wide photopeaks are also more likely to overlap with neighbors, potentially making them indistinguishable from each other, further complicating identification.
 
+To address changes in resolution in this work, we simulated gamma-ray spectra with FWHM values of 7.0, 7.5, and 8.0. This range represents typical values for commercial NaI(Tl) detectors. Detectors can be fabricated with FWHM values smaller than this, but they are less common in commercial devices.
 
 \subsection{Background Radiation}
 
@@ -134,59 +138,62 @@ Spatial and temporal changes in background alter a gamma-ray spectrum's continuu
 
 These radiation components can change both spatially and temporally. Because subsurface rocks vary in their elemental composition, background radiation isotope concentrations change geologically (Figures \ref{fig:USGS_u_conc}, \ref{fig:USGS_th_conc}, and \ref{fig:USGS_k_conc}). Local changes in soil composition and building materials also are significant enough to impact background. Because common building materials like concrete and granite contain radioactive elements, the proximity to these structures cause local variations in background. 
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=10 0 5 0, clip, width=1.0\linewidth]{images/USGS_u_conc}
+	\caption{Map of uranium concentrations in the United States. Reproduced from \cite{USGS}.}
+	\label{fig:USGS_u_conc}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=10 0 5 0, clip, width=1.0\linewidth]{images/USGS_th_conc}
+	\caption{Map of thorium concentrations in the United States. Reproduced from \cite{USGS}.}
+	\label{fig:USGS_th_conc}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=10 0 5 0, clip, width=1.0\linewidth]{images/USGS_k_conc}
+	\caption{Map of potassium concentrations in the United States. Reproduced from \cite{USGS}.}
+	\label{fig:USGS_k_conc}
+\end{figure}
+
 Background also changes over time, largely due to the decay products of $^{222}$Rn gas generated by uranium decay in soil \cite{knoll}. Rain can accordingly increase the level of background radiation by releasing trapped radon gas and other radioactive sources in the soil.
 
+To address geologic background changes in our simulated datasets, gamma-ray background spectra were simulated with geologic material compositions from Albuquerque, New Mexico; Atlanta, Georgia; Austin, Texas; Chicago, Illinois; Knoxville, Tennessee; and Miami, Florida. These locations were chosen because of their geologic differences. Temporal changes in background were not addressed in this work.
+
 % Air Survey on Background Gradients https://www-sciencedirect-com.proxy2.library.illinois.edu/science/article/pii/S0265931X13002373
-
-\begin{figure}[H]
-\centering
-\includegraphics[trim=10 0 5 0, clip, width=1.0\linewidth]{images/USGS_u_conc}
-\caption{Map of uranium concentrations in the United States. Reproduced from \cite{USGS}.}
-\label{fig:USGS_u_conc}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[trim=10 0 5 0, clip, width=1.0\linewidth]{images/USGS_th_conc}
-\caption{Map of thorium concentrations in the United States. Reproduced from \cite{USGS}.}
-\label{fig:USGS_th_conc}
-\end{figure}
-
-\begin{figure}[H]
-\centering
-\includegraphics[trim=10 0 5 0, clip, width=1.0\linewidth]{images/USGS_k_conc}
-\caption{Map of potassium concentrations in the United States. Reproduced from \cite{USGS}.}
-\label{fig:USGS_k_conc}
-\end{figure}
 
 
 \subsection{Effect of Temperature on Calibration and Resolution}
 
 % https://www.pnnl.gov/main/publications/external/technical_reports/pnnl-14735.pdf
 
-The calibration of a NaI(Tl) detector can vary due to drifts in electronics, such as the dynode, and drifts in temperature of the crystal. Calibration drift has been identified as a key factor in the poor performance of RIIDs \cite{blackadar2003}. The distribution of the intensities of different NaI(Tl) scintillation light decay processes \cite{IANAKIEV2009432} and decay time constants of these processes \cite{MOSZYNSKI2006739} are sensitive to temperature. These factors lead to appreciable changes in relative photopeak position with temperature, shown in Figure \ref{fig:CASANOVAS2012588}, and detector resolution, shown in Figure \ref{fig:temp-dependence-resolution-moszynski}. 
-
-While automated gain stabilization methods exist, many require a clear photopeak in the spectrum to calibrate from. This can be achieved with measurement times long enough to identify a background photopeak, attaching an external radioactive source to the detector, or by adding a reference light source. Measurement times long enough to identify a background photopeak may be infeasible for certain applications or the calibration step ignored altogether as a part of typical operation. Adding an external source of radiation adds additional noise to the spectrum. For these reasons, software-based, automated, gain stabilization techniques should be used to overcome this issue.
+The calibration of a NaI(Tl) detector can vary due to drifts in component voltages and drifts in the crystal's and electronic component's temperature. Calibration drift has been identified as a key factor in the poor performance of RIIDs \cite{blackadar2003}. The distribution of the intensities of different NaI(Tl) scintillation light decay processes \cite{IANAKIEV2009432} and decay time constants of these processes \cite{MOSZYNSKI2006739} are sensitive to temperature. These factors lead to appreciable changes in relative photopeak position with temperature, shown in Figure \ref{fig:CASANOVAS2012588}, and detector resolution, shown in Figure \ref{fig:temp-dependence-resolution-moszynski}. 
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.95\linewidth]{images/temp_vs_relative_peak_position_CASANOVAS2012588}
-\caption{Temperature vs relative photopeak position for an ORTEC Model 905-3 2x2 NaI(Tl) detector.  Reproduced from \cite{CASANOVAS2012588}.}
-\label{fig:CASANOVAS2012588}
+	\centering
+	\includegraphics[width=0.95\linewidth]{images/temp_vs_relative_peak_position_CASANOVAS2012588}
+	\caption{Temperature vs relative photopeak position for an ORTEC Model 905-3 2x2 NaI(Tl) detector.  Reproduced from \cite{CASANOVAS2012588}.}
+	\label{fig:CASANOVAS2012588}
 \end{figure}
 
 
 
 \begin{figure}[H]
-\centering
-\includegraphics[width=0.95\linewidth]{images/temp-dependence-resolution-moszynski}
-\caption{The energy resolution of 662 keV $\gamma$-rays measured with a 25mm x 30mm NaI(Tl) crystal using 2 $\mu$s and 12 $\mu$s peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
-\label{fig:temp-dependence-resolution-moszynski}
+	\centering
+	\includegraphics[width=0.95\linewidth]{images/temp-dependence-resolution-moszynski}
+	\caption{The energy resolution of 662 keV $\gamma$-rays measured with a 25mm x 30mm NaI(Tl) crystal using 2 $\mu$s and 12 $\mu$s peaking times. Reproduced from \cite{MOSZYNSKI2006739}.}
+	\label{fig:temp-dependence-resolution-moszynski}
 \end{figure}
+
+While automated gain stabilization methods exist, many require a clear photopeak in the spectrum to calibrate from. This can be achieved with measurement times long enough to identify a background photopeak, attaching an external radioactive source to the detector, or by adding a reference light source. Measurement times long enough to identify a background photopeak may be infeasible when checking for radioactive material in cargo containers or vehicles at boarder crossings. Calibration steps requiring active participation by the user, such as calibrating with an external radioactive source, may be ignored altogether. Adding an internal source of radiation adds additional noise to the spectrum. For these reasons, we added ranges of detector calibration gains to our simulated spectra. The smallest gain range considered, [0.9, 1.1], addresses gain changes based on expected operational temperatures found in Figure \ref{fig:CASANOVAS2012588}. The larger gain range considered, [0.8, 1.2], addresses temperature changes as well as larger calibration deviations from operator error or negligence.
+
 
 \section{Machine Learning}
 
-In this section we describe the general theory behind how neural networks operate, how to train them, and how to optimize their architectures for a task. We also give an overview of the neural network architectures studied in this work and parameters that affect their training.
+In this section we describe the general theory behind how neural networks operate, how to train them, and how to optimize their architectures for a task. We also give an introduction to neural network architectures studied in this work and describe parameters that affect their training.
 
 \subsection{General Neural Network Architecture}
 
@@ -245,7 +252,7 @@ The learning rate and its affect on training are discussed further in section \r
 
 Training occurs until an early stopping condition is met. Early stopping works by first removing a portion of the training data and defining it as validation data. The ANN is trained using the new training data while we monitor an error metric for the training and validation datasets. Early stopping conditions include ending training when a threshold on an error metric measured in the validation dataset is reached or when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs, called the early stopping patience. 
 
-Early stopping is needed to end training when the model begins to overfit or learning plateaus. Overfitting occurs when the validation dataset's error increases and the training dataset's error decreases, illustrated in Figure \ref{fig:training_testing_error}. This indicates that the model is memorizing the training data and not generalizing to examples not seen during training. Generalization is a term used to describe a model's performance on unseen data. Learning can also plateau when the ANN's weight updates are not large enough to escape a minimum in the error metric measured on the training dataset.
+Early stopping is needed to end training when the model begins to overfit or learning plateaus. Overfitting occurs when the validation dataset's error increases and the training dataset's error decreases, illustrated in Figure \ref{fig:training_testing_error}. This indicates that the model is memorizing the training data and not generalizing to examples not seen during training. Generalization is a term used to describe a model's performance data outside the training dataset. Learning can also plateau when the ANN's weight updates are not large enough to escape a minimum in the error metric measured on the training dataset.
 
 \begin{figure}[H]
 	\centering
@@ -551,7 +558,7 @@ Once a range of parameters is determined through a manual search, multiple metho
 \end{figure}
 
 
-The ability for an ANN to solve a problem depends on the network structure, teaching method, and the training set to be learned. In the following section, a method for generating a training set for isotope identification and quantification is described.
+The ability for an ANN to solve a problem depends on the network structure, teaching method, and the training dataset to be learned. In the following section, a method for generating a training dataset for isotope identification and quantification is described.
 
 To analyze the performance of a random search, a random hyperparameter efficiency curve, example shown in Figure \ref{fig:Bergstra_random_efficiency_curve_DNN} can be used. In the figure, 256 hyperparameter searches are run. These trials are split into experiments with sizes of increasing powers of two. The best performing trial from each experiment is determined and shown using a box plot.
 
@@ -622,7 +629,7 @@ Other commonly used feature extraction methods are principal component analysis 
 \section{annsa}
 
 %  \verb|annsa| creates datasets of gamma-ray spectra from spectral templates generated by gamma-ray transport tools.
-As a part of this work we developed the open source (under the BSD 3 license) software package \verb|annsa| (Artificial Neural Networks for Spectroscopic Analysis) \cite{annsa}. \verb|annsa| leverages gamma-ray transport software and open source machine learning packages to generate trained machine learning models for spectroscopic tasks. \verb|annsa| contains machine learning models designed for tasks such as: classifying spectra based on an isotope library, quantifying an object's uranium enrichment, and extracting features from a spectrum using autoencoders. Machine learning models included in \verb|annsa| are dense neural networks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs). We designed \verb|annsa| to be modular, allowing for the addition of extra machine learning models and spectroscopic dataset construction methods. 
+As a part of this work we developed the open source (under the BSD 3 license) software package \verb|annsa| \cite{annsa}. \verb|annsa| leverages gamma-ray transport software and open source machine learning packages to generate trained machine learning models for spectroscopic tasks. \verb|annsa| contains machine learning models designed for tasks such as: classifying spectra based on an isotope library, quantifying an object's uranium enrichment, and extracting features from a spectrum using autoencoders. Machine learning models included in \verb|annsa| are dense neural networks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs). We designed \verb|annsa| to be modular, allowing for the addition of extra machine learning models and spectroscopic dataset construction methods. 
 
 % SciPy \cite{scipy},
 We also included unit tests using \verb|pytest| \cite{pytest3.5} and the continuous integration framework Circle CI to ensure new functionality can be safely incorporated into \verb|annsa|.
@@ -633,7 +640,7 @@ git clone https://github.com/arfc/annsa.git
 cd annsa
 python setup.py install
 \end{lstlisting}
-\subsection{Dataset Generation}
+\subsection{Dataset Generation} \label{section_dataset_gen}
 
 The dataset generation process begins by creating a dataset of noiseless template spectra. A gamma-ray transport software and a software that simulates the response from a gamma-ray detector generate the templates. The gamma-ray transport software simulates how photons from each isotope scatter in an environment to reach the detector. Transport software that could be used for this include GADRAS-DRF \cite{mitchell2014}, MCNP \cite{Goorley2016}, or GEANT4 \cite{geant4}. The detector response software accounts for the calibration and Gaussian energy broadening of the detector. \verb|annsa| uses csv formatted template spectra with columns corresponding to simulation settings. An example row from a spectral template csv file in the format used by \verb|annsa| is shown in Figure \ref{fig:template_csv}.
 
