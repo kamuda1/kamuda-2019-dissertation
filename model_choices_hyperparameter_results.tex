@@ -1,13 +1,13 @@
 \chapter{Machine Learning Models Explored} \label{ChapterMachineLearningModelsExplored}
 
-This chapter investigates which parameters affect the convolutional and dense model's performance for datasets of different complexity. Analyzing which hyperparameters most influence performance informs future research into applying machine learning to gamma-ray spectroscopy. To accomplish this, we ran hyperparameter searches using two datasets: a complete dataset with a wide range of simulated parameters and a simple dataset with smaller parameter ranges. This section describes these datasets and the architectural and regularization hyperparameters choices for the dense and convolutional models. This section concludes with a discussion on the insights obtained from the hyperparameter searches.
+In this chapter, we investigate which parameters affect the convolutional and dense model's performance for datasets of different complexity. Analyzing which hyperparameters most influence performance informs future research into applying machine learning to gamma-ray spectroscopy. To accomplish this, we ran hyperparameter searches using two datasets: a complete dataset with a wide range of simulated parameters and a simple dataset with smaller parameter ranges. This section describes these datasets and the architectural and regularization hyperparameters choices for the dense and convolutional models. This section concludes with a discussion on the insights obtained from the hyperparameter searches.
 
 
 % Dense and convolutional models are explored for two different reasons. 
 
 \section{Training Templates Overview}
 
-The datasets used to train the models are created using templates of simulated gamma-ray spectra without Poisson noise. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF (Gamma Detector Response and Analysis Software - Detector Response Function) \cite{mitchell2014}, was used to generate these templates. This simulation code is used to model a radiation detector's response considering environmental scattering and a specific  detector's properties. The GADRAS-DRF GUI in Figure \ref{fig:gadras_parameters} shows the detector parameters used in this work. These parameters are from an Ortec 905-3 NaI(Tl) detector included in the Department of Homeland Security's Algorithm Improvement Program (AIP) software package \cite{DHSAIP}. To simulate our template spectra, the detector model's default energy calibration was modified so the detector measured energies from 0 MeV to 3.5 MeV. This was accomplished by setting the calibration offset (Order 0 in E) to zero and the calibration's gain (Order 1 in E) to 3500. The default number of channels was also changed to 1194, calibrating the 1024$^{th}$ channel - the default spectrum length used in this work - to an energy of 3 MeV. This ensures that isotopic signatures higher than 3 MeV are included in the training dataset when a template's calibration is modified to include these energies.
+The datasets used to train the models are created using templates of simulated gamma-ray spectra without Poisson noise. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF (Gamma Detector Response and Analysis Software - Detector Response Function) \cite{mitchell2014}, was used to generate these templates. This simulation code is used to model a radiation detector's response considering environmental scattering and a specific  detector's properties. The GADRAS-DRF interface in Figure \ref{fig:gadras_parameters} shows the detector parameters used in this work. These parameters are from an Ortec 905-3 NaI(Tl) detector included in the Department of Homeland Security's Algorithm Improvement Program (AIP) software package \cite{DHSAIP}. To simulate our template spectra, the detector model's default energy calibration was modified so the detector measured energies from 0 MeV to 3.5 MeV. This was accomplished by setting the calibration offset (Order 0 in E) to zero and the calibration's gain (Order 1 in E) to 3500. The default number of channels was also changed to 1194, calibrating the 1024$^{th}$ channel - the default spectrum length used in this work - to an energy of 3 MeV. This ensures that isotopic signatures higher than 3 MeV are included in the training dataset when a template's calibration is modified to include these energies.
 
 \begin{figure}[H]
 	\centering
@@ -17,7 +17,7 @@ The datasets used to train the models are created using templates of simulated g
 \end{figure}
 
 
-GADRAS-DRF was also used to simulate spectral changes associated with measurement geometry. The measurement scenario used by GADRAS-DRF is illustrated in Figure \ref{fig:gadras_measurement_setup}. Using GADRAS-DRF, we can simulate changes in source-detector distance, the source and detector's mutual height from the ground, and optional shielding material between the source and detector. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the Compton continuum's shape, the peak-to-total ratio, and the backscatter peak's magnitude. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different broadening parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
+GADRAS-DRF was also used to simulate spectral changes associated with measurement geometry. The measurement scenario used by GADRAS-DRF is illustrated in Figure \ref{fig:gadras_measurement_setup}. Using GADRAS-DRF, we can simulate changes in source-detector distance, the source and detector's mutual height from the ground, and optional shielding material between the source and detector. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the Compton continuum's shape, the peak-to-total ratio, and the backscatter peak's magnitude. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different FWHM parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
 
 
 \begin{figure}[H]
@@ -62,18 +62,19 @@ The template parameters used in this study are shown in Table \ref{table:all_fix
 
 In addition to the parameters simulated by GADRAS-DRF, parameters are included to perform additional data augmentation. These parameters are shown in Table \ref{table:all_variable_simulation_parameters}.
 
+
 \begin{table}[H]
 \centering
 \caption{Fixed GADRAS-DRF template simulation parameters.}
 \begin{tabular}{ll}
 \hline
 \textbf{Simulation Parameter} & \textbf{Values} \\ \hline
-source-detector height [cm] & 50, 75, 100, 125, 150 \\ 
-source-detector distance [cm] & 50, 112.5, 175, 237.5, 300 \\ 
+source-detector height [cm] & 50, 100, 125 \\ 
+source-detector distance [cm] & 50, 175, 300 \\ 
 Areal density of solid aluminum [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.82, 4.18, 7.49, 13.16 \\ 
 Areal density of solid iron [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.53, 3.5, 6.28, 11.02 \\ 
 Areal density of solid lead [$\frac{\text{g}}{\text{cm}^{2}}$] & 0.22, 0.51, 0.92, 1.61 \\ 
-FWHM at  662 keV [\%] & 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0 \\ 
+FWHM at  662 keV [\%] & 7.0, 7.5, 8.0 \\ 
 Background Location & \begin{tabular}[l]{@{}l@{}}Albuquerque, Atlanta, Austin,\\ Chicago , Knoxville , Miami\end{tabular} \\ \hline
 \end{tabular}
 \label{table:all_fixed_simulation_parameters}
@@ -124,7 +125,7 @@ To determine which parameters affect the convolutional and dense model's perform
 
 The parameters used for the simple dataset are shown in Table \ref{table:hyperparameter_dataset_easy_parameters} and parameters used for the complete dataset are shown in Table \ref{table:hyperparameter_dataset_full_parameters}. Both datasets are comprised of pure background templates and the following isotopes from ANSI N42-34-2006 \cite{ANSI}: $^{241}$Am, $^{133}$Ba, $^{57}$Co, $^{60}$Co, $^{51}$Cr, $^{137}$Cs, $^{152}$Eu, $^{67}$Ga, $^{123}$I, $^{125}$I, $^{131}$I, $^{111}$In, $^{192}$Ir, $^{177m}$Lu, $^{99}$Mo, $^{237}$Np, $^{103}$Pd, $^{239}$Pu, $^{240}$Pu, $^{226}$Ra, $^{75}$Se, $^{153}$Sm, $^{99m}$Tc, $^{201}$Tl, $^{204}$Tl, $^{233}$U, $^{235}$U, $^{238}$U, and $^{133}$Xe.
 
-Independent hyperparameter searches were conducted for both datasets because datasets of different complexity often need different architectures and hyperparameters \cite{Bergstra2012}. For each dataset, a total of 100 spectra were simulated for each isotope and 100 spectra were simulated of only background. Each spectrum was simulated with parameters randomly sampled from the simple or complete parameter set.
+Independent hyperparameter searches were conducted for both datasets. Datasets of different complexity often need different architectural and training hyperparameters for optimum performance \cite{Bergstra2012}. For each dataset, a total of 100 spectra were simulated for each isotope and 100 spectra were simulated of only background. Each spectrum was simulated with parameters randomly sampled from the simple or complete parameter set.
 
 \begin{table}[H]
 \centering
