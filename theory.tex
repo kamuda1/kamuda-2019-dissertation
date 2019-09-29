@@ -469,7 +469,7 @@ Finally, the weight update equation is computed as
 
 %Another method is to randomly perturbing the weights during training using a simulated annealing technique \cite{Kirkpatrick1983}. Simulated annealing mimics how crystal lattices bond together in cooling metal to achieve a low energy state. As metal cools, its crystal lattice will orient itself to lower its total bond energy, but occasionally due to statistical heating sections will jump to a higher energy level. This encourages a global low energy state, as many local low energy state regions are discouraged. This process can be mimicked in a learning algorithm by randomly perturbing the weights during learning. As learning continues the network 'cools' and the frequency of weight perturbation decreases. It can be shown that given a long enough annealing schedule, the global optimum solution for a problem is guaranteed to be found \cite{Granville1994}.
 
-\subsubsection{Cost Functions and Performance Metrics}
+\subsubsection{Cost Functions}
 
 The choice of cost function used in an ANN depends on the task the network is attempting to learn. Tasks that require the network's output be real numbers typically use the MSE function and multi-class classification tasks use the mean cross entropy (MCE),
 %
