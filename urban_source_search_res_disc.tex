@@ -2,24 +2,15 @@
 
 % https://e-reports-ext.llnl.gov/pdf/312592.pdf they show common false positive isotopes and we see a lot of overlap
 
+This chapter applies machine learning algorithms to solve the problem of identifying a radioactive source in an urban environment. This scenario is applicable when performing source interdiction searching cargo containers, vehicles at boarder crossings, or surveying high profile events. Urban environments present unique challenges to gamma-ray spectroscopy. Background radiation can change over city blocks due to different concentrations of uranium and thorium in building materials. Sources may be purposely shielded by unknown amounts of material to obscure their gamma-ray signal. 
 
-\newcommand{\blackline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,solid,line width = 1.1pt](0,0) -- (6mm,0);}}}
-
-\newcommand{\blackdotline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dashed,line width = 1.1pt](0,0) -- (6mm,0);}}}
-
-\newcommand{\blackdashdotline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dash dot,line width = 1.1pt](0,0) -- (6mm,0);}}}
-
-\newcommand{\blackdottedline}{\raisebox{2pt}{\tikz{\draw[-,black!40!black,dotted,line width = 1.1pt](0,0) -- (6mm,0);}}}
-
-This chapter applies machine learning algorithms to solve the problem of identifying a radioactive source in an urban environment. This scenario is applicable when performing source interdiction searching cargo containers, vehicles at boarder crossings, or surveying high profile events. Urban environments present unique challenges to gamma-ray spectroscopy. Background radiation can change over city blocks due to different concentrations of uranium and thorium in building materials. Sources may be purposely shielded by unknown amounts of material to obscure their gamma-ray signal.
-
-
+To investigate how simulated parameters affect the performance of dense and convolutional networks with and without autoencoder pretraining, we first determine a sufficient training dataset size for each model and dataset by analyzing their learning curves. We then observe how well each model identifies simulated and measured spectra in a variety of conditions. Finally, we compare the F1 score from our approach with a peak-based Bayesian classifier.
 
 \section{Learning Curve Analysis}
 
-In this section we use learning curves to determine a sufficient number of training dataset examples for the simple and complete networks. Two separate datasets were constructed for this chapter: one using simple dataset parameters, Tables \ref{table:hyperparameter_dataset_easy_parameters}, and the other using complete dataset parameters from Table \ref{table:hyperparameter_dataset_full_parameters}. The datasets include isotopes from the ANSI N42-34-2006 standard, shown in Section \ref{datasets_used_hyperparam_search}. Each dataset contains 1 x 10$^{4}$ randomly generated spectra for each isotope. These datasets will be referred to as the simple and complete master dataset.
+In this section we analyze learning curves to determine a sufficient number of training dataset examples for the simple and complete networks. Two separate datasets were constructed for this chapter: one using simple dataset parameters, Tables \ref{table:hyperparameter_dataset_easy_parameters}, and the other using complete dataset parameters from Table \ref{table:hyperparameter_dataset_full_parameters}. The datasets included isotopes from the ANSI N42-34-2006 standard, shown in Section \ref{datasets_used_hyperparam_search}. Each dataset contained 1 x 10$^{4}$ randomly generated spectra for each isotope. These datasets will be referred to as the simple and complete master dataset. Models trained on the simple and complete datasets are referred to as simple and complete models.
 
-Different sized training datasets were sampled from both master datasets using stratified sampling without replacement. Stratified sampling keeps the number of isotopes in each sampled subset as equal as possible. Training dataset sizes included 50, 100, 500, 1000, 5000, 10000, 15000, and 20000. For each training dataset size, five sampled subsets of a master dataset were used as training datasets.Figure \ref{fig:learning_curve_training_diagram}. ANN's were trained using these dataset. A separate holdout validation dataset of 300 spectra (10 examples per class) was used to end training when its F1 score did not improve using an early stopping patience of 10 epochs.
+Different sized training datasets were sampled from both master datasets and trained using each model. This process is illustrated in Figure \ref{fig:learning_curve_training_diagram}. Stratified sampling without replacement was used to sample each master dataset. Stratified sampling keeps the number of isotopes in each sampled subset as equal as possible. Training dataset sizes included 50, 100, 500, 1000, 5000, 10000, 15000, and 20000. For each training dataset size, five sampled subsets of a master dataset were used as training datasets. ANN's were trained using these dataset. A separate holdout validation dataset of 300 spectra (10 examples per class) was used to end training when its F1 score did not improve using an early stopping patience of 10 epochs.
 
 \begin{figure}[H]
 	\centering
@@ -28,7 +19,9 @@ Different sized training datasets were sampled from both master datasets using s
 	\label{fig:learning_curve_training_diagram}
 \end{figure}
 
-The validation dataset's F1 score was used to construct learning curves for each model. Figure \ref{fig:learning_curves_easy} shows the learning curves for each simple model's F1 score asymptotes to one past 5000 examples. This shows that each model is well suited to generalize within the simple parameter space. Training was rerun on one CAE model at 1 x 10$^{4}$ and 2 x 10$^{4}$ samples due to the error not decreasing during training. This can be attributed to a poor CAE pretraining.
+The validation dataset's F1 score was used to construct learning curves for each model. Figure \ref{fig:learning_curves_easy} shows the learning curves for the simple convolutional model's F1 scores reaching an asymptote near one above datasets of 5000 examples. This shows that each convolutional model is well suited to generalize within the simple parameter space. There are no obvious differences between the learning curves for the simple CAE and CNN.
+
+Simple dense models reach an asymptote with a wider variance between F1 scores of 0.8 and 0.9. With fewer than 5000 training examples, the simple DAE had achieved F1 scores lower than the other models. This indicates that the simple DAE did not learn features from the pretraining step. This is likely due to the dense network having an insufficient capacity to reconstruct spectra.
 
 
 \begin{figure}[H]
@@ -38,10 +31,7 @@ The validation dataset's F1 score was used to construct learning curves for each
 	\label{fig:learning_curves_easy}
 \end{figure}
 
-The validation dataset error curves in Figure \ref{fig:learning_curves_full} are less steep than those in the simple learning curve plot. This shows that the patterns in the complete dataset are more complex and models require more examples to generalize to unseen complete dataset examples. The learning curve for the complete model shows the CNN and DNN converging to near one after 5 x 10$^{3}$ and 1.5 x 10$^{4}$ examples. The testing and training F1 score curves for the CNN and DNN also show low-bias and low-variance, indicating the hyperparameter search found appropriate values for the complexity of the complete dataset.
-
-The training errors for the autoencoder models do not saturate as quickly as the training errors for the CNN and DNN. This shows that either the pretraining has a large effect on learning or the pretrained models need regularization during fine-tuning. Both the DAE and CAE saturate past 1 x 10$^{4}$ examples. Similar to the simple training curve, training was rerun on one CAE model at 1.5 x 10$^{4}$ and 2 x 10$^{4}$.
-
+The validation dataset error curves in Figure \ref{fig:learning_curves_full} are less step than those in the simple learning curve plot. The asymptote for the full dense and convolutional models is also lower than the asymptote for the easy models, demonstrating that the complete dataset is more difficult for the models to generalize to. Even with a comparable number of trainable parameters, the convolutional networks outperform the dense networks. This indicates that the convolutional architecture is better suited to performing gamma-ray spectroscopy. 
 
 \begin{figure}[H]
 	\centering
@@ -54,7 +44,7 @@ The training errors for the autoencoder models do not saturate as quickly as the
 
 \section{Generalization Performance Evaluation}
 
-In this section we analyze the generalization performance of each machine learning model and the simple and complete training datasets. To quantify performance on a range of spectral qualities, the F1-scores are averaged for each model trained on a dataset of 10000 examples. Testing data are simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. To reduce variance, ten spectra are generated for each isotope and simulated parameter combination. Models trained on the simple and complete datasets are referred to as simple and complete models.
+In this section we analyze the generalization performance of each machine learning model trained with the simple and complete training datasets. The process used is outline in Figure \ref{fig:generalization_performance_diagram}. To quantify performance on a range of spectral qualities, the F1-scores are averaged for each model trained on a dataset of 10000 examples. Testing data are simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. To reduce variance, ten spectra are generated for each isotope and simulated parameter combination. 
 
 \begin{figure}[H]
 	\centering
@@ -80,30 +70,6 @@ Calibration - Gain & 1.0 \\
 Background Counts Per Second & 200 \\ \hline 
 \end{tabular}
 \end{table}
-
-
-% \begin{figure}[H]
-%      \centering
-%      \begin{subfigure}[b]{0.49\textwidth}
-%          \centering
-%          \includegraphics[width=\textwidth]{images/generalization-height-easy-01.png}
-%          \caption{}
-%          \label{fig:generalization-height-easy-01}
-%      \end{subfigure}
-%      \hfill
-%      \begin{subfigure}[b]{0.49\textwidth}
-%          \centering
-%          \includegraphics[width=\textwidth]{images/generalization-height-easy-05.png}
-%          \caption{}
-%          \label{fig:generalization-height-easy-05}
-%      \end{subfigure}
-
-%         \caption{Examples of spectra simulated with different signal-to-background ratios,}
-%         \label{fig:generalization_signalbackground_examples}
-% \end{figure}
-
-
-% When the error between models differs significantly or is particularly large, confusion matrices are included to show what isotopes are problematic.
 
 
 \subsection{Generalization Performance on Source-Detector Height}
