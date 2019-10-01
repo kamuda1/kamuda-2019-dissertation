@@ -6,7 +6,7 @@ This chapter applies machine learning algorithms to solve the problem of identif
 
 To investigate how simulated parameters affect the performance of dense and convolutional networks with and without autoencoder pretraining, we first determine a sufficient training dataset size for each model and dataset by analyzing their learning curves. We then observe how well each model identifies simulated and measured spectra in a variety of conditions. Finally, we compare the F1 score from our approach with a peak-based Bayesian classifier.
 
-\section{Learning Curve Analysis}
+\section{Learning Curve Analysis} \label{sectionlearningcurve}
 
 In this section we analyze learning curves to determine a sufficient number of training dataset examples for the simple and complete networks. Two separate datasets were constructed for this chapter: one using simple dataset parameters, Tables \ref{table:hyperparameter_dataset_easy_parameters}, and the other using complete dataset parameters from Table \ref{table:hyperparameter_dataset_full_parameters}. The datasets included isotopes from the ANSI N42-34-2006 standard, shown in Section \ref{datasets_used_hyperparam_search}. Each dataset contained 1 x 10$^{4}$ randomly generated spectra for each isotope. These datasets will be referred to as the simple and complete master dataset. Models trained on the simple and complete datasets are referred to as simple and complete models.
 
@@ -44,18 +44,20 @@ The validation dataset error curves in Figure \ref{fig:learning_curves_full} are
 
 \section{Generalization Performance Evaluation}
 
-In this section we analyze the generalization performance of each machine learning model trained with the simple and complete training datasets. The process used is outline in Figure \ref{fig:generalization_performance_diagram}. To quantify performance on a range of spectral qualities, the F1-scores are averaged for each model trained on a dataset of 10000 examples. Testing data are simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5. Default simulation parameters are shown in Table \ref{table:default_sim_params}. Changes to these defaults are indicated for each generalization experiment. To reduce variance, ten spectra are generated for each isotope and simulated parameter combination. 
+In this section we analyze each simple and complete ANNs' performance dependence on simulated parameters expected during source interdiction measurements. The process used in this section is outlined in Figure \ref{fig:generalization_performance_diagram}. For each ANN, five models are used as an ensemble by averaging their output, a posterior probability distribution over each isotope. Models trained on a dataset of 10000 examples from Section \ref{sectionlearningcurve} were used in this section.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[trim=0 0 210 0,clip,width=1.0\linewidth]{images/generalization_performance_diagram}
-	\caption{Model averaging process used to evaluate models for testing datasets.}
+	\caption{Model averaging process used to evaluate ANNs using testing datasets.}
 	\label{fig:generalization_performance_diagram}
 \end{figure}
 
+To compare each ANN's performance, we simulated datasets with various source-detector heights, source-detector distances, detector resolutions, shielding thicknesses, and detector gain calibrations. Datasets were simulated with ten spectra for each ANSI N42-34-2006 isotope and unique parameter. Default simulation parameters for each testing dataset are shown in Table \ref{table:default_sim_params}. Testing datasets were simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5.
+
 \begin{table}[H]
 \centering
-\caption{Default parameters used for all generalization datasets.}
+\caption{Default parameters used for all testing datasets.}
 \label{table:default_sim_params}
 \begin{tabular}{ll}
 % \cline{2-3}
@@ -74,15 +76,15 @@ Background Counts Per Second & 200 \\ \hline
 
 \subsection{Generalization Performance Dependence on Source-Detector Height}
 
-In this section we analyze how each model's F1 score depends on changes in source-detector height off the ground. This tests if each model is sensitive to changes in the Compton continuum due to environmental scattering associated with the source-detector height. An example of these changes can be seen in Figure \ref{fig:sim_spectra_height_comparison}.
+In this section we analyze how each model's F1 score changes when identifying spectra in datasets simulated with different source-detector heights off the ground. This tests if each model is sensitive to changes in the Compton continuum due to environmental scattering associated with the source-detector height. An example of these changes can be seen in Figure \ref{fig:sim_spectra_height_comparison}. These changes are only noticeably significant in the region below the backscatter peak around 200 keV. This region is important because it contains photopeaks used to detect enriched uranium.
 
-As seen in Figure \ref{fig:sim-generalization-height}, the performance of each network is not significantly changed with changes to source-detector height. This shows that performance is not impacted by the relatively small changes in the Compton continuum caused by varying the source-detector height. Figure \ref{fig:sim-generalization-height} also shows that simple models generalize to changes in source-detector height when the signal-to-background ratio is raised. This shows that the features required to accurately identify low signal-to-background spectra are significantly different from those required by higher signal-to-background spectra. 
+As seen in Figure \ref{fig:sim-generalization-height}, the performance of each network is not significantly changed with changes to source-detector height. This shows that performance is not impacted by the relatively small changes in the continuum caused by varying the source-detector height. Figure \ref{fig:sim-generalization-height} also shows that simple models generalize to changes in source-detector height when the signal-to-background ratio is raised. This shows that the features required to accurately identify low signal-to-background spectra are significantly different from those required by higher signal-to-background spectra. 
 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{images/sim-generalization-height}
-	\caption{Height generalization.}
+	\caption{F1 score dependence Height generalization.}
 	\label{fig:sim-generalization-height}
 \end{figure}
 
@@ -121,11 +123,14 @@ In this section we analyze how each model's F1 score depends on changes in detec
 
 \subsection{Generalization Dependence on Shielding.}
 
-In this section we analyze how each model's F1 score depends on changes in shielding. Spectra were simulated with iron shielding that shields 40\%, 60\%, and 80\% of the intensity of a 200 keV gamma-ray.
+In this section we analyze how each model's F1 score depends on changes in shielding. Spectra were simulated with iron thicknesses that shield 40\%, 60\%, and 80\% of the intensity of a 200 keV gamma-ray.
 
-As seen previously, simple models do not generalize to the lower signal-to-background spectra. Simple models, which only use unshielded and 20\% shielded templates, do generalize to other shielding thicknesses in higher signal-to-background spectra. Each simple model achieves an F1 score above 80\% after 2000 seconds for the 40\% attenuated spectra. Only the CAE achieves similar performance for the 40\% attenuated spectra. All other models and shielding settings attain F1 scores between 50\% and 75\%.
+As seen previously, simple models do not generalize to the lower signal-to-background spectra. Simple models, which only use unshielded and 20\% shielded templates, achieve F1 scores between 50\% and 75\% in higher signal-to-background spectra. This shows that simple models generalize to other shielding thicknesses in higher signal-to-background spectra. The simple CAE outperforms the CNN in spectra with each shielding thicknesses. This demonstrates that the CAE pretraining is useful for conditioning the convolutional weights for identification tasks. 
 
-The complete models perform better in the low signal-to-background spectra. Both complete convolutional models perform comparatively and outperform the complete dense models. Each network's performance on 40\% and 60\% attenuated spectra were comparable, while the 80\% attenuation reduced performance more significantly. Similar trends are seen in higher signal-to-background spectra. 
+The complete models perform better in the low signal-to-background spectra. Both complete convolutional models perform comparatively and outperform the complete dense models. At 60\% and 80\% shielding the complete CAE outperformed the CNN in low signal-to-background spectra. This again shows the CAE pretraining boosting the CNN architecture's performance.
+
+% The performance of each complete ANN decreases when identifying spectra with additional attenuation.
+
 
 \begin{figure}[H]
 	\centering
@@ -136,9 +141,12 @@ The complete models perform better in the low signal-to-background spectra. Both
 
 \subsection{Generalization Dependence on Gain}
 
-In this section we analyze how each model's F1 score depends on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. The 1.0 gain setting calibrates the 1024$^{th}$ channel of the spectrum to 3 MeV.
+In this section we analyze how each model's F1 score depends on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. These relative gain calibrations represent the range of calibrations expected due to temperatures expected when performing source interdiction. The 1.0 gain setting calibrates the 1024$^{th}$ channel of the spectrum to 3 MeV.
 
-At the higher signal-to-background ratio the simple models begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the input signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
+At the higher signal-to-background ratio, the simple convolutional models achieve F1 scores above 50\% for each gain setting except 0.8. Simple dense models achieve F1 scores between 30\% and 50\% for the same settings.
+
+
+begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the input signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
 
 The complete models performed better with changing gain, but still struggled with the 0.8 relative gain for the reasons outline in the previous paragraph. Compared to other complete models, the complete CNN performed the best on each relative gain setting.
 
@@ -152,9 +160,11 @@ The complete models performed better with changing gain, but still struggled wit
 
 
 
-\subsection{Results on Measured Spectra}
+\section{Performance Identifying Measured Spectra}
 
-This section shows performance over integration time for different calibration settings and shielding amounts in real gamma-ray spectra. Sources include $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. A diagram of the laboratory setup used for these measurements is shown in Figure \ref{fig:shielding_measurment_diagram}. The radioactive sources, 1 inch diameter by 1/8 inch thick plastic disks containing $\mu$Ci quantities of radioactive material, were measured on a wooden desk approximately one meter from the nearest wall to reduce radiation backscatter. We used a 2x2 inch Ortec NaI detector to measure the sources. We measured the source-detector from the source disk's face to the detector's face. Blocks of shielding material were added for the measurements in Section \ref{real_shielding_performance}. Measurements in Section \ref{real_calibration_performance} used no shielding material. 
+In this section we investigate each ANN's performance when identifying real gamma-ray spectra with calibration settings and shielding possible in source interdiction activities. To measure performance, we observe how each model's posterior probability for each isotope changes over integration times ranging from 10 s to 10 mins. Sources included are $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. $^{137}$Cs and $^{60}$Co are included because they have uncomplicated spectra, $^{137}$Cs with only one primary photopeak at 662 keV and $^{60}$Co with two photopeaks at 1173 and 1332 keV. These are also common industrial and medical sources which are important for source interdiction. $^{133}$Ba and $^{152}$Eu have more complicated spectra with many photopeaks. Photopeaks from $^{133}$Ba are all below 400 keV and the photopeaks from $^{152}$Eu range from 121 keV to 1213 keV \cite{bigbluebook}. $^{133}$Ba is included in these tests because it is a medical isotope and an often used surrogate for plutonium. $^{152}$Eu is included because it's large range of photopeak energies are uniquely effected by shielding and calibration changes. Shielding $^{152}$Eu can remove low-energy photopeaks while only slightly reducing higher-energy photopeaks. This presents a unique challenge for identification algorithms.
+
+A diagram of the laboratory setup used for these measurements is shown in Figure \ref{fig:shielding_measurment_diagram}. The radioactive sources, 1 inch diameter by 1/8 inch thick plastic disks containing $\mu$Ci quantities of radioactive material, were measured on a wooden desk approximately one meter from the nearest wall to reduce environmental scatter. We used a 2x2 inch Ortec NaI detector to measure the sources. We measured the source-detector from the source disk's face to the detector's face. Blocks of shielding material were added for the measurements in Section \ref{real_shielding_performance}. Measurements in Section \ref{real_calibration_performance} used no shielding material. 
 
 \begin{figure}[H]
 	\centering
@@ -163,14 +173,26 @@ This section shows performance over integration time for different calibration s
 	\label{fig:shielding_measurment_diagram}
 \end{figure}
 
+For this section, we define a model's performance to be good when the posterior probability increases above 50 \% after 60 seconds. This measurement time is typical for source interdiction tasks. We also trigger an alarm when an isotopes posterior probability rises above 50\%. Plots in this section observe true positives, when the measured isotope's posterior probability exceed the 50\% threshold, and false negatives, when the measured isotope's posterior probability is below the 50\% threshold. For practical implementation, this threshold needs to be tuned for specific operational requirements. 
 
-\subsubsection{Asymptotic Model Performance on Changing Voltage} \label{real_calibration_performance}
 
-To test the dependence of performance of each model to changes in calibration, spectra with different voltages were recorded and the posterior probability of the measured isotope found by each model is observed over integration time. The detector's calibrations was varied by changing the PMT voltage to 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V calibrated the detector's 1024$^{th}$ channel to 3 MeV. Reported relative gain settings are calibrated to the 662 keV photopeak defining the 770 V calibration as the reference. Sources measured include $\mu$Ci level $^{137}$Cs, $^{60}$Co, $^{152}$Eu, and $^{133}$Ba. The source-detector distance of each source was adjusted to keep the counts-per-second from the source equal-to and one-half-of the counts-per-second from background.
+\subsection{Model Performance on Changing Voltage} \label{real_calibration_performance}
 
-The figures in \ref{fig:realspectra-cal-cs137} show trained ANN performance when identifying $^{137}$Cs. Models trained on the simple dataset, Figures \ref{fig:realspectra-cal-cs137} and \ref{fig:realspectra-cal-cs137}, did not generalize well to calibrations outside the training set. When trained on both the simple and complete dataset, The CNN performed well. Both CNNs identified $^{137}$Cs with a 100\% posterior probability after 50 seconds in both signal-to-background ratios.% The simple DNN and DAE achieve a posterior probability of above 50 \% after 60 seconds of integration time show some potential to generalize to calibrations outside the training set.
+To test how well each model identified spectra with changing calibration, spectra were measured with different PMT voltages. PMT voltages included 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V calibrated the detector's 1024$^{th}$ channel to 3 MeV. This gain setting was used as the reference calibration. Relative gain settings for the PMT voltages are measured with respect to the relative shift of the 662 keV photopeak. The source-detector distance of each source was adjusted so the ratio of counts-per-second from the source and background were 0.5 and 1.0.
 
-Figures \ref{fig:realspectra-cal-cs137} and \ref{fig:realspectra-cal-cs137} show performance on models trained with the full dataset. Again, the CNN performs well, identifying $^{137}$Cs with a 100\% posterior in all cases except in the spectra with the most extreme gain change. Even at a relative gain change of 1.27, outside the training dataset's parameters, the CNN outperforms the other datasets with a 100\% posterior. This shows that the convolution operation provides a stronger gain invariance than dense architectures. 
+\subsubsection{$^{137}$Cs}
+
+Example $^{137}$Cs spectra identified in this analysis are shown in Figure \ref{fig:realspectra-cal-cs137-spec}. The 662 keV photopeak is clearly visible even at a measurement time of 10 s. At a 10 s integration time, background peaks from $^{40}$K, at 1460 keV, and the thorium series, 2614 keV, are not visible. Without these peaks, it is very difficult to know the energy calibration of the detector.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\linewidth]{images/realspectra-cal-cs137-spec}
+	\caption{Example $^{137}$Cs measured with signal-to-background ratios of 0.5 and 1.0. The lower and higher count spectra use a measurement times of 10 s and 300 s respectively.}
+	\label{fig:realspectra-cal-cs137-spec}
+\end{figure}
+
+
+As seen in Figure \ref{fig:realspectra-cal-cs137}, each ANN, except the simple DAE, identifies reference calibration spectra above the 50\% posterior probability threshold after 60 s of measurement. Simple ANNs fail to alarm on $^{137}$Cs spectra with other calibration settings. Complete ANNs, with the exception of the CAE, successfully alarm when identifying spectra with a relative gain of 1.0 and 0.78.
 
 \begin{figure}[H]
 	\centering
@@ -179,10 +201,44 @@ Figures \ref{fig:realspectra-cal-cs137} and \ref{fig:realspectra-cal-cs137} show
 	\label{fig:realspectra-cal-cs137}
 \end{figure}
 
+% This shows that even for an isotope with a single photopeak, ANN's cannot extrapolate outside of their 
+Spectra with relative gains of 0.59 and 1.27 never raise a true positive alarm. These settings are too far outside of the training dataset's relative gain ranges, (0.8, 1.2), for correct identification. Correctly identifying $^{137}$Cs with a relative calibration of 1.27 are possible if the detection threshold is lowered, but this risks increasing the false positive rate. Spectra with a relative calibration of 0.59 move the 662 keV photopeak to 340 keV. As shown in Table \ref{table:cs137_precictions_60s}, ANNs mistakes $^{137}$Cs at this calibration for other isotopes with lower-energy photopeaks. The Simple CNN raises an incorrect alarm on $^{192}$Ir, which has it's largest photopeak at 316 keV. The complete CNN, DNN, and DAE also raise incorrect alarms. Both complete convolutional models predict the same isotope, $^{131}$I, which has a primary photopeak at 364 keV. Both dense models predict $^{239}$Pu.
 
-The figures in \ref{fig:realspectra-cal-co60} show performance when identifying $^{60}$Co. Some models exhibit improved generalization performance when using the simple dataset over $^{137}$Cs identification. The autoencoders' performance improves for a range of calibrations while the performance of the DNN and CNN improves slightly. The performance of the autoencoders show that pretraining on simulated spectra did have a positive effect on the final network. This also shows that the dense encoding is particularly well suited to changes in calibration.
+\begin{table}[H]
+	\centering
+	\caption{ANN predictions $^{137}$Cs spectra measured with a relative gain shift of 0.59. Spectra used a signal-to-background ratio of 1.0 and were measured for 60 s. Incorrect alarms are bolded.}
+	\label{table:cs137_precictions_60s}
+	\begin{tabular}{lllll}
+		\hline
+		Dataset & \multicolumn{4}{l}{\textbf{Simple}} \\
+		Model & \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
+		Prediction & \textbf{$^{192}$Ir} & $^{177m}$Lu &  $^{75}$Se  & $^{67}$Ga \\
+		Probability & \textbf{80} & 33 & 41 & 33 \\ \hline \\ \\
+		
+		\hline
+		& \multicolumn{4}{l}{\textbf{Complete}} \\
+		& \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
+		Prediction  & \textbf{$^{131}$I} & \textbf{$^{239}$Pu} & $^{131}$I & \textbf{$^{239}$Pu}  \\ 
+		Probability & \textbf{100} & \textbf{70} & 40 & \textbf{61} \\ \hline
+	\end{tabular}
+\end{table}
 
-Performance is degraded when using the full dataset. This is likely due to the models trained on the full dataset assigning higher contributions to other isotopes. Because the spectra for each isotope can look significantly different from each other in the full dataset, the models are more likely to assign higher probabilities to all isotopes.
+
+Even for isotopes with simple spectra, Including a wide range of calibrations in a ANNs training dataset is necessary for good performance when identifying 
+
+
+\subsubsection{$^{60}$Co}
+
+As seen in Figure \ref{fig:realspectra-cal-co60-spec}, the 1173 keV and 1332 keV photopeaks from $^{60}$Co spectra measured at 10 s each have a maximum number of counts less than 100. This is around a factor of two less than the maximum photopeak counts in the $^{137}$Cs spectra shown in the previous section. This amplifies the effects of Poisson noise on the $^{60}$Co spectra when compared to the $^{137}$Cs spectra.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\linewidth]{images/realspectra-cal-co60-spec}
+	\caption{Example $^{60}$Co spectra measured with signal-to-background ratios of 0.5 and 1.0. The lower and higher count spectra use a measurement times of 10 s and 300 s respectively.}
+	\label{fig:realspectra-cal-co60-spec}
+\end{figure}
+
+As seen in figure \ref{fig:realspectra-cal-co60}, simple ANNs correctly alarm on $^{60}$Co spectra measured using the default gain. This effect is also seen in the $^{137}$Cs identifications. Unlike identifications in $^{137}$Cs, both simple dense ANNs correctly alarm on the gain setting of 1.27. This shows that dense networks are more flexible when identifying spectra with parameters outside of their training set. Convolutional models may develop feature extraction mechanisms that are more prone to overtraining than dense models. Simple dense ANNs outperforming simple convolutional ANNs is also shown when identifying spectra measured with the higher signal-to-background ratio. Simple dense ANNs correctly alarm on spectra with all gain settings except 0.59.
 
 \begin{figure}[H]
 	\centering
@@ -191,9 +247,21 @@ Performance is degraded when using the full dataset. This is likely due to the m
 	\label{fig:realspectra-cal-co60}
 \end{figure}
 
-Subfigures \ref{fig:realspectra-cal-ba133} and \ref{fig:realspectra-cal-ba133} show that performance on the simple dataset drops significantly when identifying $^{133}$Ba. The drop in performance is attributed to the lack of spectral variety in the simple dataset. For generalization to real spectra, spectral variety in a training set is required for complicated spectra like $^{133}$Ba. Despite this, the models that performed best were convolutional.
+Complete ANNs fail to alarm on spectra with a relative gain setting of 0.78. ANNs predict these spectra to be $^{238}$U with posterior probabilities above 98\%. The $^{238}$U spectrum is characterized by photopeaks at 93 keV, 766 keV, and 1001 keV. With sufficient shielding, the 93 keV photopeak is completely attenuated, leaving a two photopeaks. These photopeaks are have an energy similar to the photopeaks from $^{60}$Co. By including shielded $^{238}$U spectra in the complete training dataset, we introduced spectra similar to $^{60}$Co. 
 
-Performance improved in complete models. Again, both convolutional models outperformed the purely dense models, with the CNN outperforming the CAE at the higher signal-to-background ratio. All models only generalized to the relative gain settings of 0.78 and 1.0,  
+
+\subsubsection{$^{133}$Ba}
+
+$^{133}$Ba spectra measured at a signal-to-background ratio of 0.5 with a relative gain of 1.27 was replaced by recalibrated reference gain spectra.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\linewidth]{images/realspectra-cal-ba133-spec}
+	\caption{Example $^{133}$Ba spectra measured with signal-to-background ratios of 0.5 and 1.0. The lower and higher count spectra use a measurement times of 10 s and 300 s respectively.}
+	\label{fig:realspectra-cal-ba133-spec}
+\end{figure}
+
+Only the simple CAE with a source-to-background ratio of 1.0 alarmed after 120 s measurement time. 
 
 
 \begin{figure}[H]
@@ -204,7 +272,16 @@ Performance improved in complete models. Again, both convolutional models outper
 \end{figure}
 
 
+\subsubsection{$^{152}$Eu}
+
 Figures in \ref{fig:realspectra-cal-eu152} show performance when identifying $^{152}$Eu. For the first time, convolutional architectures did not outperform the dense models. This performance change only occurred in the simple dataset. As explained above, because of the lack of spectral variety in the simple dataset, generalization to real spectra is more difficult. $^{152}$Eu has many more identifiable photopeaks in a larger range of energies compared to $^{133}$Ba. Because of this, using the channel-based approach (dense architectures) would lead to better performance over approaches that use a form of feature extraction.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.85\linewidth]{images/realspectra-cal-eu152-spec}
+	\caption{Example $^{152}$Eu spectra measured with signal-to-background ratios of 0.5 and 1.0. The lower and higher count spectra use a measurement times of 10 s and 300 s respectively.}
+	\label{fig:realspectra-cal-eu152-spec}
+\end{figure}
 
 The improvement in the convolutional models for $^{152}$Eu identification occurs when more spectral variety is available in the complete dataset. With the complete dataset, all gain settings except 0.59 are identified with high posterior probability above 100 seconds of integration time. 
 
@@ -216,9 +293,11 @@ The improvement in the convolutional models for $^{152}$Eu identification occurs
 	\label{fig:realspectra-cal-eu152}
 \end{figure}
 
-\subsubsection{Asymptotic Model Performance with Respect to Shielding} \label{real_shielding_performance}
+\subsection{Model Performance with Respect to Shielding} \label{real_shielding_performance}
 
-To investigate the generalization performance of the model to increased shielding, spectra of $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu were measured with increasing thicknesses of shielding material. Iron or aluminum blocks were 
+To investigate the identification performance of each ANN with increased shielding thicknesses, were measured with increasingly thick shielding material. 
+
+Iron or aluminum blocks were 
 
 Identification performance for $^{137}$Cs was not heavily effected by varying shielding in either training dataset. This is due to shielding not dramatically affecting the single photopeak of $^{137}$Cs. The CNN performs very well in both datasets. The complete DNN performs comparably to complete CNN. The DNN and DAE are affected by increased shielding when trained on the simple dataset, showing that slight changes in spectral shapes affect performance in dense models when they are not exposed to a variety of spectral patterns. When trained on the complete dataset, networks without autoencoder pretraining outperform networks with pretraining.
 
