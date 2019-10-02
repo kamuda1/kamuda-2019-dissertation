@@ -645,7 +645,7 @@ A wide variety of realistic gamma-ray spectra can be generated using noiseless t
 \text{spectrum} &= T ( S_{cps} \sum_{n=1}^{N} C_n S_{n}^{template}  + B_{cps} B^{template} ) \\
 \text{where } S_{cps} &= \text{total source counts per second measured by the detector} \nonumber \\
 S_{n}^{template} &= n^{th} \text{ noiseless source template's PDF} \nonumber \\
-C_{n} &= \text{contribution from the $n^{th}$ source} \nonumber \\
+C_{n} &= \text{relative contribution from the $n^{th}$ source} \nonumber \\
 B_{cps} &= \text{background counts per second measured by the detector} \nonumber \\
 B^{template} &= \text{noiseless background template PDF.} \nonumber \\
 T &= \text{measurment time}
@@ -669,7 +669,7 @@ After the normalization process, spectra are combined based on total counts desi
 	\label{fig:template_sampling_diagram}
 \end{figure}
 
-This workflow is designed to be flexible and allow for quick dataset prototyping. The workflow can be used for multiple gamma-ray transport and detector response software. Dataset simulation functions can be added or modified in the \verb|template_sampling| module to extend \verb|annsa|'s capabilities.
+This workflow is designed to be flexible and allow for quick dataset prototyping. The workflow can be used for multiple gamma-ray transport and detector response software. Dataset simulation functions can be added or modified in \verb|annsa| to extend it's capabilities.
 
 % trim left bottom right top
 
@@ -701,17 +701,17 @@ DNNs in \verb|annsa| are created by stacking dense-dropout layers between user d
 \begin{table}[H]
 \centering
 \caption{\texttt{annsa}'s DNN parameters.}
-\begin{tabular}{c}
+\begin{tabular}{ll}
 \hline
-Parameter \\ \hline
-Dense Nodes per Layer \\
-Dropout Rate \\
-Activation Function \\
-L2 Regularization Strength \\ 
-Minibatch Size \\ 
-Input Scaling \\
-Output Size \\
-Output Activation \\ \hline
+\textbf{Parameter} & \textbf{Default Value}\\ \hline
+Dense Nodes per Layer & 10\\
+Dropout Rate & 0.5\\
+Activation Function & relu\\
+L2 Regularization Strength & 1 x 10$^{-3}$\\ 
+Minibatch Size & 32\\ 
+Input Scaling & None\\
+Output Size & 30\\
+Output Activation & softmax\\ \hline
 \end{tabular}
 \label{table:annsa_dnn_params}
 \end{table}
@@ -742,23 +742,23 @@ Subsequent convolution-pooling layers also use 1D convolutions. In Figure \ref{f
 \begin{table}[H]
 \centering
 \caption{\texttt{annsa}'s 1D CNN parameters.}
-\begin{tabular}{c}
+\begin{tabular}{ll}
 \hline
-Parameter \\ \hline
-Pooling Method \\
-Number of Filters per Layer \\
-Length of Filter per Layer \\
-Convolution Stride per Layer \\
-Pooling Stride per Layer \\
-Pooling Length per Layer \\
-Dense Nodes per Layer \\
-Dropout Rate \\
-Activation Function \\
-L2 Regularization Strength \\ 
-Minibatch Size \\ 
-Input Scaling \\
-Output Size \\
-Output Activation \\ \hline
+\textbf{Parameter} & \textbf{Default Value}\\ \hline
+Pooling Method & max pooling \\
+Number of Filters per Layer & 8 \\
+Length of Filter per Layer & 8 \\
+Convolution Stride per Layer & 1 \\
+Pooling Stride per Layer & 2 \\
+Pooling Length per Layer & 8 \\
+Dense Nodes per Layer & 0.5 \\
+Dropout Rate & 0.5 \\
+Activation Function & relu \\
+L2 Regularization Strength & 1 x 10$^{-3}$\\ 
+Minibatch Size & 32 \\ 
+Input Scaling & None \\
+Output Size & 30 \\
+Output Activation & softmax\\ \hline
 \end{tabular}
 \label{table:annsa_cnn_params}
 \end{table}
@@ -767,7 +767,7 @@ Output Activation \\ \hline
 
 \verb|annsa| includes a class to create DAEs. The DAE class contains an encoder and decoder function. Both functions contain a user defined number of dense-dropout layers and nodes in each layer. Using this, encoders and decoders with different dense architectures can be constructed. Parameters required by the DAE class are shown in Table \ref{table:annsa_dae_params}. An example autoencoder with a two-hidden layer encoder, a single hidden-layer decoder, and no dropout is shown in Figure \ref{fig:annsa_dae}. By changing the input and output, autoencoders can be trained to extract various features from input signals. The final layer of the encoder, called the encoding, contains these extracted features. This example demonstrates a background subtracting denoising autoencoder: the input is a Poisson sampled source and background spectrum and the output is only the source spectrum without Poisson sampling.
 
-\verb|annsa| includes a function in the \verb|load_pretrained_network| module to extract weights from the encoder of a trained DAE and load them into a classification DNN. This process is shown in Figure \ref{fig:annsa_daednn}. This pretrained network can be additionally trained in a process called fine tuning.
+Weights from the encoder of a trained DAE can be loaded into a classification DNN for additional training in a process called fine tuning. This process is shown in Figure \ref{fig:annsa_daednn}.
 
 \begin{figure}[H]
 \centering
@@ -787,17 +787,17 @@ Output Activation \\ \hline
 \begin{table}[H]
 \centering
 \caption{\texttt{annsa}'s DAE parameters.}
-\begin{tabular}{c}
+\begin{tabular}{ll}
 \hline
-Parameter \\ \hline
-Dense Encoder Nodes \\
-Dense Decoder Nodes \\
-Dropout Rate \\
-Activation Function \\
-Minibatch Size \\ 
-Input Scaling \\
-Output Size \\
-Output Activation \\ \hline
+\textbf{Parameter} & \textbf{Default Value}\\ \hline
+Dense Encoder Nodes & 32\\
+Dense Decoder Nodes & None \\
+Dropout Rate & 0.0 \\
+Activation Function & relu \\
+Minibatch Size & 32 \\ 
+Input Scaling & None \\
+Output Size & 1024 \\
+Output Activation & None \\ \hline
 \end{tabular}
 \label{table:annsa_dae_params}
 \end{table}
@@ -808,7 +808,7 @@ Output Activation \\ \hline
 
 \verb|annsa| includes a class to create CAEs. Like the DAE, the CAE class contains an encoder and decoder function. The CAE uses parameters from the 1D CNN (Table \ref{fig:annsa_cnn}) with the exception of L2 regularization strength and dropout rate (parameters only used by dense layers). The encoder is constructed using stacked 1D convolutional-pooling layers. As with the CNNs described in section \ref{annsa_section_conv_neural_network}, the CAEs use padding to keep the input and output sizes the same when the strides parameter is set to one. In \verb|annsa| the CAE encoder pooling strides parameter is two by default, making each convolutional-pooling layer reduce the input's length by a factor of two. The decoder uses resize-convolutional layers to increase the dimension of the encoding. The resize layer doubles the input signal's length using bilinear interpolation. The final decoding convolutional layer must have one output filter to ensure the autoencoder's output is a vector. A summary of this operation is shown in Figure \ref{fig:annsa_cae}.
 
-Similar to the DAE, \verb|annsa| includes a function in the \verb|load_pretrained_network| module to extract the weights from the encoder of a trained CAE into a CNN. This process is shown in Figure \ref{fig:annsa_caednn}.
+Similar to the DAE, the weights from the encoder of a trained CAE can be extracted into a CNN for additional training. This process is shown in Figure \ref{fig:annsa_caednn}.
 
 \begin{figure}[H]
 \centering
@@ -827,7 +827,15 @@ Similar to the DAE, \verb|annsa| includes a function in the \verb|load_pretraine
 
 \subsection{Training}
 
-Each model was trained using a p2.8xlarge EC2 (Elastic Compute Cloud) instance on Amazon Web Services using the Deep Learning AMI (Amazon Machine Image). Training on multiple GPUs enabled simultaneous training of experiments. Jupyter notebooks used for experiments in this thesis are available at \verb|https://github.com/arfc/annsa/examples|.
+Template datasets were simulated on a local machine and uploaded to a cloud computing platform using Amazon Web Services. Each model was trained using one of eight GPU's available on a p2.8xlarge EC2 (Elastic Compute Cloud) instance. Jupyter notebooks used for training and generating results in this dissertation are available at \verb|https://github.com/arfc/annsa/examples|.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 0 20 0,clip,width=1.0\linewidth]{images/local_cloud_diagram.png}
+	\caption{Diagram of AWS use.}
+	\label{fig:local_cloud_diagram}
+\end{figure}
+
 
 
 \section{Chapter Conclusions}
