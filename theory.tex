@@ -618,7 +618,6 @@ Other commonly used feature extraction methods are principal component analysis 
 
 As a part of this work we developed the open source (under the BSD 3 license) software package \verb|annsa| \cite{annsa}. \verb|annsa| leverages gamma-ray transport software and open source machine learning packages to generate trained machine learning models for spectroscopic tasks. \verb|annsa| contains machine learning models designed for tasks such as: classifying spectra based on an isotope library, quantifying an object's uranium enrichment, and extracting features from a spectrum using autoencoders. Machine learning models included in \verb|annsa| are dense neural networks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs). We designed \verb|annsa| to be modular, allowing for the addition of extra machine learning models and spectroscopic dataset construction methods. 
 
-% SciPy \cite{scipy},
 We also included unit tests using \verb|pytest| \cite{pytest3.5} and the continuous integration framework Circle CI to ensure new functionality can be safely incorporated into \verb|annsa|.
 
 The open source software stack \verb|annsa| uses include: TensorFlow \cite{tensorflow2015-whitepaper} and Keras \cite{chollet2015keras} for the machine learning model creation and training; NumPy \cite{numpy} and pandas \cite{mckinney-proc-scipy-2010} to manipulate and store data; and scikit-learn \cite{scikit-learn} for prepossessing and miscellaneous training tasks. \verb|annsa| can be installed in a UNIX environment using the following commands:
@@ -629,18 +628,39 @@ python setup.py install
 \end{lstlisting}
 \subsection{Dataset Generation} \label{section_dataset_gen}
 
-The dataset generation process begins by creating a dataset of noiseless template spectra. A gamma-ray transport software and a software that simulates the response from a gamma-ray detector generate the templates. The gamma-ray transport software simulates how photons from each isotope scatter in an environment to reach the detector. Transport software that could be used for this include GADRAS-DRF \cite{mitchell2014}, MCNP \cite{Goorley2016}, or GEANT4 \cite{geant4}. The detector response software accounts for the calibration and Gaussian energy broadening of the detector. \verb|annsa| uses csv formatted template spectra with columns corresponding to simulation settings. An example row from a spectral template csv file in the format used by \verb|annsa| is shown in Figure \ref{fig:template_csv}.
+The dataset generation process begins by creating a dataset of noiseless template spectra. A gamma-ray transport software and a software that simulates the response from a gamma-ray detector generate the templates. The gamma-ray transport software simulates how photons from each isotope scatter in an environment to reach the detector. Transport software that could be used for this include GADRAS-DRF \cite{mitchell2014}, MCNP \cite{Goorley2016}, or GEANT4 \cite{geant4}. The detector response software accounts for the calibration and Gaussian energy broadening of the detector. 
+
+\verb|annsa| uses separate csv formatted source and background template spectra datasets. These templates are simulated without Poisson noise. Poisson noise can be removed from a spectrum by simulating spectra with sufficient counts to minimize channel-to-channel variance. Columns in each template dataset correspond to simulation settings. Example rows from the source and background template csv files used in this work are shown in Figure \ref{fig:template_csv}. Source height, distance, and shielding are assumed to have no effect on the background templates and omitted from the background template dataset. Instead, the background template dataset includes entries for the location simulated, resolution of the detector, and the inclusion of cosmic radiation background. Cosmic radiation is assumed to be negligible and is not simulated for the background templates in this work.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[trim=0 0 0 0,clip,width=1.0\linewidth]{images/template_csv.png}
-	\caption{Example spectral template csv entry.}
+	\includegraphics[trim=0 380 490 0,clip,width=0.8\linewidth]{images/template_csv.png}
+	\caption{Example csv entries for the source and background template datasets.}
 	\label{fig:template_csv}
 \end{figure}
 
-% Datasets are generated using the process outlined in Figure \ref{fig:annsa_data_generation}
+A wide variety of realistic gamma-ray spectra can be generated using noiseless templates without the need to excessively run computationally expensive transport software. Spectra can be simulated by combining source and background templates in desired amounts,
+%
+\begin{align}
+\text{spectrum} &= T ( S_{cps} \sum_{n=1}^{N} C_n S_{n}^{template}  + B_{cps} B^{template} ) \\
+\text{where } S_{cps} &= \text{total source counts per second measured by the detector} \nonumber \\
+S_{n}^{template} &= n^{th} \text{ noiseless source template's PDF} \nonumber \\
+C_{n} &= \text{contribution from the $n^{th}$ source} \nonumber \\
+B_{cps} &= \text{background counts per second measured by the detector} \nonumber \\
+B^{template} &= \text{noiseless background template PDF.} \nonumber \\
+T &= \text{measurment time}
+\end{align}
+%
+Source template probability density functions are created by rebinning a chosen template, removing channels above the 1024$^{th}$, setting counts defined by the low level discriminator to zero, and finally normalizing the spectrum by it's total counts. This process is illustrated in Figure \ref{fig:template_manipulation} for a background and $^{60}$Co template spectrum. \verb|annsa| contains a function that chooses templates based on a users input.
 
-A wide variety of realistic gamma-ray spectra can be generated using noiseless templates without the need to excessively run computationally expensive transport software. Spectra with various source-to-background ratios can be simulated by combining source and background templates in desired amounts. This process is displayed in Figure \ref{fig:template_sampling_diagram} for a $^{60}Co$ and background template. First, normalized template spectra generated by the transport software are scaled to the desired total expected counts in the spectrum. In this example, the signal to background ratio is $\frac{1}{5}$ and the expected total number of counts in the final spectrum is 6000. These templates are then added together and sampled using a Poisson distribution to yield spectra with realistic counting statistics. The \verb|annsa| \verb|template_sampling| module contains a function, \verb|make_random_spectrum|, that generates source and background spectra and a function, \verb|make_uenriched_spectrum|, that generates enriched uranium spectra. These functions take a dataset of template spectra and user defined parameters to create new spectra. Using the parameters, these functions choose templates from the template dataset. Chosen templates are combined based on additional parameters such as integration time, calibration, and source-to-background ratio. These spectra and machine learning target values (which isotope is in a spectrum, relative quantities of each isotope in a spectral mixture, $^{235}$U \% enrichment) are stored and saved in a NumPy array for future machine learning training.
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 0 450 0,clip,width=1.0\linewidth]{images/template_manipulation.png}
+	\caption{An example of the procedure used to normalize a template spectrum.}
+	\label{fig:template_manipulation}
+\end{figure}
+
+After the normalization process, spectra are combined based on total counts desired in the source and background signals. An example of combining background and $^{60}$Co probability density function templates is shown in Figure \ref{fig:template_sampling_diagram}. In this illustration, the signal to background ratio is 5 and the expected total number of counts in the final spectrum is 6000. Normalized templates are scaled by the appropriate amounts, combined, and sampled using a Poisson distribution to yield spectra with realistic counting statistics. These spectra and machine learning target values (which isotope is in a spectrum, relative quantities of each isotope in a spectral mixture, $^{235}$U \% enrichment) are stored and saved in a NumPy array for future machine learning training.
 
 \begin{figure}[H]
 	\centering
@@ -793,7 +813,7 @@ Similar to the DAE, \verb|annsa| includes a function in the \verb|load_pretraine
 \begin{figure}[H]
 \centering
 \includegraphics[trim=0 0 30 0,clip,width=1.0\linewidth]{images/annsa_cae.png}
-\caption{\texttt{annsa} CAE structure. This example demonstrates a background subtracting denoising autoencoder.}
+\caption{\texttt{annsa}'s CAE structure. This example demonstrates a background subtracting denoising autoencoder.}
 \label{fig:annsa_cae}
 \end{figure}
 
