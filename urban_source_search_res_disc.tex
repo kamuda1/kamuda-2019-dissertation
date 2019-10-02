@@ -210,13 +210,13 @@ Spectra with relative gains of 0.59 and 1.27 never raise a true positive alarm. 
 	\label{table:cs137_precictions_60s}
 	\begin{tabular}{lllll}
 		\hline
-		Dataset & \multicolumn{4}{l}{\textbf{Simple}} \\
-		Model & \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
+		 & \multicolumn{4}{l}{\textbf{Simple}} \\
+		 & \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
 		Prediction & \textbf{$^{192}$Ir} & $^{177m}$Lu &  $^{75}$Se  & $^{67}$Ga \\
 		Probability & \textbf{80} & 33 & 41 & 33 \\ \hline \\ \\
 		
 		\hline
-		& \multicolumn{4}{l}{\textbf{Complete}} \\
+		Model & \multicolumn{4}{l}{\textbf{Complete}} \\
 		& \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
 		Prediction  & \textbf{$^{131}$I} & \textbf{$^{239}$Pu} & $^{131}$I & \textbf{$^{239}$Pu}  \\ 
 		Probability & \textbf{100} & \textbf{70} & 40 & \textbf{61} \\ \hline
@@ -252,7 +252,7 @@ Complete ANNs fail to alarm on spectra with a relative gain setting of 0.78. ANN
 
 \subsubsection{$^{133}$Ba}
 
-$^{133}$Ba spectra measured at a signal-to-background ratio of 0.5 with a relative gain of 1.27 was replaced by recalibrated reference gain spectra.
+$^{133}$Ba spectra are shown in Figure \ref{fig:realspectra-cal-ba133-spec}. Due to an error, $^{133}$Ba spectra measured at a signal-to-background ratio of 0.5 with a relative gain of 1.27 were lost. Spectra measured with this setting are replaced by spectra measured with a signal-to-background ratio of 0.5 and relative gain of 1.0 recalibrated to match a gain of 1.27.
 
 \begin{figure}[H]
 	\centering
@@ -261,7 +261,9 @@ $^{133}$Ba spectra measured at a signal-to-background ratio of 0.5 with a relati
 	\label{fig:realspectra-cal-ba133-spec}
 \end{figure}
 
-Only the simple CAE with a source-to-background ratio of 1.0 alarmed after 120 s measurement time. 
+Only the simple CAE with a source-to-background ratio of 1.0 alarmed after 120 s measurement time. The spectrum from $^{133}$Ba is more complicated compared to the signals from $^{137}$Cs and $^{60}$Co. Without a sufficient amount of spectral diversity, 
+
+ This shows that there is not enough spectral diversity in the 
 
 
 \begin{figure}[H]
@@ -305,7 +307,7 @@ Identification performance for $^{137}$Cs was not heavily effected by varying sh
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/shielded_cs137}
+	\includegraphics[width=0.8\linewidth]{images/shielded_cs137}
 	\caption{Spectra of $^{137}$Cs shielded with increasing amounts of iron.}
 	\label{fig:shielded_cs137}
 \end{figure}
@@ -324,7 +326,7 @@ The DNN is heavily effected by shielding even when trained on the complete datas
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/shielded_co60}	\caption{Spectra of $^{60}$Co shielded with increasing amounts of iron.}
+	\includegraphics[width=0.8\linewidth]{images/shielded_co60}	\caption{Spectra of $^{60}$Co shielded with increasing amounts of iron.}
 	\label{fig:shielded_co60}
 \end{figure}
 
@@ -340,7 +342,7 @@ Due to the relatively low gamma-ray energies of $^{133}$Ba compared to the other
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/shielded_ba133}	\caption{Spectra of $^{133}$Ba shielded with increasing amounts of aluminum.}
+	\includegraphics[width=0.8\linewidth]{images/shielded_ba133}	\caption{Spectra of $^{133}$Ba shielded with increasing amounts of aluminum.}
 	\label{fig:shielded_ba133}
 \end{figure}
 
@@ -360,7 +362,7 @@ The complete CNN identifies lightly and moderately shielded $^{152}$Eu with a hi
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/shielded_eu152}
+	\includegraphics[width=0.8\linewidth]{images/shielded_eu152}
 	\caption{Spectra of $^{152}$Eu shielded with increasing amounts of iron.}
 	\label{fig:shielded_eu152}
 \end{figure}
@@ -372,15 +374,65 @@ The complete CNN identifies lightly and moderately shielded $^{152}$Eu with a hi
 	\label{fig:iron_eu152}
 \end{figure}
 
+\section{Comparison with Peak-Based Bayesian Classifier}
+
+In this section we compare our trained ANNs to the performance of a peak-based Bayesian classifier created in Dr. Jacob Stinnett's PhD dissertation \cite{stinnett2016}. The peak-based classifier extracts photopeak locations and areas using a wavelet transform. These features are then used in a Bayesian classifier to produce posterior probabilities for a library of ANSI N42-34-2006 standard isotopes. Following the same procedure as Dr. Stinnett, we simulated the same sources using the same 20 s measurement time. Simulated sources were modeled after measured sources that are included in the AIP. The sources include: $^{241}$Am, $^{133}$Ba, $^{57}$Co, $^{60}$Co, $^{137}$Cs, $^{152}$Eu, $^{67}$Ga, $^{125}$I, $^{131}$I, $^{192}$Ir, $^{40}$K, $^{226}$Ra, $^{99m}$Tc, $^{201}$Tl, $^{233}$U, high enriched uranium (HEU), and weapons grade plutonium (WGPu). HEU was defined to be identified correctly if the ANN's highest posterior probability output identified $^{235}$U. WGPu was defined to be identified correctly if the ANN identified either $^{241}$Am, $^{239}$Pu, or $^{240}$Pu. Each of these isotopes are present in WGPu spectra.
+
+F1 scores for trained ANNs and the peak-based Bayesian classifier are shown in Table \ref{table:jacob_compare}. As seen in Table \ref{table:jacob_compare}, each ANN, except the simple autoencoders, outperform the Bayesian classifier. Complete ANNs match or outperform their simple counterparts. The complete DNN achieves the highest F1 score. 
+
+\begin{table}[H]
+	\centering
+	\caption{F1 scores from the Bayesian classifier and ANNs. The highest F1 scores are shown in bold.}
+	\label{table:jacob_compare}
+	\begin{tabular}{ll}
+		\hline
+		\textbf{Model} &  \textbf{F1 Score [\%]} \\ \hline
+		Bayesian classifier & 71.47 \\ 
+		Simple CNN & 78.79 \\ 
+		Simple DNN & 72.73 \\ 
+		Simple CAE & 66.67 \\ 		
+		Simple DAE & 60.61 \\ 
+		Complete CNN & 78.79 \\ 
+		Complete DNN & \textbf{84.85} \\ 
+		Complete CAE & 78.79 \\ 
+		Complete DAE & 78.79 \\ \hline
+	\end{tabular}
+\end{table}
+
+Incorrect identifications are shown in Table \ref{table:anns_incorrect}. Incorrect identifications typically involve isotopes that present only a few low energy photopeaks. Examples of this are $^{125}$I classified as $^{241}$Am; $^{241}$Am classified as $^{204}$Tl and $^{133}$Xe; $^{99m}$Tc classified as $^{131}$I; and $^{57}$Co classified as $^{99m}$Tc. The Bayesian classifier also experienced issues identifying isotopes in this category, particularly $^{125}$I. The Bayesian classifier also misidentified $^{233}$U, likely due to contamination from $^{232}$U.
+
+\begin{table}[H]
+	\centering
+	\caption{Isotopes incorrectly classified by the ANNs. Entries with dashes indicate a correct identification.}
+	\label{table:anns_incorrect}
+	\begin{tabular}{lllll}
+		\hline
+		& \multicolumn{4}{l}{\textbf{Training Dataset - Simple}} \\
+		\textbf{True Label} & \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
+		$^{125}$I & $^{241}$Am & $^{241}$Am & $^{241}$Am & $^{241}$Am \\ 
+		$^{233}$U & $^{137}$Cs & $^{226}$Ra & $^{57}$Co &  $^{226}$Ra  \\ 
+		WGPu & - & $^{201}$Tl & $^{201}$Tl & $^{201}$Tl \\ 
+		$^{241}$Am & - & $^{204}$Tl &- & $^{133}$Xe \\
+		$^{40}$K & Background & $^{60}$Co & Background & $^{60}$Co \\
+		$^{57}$Co & - & - & - & $^{60}$Co \\
+		$^{99m}$Tc & $^{131}$I & $^{131}$I & $^{131}$I & $^{131}$I \\ \hline \\ \\
+		
+		\hline
+		& \multicolumn{4}{l}{\textbf{Training Dataset - Complete}} \\
+		\textbf{True Label} & \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
+		$^{125}$I & $^{241}$Am & $^{241}$Am & $^{241}$Am & $^{241}$Am  \\ 
+		$^{233}$U & $^{99}$Mo & $^{137}$Cs & $^{153}$Sm &  $^{137}$Cs \\ 
+		$^{235}$U & - & - &  $^{177m}$Lu  & - \\ 
+		$^{241}$Am & $^{133}$Xe & - & - & - \\	
+		$^{57}$Co & - & - & - & $^{99m}$Tc \\ \hline \\ \\
+	\end{tabular}
+\end{table}
+
+
 \section{Chapter Discussion and Conclusion}
 
 This chapter shows that CNNs trained on the complete dataset generalize very well to simulated and real gamma-ray spectra. When trained on the simple dataset CNNs often also perform well when identifying spectra outside the simple dataset's parameters, but struggle with real spectra. The autoencoders perform poorly in the simulated spectra, but generalize well to parameters outside the simple training set - particularly DAEs. There is also some evidence that CAEs generalize better to isotopes with predominately low energy photopeaks in real spectra. Occasionally, at the lower signal-to-background ratio, the DNN outperforms the CNN. Because the dense architecture is more suited to comparing counts in different regions, it should be more robust against changes in Compton continua as it compares counts in photopeak areas. Despite this, DNN's offer unpredictable performance. Due to the large number of inputs, the DNN's are likely overtraining to specific combinations of noise in the training datasets.
 
-In addition to the above, the results also shown that using datasets of fixed sizes should be preferred over using online data augmentation. Online data augmentation usually reduced performance in each network. There is some evidence that the CNN generalizes better when trained with online data augmentation. This may be due to the larger capacity of the CNN compared to the DNN. 
-
-% To take advantage of this, it may be best to include a committee of CNN's and DNN's, or to train networks for specific ranges of integration time.
-
-% A committee of models can be constructed with CAEs, DAEs, and CNNs. 
 
 
 
