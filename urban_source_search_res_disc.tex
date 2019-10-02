@@ -164,7 +164,7 @@ The complete models performed better with changing gain, but still struggled wit
 
 In this section we investigate each ANN's performance when identifying real gamma-ray spectra with calibration settings and shielding possible in source interdiction activities. To measure performance, we observe how each model's posterior probability for each isotope changes over integration times ranging from 10 s to 10 mins. Sources included are $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. $^{137}$Cs and $^{60}$Co are included because they have uncomplicated spectra, $^{137}$Cs with only one primary photopeak at 662 keV and $^{60}$Co with two photopeaks at 1173 and 1332 keV. These are also common industrial and medical sources which are important for source interdiction. $^{133}$Ba and $^{152}$Eu have more complicated spectra with many photopeaks. Photopeaks from $^{133}$Ba are all below 400 keV and the photopeaks from $^{152}$Eu range from 121 keV to 1213 keV \cite{bigbluebook}. $^{133}$Ba is included in these tests because it is a medical isotope and an often used surrogate for plutonium. $^{152}$Eu is included because it's large range of photopeak energies are uniquely effected by shielding and calibration changes. Shielding $^{152}$Eu can remove low-energy photopeaks while only slightly reducing higher-energy photopeaks. This presents a unique challenge for identification algorithms.
 
-A diagram of the laboratory setup used for these measurements is shown in Figure \ref{fig:shielding_measurment_diagram}. The radioactive sources, 1 inch diameter by 1/8 inch thick plastic disks containing $\mu$Ci quantities of radioactive material, were measured on a wooden desk approximately one meter from the nearest wall to reduce environmental scatter. We used a 2x2 inch Ortec NaI detector to measure the sources. We measured the source-detector from the source disk's face to the detector's face. Blocks of shielding material were added for the measurements in Section \ref{real_shielding_performance}. Measurements in Section \ref{real_calibration_performance} used no shielding material. 
+A diagram of the laboratory setup used for these measurements is shown in Figure \ref{fig:shielding_measurment_diagram}. The radioactive sources, 1 inch diameter by 1/8 inch thick plastic disks containing $\mu$Ci quantities of radioactive material, were measured on a wooden desk approximately one meter from the nearest wall to reduce environmental scatter. We used a 2x2 inch Ortec NaI detector to measure the sources. The source-detector distance, measured from the source disk's face to the detector's face, was adjusted to keep the signal-to-background ratio either 0.5 or 1.0. Blocks of shielding material were added for the measurements in Section \ref{real_shielding_performance}. Measurements in Section \ref{real_calibration_performance} used no shielding material. 
 
 \begin{figure}[H]
 	\centering
@@ -178,7 +178,7 @@ For this section, we define a model's performance to be good when the posterior 
 
 \subsection{Model Performance on Changing Voltage} \label{real_calibration_performance}
 
-To test how well each model identified spectra with changing calibration, spectra were measured with different PMT voltages. PMT voltages included 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V calibrated the detector's 1024$^{th}$ channel to 3 MeV. This gain setting was used as the reference calibration. Relative gain settings for the PMT voltages are measured with respect to the relative shift of the 662 keV photopeak. The source-detector distance of each source was adjusted so the ratio of counts-per-second from the source and background were 0.5 and 1.0.
+To test how well each model identified spectra with changing calibration, spectra were measured with different PMT voltages. PMT voltages included 720 V, 745 V, 770 V, and 795 V. The detector calibration of 770 V calibrated the detector's 1024$^{th}$ channel to 3 MeV. This gain setting was used as the reference calibration. Relative gain settings for the PMT voltages are measured with respect to the relative shift of the 662 keV photopeak. The source-detector distance of each source was adjusted so the ratio of counts per second from the source and background were 0.5 and 1.0. Example spectra measured at the experiment's time limits are shown for each isotope.
 
 \subsubsection{$^{137}$Cs}
 
@@ -191,8 +191,7 @@ Example $^{137}$Cs spectra identified in this analysis are shown in Figure \ref{
 	\label{fig:realspectra-cal-cs137-spec}
 \end{figure}
 
-
-As seen in Figure \ref{fig:realspectra-cal-cs137}, each ANN, except the simple DAE, identifies reference calibration spectra above the 50\% posterior probability threshold after 60 s of measurement. Simple ANNs fail to alarm on $^{137}$Cs spectra with other calibration settings. Complete ANNs, with the exception of the CAE, successfully alarm when identifying spectra with a relative gain of 1.0 and 0.78.
+Figure \ref{fig:realspectra-cal-cs137} demonstrates the effect of measurement time on each model's posterior probability for $^{137}$Cs. As time increases, the simple DNN and DAE monotonically increase their probabilities for $^{137}$Cs measured with the default gain. These probabilities approach an asymptote in the higher signal-to-background spectra. The simple CNN jumps to 100\% posterior probability for default gain spectra. Complete models demonstrate more monotonic performance for a wider range of gain settings. Monotonic increases in posterior probability are desirable for isotope identification algorithms because they are more easily interpreted by an unskilled user.
 
 \begin{figure}[H]
 	\centering
@@ -201,12 +200,14 @@ As seen in Figure \ref{fig:realspectra-cal-cs137}, each ANN, except the simple D
 	\label{fig:realspectra-cal-cs137}
 \end{figure}
 
+Each ANN, except the simple DAE, identifies reference calibration spectra above the 50\% posterior probability threshold after 60 s of measurement. Simple ANNs fail to alarm on $^{137}$Cs spectra with other calibration settings. Complete ANNs, with the exception of the CAE, successfully alarm when identifying spectra with a relative gain of 1.0 and 0.78.
+
 % This shows that even for an isotope with a single photopeak, ANN's cannot extrapolate outside of their 
 Spectra with relative gains of 0.59 and 1.27 never raise a true positive alarm. These settings are too far outside of the training dataset's relative gain ranges, (0.8, 1.2), for correct identification. Correctly identifying $^{137}$Cs with a relative calibration of 1.27 are possible if the detection threshold is lowered, but this risks increasing the false positive rate. Spectra with a relative calibration of 0.59 move the 662 keV photopeak to 340 keV. As shown in Table \ref{table:cs137_precictions_60s}, ANNs mistakes $^{137}$Cs at this calibration for other isotopes with lower-energy photopeaks. The Simple CNN raises an incorrect alarm on $^{192}$Ir, which has it's largest photopeak at 316 keV. The complete CNN, DNN, and DAE also raise incorrect alarms. Both complete convolutional models predict the same isotope, $^{131}$I, which has a primary photopeak at 364 keV. Both dense models predict $^{239}$Pu.
 
 \begin{table}[H]
 	\centering
-	\caption{ANN predictions $^{137}$Cs spectra measured with a relative gain shift of 0.59. Spectra used a signal-to-background ratio of 1.0 and were measured for 60 s. Incorrect alarms are bolded.}
+	\caption{ANN predictions of $^{137}$Cs spectra measured with a relative gain shift of 0.59. Spectra were measured with a signal-to-background ratio of 1.0 for 60 s. Incorrect alarms are bolded.}
 	\label{table:cs137_precictions_60s}
 	\begin{tabular}{lllll}
 		\hline
@@ -224,7 +225,7 @@ Spectra with relative gains of 0.59 and 1.27 never raise a true positive alarm. 
 \end{table}
 
 
-Even for isotopes with simple spectra, Including a wide range of calibrations in a ANNs training dataset is necessary for good performance when identifying 
+Even for isotopes with a single photopeak, Including a wide range of calibrations in a ANNs training dataset is necessary for good performance when identifying measured spectra.
 
 
 \subsubsection{$^{60}$Co}
@@ -238,7 +239,7 @@ As seen in Figure \ref{fig:realspectra-cal-co60-spec}, the 1173 keV and 1332 keV
 	\label{fig:realspectra-cal-co60-spec}
 \end{figure}
 
-As seen in figure \ref{fig:realspectra-cal-co60}, simple ANNs correctly alarm on $^{60}$Co spectra measured using the default gain. This effect is also seen in the $^{137}$Cs identifications. Unlike identifications in $^{137}$Cs, both simple dense ANNs correctly alarm on the gain setting of 1.27. This shows that dense networks are more flexible when identifying spectra with parameters outside of their training set. Convolutional models may develop feature extraction mechanisms that are more prone to overtraining than dense models. Simple dense ANNs outperforming simple convolutional ANNs is also shown when identifying spectra measured with the higher signal-to-background ratio. Simple dense ANNs correctly alarm on spectra with all gain settings except 0.59.
+Figure \ref{fig:realspectra-cal-co60} shows that monotonic behavior is observed in more $^{60}$Co identifications in a wider range of calibrations than observed for $^{137}$Cs. Similar to identifications for $^{137}$Cs, shown in Figure \ref{fig:realspectra-cal-cs137}, the convolutional models exhibited more erratic behavior than dense models.
 
 \begin{figure}[H]
 	\centering
@@ -247,12 +248,14 @@ As seen in figure \ref{fig:realspectra-cal-co60}, simple ANNs correctly alarm on
 	\label{fig:realspectra-cal-co60}
 \end{figure}
 
+Simple ANNs correctly alarm on $^{60}$Co spectra measured using the default gain. This effect is also seen in the $^{137}$Cs identifications. Unlike identifications in $^{137}$Cs, both simple dense ANNs correctly alarm on the gain setting of 1.27. This shows that dense networks are more flexible when identifying spectra with parameters outside of their training set. Convolutional models may develop feature extraction mechanisms that are more prone to overtraining than dense models. Simple dense ANNs outperforming simple convolutional ANNs is also shown when identifying spectra measured with the higher signal-to-background ratio. Simple dense ANNs correctly alarm on spectra with all gain settings except 0.59.
+
 Complete ANNs fail to alarm on spectra with a relative gain setting of 0.78. ANNs predict these spectra to be $^{238}$U with posterior probabilities above 98\%. The $^{238}$U spectrum is characterized by photopeaks at 93 keV, 766 keV, and 1001 keV. With sufficient shielding, the 93 keV photopeak is completely attenuated, leaving a two photopeaks. These photopeaks are have an energy similar to the photopeaks from $^{60}$Co. By including shielded $^{238}$U spectra in the complete training dataset, we introduced spectra similar to $^{60}$Co. 
 
 
 \subsubsection{$^{133}$Ba}
 
-$^{133}$Ba spectra are shown in Figure \ref{fig:realspectra-cal-ba133-spec}. Due to an error, $^{133}$Ba spectra measured at a signal-to-background ratio of 0.5 with a relative gain of 1.27 were lost. Spectra measured with this setting are replaced by spectra measured with a signal-to-background ratio of 0.5 and relative gain of 1.0 recalibrated to match a gain of 1.27.
+$^{133}$Ba spectra are shown in Figure \ref{fig:realspectra-cal-ba133-spec}. Spectra measured for 10 s have features and photopeaks difficult to identify by eye. Due to a measurement error, $^{133}$Ba spectra measured at a signal-to-background ratio of 0.5 with a relative gain of 1.27 were lost. Spectra measured with this setting are replaced by spectra measured with a signal-to-background ratio of 0.5 and relative gain of 1.0 recalibrated to match a gain of 1.27.
 
 \begin{figure}[H]
 	\centering
@@ -261,9 +264,11 @@ $^{133}$Ba spectra are shown in Figure \ref{fig:realspectra-cal-ba133-spec}. Due
 	\label{fig:realspectra-cal-ba133-spec}
 \end{figure}
 
-Only the simple CAE with a source-to-background ratio of 1.0 alarmed after 120 s measurement time. The spectrum from $^{133}$Ba is more complicated compared to the signals from $^{137}$Cs and $^{60}$Co. Without a sufficient amount of spectral diversity, 
+In most cases, dense models failed to achieve posterior probabilities above 20\% when identifying $^{133}$Ba spectra. Only the simple CAE with a source-to-background ratio of 1.0 alarmed after 120 s measurement time. The simple CAE only correctly identifies spectra measured using the default calibration. 
 
- This shows that there is not enough spectral diversity in the 
+Only the complete CNN successfully alarms on $^{133}$Ba with a signal-to-background ratio of 0.5. Both convolutional models 
+
+This shows that despite their erratic predictions, convolutional models may be necessary when identifying spectra similar to $^{133}$Ba. Adding relative gain settings using a finer sampling on the range (0.8, 1.2) may be necessary to consistently identify $^{133}$Ba spectra.
 
 
 \begin{figure}[H]
@@ -276,7 +281,7 @@ Only the simple CAE with a source-to-background ratio of 1.0 alarmed after 120 s
 
 \subsubsection{$^{152}$Eu}
 
-Figures in \ref{fig:realspectra-cal-eu152} show performance when identifying $^{152}$Eu. For the first time, convolutional architectures did not outperform the dense models. This performance change only occurred in the simple dataset. As explained above, because of the lack of spectral variety in the simple dataset, generalization to real spectra is more difficult. $^{152}$Eu has many more identifiable photopeaks in a larger range of energies compared to $^{133}$Ba. Because of this, using the channel-based approach (dense architectures) would lead to better performance over approaches that use a form of feature extraction.
+Spectra of $^{152}$Eu are shown in Figure \ref{fig:realspectra-cal-eu152-spec}. $^{152}$Eu emits photons with a wide range of energies. 
 
 \begin{figure}[H]
 	\centering
@@ -285,7 +290,12 @@ Figures in \ref{fig:realspectra-cal-eu152} show performance when identifying $^{
 	\label{fig:realspectra-cal-eu152-spec}
 \end{figure}
 
-The improvement in the convolutional models for $^{152}$Eu identification occurs when more spectral variety is available in the complete dataset. With the complete dataset, all gain settings except 0.59 are identified with high posterior probability above 100 seconds of integration time. 
+Higher signal-to-noise $^{152}$Eu is identified correctly with a 60 s measurement 
+
+% Figures in \ref{fig:realspectra-cal-eu152} show performance when identifying $^{152}$Eu. For the first time, convolutional architectures did not outperform the dense models. This performance change only occurred in the simple dataset. As explained above, because of the lack of spectral variety in the simple dataset, generalization to real spectra is more difficult. $^{152}$Eu has many more identifiable photopeaks in a larger range of energies compared to $^{133}$Ba. Because of this, using the channel-based approach (dense architectures) would lead to better performance over approaches that use a form of feature extraction.
+
+
+% The improvement in the convolutional models for $^{152}$Eu identification occurs when more spectral variety is available in the complete dataset. With the complete dataset, all gain settings except 0.59 are identified with high posterior probability above 100 seconds of integration time. 
 
 
 \begin{figure}[H]
@@ -297,82 +307,99 @@ The improvement in the convolutional models for $^{152}$Eu identification occurs
 
 \subsection{Model Performance with Respect to Shielding} \label{real_shielding_performance}
 
-To investigate the identification performance of each ANN with increased shielding thicknesses, were measured with increasingly thick shielding material. 
+To investigate the identification performance of each ANN with increased shielding thicknesses, sources were shielded with increasingly thick iron or aluminum blocks and measured. For each measurement, the source-detector distance was adjusted so the ratio of counts per second measured by the detector was equal to the counts per second from background. Each spectrum was measured using the default detector PMT calibration of 770 V. 
 
-Iron or aluminum blocks were 
-
-Identification performance for $^{137}$Cs was not heavily effected by varying shielding in either training dataset. This is due to shielding not dramatically affecting the single photopeak of $^{137}$Cs. The CNN performs very well in both datasets. The complete DNN performs comparably to complete CNN. The DNN and DAE are affected by increased shielding when trained on the simple dataset, showing that slight changes in spectral shapes affect performance in dense models when they are not exposed to a variety of spectral patterns. When trained on the complete dataset, networks without autoencoder pretraining outperform networks with pretraining.
+\subsubsection{$^{137}$Cs}
 
 
+Figure \ref{fig:shielded_cs137} shows that shielding affects the $^{137}$Cs spectrum by reducing the 662 keV photopeak's peak-to-total ratio. Shielding does not visibly impact the shape of Compton continuum. 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/shielded_cs137}
-	\caption{Spectra of $^{137}$Cs shielded with increasing amounts of iron.}
+	\caption{Spectra of $^{137}$Cs shielded with increasing amounts of iron measured for 60 s.}
 	\label{fig:shielded_cs137}
 \end{figure}
 
+As seen in Figure \ref{fig:iron_cs137}, all simple and complete models correctly alarm on each shielded $^{137}$Cs isotope. Shielding impacts the simple dense models' performance more than the convolutional models. This reduction in performance is demonstrated by a reduced posterior probability. The DAE outperforms the DNN, achieving a higher posterior probability for each shielding thickness after 50 s. This demonstrates that the dense pretraining improved the dense model's performance.
+
+Each complete model achieves a posterior probability above 90\% for all measured times and shielding thicknesses. This shows that the additional parameters in the complete training dataset boost performance in trained ANNs when identifying shielded isotopes.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\linewidth]{images/iron_co60}	\caption{Shielding generalization performance in real $^{137}$Cs spectra.}
+	\includegraphics[width=0.8\linewidth]{images/iron_cs137}
+	\caption{Shielding generalization performance in real $^{137}$Cs spectra.}
 	\label{fig:iron_cs137}
 \end{figure}
 
 
-The effect of shielding is more significant in $^{60}$Co. As expected, when trained on the simple dataset each model performs worse with heavier shielding. The convolutional models and autoencoders outperform the DNN after 120 seconds of integration time. The DAE performs the best on the highest shielded spectra.  
 
-The DNN is heavily effected by shielding even when trained on the complete dataset. The CNN performs very well, with the DAE performing well over a range of shielding amounts. The DNN was the most drastically affected by the shielding. Compared to the other networks, the DNN has a relatively large variance in its posterior probability for each shielding amount.
+
+\subsubsection{$^{60}$Co}
+
+As shown in Figure \ref{fig:shielded_co60}, the effect of shielding is not visibly significant in $^{60}$Co spectra. The 1173 keV and 1332 keV photopeaks from $^{60}$Co are attenuated less than the 662 keV photopeak from $^{137}$Cs. Shielding only slightly decreases the area of the $^{60}$Co photopeaks.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{images/shielded_co60}	\caption{Spectra of $^{60}$Co shielded with increasing amounts of iron.}
+	\includegraphics[width=0.8\linewidth]{images/shielded_co60}	\caption{Spectra of $^{60}$Co shielded with increasing amounts of iron measured for 60 s.}
 	\label{fig:shielded_co60}
 \end{figure}
 
+As seen in Figure \ref{fig:iron_co60}, each simple convolutional model successfully alarms on each shielded  $^{60}$Co spectrum. In particular, the CAE identifies each shielded $^{60}$Co spectrum with a near 100\% posterior probability after 20 s. This demonstrates that the natural feature extraction capabilities of convolutional models work well when identifying simple spectra with shielding amounts not included in their training dataset. This also shows that using autoencoder pretraining increases the convolutional model's performance.
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\linewidth]{images/iron_co60}	\caption{Shielding generalization performance in real $^{60}$Co spectra.}
+	\includegraphics[width=0.8\linewidth]{images/iron_co60}	\caption{Shielding generalization performance in real $^{60}$Co spectra.}
 	\label{fig:iron_co60}
 \end{figure}
 
+Shielding has a larger detrimental impact on simple dense ANNs compared to simple convolutional ANNs. Despite a clear photopeak at 662 keV, only the DAE successfully alarms on $^{60}$Co shielded with the two thinnest iron blocks. As with the convolutional model, this result shows that dense models visibly improve with autoencoder pretraining. The poor performance of the simple dense models is attributed to overtraining on the single $^{60}$Co example in the training dataset. 
 
-Due to the relatively low gamma-ray energies of $^{133}$Ba compared to the other spectra in this section, aluminum with thicknesses of 6.56 mm, 25.5 mm, and 51.0 mm were used for the light, medium, and heavy settings. When trained on the simple dataset, the CAE performed best. Unlike the previous isotopes, the DAE trained on the simple dataset did not perform well on shielded $^{133}$Ba. Even when trained on the complete dataset, the CAE outperformed the DAE. Characteristic $^{133}$Ba photons have relatively low energy - particularly the photopeaks at 31 and 81 keV. Shielding significantly distorts the spectrum because these photons are easily attenuated. Features like the Compton continuum from the higher energy photopeaks may provide more signal when identifying these isotopes in shielded case. These features are also better exploited in the networks trained on the complete dataset. The dense architectures perform poorly even when trained on the complete dataset. The variance of the posterior probability for the convolutional architectures are lower than the DAE, showing they are more consistent.
+Each model's performance improves when trained on the complete dataset. All complete ANNs successfully alarm on spectra measured with each shielding thickness. Both complete convolutional ANNs have comparable performance. Similar to the simple models, complete dense ANNs achieve posterior probabilities less than the comple convolutional ANNs.
 
+\subsubsection{$^{133}$Ba}
+
+Due to the relatively low gamma-ray energies of $^{133}$Ba compared to the other spectra in this section, aluminum with thicknesses of 6.56 mm, 25.5 mm, and 51.0 mm were used as the shielding material. Characteristic $^{133}$Ba photons have relatively low energy - particularly the photopeaks at 31 and 81 keV. As seen in Figure \ref{fig:shielded_ba133}, shielding significantly distorts the spectrum at these energies.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.8\linewidth]{images/shielded_ba133}	\caption{Spectra of $^{133}$Ba shielded with increasing amounts of aluminum.}
+	\includegraphics[width=0.8\linewidth]{images/shielded_ba133}
+	\caption{Spectra of $^{133}$Ba shielded with increasing amounts of aluminum measured for 60 s.}
 	\label{fig:shielded_ba133}
 \end{figure}
 
+As seen in Figure \ref{fig:alum_ba133}, all simple ANNs, except the simple CAE, fail to correctly alarm when identifying shielded $^{133}$Ba spectra. The simple CAE correctly alarms only when identifying $^{133}$Ba with the thinnest shielding. This shows that the models trained on the simple dataset will perform poorly when measuring shielded spectra visibly distorted by shielding material.
+
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\linewidth]{images/alum_ba133}	\caption{Shielding generalization performance in real $^{133}$Ba spectra.}
+	\includegraphics[width=0.8\linewidth]{images/alum_ba133}	\caption{Shielding generalization performance in real $^{133}$Ba spectra.}
 	\label{fig:alum_ba133}
 \end{figure}
 
+Each complete convolutional models perform very well on all shielded $^{133}$Ba spectra. Each model successfully alarms after 20 s. Dense models perform poorly, incorrectly alarming on $^{131}$I in spectra with the thinnest shielding and $^{51}$Cr in spectra with thicker shielding material. The largest photopeak from $^{131}$I is located at 364 keV and the single photopeak from $^{51}$Cr is located at 320 keV. The complete dense ANNs poor performance when identifying shielded $^{133}$Ba indicates that they are poor choices for differentiating spectra with low-energy photopeaks. This is concerning because medical sources, plutonium, and uranium all have characteristic photopeaks below 400 keV. These low-energy photopeak sources are particularly important to identify and differentiate for source interdiction.
 
 
-The simple DAE performs well generalizing to shielded $^{152}$Eu while the simple CNN generalizes poorly. The simple CAE and DNN both perform similarly across the full range of shielding. 
+\subsubsection{$^{152}$Eu}
 
-The complete CNN identifies lightly and moderately shielded $^{152}$Eu with a high posterior probability. The DNN performs second best, identifying these spectra with a slightly lower posterior probability. The complete DNN operates consistently over a range of integration times for the heavily shielded $^{152}$Eu. Only after 150 seconds of integration time does the CNN perform similarly on heavily shielded $^{152}$Eu. % The complete CAE performs worse.
-
-
+As seen in Figure \ref{fig:shielded_eu152}, $^{152}$Eu has many photopeaks spread across a large range of energies. As with $^{133}$Ba, higher-energy photopeaks (like those at 779 keV, 963 keV, 1086 keV, 1112 keV, and 1408 keV) are attenuated less than lower-energy photopeaks (like those at 122 keV and 344 keV).
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/shielded_eu152}
-	\caption{Spectra of $^{152}$Eu shielded with increasing amounts of iron.}
+	\caption{Spectra of $^{152}$Eu shielded with increasing amounts of iron measured for 60 s.}
 	\label{fig:shielded_eu152}
 \end{figure}
 
+Identification results for shielded $^{152}$Eu are shown in Figure \ref{fig:iron_eu152}. Similar to identifications in shielded $^{133}$Ba, the simple CAE correctly alarms on $^{152}$Eu spectra shielded with the two thinnest shielding materials. In addition to this, the simple DNN correctly alarms on spectra measured with the lightest shielding thickness.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=0.9\linewidth]{images/iron_eu152}	\caption{Shielding generalization performance in real $^{152}$Eu spectra.}
+	\includegraphics[width=0.8\linewidth]{images/iron_eu152}
+	\caption{Shielding generalization performance in real $^{152}$Eu spectra.}
 	\label{fig:iron_eu152}
 \end{figure}
+
+All complete models successfully alarm on $^{152}$Eu spectra shielded with the two thinnest blocks of iron. Both $^{152}$Eu and $^{133}$Ba have a large number of photopeaks compared to $^{60}$Co and $^{137}$Cs. Despite the large number of photopeaks, ANNs correctly identify $^{152}$Eu more often than $^{133}$Ba. The difference between these two isotopes is that $^{152}$Eu has a unique set of photopeaks relative to the library of training isotopes. The unique set of photopeaks in a wide range of energies make identification easier for the ANNs. As previously discussed, $^{133}$Ba possesses a large number of photopeaks in the lower-energy region shared by other isotopes' photopeaks. To improve identification of these important low-energy isotopes, additional examples of them need to be included in each ANN's training dataset.
 
 \section{Comparison with Peak-Based Bayesian Classifier}
 
