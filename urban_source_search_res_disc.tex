@@ -76,7 +76,7 @@ Background Counts Per Second & 200 \\ \hline
 
 \subsection{Generalization Performance Dependence on Source-Detector Height}
 
-In this section we analyze how each model's F1 score changes when identifying spectra in datasets simulated with different source-detector heights off the ground. This tests if each model is sensitive to changes in the Compton continuum due to environmental scattering associated with the source-detector height. An example of these changes can be seen in Figure \ref{fig:sim_spectra_height_comparison}. These changes are only noticeably significant in the region below the backscatter peak around 200 keV. This region is important because it contains photopeaks used to detect enriched uranium.
+In this section we analyze how each model's F1 score changes when identifying spectra simulated with different source-detector heights off the ground. This tests if each model is sensitive to changes in the Compton continuum due to environmental scattering associated with the source-detector height. An example of these changes can be seen in Figure \ref{fig:sim_spectra_height_comparison}. These changes are only noticeably significant in the region below the backscatter peak around 200 keV. This region is important because it contains photopeaks used to detect enriched uranium.
 
 As seen in Figure \ref{fig:sim-generalization-height}, the performance of each network is not significantly changed with changes to source-detector height. This shows that performance is not impacted by the relatively small changes in the continuum caused by varying the source-detector height. Figure \ref{fig:sim-generalization-height} also shows that simple models generalize to changes in source-detector height when the signal-to-background ratio is raised. This shows that the features required to accurately identify low signal-to-background spectra are significantly different from those required by higher signal-to-background spectra. 
 
@@ -84,28 +84,29 @@ As seen in Figure \ref{fig:sim-generalization-height}, the performance of each n
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{images/sim-generalization-height}
-	\caption{F1 score dependence Height generalization.}
+	\caption{F1 score dependence on source-detector height measured using simulated data.}
 	\label{fig:sim-generalization-height}
 \end{figure}
 
 
 \subsection{Generalization Performance Dependence on Source-Detector Distance}
 
-In this section we analyze how each model's F1 score depends on changes in source-detector distance. This tests if each model is sensitive to larger changes in the Compton continuum compared to those associated with changes in source-detector height. An example of these changes can be seen in Figure \ref{fig:sim_spectra_distance_comparison}.
+In this section we analyze how each model's F1 score depends on changes in source-detector distance. This tests if each model is sensitive to larger changes in the Compton continuum compared to those associated with changes in source-detector height. An example of these changes were shown previously in Figure \ref{fig:sim_spectra_distance_comparison}.
 
 As seen in Figure \ref{fig:sim-generalization-dist}, we observe similar trends seen in the source-detector height generalization such as superior performance of the convolutional models and the poor simple DAE encoding. Changing the source-detector distance changes performance more noticeably compared to changes in standoff distance.
-
-This change is especially noticeable for the shorter standoff distance of 50 cm. At this distance, the peak-to-total ratio increases significantly. The rise in peak-to-total ratio emphasizes the peak information while reducing the Compton continuum's contribution. Each model's F1 score is higher when benchmarked against lower signal-to-background spectra due to the increased photopeak information. This trend does not continue in the higher signal-to-background ratio spectra. At the higher ratio, each model's worst F1 score is achieved when benchmarked against spectra simulated with a 50 cm distance. As seen in Figure \ref{fig:sim_spectra_distance_comparison}, spectra simulated at a distance of 50 cm have a much different shape than spectra simulated at 175 cm or 300 cm. The simple models only trained with source-detector distances of 175 cm, making identifications for 50 cm spectra very difficult. The complete models trained using each simulated distance. The models could achieve a lower cost function error if they selectively updated weights associated with the 175 cm and 300 cm spectra because they were similar. This explains each complete model's reduced performance when identifying spectra simulated at 50 cm. 
-
-This result also shows that each model is sensitive to a spectrum's photopeaks and shape of it's continuum. If the models were only sensitive to photopeaks, spectra simulated at a distance of 50 cm would have performed best in all cases due to the increased peak-to-total ratio.
 
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{images/sim-generalization-dist}
-	\caption{Distance generalization.}
+	\caption{F1 score dependence on source-detector distance measured using simulated data.}
 	\label{fig:sim-generalization-dist}
 \end{figure}
+
+
+This change is especially noticeable for the shorter standoff distance of 50 cm. At this distance, the peak-to-total ratio increases significantly. The rise in peak-to-total ratio emphasizes the peak information while reducing the Compton continuum's contribution. Each model's F1 score is higher when benchmarked against lower signal-to-background spectra due to the increased photopeak information. This trend does not continue in the higher signal-to-background ratio spectra. At the higher ratio, each model's worst F1 score is achieved when benchmarked against spectra simulated with a 50 cm distance. As seen in Figure \ref{fig:sim_spectra_distance_comparison}, spectra simulated at a distance of 50 cm have a much different shape than spectra simulated at 175 cm or 300 cm. The simple models only trained with source-detector distances of 175 cm, making identifications for 50 cm spectra very difficult. The complete models trained using each simulated distance. The models could achieve a lower cost function error if they selectively updated weights associated with the 175 cm and 300 cm spectra because they were similar. This explains each complete model's reduced performance when identifying spectra simulated at 50 cm. 
+
+This result also shows that each model is sensitive to a spectrum's photopeaks and shape of it's continuum. If the models were only sensitive to photopeaks, spectra simulated at a distance of 50 cm would have performed best in all cases due to the increased peak-to-total ratio.
 
 
 
@@ -116,14 +117,21 @@ In this section we analyze how each model's F1 score depends on changes in detec
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{images/sim-generalization-fwhm}
-	\caption{Resolutions generalization.}
+	\caption{F1 score dependence on detector resolution measured using simulated data.}
 	\label{fig:sim-generalization-fwhm}
 \end{figure}
 
 
 \subsection{Generalization Dependence on Shielding.}
 
-In this section we analyze how each model's F1 score depends on changes in shielding. Spectra were simulated with iron thicknesses that shield 40\%, 60\%, and 80\% of the intensity of a 200 keV gamma-ray.
+In this section we analyze how each model's F1 score depends on changes in shielding. These results are shown in Figure \ref{fig:sim-generalization-ironshield}. Spectra were simulated with iron thicknesses that shield 40\%, 60\%, and 80\% of the intensity of a 200 keV gamma-ray.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-ironshield}
+	\caption{F1 score dependence on shielding measured using simulated data.}
+	\label{fig:sim-generalization-ironshield}
+\end{figure}
 
 As seen previously, simple models do not generalize to the lower signal-to-background spectra. Simple models, which only use unshielded and 20\% shielded templates, achieve F1 scores between 50\% and 75\% in higher signal-to-background spectra. This shows that simple models generalize to other shielding thicknesses in higher signal-to-background spectra. The simple CAE outperforms the CNN in spectra with each shielding thicknesses. This demonstrates that the CAE pretraining is useful for conditioning the convolutional weights for identification tasks. 
 
@@ -132,33 +140,24 @@ The complete models perform better in the low signal-to-background spectra. Both
 % The performance of each complete ANN decreases when identifying spectra with additional attenuation.
 
 
-\begin{figure}[H]
-	\centering
-	\includegraphics[width=1.0\linewidth]{images/sim-generalization-ironshield}
-	\caption{Calibration gain generalization.}
-	\label{fig:sim-generalization-ironshield}
-\end{figure}
+
 
 \subsection{Generalization Dependence on Gain}
 
 In this section we analyze how each model's F1 score depends on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. These relative gain calibrations represent the range of calibrations expected due to temperatures expected when performing source interdiction. The 1.0 gain setting calibrates the 1024$^{th}$ channel of the spectrum to 3 MeV.
 
-At the higher signal-to-background ratio, the simple convolutional models achieve F1 scores above 50\% for each gain setting except 0.8. Simple dense models achieve F1 scores between 30\% and 50\% for the same settings.
-
-
-begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the input signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
-
-The complete models performed better with changing gain, but still struggled with the 0.8 relative gain for the reasons outline in the previous paragraph. Compared to other complete models, the complete CNN performed the best on each relative gain setting.
+As shown in Figure \ref{fig:sim-generalization-cal}, at the higher signal-to-background ratio, the simple convolutional models achieve F1 scores above 50\% for each gain setting except 0.8. Simple dense models achieve F1 scores between 30\% and 50\% for the same settings.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=1.0\linewidth]{images/sim-generalization-cal}
-	\caption{Calibration gain generalization.}
+	\caption{F1 score dependence on gain using simulated data.}
 	\label{fig:sim-generalization-cal}
 \end{figure}
 
+begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the input signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
 
-
+The complete models performed better with changing gain, but still struggled with the 0.8 relative gain for the reasons outline in the previous paragraph. Compared to other complete models, the complete CNN performed the best on each relative gain setting.
 
 \section{Performance Identifying Measured Spectra}
 
@@ -264,12 +263,7 @@ $^{133}$Ba spectra are shown in Figure \ref{fig:realspectra-cal-ba133-spec}. Spe
 	\label{fig:realspectra-cal-ba133-spec}
 \end{figure}
 
-In most cases, dense models failed to achieve posterior probabilities above 20\% when identifying $^{133}$Ba spectra. Only the simple CAE with a source-to-background ratio of 1.0 alarmed after 120 s measurement time. The simple CAE only correctly identifies spectra measured using the default calibration. 
-
-Only the complete CNN successfully alarms on $^{133}$Ba with a signal-to-background ratio of 0.5. Both convolutional models 
-
-This shows that despite their erratic predictions, convolutional models may be necessary when identifying spectra similar to $^{133}$Ba. Adding relative gain settings using a finer sampling on the range (0.8, 1.2) may be necessary to consistently identify $^{133}$Ba spectra.
-
+Identification performance is shown in Figure \ref{fig:realspectra-cal-ba133}. In most cases, dense models fail to achieve posterior probabilities above 20\% when identifying $^{133}$Ba spectra. Only the simple CAE with a source-to-background ratio of 1.0 alarms after 120 s measurement time. The simple CAE only correctly identifies spectra measured using the default calibration. These results show that simple ANNs will not identify $^{133}$Ba in spectra measured using calibrations outside the simple training dataset's parameters. 
 
 \begin{figure}[H]
 	\centering
@@ -278,10 +272,12 @@ This shows that despite their erratic predictions, convolutional models may be n
 	\label{fig:realspectra-cal-ba133}
 \end{figure}
 
+Only the complete CNN successfully alarms on $^{133}$Ba with a signal-to-background ratio of 0.5. Complete CNN identification performance for spectra measured with gain settings of 1.0 and 0.78 improve at the higher signal-to-noise ratio. This shows that despite their erratic predictions, convolutional models may be necessary to identify low-energy photopeak spectra similar to $^{133}$Ba. Adding relative gain settings using a finer sampling on the range (0.8, 1.2) may be necessary to consistently identify $^{133}$Ba spectra.
+
 
 \subsubsection{$^{152}$Eu}
 
-Spectra of $^{152}$Eu are shown in Figure \ref{fig:realspectra-cal-eu152-spec}. $^{152}$Eu emits photons with a wide range of energies. 
+Spectra of $^{152}$Eu are shown in Figure \ref{fig:realspectra-cal-eu152-spec}. $^{152}$Eu emits photons with a wide range of energies including: 122 keV, 344 keV, 779 keV, 963 keV, 1086 keV, 1112 keV, and 1408 keV. 
 
 \begin{figure}[H]
 	\centering
@@ -290,12 +286,7 @@ Spectra of $^{152}$Eu are shown in Figure \ref{fig:realspectra-cal-eu152-spec}. 
 	\label{fig:realspectra-cal-eu152-spec}
 \end{figure}
 
-Higher signal-to-noise $^{152}$Eu is identified correctly with a 60 s measurement 
-
-% Figures in \ref{fig:realspectra-cal-eu152} show performance when identifying $^{152}$Eu. For the first time, convolutional architectures did not outperform the dense models. This performance change only occurred in the simple dataset. As explained above, because of the lack of spectral variety in the simple dataset, generalization to real spectra is more difficult. $^{152}$Eu has many more identifiable photopeaks in a larger range of energies compared to $^{133}$Ba. Because of this, using the channel-based approach (dense architectures) would lead to better performance over approaches that use a form of feature extraction.
-
-
-% The improvement in the convolutional models for $^{152}$Eu identification occurs when more spectral variety is available in the complete dataset. With the complete dataset, all gain settings except 0.59 are identified with high posterior probability above 100 seconds of integration time. 
+As seen in Figure \ref{fig:realspectra-cal-eu152}, simple models occasionally correctly alarm on only relative gain settings of 0.78 and 1.0. More consistent performance is demonstrated when complete models identify spectra at the higher signal-to-background ratio. Even in this setting, relative gain settings of 0.59 and 1.27 are not identified correctly. This shows that ANNs cannot correctly identify spectra with relative gain settings far outside the range used by the training dataset.
 
 
 \begin{figure}[H]
@@ -458,7 +449,11 @@ Incorrect identifications are shown in Table \ref{table:anns_incorrect}. Incorre
 
 \section{Chapter Discussion and Conclusion}
 
-This chapter shows that CNNs trained on the complete dataset generalize very well to simulated and real gamma-ray spectra. When trained on the simple dataset CNNs often also perform well when identifying spectra outside the simple dataset's parameters, but struggle with real spectra. The autoencoders perform poorly in the simulated spectra, but generalize well to parameters outside the simple training set - particularly DAEs. There is also some evidence that CAEs generalize better to isotopes with predominately low energy photopeaks in real spectra. Occasionally, at the lower signal-to-background ratio, the DNN outperforms the CNN. Because the dense architecture is more suited to comparing counts in different regions, it should be more robust against changes in Compton continua as it compares counts in photopeak areas. Despite this, DNN's offer unpredictable performance. Due to the large number of inputs, the DNN's are likely overtraining to specific combinations of noise in the training datasets.
+This chapter shows that while convolutional models performed very well in the simulated datasets in Section 
+
+
+
+CNNs trained on the complete dataset generalize very well to simulated and real gamma-ray spectra. When trained on the simple dataset CNNs often also perform well when identifying spectra outside the simple dataset's parameters, but struggle with real spectra. The autoencoders perform poorly in the simulated spectra, but generalize well to parameters outside the simple training set - particularly DAEs. There is also some evidence that CAEs generalize better to isotopes with predominately low energy photopeaks in real spectra. Occasionally, at the lower signal-to-background ratio, the DNN outperforms the CNN. Because the dense architecture is more suited to comparing counts in different regions, it should be more robust against changes in Compton continua as it compares counts in photopeak areas. Despite this, DNN's offer unpredictable performance. Due to the large number of inputs, the DNN's are likely overtraining to specific combinations of noise in the training datasets.
 
 
 
