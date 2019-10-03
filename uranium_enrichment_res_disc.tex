@@ -135,7 +135,7 @@ Background Counts Per Second & 200 \\ \hline
 
 \subsection{Effect of Shielding on Enrichment Prediction}
 
-To test each model's ability to measure uranium enrichment when the uranium source is shielded, enriched uranium spectra were simulated with various thicknesses of shielding. The effect of each shielding thickness is shown in Figure \ref{fig:simulated_uranium_shielding}. The predicted enrichments from each model on these cases are shown in Figure \ref{fig:simuranium-shielding}. In general for each case, the complete networks outperform the simple networks by predicting enrichments closer to the simulated value. This indicates that the reduced capacity of the simple networks is insufficient to properly perform uranium enrichment measurements using the provided dataset. At 93\% enrichment each model underpredicts the enrichment.
+To test each model's ability to measure uranium enrichment when the uranium source is shielded, enriched uranium spectra were simulated with various thicknesses of shielding. The effect of each shielding thickness is shown in Figure \ref{fig:simulated_uranium_shielding}. The predicted enrichments from each model on these cases are shown in Figure \ref{fig:simuranium-shielding}. In general for each case, the complete networks outperform the simple networks by predicting enrichments closer to the simulated value. This indicates that the reduced capacity of the simple networks is insufficient to properly perform uranium enrichment measurements using the provided dataset. At 93\% enrichment each model underestimates the enrichment.
 
 \begin{figure}[H]
 	\centering
@@ -173,17 +173,17 @@ To test each model's ability to measure uranium enrichment when the uranium sour
          \caption{1.42 mm lead.}
          \label{fig:simuranium-heavylead}
      \end{subfigure}
-        \caption{The dependence of each model's predicted uranium enrichment on shielding with respect to simulated spectra. Simulated shielding amounts are indicated below each figure.}
+        \caption{Each model's prediction for the uranium enrichment of spectra simulated with different shielding thicknesses. Shielding conditions are indicated below each figure.}
         \label{fig:simuranium-shielding}
 \end{figure}
 
-In all cases except with 1.42 mm of lead shielding, simple networks overpredict the enrichment at and below 50\%. The simple models also underpredict the enrichment at values over 50\%. This reinforces the conclusion that the simple network has too little capacity to fit the data. Because the range of enrichments in the training data are uniformly distributed from 0 - 100\%, the naive method to minimize the cost function is predict enrichments near 50\%. The complete models were 
+In all cases except with 1.42 mm of lead shielding, simple networks overestimate the enrichment at and below 50\%. The simple models also underestimate the enrichment at values over 50\%. This reinforces the conclusion that the simple network has too little capacity to fit the data. Because the range of enrichments in the training data are uniformly distributed from 0 - 100\%, the naive method to minimize the cost function is to predict enrichments near 50\%. The complete models were 
 within 20\% of the true value in all cases except with 1.42 mm of lead shielding. This shows that complete models are only affected by relatively large amounts of shielding.
 
 
 \subsection{Effect of Calibration on Enrichment Prediction} \label{section_uranium_sim_cal}
 
-To test each model's generalization performance with respect to calibration, enriched uranium spectra were simulated with various relative gains. The predict enrichments from each model on these cases are shown in Figure \ref{fig:simuranium-cal}. Model performance at relative gains of 0.9 and 1.1 are similar to the reference gain case, shown in Figure \ref{fig:simuranium-noshield}.
+In this section we test each model's ability to measure uranium enrichment in spectra with various relative calibration gains. The predict enrichments from each model on these cases are shown in Figure \ref{fig:simuranium-cal}. Model performance at relative gains of 0.9 and 1.1 are similar to the reference gain case, shown in Figure \ref{fig:simuranium-noshield}.
 
 \begin{figure}[H]
 	\centering
@@ -214,14 +214,15 @@ To test each model's generalization performance with respect to calibration, enr
 		\caption{1.2}
 		\label{fig:simuranium-cal12}
 	\end{subfigure}
-	\caption{The dependence of each model's predicted uranium enrichment on calibration gain with respect to simulated spectra. The magnitude of the applied relative gain shift are shown below each figure.}
+	\caption{Each model's prediction for the uranium enrichment of simulated spectra calibrated with  different gain settings. The magnitude of the applied relative gain shift are shown below each figure.}
 	\label{fig:simuranium-cal}
 \end{figure}
 
 
-At the extreme relative gain shifts of 0.8 and 1.2 model performance changes. These shifts represent large deviations in normal NaI(Tl) operating temperature or a significantly miscalibrated detector.  At a relative gain shift of 0.8, the dense models display a large variance in predict enrichments while the convolutional models do not. Convolutional models are effected less by the large change in gain because of their inherent shift invariance. At a relative gain shift of 0.8, the 186 keV peak from $^{235}$U is shifted to the 225 keV region as seen in Figure \ref{fig:simulated_uranium_calibration_93pct}. This region contains little spectral information about enrichment. Without enrichment information, ANN weight connections in this region will not update significantly during training. With weak connections, this region - and the 186 keV peak - will be ignored with a relative gain shift of 0.8. Because the 186 keV peak is ignored the dense networks underpredict enrichment at a 0.8 relative gain shift. At a gain shift of 1.2 each model overpredicts enrichment for enrichments at and below 50\%. Because the 1.2 relative shift moves the 766 keV and 1001 keV $^{238}$U peaks into regions of little importance for the spectra without gain shift, seen in Figure \ref{fig:simulated_uranium_calibration_10pct}, these peaks are ignored and the enrichment is overpredicted.
+At the extreme relative gain shifts of 0.8 and 1.2 each ANN's performance visibly changes compared to the reference gain. These shifts represent large deviations in normal NaI(Tl) operating temperature or a significantly miscalibrated detector. At a relative gain shift of 0.8, the dense models are not visibly impacted compared to the reference gain case when measuring uranium with enrichments below 75\%. 
 
-% Also, because the shifted peak is wider, more nodes connected to this region would need to update to extract useful information. 
+At a gain shift of 1.2 each ANN overestimates enrichment for enrichments at and below 50\%. The complete CAE and simple CNN are the most accurate when predicting enrichment values at and below 25\%. Because the 1.2 relative shift moves the 766 keV and 1001 keV $^{238}$U peaks into regions of little importance for the spectra without gain shift, seen in Figure \ref{fig:simulated_uranium_calibration_10pct}, these peaks are ignored and the enrichment is overestimated.
+
 
 \begin{figure}[H]
 	\centering
@@ -239,7 +240,7 @@ At the extreme relative gain shifts of 0.8 and 1.2 model performance changes. Th
 
 \section{Results - Measured Spectra}
 
-To quantify performance in real gamma-ray spectra, material with different uranium enrichments were measured with a variety of NaI(Tl) detectors. Objects measured include a 13 kg 93\% enriched uranium metal sphere \cite{Rothe1997} and three U$_{3}$O$_{8}$  samples \cite{jacobstinnett_u3o8}. The U$_{3}$O$_{8}$ spectra were measured with as part of an IAEA measurement exercises which did not measure energies above 1.3 MeV. This region does not include information about the object's enrichment, so removing it will have negligible effect on the ANN predictions. In addition to this, each detector used to measure the U$_{3}$O$_{8}$ spectra had a unique calibration. We manually recalibrated each spectrum using gain and offset correction to match each 186 keV and 1001 keV photopeak. These recalibrated spectra are shown in Figure \ref{fig:measured_uranium_plots}. Shielding, source-detector distance, radiation background, and scattering environments were not recorded for the U$_{3}$O$_{8}$ spectra.
+To quantify performance in real gamma-ray spectra, material with different uranium enrichments were measured with a variety of NaI(Tl) detectors. Objects measured include a 13 kg 93\% enriched uranium metal sphere \cite{Rothe1997} measured at the Nevada National Security Site and three U$_{3}$O$_{8}$ samples measured as part of an IAEA training exercises \cite{jacobstinnett_u3o8}. Shielding, source-detector distance, radiation background, and scattering environments were not recorded for the training exercise. The U$_{3}$O$_{8}$ spectra were measured with energies below 1.3 MeV. Energies above this threshold do not include information about the object's enrichment, so removing it will have negligible effect on the ANN predictions. In addition to this, each detector used to measure the U$_{3}$O$_{8}$ spectra had a unique calibration. We manually recalibrated each spectrum using gain and offset correction to match each 186 keV and 1001 keV photopeak. These recalibrated spectra are shown in Figure \ref{fig:measured_uranium_plots}.
 
 \begin{table}[H]
 \centering
@@ -262,9 +263,7 @@ Enrichment & $^{235}$U Mass (g) & Material & Live Time (s)   \\ \hline
 	\label{fig:measured_uranium_plots}
 \end{figure}
 
-Figure \ref{fig:measured_uranium} shows the predicted enrichment's mean and variance for each model and measured spectrum. Similar to the simulated spectra, the simple architectures underpredicted enrichments over 50\% and overpredicted enrichments under 50\%. The simple DAE's predict enrichment variance was visible at lower enrichments while the rest of the networks did not have observable variance in their predictions. The complete architectures were more accurate than the simple architectures above 20\% enrichment. At 27.1\% enrichment, each convolutional model overpredicted the enrichment while the dense models predicted closer to the true value. % This is due to the $^{235}$U features being the wrong size for the convolutional filters.
-
-
+Figure \ref{fig:measured_uranium} shows the predicted enrichment's mean and variance for each model and measured spectrum. Similar to the simulated spectra, the simple architectures underestimate enrichments over 50\% and overestimate enrichments under 50\%. Each network's prediction variance was not visible. In general, the complete architectures were more accurate than the simple architectures. 
 
 \begin{figure}[H]
 	\centering
@@ -273,42 +272,46 @@ Figure \ref{fig:measured_uranium} shows the predicted enrichment's mean and vari
 	\label{fig:measured_uranium}
 \end{figure}
 
-To investigate how changing calibration effects each algorithm, the recalibrated spectra were additionally recalibrated with the same gain settings explored in Section \ref{section_uranium_sim_cal}. 
+At 27.1\% enrichment, most ANNs overestimate the enrichment by at least 13 points. The complete dense models more accurately predict enrichment values for the 27.1\% enriched uranium spectrum. Spectra with lower enrichment include a continuum-like signal from an effect called bremsstrahlung. Bremsstrahlung (German for "breaking radiation") is produces when charged particles accelerate in the electric field of a heavy nucleus. In enriched uranium, bremsstrahlung is produced from the 2.3 MeV beta particle that is associated with the decay of $^{234m}$Pa, a $^{238}$U daughter. Convolutional models extract features based on their 16 channel filter kernel lengths. Without the bremsstrahlung signal in the training dataset, convolutional models have learned feature extraction techniques that cannot work when the bremsstrahlung signal is present in low-enriched data. Dense models are forced to extract features in patches of 16 channels, so they can more easily ignore the bremsstrahlung continuum and use the $^{235}$U and $^{238}$U photopeaks for enrichment prediction. 
 
-Similar to the simulated results, gain changes of 0.9 and 1.1 do not significantly impact enrichment quantification for the complete networks. An exception to this is the complete dense models underpredict enrichment in the 93\% enriched, 1.1 gain setting spectrum. At a gain of 0.8, networks generally overpredicted the enrichment of lower enrichment samples. This effect was observed to a smaller magnitude in simulated results.
+
+To investigate how changing calibration effects each algorithm, the spectra from Figure \ref{fig:measured_uranium_plots} were recalibrated with the same gain settings explored in Section \ref{section_uranium_sim_cal}. Each ANN's enrichment prediction for these spectra is shown in Figure \ref{fig:realuranium-cal}.
 
 \begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/measured_uranium_08.png}
-         \caption{0.8}
-         \label{fig:measured_uranium_08}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/measured_uranium_09.png}
-         \caption{0.9}
-         \label{fig:measured_uranium_09}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/measured_uranium_11.png}
-         \caption{1.1}
-         \label{fig:measured_uranium_11}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/measured_uranium_12.png}
-         \caption{1.2}
-         \label{fig:measured_uranium_12}
-     \end{subfigure}
-        \caption{The dependence of each model's predicted uranium enrichment on calibration gain with respect to real spectra. The magnitude of the applied relative gain shift are shown below each figure.}
-        \label{fig:realuranium-cal}
+	\centering
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/measured_uranium_08.png}
+		\caption{0.8}
+		\label{fig:measured_uranium_08}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/measured_uranium_09.png}
+		\caption{0.9}
+		\label{fig:measured_uranium_09}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/measured_uranium_11.png}
+		\caption{1.1}
+		\label{fig:measured_uranium_11}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/measured_uranium_12.png}
+		\caption{1.2}
+		\label{fig:measured_uranium_12}
+	\end{subfigure}
+	\caption{Each model's prediction for the uranium enrichment of measured spectra calibrated with  different gain settings. The magnitude of the applied relative gain shift are shown below each figure.}
+	\label{fig:realuranium-cal}
 \end{figure}
+
+Similar to the simulated results, gain changes of 0.9 and 1.1 do not significantly impact enrichment quantification for the complete networks. An exception to this is the complete dense models underestimate enrichment in the 93\% enriched, 1.1 gain setting spectrum. At a gain of 0.8, networks generally overestimate the enrichment of lower enrichment samples. This effect was observed to a smaller magnitude in simulated results.
+
 
 
 
