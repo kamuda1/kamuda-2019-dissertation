@@ -8,7 +8,7 @@ To investigate how simulated parameters affect the performance of dense and conv
 
 \section{Learning Curve Analysis} \label{sectionlearningcurve}
 
-In this section we analyze learning curves to determine a sufficient number of training dataset examples for the simple and complete networks. Two separate datasets were constructed for this chapter: one using simple dataset parameters, Tables \ref{table:hyperparameter_dataset_easy_parameters}, and the other using complete dataset parameters from Table \ref{table:hyperparameter_dataset_full_parameters}. The datasets included isotopes from the ANSI N42-34-2006 standard, shown in Section \ref{datasets_used_hyperparam_search}. Each dataset contained 1 x 10$^{4}$ randomly generated spectra for each isotope. These datasets will be referred to as the simple and complete master dataset. Models trained on the simple and complete datasets are referred to as simple and complete models.
+In this section we analyze learning curves to determine a sufficient number of training dataset examples for the simple and complete networks. Two separate datasets were constructed for this chapter: one using simple dataset parameters, Tables \ref{table:hyperparameter_dataset_easy_parameters}, and the other using complete dataset parameters from Table \ref{table:hyperparameter_dataset_full_parameters}. The datasets included isotopes from the ANSI N42-34-2006 standard, shown in Section \ref{datasets_used_hyperparam_search}. Each dataset contained 1 x 10$^{4}$ randomly generated spectra for each isotope. These datasets will be referred to as the simple and complete master dataset. Models trained using the simple and complete datasets are referred to as simple and complete models.
 
 Different sized training datasets were sampled from both master datasets and trained using each model. This process is illustrated in Figure \ref{fig:learning_curve_training_diagram}. Stratified sampling without replacement was used to sample each master dataset. Stratified sampling keeps the number of isotopes in each sampled subset as equal as possible. Training dataset sizes included 50, 100, 500, 1000, 5000, 10000, 15000, and 20000. For each training dataset size, five sampled subsets of a master dataset were used as training datasets. ANN's were trained using these dataset. A separate holdout validation dataset of 300 spectra (10 examples per class) was used to end training when its F1 score did not improve using an early stopping patience of 10 epochs.
 
@@ -42,9 +42,9 @@ The validation dataset error curves in Figure \ref{fig:learning_curves_full} are
 
 
 
-\section{Generalization Performance Evaluation}
+\section{Performance in Simulated Datasets} \label{simulated_dataset_performance}
 
-In this section we analyze each simple and complete ANNs' performance dependence on simulated parameters expected during source interdiction measurements. The process used in this section is outlined in Figure \ref{fig:generalization_performance_diagram}. For each ANN, five models are used as an ensemble by averaging their output, a posterior probability distribution over each isotope. Models trained on a dataset of 10000 examples from Section \ref{sectionlearningcurve} were used in this section.
+In this section we analyze each simple and complete ANNs' performance dependence on simulated parameters expected during source interdiction measurements. The process used in this section is outlined in Figure \ref{fig:generalization_performance_diagram}. For each ANN, five models are used as an ensemble by averaging their output, a posterior probability distribution over each isotope. Models trained using a dataset of 10000 examples from Section \ref{sectionlearningcurve} were used in this section.
 
 \begin{figure}[H]
 	\centering
@@ -159,7 +159,7 @@ begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 r
 
 The complete models performed better with changing gain, but still struggled with the 0.8 relative gain for the reasons outline in the previous paragraph. Compared to other complete models, the complete CNN performed the best on each relative gain setting.
 
-\section{Performance Identifying Measured Spectra}
+\section{Performance Identifying Measured Spectra} \label{real_spectra_performance}
 
 In this section we investigate each ANN's performance when identifying real gamma-ray spectra with calibration settings and shielding possible in source interdiction activities. To measure performance, we observe how each model's posterior probability for each isotope changes over integration times ranging from 10 s to 10 mins. Sources included are $^{137}$Cs, $^{60}$Co, $^{133}$Ba, and $^{152}$Eu. $^{137}$Cs and $^{60}$Co are included because they have uncomplicated spectra, $^{137}$Cs with only one primary photopeak at 662 keV and $^{60}$Co with two photopeaks at 1173 and 1332 keV. These are also common industrial and medical sources which are important for source interdiction. $^{133}$Ba and $^{152}$Eu have more complicated spectra with many photopeaks. Photopeaks from $^{133}$Ba are all below 400 keV and the photopeaks from $^{152}$Eu range from 121 keV to 1213 keV \cite{bigbluebook}. $^{133}$Ba is included in these tests because it is a medical isotope and an often used surrogate for plutonium. $^{152}$Eu is included because it's large range of photopeak energies are uniquely effected by shielding and calibration changes. Shielding $^{152}$Eu can remove low-energy photopeaks while only slightly reducing higher-energy photopeaks. This presents a unique challenge for identification algorithms.
 
@@ -206,18 +206,16 @@ Spectra with relative gains of 0.59 and 1.27 never raise a true positive alarm. 
 
 \begin{table}[H]
 	\centering
-	\caption{ANN predictions of $^{137}$Cs spectra measured with a relative gain shift of 0.59. Spectra were measured with a signal-to-background ratio of 1.0 for 60 s. Incorrect alarms are bolded.}
+	\caption{ANN predictions of $^{137}$Cs spectra measured with a relative gain shift of 0.59. Spectra were measured with a signal-to-background ratio of 1.0 for 60 s. Simple and complete ANNs are indicated by the S- and C- prefix respectively. Incorrect alarms are bolded.}
 	\label{table:cs137_precictions_60s}
 	\begin{tabular}{lllll}
-		\hline
-		 & \multicolumn{4}{l}{\textbf{Simple}} \\
-		 & \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
+		\hline\
+		 & \textbf{S-CNN} & \textbf{S-DNN} & \textbf{S-CAE} & \textbf{S-DAE} \\ \hline
 		Prediction & \textbf{$^{192}$Ir} & $^{177m}$Lu &  $^{75}$Se  & $^{67}$Ga \\
 		Probability & \textbf{80} & 33 & 41 & 33 \\ \hline \\ \\
 		
 		\hline
-		Model & \multicolumn{4}{l}{\textbf{Complete}} \\
-		& \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
+		& \textbf{C-CNN} & \textbf{C-DNN} & \textbf{C-CAE} & \textbf{C-DAE} \\ \hline
 		Prediction  & \textbf{$^{131}$I} & \textbf{$^{239}$Pu} & $^{131}$I & \textbf{$^{239}$Pu}  \\ 
 		Probability & \textbf{100} & \textbf{70} & 40 & \textbf{61} \\ \hline
 	\end{tabular}
@@ -348,7 +346,7 @@ As seen in Figure \ref{fig:iron_co60}, each simple convolutional model successfu
 
 Shielding has a larger detrimental impact on simple dense ANNs compared to simple convolutional ANNs. Despite a clear photopeak at 662 keV, only the DAE successfully alarms on $^{60}$Co shielded with the two thinnest iron blocks. As with the convolutional model, this result shows that dense models visibly improve with autoencoder pretraining. The poor performance of the simple dense models is attributed to overtraining on the single $^{60}$Co example in the training dataset. 
 
-Each model's performance improves when trained on the complete dataset. All complete ANNs successfully alarm on spectra measured with each shielding thickness. Both complete convolutional ANNs have comparable performance. Similar to the simple models, complete dense ANNs achieve posterior probabilities less than the comple convolutional ANNs.
+Each model's performance improves when trained using the complete dataset. All complete ANNs successfully alarm on spectra measured with each shielding thickness. Both complete convolutional ANNs have comparable performance. Similar to the simple models, complete dense ANNs achieve posterior probabilities less than the comple convolutional ANNs.
 
 \subsubsection{$^{133}$Ba}
 
@@ -361,7 +359,7 @@ Due to the relatively low gamma-ray energies of $^{133}$Ba compared to the other
 	\label{fig:shielded_ba133}
 \end{figure}
 
-As seen in Figure \ref{fig:alum_ba133}, all simple ANNs, except the simple CAE, fail to correctly alarm when identifying shielded $^{133}$Ba spectra. The simple CAE correctly alarms only when identifying $^{133}$Ba with the thinnest shielding. This shows that the models trained on the simple dataset will perform poorly when measuring shielded spectra visibly distorted by shielding material.
+As seen in Figure \ref{fig:alum_ba133}, all simple ANNs, except the simple CAE, fail to correctly alarm when identifying shielded $^{133}$Ba spectra. The simple CAE correctly alarms only when identifying $^{133}$Ba with the thinnest shielding. This shows that the models trained using the simple dataset will perform poorly when measuring shielded spectra visibly distorted by shielding material.
 
 \begin{figure}[H]
 	\centering
@@ -423,12 +421,11 @@ Incorrect identifications are shown in Table \ref{table:anns_incorrect}. Incorre
 
 \begin{table}[H]
 	\centering
-	\caption{Isotopes incorrectly classified by the ANNs. Entries with dashes indicate a correct identification.}
+	\caption{Isotopes incorrectly classified by the ANNs. Simple and complete ANNs are indicated by the S- and C- prefix respectively. Entries with dashes indicate a correct identification.}
 	\label{table:anns_incorrect}
 	\begin{tabular}{lllll}
 		\hline
-		& \multicolumn{4}{l}{\textbf{Training Dataset - Simple}} \\
-		\textbf{True Label} & \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
+		\textbf{True Label} & \textbf{S-CNN} & \textbf{S-DNN} & \textbf{S-CAE} & \textbf{S-DAE} \\ \hline
 		$^{125}$I & $^{241}$Am & $^{241}$Am & $^{241}$Am & $^{241}$Am \\ 
 		$^{233}$U & $^{137}$Cs & $^{226}$Ra & $^{57}$Co &  $^{226}$Ra  \\ 
 		WGPu & - & $^{201}$Tl & $^{201}$Tl & $^{201}$Tl \\ 
@@ -438,25 +435,25 @@ Incorrect identifications are shown in Table \ref{table:anns_incorrect}. Incorre
 		$^{99m}$Tc & $^{131}$I & $^{131}$I & $^{131}$I & $^{131}$I \\ \hline \\ \\
 		
 		\hline
-		& \multicolumn{4}{l}{\textbf{Training Dataset - Complete}} \\
-		\textbf{True Label} & \textbf{CNN} & \textbf{DNN} & \textbf{CAE} & \textbf{DAE} \\ \hline
+		\textbf{True Label} & \textbf{C-CNN} & \textbf{C-DNN} & \textbf{C-CAE} & \textbf{C-DAE} \\ \hline
 		$^{125}$I & $^{241}$Am & $^{241}$Am & $^{241}$Am & $^{241}$Am  \\ 
 		$^{233}$U & $^{99}$Mo & $^{137}$Cs & $^{153}$Sm &  $^{137}$Cs \\ 
 		$^{235}$U & - & - &  $^{177m}$Lu  & - \\ 
 		$^{241}$Am & $^{133}$Xe & - & - & - \\	
-		$^{57}$Co & - & - & - & $^{99m}$Tc \\ \hline \\ \\
+		$^{57}$Co & - & - & - & $^{99m}$Tc \\ \hline
 	\end{tabular}
 \end{table}
 
 
 \section{Chapter Discussion and Conclusion}
 
-This chapter shows that while convolutional models performed very well in the simulated datasets in Section 
+This chapter shows that convolutional models performed well when identifying spectra in both simulated and measured data. When identifying simulated data in Section \ref{simulated_dataset_performance}, the CNN's and CAE's often displays comparable performance. When identifying real spectra in Section \ref{real_spectra_performance}, the simple CAE often achieves a larger posterior probability for the correct isotope compared to the simple CNN. This shows that the CAE's pretraining allows the convolutional architecture to better identify real spectra who's parameters are outside the training dataset. With additional simulated parameters in the complete training dataset, the CNN outperforms the CAE in real spectra.
 
+%The simple DAE performs poorly in the simulated datasets. This poor performance indicates the simple DAE architecture has too little capacity to extract features from and reconstruct gamma-ray spectra.
 
+This chapter also shows that the posterior probabilities of complete ANNs converge to an asymptote quicker and more monotonically than the simple ANNs. These features are desirable for an isotope identification algorithm because they help untrained users interpret the identification results. For example, a sudden increase in an identified isotope's posterior probability could indicate a source is moving towards the detector, increasing the signal-to-background ratio of the spectrum. If the ANN's posterior predictions are erratic, increases and decreases in posterior probability would be meaningless.
 
-CNNs trained on the complete dataset generalize very well to simulated and real gamma-ray spectra. When trained on the simple dataset CNNs often also perform well when identifying spectra outside the simple dataset's parameters, but struggle with real spectra. The autoencoders perform poorly in the simulated spectra, but generalize well to parameters outside the simple training set - particularly DAEs. There is also some evidence that CAEs generalize better to isotopes with predominately low energy photopeaks in real spectra. Occasionally, at the lower signal-to-background ratio, the DNN outperforms the CNN. Because the dense architecture is more suited to comparing counts in different regions, it should be more robust against changes in Compton continua as it compares counts in photopeak areas. Despite this, DNN's offer unpredictable performance. Due to the large number of inputs, the DNN's are likely overtraining to specific combinations of noise in the training datasets.
-
+Finally, this chapter demonstrated an improvement over a peak based Bayesian classifier designed to perform isotope identification using the same isotope library as our work. Each complete ANN outperformed the Bayesian classifier by at least 7 points on an F1 score measured using the same dataset.
 
 
 
