@@ -1,13 +1,13 @@
 \chapter{Machine Learning Models Explored} \label{ChapterMachineLearningModelsExplored}
 
-This chapter investigates which parameters affect the convolutional and dense model's performance for datasets of different complexity. Analyzing which hyperparameters most influence performance informs future research into applying machine learning to gamma-ray spectroscopy. To accomplish this, we ran hyperparameter searches using two datasets: a complete dataset with a wide range of simulated parameters and a simple dataset with smaller parameter ranges. This section describes these datasets and the architectural and regularization hyperparameters choices for the dense and convolutional models. This section concludes with a discussion on the insights obtained from the hyperparameter searches.
+In this chapter, we investigate which parameters affect the convolutional and dense model's performance for datasets of different complexity. Analyzing which hyperparameters most influence performance informs future research into applying machine learning to gamma-ray spectroscopy. To accomplish this, we ran hyperparameter searches using two datasets: a complete dataset with a wide range of simulated parameters and a simple dataset with smaller parameter ranges. This section describes these datasets and the architectural and regularization hyperparameters choices for the dense and convolutional models. This section concludes with a discussion on the insights obtained from the hyperparameter searches.
 
 
 % Dense and convolutional models are explored for two different reasons. 
 
 \section{Training Templates Overview}
 
-The datasets used to train the models are created using templates of simulated gamma-ray spectra without Poisson noise. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF (Gamma Detector Response and Analysis Software - Detector Response Function) \cite{mitchell2014}, was used to generate these templates. This simulation code is used to model a radiation detector's response considering environmental scattering and a specific  detector's properties. The GADRAS-DRF GUI in Figure \ref{fig:gadras_parameters} shows the detector parameters used in this work. These parameters are from an Ortec 905-3 NaI(Tl) detector included in the Department of Homeland Security's Algorithm Improvement Program (AIP) software package \cite{DHSAIP}. To simulate our template spectra, the detector model's default energy calibration was modified so the detector measured energies from 0 MeV to 3.5 MeV. This was accomplished by setting the calibration offset (Order 0 in E) to zero and the calibration's gain (Order 1 in E) to 3500. The default number of channels was also changed to 1194, calibrating the 1024$^{th}$ channel - the default spectrum length used in this work - to an energy of 3 MeV. This ensures that isotopic signatures higher than 3 MeV are included in the training dataset when a template's calibration is modified to include these energies.
+The datasets used to train the models are created using templates of simulated gamma-ray spectra without Poisson noise. A one-dimensional particle transport code developed at Sandia National Laboratory, GADRAS-DRF (Gamma Detector Response and Analysis Software - Detector Response Function) \cite{mitchell2014}, was used to generate these templates. This simulation code is used to model a radiation detector's response considering environmental scattering and a specific  detector's properties. The GADRAS-DRF interface in Figure \ref{fig:gadras_parameters} shows the detector parameters used in this work. These parameters are from an Ortec 905-3 NaI(Tl) detector included in the Department of Homeland Security's Algorithm Improvement Program (AIP) software package \cite{DHSAIP}. To simulate our template spectra, the detector model's default energy calibration was modified so the detector measured energies from 0 MeV to 3.5 MeV. This was accomplished by setting the calibration offset (Order 0 in E) to zero and the calibration's gain (Order 1 in E) to 3500. The default number of channels was also changed to 1194, calibrating the 1024$^{th}$ channel - the default spectrum length used in this work - to an energy of 3 MeV. This ensures that isotopic signatures higher than 3 MeV are included in the training dataset when a template's calibration is modified to include these energies.
 
 \begin{figure}[H]
 	\centering
@@ -17,7 +17,7 @@ The datasets used to train the models are created using templates of simulated g
 \end{figure}
 
 
-GADRAS-DRF was also used to simulate spectral changes associated with measurement geometry. The measurement scenario used by GADRAS-DRF is illustrated in Figure \ref{fig:gadras_measurement_setup}. Using GADRAS-DRF, we can simulate changes in source-detector distance, the source and detector's mutual height from the ground, and optional shielding material between the source and detector. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the Compton continuum's shape, the peak-to-total ratio, and the backscatter peak's magnitude. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different broadening parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
+GADRAS-DRF was also used to simulate spectral changes associated with measurement geometry. The measurement scenario used by GADRAS-DRF is illustrated in Figure \ref{fig:gadras_measurement_setup}. Using GADRAS-DRF, we can simulate changes in source-detector distance, the source and detector's mutual height from the ground, and optional shielding material between the source and detector. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the Compton continuum's shape, the peak-to-total ratio, and the backscatter peak's magnitude. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different FWHM parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
 
 
 \begin{figure}[H]
@@ -62,18 +62,19 @@ The template parameters used in this study are shown in Table \ref{table:all_fix
 
 In addition to the parameters simulated by GADRAS-DRF, parameters are included to perform additional data augmentation. These parameters are shown in Table \ref{table:all_variable_simulation_parameters}.
 
+
 \begin{table}[H]
 \centering
 \caption{Fixed GADRAS-DRF template simulation parameters.}
 \begin{tabular}{ll}
 \hline
 \textbf{Simulation Parameter} & \textbf{Values} \\ \hline
-source-detector height [cm] & 50, 75, 100, 125, 150 \\ 
-source-detector distance [cm] & 50, 112.5, 175, 237.5, 300 \\ 
+source-detector height [cm] & 50, 100, 125 \\ 
+source-detector distance [cm] & 50, 175, 300 \\ 
 Areal density of solid aluminum [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.82, 4.18, 7.49, 13.16 \\ 
 Areal density of solid iron [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.53, 3.5, 6.28, 11.02 \\ 
 Areal density of solid lead [$\frac{\text{g}}{\text{cm}^{2}}$] & 0.22, 0.51, 0.92, 1.61 \\ 
-FWHM at  662 keV [\%] & 6.0, 6.5, 7.0, 7.5, 8.0, 8.5, 9.0 \\ 
+FWHM at  662 keV [\%] & 7.0, 7.5, 8.0 \\ 
 Background Location & \begin{tabular}[l]{@{}l@{}}Albuquerque, Atlanta, Austin,\\ Chicago , Knoxville , Miami\end{tabular} \\ \hline
 \end{tabular}
 \label{table:all_fixed_simulation_parameters}
@@ -122,49 +123,64 @@ To determine which parameters affect the convolutional and dense model's perform
 
 \section{Datasets Used for the Hyperparameter Search} \label{datasets_used_hyperparam_search}
 
-The parameters used for the simple dataset are shown in Table \ref{table:hyperparameter_dataset_easy_parameters} and parameters used for the complete dataset are shown in Table \ref{table:hyperparameter_dataset_full_parameters}. Both datasets are comprised of pure background templates and the following isotopes from ANSI N42-34-2006 \cite{ANSI}: $^{241}$Am, $^{133}$Ba, $^{57}$Co, $^{60}$Co, $^{51}$Cr, $^{137}$Cs, $^{152}$Eu, $^{67}$Ga, $^{123}$I, $^{125}$I, $^{131}$I, $^{111}$In, $^{192}$Ir, $^{177m}$Lu, $^{99}$Mo, $^{237}$Np, $^{103}$Pd, $^{239}$Pu, $^{240}$Pu, $^{226}$Ra, $^{75}$Se, $^{153}$Sm, $^{99m}$Tc, $^{201}$Tl, $^{204}$Tl, $^{233}$U, $^{235}$U, $^{238}$U, and $^{133}$Xe.
-
-Independent hyperparameter searches were conducted for both datasets because datasets of different complexity often need different architectures and hyperparameters \cite{Bergstra2012}. For each dataset, a total of 100 spectra were simulated for each isotope and 100 spectra were simulated of only background. Each spectrum was simulated with parameters randomly sampled from the simple or complete parameter set.
+The parameters used for the simple dataset are shown in Table \ref{table:hyperparameter_dataset_easy_parameters} and parameters used for the complete dataset are shown in Table \ref{table:hyperparameter_dataset_full_parameters}. Datasets are simulated using the process described in Section \ref{section_dataset_gen}. Isotopes included in the dataset are from the  ANSI N42-34-2006 standard for isotope identification devices \cite{ANSI}: $^{241}$Am, $^{133}$Ba, $^{57}$Co, $^{60}$Co, $^{51}$Cr, $^{137}$Cs, $^{152}$Eu, $^{67}$Ga, $^{123}$I, $^{125}$I, $^{131}$I, $^{111}$In, $^{192}$Ir, $^{177m}$Lu, $^{99}$Mo, $^{237}$Np, $^{103}$Pd, $^{239}$Pu, $^{240}$Pu, $^{226}$Ra, $^{75}$Se, $^{153}$Sm, $^{99m}$Tc, $^{201}$Tl, $^{204}$Tl, $^{233}$U, $^{235}$U, $^{238}$U, and $^{133}$Xe. In each dataset, a total of 100 spectra were simulated for each isotope. Each dataset also included 100 spectra of only background.
 
 \begin{table}[H]
-\centering
-\caption{Range of parameters used for the simple dataset.}
-\label{table:hyperparameter_dataset_easy_parameters}
-\begin{tabular}{lll}
-\hline
-\textbf{Simulation Parameter} & \textbf{Parameter Range} & \textbf{Sampling} \\ \hline
-Source-Detector Distance [cm] & 175 & N/A \\ 
-Source-Detector Height [cm] & 100 & N/A \\ 
-FWHM at 662 keV & 7.5 & N/A \\ 
-Shielding [\% 200 keV Attenuated] & 0\%, 20\% & Uniform \\ 
-Integration Time [s] & 60 - 600 & Log-Uniform \\ 
-Calibration - Offset [channels] & 0 - 10 & Uniform \\ 
-Calibration - Gain & 0.9 - 1.1 & Uniform \\ 
-Signal to Background Ratio & 0.5 - 2.0 & Uniform \\ 
-Background Counts Per Second & 200 & Poisson \\ \hline
-\end{tabular}
+	\centering
+	\caption{Range of parameters used for the simple dataset.}
+	\label{table:hyperparameter_dataset_easy_parameters}
+	\begin{tabular}{lll}
+		\hline
+		\textbf{Simulation Parameter} & \textbf{Parameter Range} & \textbf{Sampling} \\ \hline
+		Source-Detector Distance [cm] & 175 & N/A \\ 
+		Source-Detector Height [cm] & 100 & N/A \\ 
+		FWHM at 662 keV & 7.5 & N/A \\ 
+		Shielding [\% 200 keV Attenuated] & 0\%, 20\% & Uniform \\ 
+		Integration Time [s] & 60 - 600 & Log-Uniform \\ 
+		Calibration - Offset [channels] & 0 - 10 & Uniform \\ 
+		Calibration - Gain & 0.9 - 1.1 & Uniform \\ 
+		Signal to Background Ratio & 0.5 - 2.0 & Uniform \\ 
+		Background Counts Per Second & 200 & Poisson \\ \hline
+	\end{tabular}
 \end{table}
 
 
 \begin{table}[H]
-\centering
-\caption{Range of parameters used for the complete dataset.}
-\label{table:hyperparameter_dataset_full_parameters}
-\begin{tabular}{lll}
-\hline
-\textbf{Simulation Parameter} & \textbf{Parameter Range} & \textbf{Sampling} \\ \hline
-Source-Detector Distance {[}cm{]} & 50, 175, 300 & Uniform \\ 
-Source-Detector Height {[}cm{]} & 50, 100, 150 & Uniform \\ 
-FWHM 662 keV {[}s{]} & 7.0, 7.5, 8.0 & Uniform \\ 
-Shielding [\% 200 keV Attenuated] & 0\%, 20\%, 40\%, 60\% & Uniform \\ 
-Integration Time {[}s{]} & 10 - 3600 & Log-Uniform \\ 
-Calibration - Offset (channels) & 0 - 10 & Uniform \\ 
-Calibration - Gain & 0.8 - 1.2 & Uniform \\ 
-Signal to Background Ratio & 0.1 - 3.0 & Uniform \\ 
-Background Counts Per Second & 200 & Poisson \\ \hline
-\end{tabular}
+	\centering
+	\caption{Range of parameters used for the complete dataset.}
+	\label{table:hyperparameter_dataset_full_parameters}
+	\begin{tabular}{lll}
+		\hline
+		\textbf{Simulation Parameter} & \textbf{Parameter Range} & \textbf{Sampling} \\ \hline
+		Source-Detector Distance {[}cm{]} & 50, 175, 300 & Uniform \\ 
+		Source-Detector Height {[}cm{]} & 50, 100, 150 & Uniform \\ 
+		FWHM 662 keV {[}s{]} & 7.0, 7.5, 8.0 & Uniform \\ 
+		Shielding [\% 200 keV Attenuated] & 0\%, 20\%, 40\%, 60\% & Uniform \\ 
+		Integration Time {[}s{]} & 10 - 3600 & Log-Uniform \\ 
+		Calibration - Offset (channels) & 0 - 10 & Uniform \\ 
+		Calibration - Gain & 0.8 - 1.2 & Uniform \\ 
+		Signal to Background Ratio & 0.1 - 3.0 & Uniform \\ 
+		Background Counts Per Second & 200 & Poisson \\ \hline
+	\end{tabular}
 \end{table}
 
+
+The hyperparameter search for a single model and dataset is illustrated in Figure \ref{fig:hyperparameter_search_workflow}. For each dataset and model, 5-folds cross validation is performed on 256 sets of randomly chosen hyperparameters. The maximum number of epochs was set to 200 and an early stopping patience of 20 epochs was used to stop training using the validation dataset's F1 score,
+%
+\begin{align} \label{eq:f1_score}
+\text{F1 score} &= 2 \frac{\text{precision} \cdot \text{recall}}{\text{precision + recall}} \\
+\text{where precision} &= \frac{\text{true positives}}{\text{true positives + false positives}} \nonumber \\
+\text{recall} &= \frac{\text{true positives}}{\text{true positives + false negatives}}. \nonumber \\
+\end{align}
+%
+In addition to this, training was ended after 10 epochs if the validation dataset's F1 score did cross a 10\% threshold. The hyperparameter combination with the lowest average validation dataset F1 score was declared the optimum hyperparameter combination for that model. The validation dataset being used to end training induces a biased into the score used to determine the best hyperparameter combination. A better approach would be to use a separate simulated dataset's F1 score to determine the optimum hyperparameter combination.
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 0 40 0,clip,width=1.0\linewidth]{images/hyperparameter_search_workflow}
+	\caption{Hyperparameter search workflow.}
+	\label{fig:hyperparameter_search_workflow}
+\end{figure}
 
 \section{Hyperparameter Search Results}
 
@@ -192,11 +208,11 @@ log1p(x) := log_{10}(x+1)
 \hline
 \textbf{Hyperparameter} & \textbf{Hyperparameter Range} & \textbf{Sampling} \\ \hline
 Number of Layers & 1 - 3 & Uniform \\
-Nodes in Layer & 2$^{5}$ - 2$^{10}$ & Power of Two \\
+Nodes in Layer & 32, 64, 128, 256, 512 & Uniform \\
 Initial Learning Rate & 10$^{-4}$ - 10$^{-1}$ & Log-Uniform \\
 L2 Regularization Strength & 10$^{-2}$ - 10$^{0}$ & Log-Uniform \\
 Dropout Frequency & 0 - 1 & Uniform \\
-Batch Size & 2$^{4}$ - 2$^{10}$ & Power of Two \\
+Batch Size & 16, 32, 64, 128, 256, 512 & Uniform \\
 Activation Function & relu, tanh & Uniform \\
 Input Scaling & \begin{tabular}[l]{@{}l@{}}sqrt \\ sqrt-max \\ sqrt-L1 norm \\ log1p \\ log1p-max \\ log1p-L1 norm\end{tabular} & Uniform \\ \hline
 \end{tabular}
@@ -353,7 +369,7 @@ Nodes in Dense Layers & 10 - 1000 & Log-Uniform \\
 Initial Learning Rate & 10$^{-4}$ - 10$^{-1}$ & Log-Uniform \\
 L2 Regularization Strength & 10$^{-3}$ - 10$^{0}$ & Log-Uniform \\
 Dropout Frequency & 0 - 1 & Uniform \\
-Batch Size & 2$^{4}$ - 2$^{6}$ & Power of Two \\
+Batch Size & 16, 32 & Uniform \\
 Activation Function & tanh, relu & Uniform \\
 Input Scaling & \begin{tabular}[l]{@{}l@{}}sqrt \\ sqrt-max \\ sqrt-L1 norm \\ log1p \\ log1p-max \\ log1p-L1 norm\end{tabular} & Uniform \\ \hline
 \end{tabular}
@@ -377,15 +393,15 @@ Random efficiency experiment curves for the CNN trained on the simple and comple
 \end{figure}
 
 
-Figure \ref{fig:cnn_hyperparameters_f1_score} shows the distribution of hyperparameters searched for the CNN and their average validation dataset F1 scores from the 5-folds cross validation. Similar to the DNN, few networks trained on the complete dataset achieved high validation dataset F1 scores. This means conclusions based on these suffer from a small (albeit larger than the DNN) sample size.
+Figure \ref{fig:cnn_hyperparameters_f1_score} shows the distribution of hyperparameters searched for the CNN and their average validation dataset F1 scores from the 5-folds cross validation. Similar to the DNN, few networks trained on the complete dataset achieved high validation dataset F1 scores. Conclusions based on these diagrams suffer from a small (albeit larger than the DNN) sample size.
 
-The CNN's training performance was largely agnostic to many hyperparameters, including those associated with the dense part of the CNN. Figure \ref{fig:cnn_hyperparameters_f1_score} shows that both datasets train similarly over a wide range of learning rates below 10$^{-2}$, dense layer dropout rates below 0.6, L2 regularization scales below 10$^{-1}$, between 50 - 200 total dense nodes, and both mini-batch sizes, 
+The CNN's training performance is largely agnostic to many hyperparameters, including those associated with the dense part of the CNN. Figure \ref{fig:cnn_hyperparameters_f1_score} shows that both datasets train similarly over a wide range of learning rates below 10$^{-2}$, dense layer dropout rates below 0.8, L2 regularization scales below 10$^{-1}$, between 50 - 200 total dense nodes, and both mini-batch sizes.
 
-The CNN training performance on the complete dataset was sensitive to hyperparameters related to model capacity. The total number of convolutional layers had the largest affect on the performance of the complete dataset. Because of the additional complexity in the complete dataset, deeper networks - which extract more abstract features - are necessary for good performance. CNNs with additional convolutional layers should be explored for problems of similar complexity. Additional dense layers did not provide the same boost in performance. The simple dataset performed well with a large range of total dense layers while the complete dataset performed well with fewer layers, achieving the best validation dataset F1 score with a single layer. A high number of dense layers overtrain on more complicated datasets. 
+The CNN's training performance on the complete dataset is sensitive to hyperparameters related to model capacity. The total number of convolutional layers have the largest affect on the performance of models trained using the complete dataset. Because of the additional complexity in the complete dataset, deeper networks - which extract more abstract features - are necessary for good performance. CNNs with additional convolutional layers should be explored for problems of similar complexity. Additional dense layers did not provide the same boost in performance. Models trained using the simple dataset perform well with a large range of total dense layers while the complete dataset performs well with fewer layers, achieving the best validation dataset F1 score with a two layers. Simple and complete models with three dense layers have maximum F1 scores lower than two or three dense layers.
 
-Performance was also sensitive to other convolutional hyperparameters. Both datasets worked well with each convolutional pooling size, but the complete dataset worked best when the convolutional pooling size was largest. Longer pooling sizes add more shift and scale invariance, which is more important in the complete dataset due to a wider range of detector gain settings. Similarly, longer convolutional kernel lengths were required for good performance in the complete dataset. Longer kernels incorporate information in a greater range of channels. Longer kernels may be necessary to incorporate photopeaks and Compton continua, where smaller filters may be sufficient to identify photopeaks alone. Identifying the photopeaks may be enough to identify isotopes in the simple dataset because there are fewer confounding variables. The preference for depth in the convolutional part of the CNN was also seen in the number of convolutional filters.
+Performance is also sensitive to other convolutional hyperparameters. Models trained using the simple datasets perform well with each convolutional pooling size. As a general trend, models trained with the complete dataset perform better with larger convolutional pooling sizes. Longer pooling sizes add more shift and scale invariance, which is more important in the complete dataset due to a wider range of detector gain settings. Longer pooling sizes are necessary to incorporate photopeaks and Compton continua, where smaller pooling sizes may be sufficient to retain only photopeak information. Identifying the photopeaks may be enough to identify isotopes in the simple dataset because there are fewer confounding variables. Convolutional kernel lengths of 16 are required for optimal performance for both datasets. The preference for depth in the convolutional part of the CNN is also seen in the number of convolutional filters.
 
-The effect of scaling on performance was similar to the DNN. Using $sqrt$ scaling yielded the best performing networks, especially when tied with $max$ normalization. While $log1p-L1$ performed very poorly, $sqrt-L1$ yielded comparable performance to the other scaling strategies - despite the discrepancy in feature magnitude. This is likely due to the fact that the CNN extracts scale invariant features (like photopeak locations) from the input signal.
+The effect of scaling on performance was similar to the DNN. Using $sqrt$ scaling yielded the best performing networks, especially when tied with $max$ normalization.
 
 
 \begin{figure}[H]
