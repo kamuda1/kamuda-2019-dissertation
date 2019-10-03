@@ -2,10 +2,10 @@
 
 % great examples of various enriched U with a large range of detector resolutions https://www.lanl.gov/orgs/n/n1/docs/la_14206.pdf
 
-This chapter demonstrates \verb|annsa|'s use for 
+Measuring uranium enrichment is difficult for a number of reasons. First, characteristic $^{235}$U gamma-rays are easily shielded. Second, restriction may be placed on inspectors performing measurements for treaty verification. Inspectors can face two major restrictions: a limited amount of time to measure data and the requirement for an information barrier. An information barrier is anything that restricts the inspector from measuring information outside of their specific target. For example, if an inspector measured the gamma-ray spectrum of an object using a high-resolution HPGe detector, they could extract information about the process used to process used to bred and enrich the material. This information could be a state secret, and thus would need to be protected with some barrier. The low-resolution inherent to NaI(Tl) is an information barrier for treaty verification measurements. An addition information barrier is an ANN which is trained to only extract enrichment information. 
 
+This chapter demonstrates a validation demonstration applying \verb|annsa| to automated uranium enrichment measurements using NaI(Tl). In this chapter we discuss how we used MCNP and GADRAS-DRF to create spectral templates for training dataset simulation with \verb|annsa|. We also train and benchmark ANNs on simulated and measured enriched uranium spectra.
 
-applies machine learning algorithms to measuring the $^{235}$U enrichment of infinitely thick samples of uranium in unknown shielding and scattering environments. 
 
 \section{Uranium Enrichment Measurement Background}
 
@@ -14,11 +14,11 @@ Verifying the enrichment of HEU through passive nondestructive analysis is impor
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/enriched_u_peaks_displayed}
-	\caption{27\% enriched uranium spectrum measured with a NaI detector.}.
+	\caption{27\% enriched uranium spectrum measured with a NaI(Tl) detector.}.
 	\label{fig:enriched_u_peaks_displayed}
 \end{figure}
 
-Traditionally, the enrichment meter method is used to measure uranium enrichment in NaI spectra \cite{Reilly1970}. This method exploits the proportionality between the activity of the 186 keV photon and the enrichment of $^{235}$U. The enrichment meter method works by finding calibration constants that relate counts in two ROIs,
+Traditionally, the enrichment meter method is used to measure uranium enrichment in NaI(Tl) spectra \cite{Reilly1970}. This, and all enrichment measurement methods based on gamma-ray spectroscopy, only measures the enrichment of an object's surface to a depth of 0.26 cm and 0.74 cm for uranium metal and U$_{3}$O$_{8}$ powder, respectively \cite{Pandas}. At these material depths, the attenuation properties of uranium removes 99.8\% of the 186 keV signal. The enrichment meter method method exploits the proportionality between the activity of the 186 keV photon and the enrichment of $^{235}$U. The enrichment meter method works by finding calibration constants that relate counts in two ROIs,
 %
 \begin{align} \label{eq:enrichment_meter_principle}
 E &= A  C_{ROI1} + B C_{ROI2} \\
@@ -28,12 +28,7 @@ A &= \text{calibration constant} \nonumber \\
 B &= \text{calibration constant,} \nonumber
 \end{align}
 %
-to the enrichment of the measured material. These ROIs are placed around the 186 keV peak and in the background region to the right of the peak. Finding these constants requires measuring two different uranium enrichment standards in the same configuration (shielding, scattering environment, source-detector distance). Once these calibration constants are measured, they can only be used in the same configuration as the reference standards. It is possible to extend this method to other shielding configurations, but this introduces a risk of adding systematic errors. An automated version of this method called NaIGEM (NaI Gamma Enrichment Measurements) is included in the HM-5 instrument used by the IAEA \cite{MORTREAU2004}. Enrichment measurements of uranium without contaminants using low-resolution detectors can achieve 1\% precision for arbitrary enrichments while  contamination by minor uranium isotopes have a biasing effect of 5-10\% \cite{SPRINKLE1997}. Measurements of materials with unknown enrichment, shielding, and geometry are typically performed with high resolution HPGe detectors using the Multi-Group Analysis for Uranium (MGAU) software \cite{MGAU1994}.
-
-% Measuring uranium enrichment with a NaI detector in an unknown configuration is difficult.
-
-
-% Measuring the enrichment of uranium is made difficult by the fact that it's characteristic gamma-rays are easily shielded. This task is made more difficult for treaty verification by the restriction placed on inspectors. IAEA inspectors face two major restrictions: a limited amount of time to measure data from declared items and the requirement for an information barrier. This means that direct viewing and analysis of the gamma-ray spectrum - necessary for the enrichment meter method - is impossible. 
+to the measured material's enrichment. These ROIs are placed around the 186 keV peak and in the background region to the right of the peak. Finding these constants requires measuring two different uranium enrichment standards in the same configuration (shielding, scattering environment, source-detector distance). Once these calibration constants are measured, they can only be used in the same configuration as the reference standards. It is possible to extend this method to other shielding configurations, but this introduces a risk of adding systematic errors. An automated version of this method called NaIGEM (NaI(Tl) Gamma Enrichment Measurements) is included in the HM-5 instrument used by the IAEA \cite{MORTREAU2004}. Enrichment measurements of uranium without contaminants using low-resolution detectors can achieve 1\% precision for arbitrary enrichments while  contamination by minor uranium isotopes have a biasing effect of 5-10\% \cite{SPRINKLE1997}. Measurements of materials with unknown enrichment, shielding, and geometry are typically performed with high resolution HPGe detectors using the Multi-Group Analysis for Uranium (MGAU) software \cite{MGAU1994}. Using a NaI(Tl) detector to measure the enrichment of an item without knowing these parameters is inherently challenging due to the low-resolution of NaI(Tl). By training ANNs with a dataset of simulated enriched uranium spectra, it may be possible to use this material to perform uranium enrichment measurements.
 
 
 % "Generally, low resolution measurements of 'clean' uranium can be made to 1\% precision over nearly the entire range of uranium enrichment. Measurements in both Europe and the Former Soviet Union have observed bias effects of 5-10\% in low-resolution measurements caused by minor isotopes of uranium. This level of bias has been deemed unacceptable, causing some inspectors to resort to more expensive, time-consuming alternatives like mass spectrometry or liquid-nitrogen-cooler high-resolution detectors. As the international safeguards community attempts to inspect more facilities with less resources, these alternatives become highly undesirable. The minor isotopes come from the use of uranium recycled from reactors being used as feed in the enrichment plants. Daughters of $^{232}$U or $^{236}$U include the thorium decay chain which emits a 238.6-keV gamma ray from $^{212}$Pb. This gamma ray falls in the ROI used to estimate the Compton continuum under the 186-keV gamma ray. In addition, the multitude of high-energy gamma rays from the daughters of $^{232}$U change the shape of the Compton continuum that lies under the desired 186-keV peak. Just to make the entire issue more challenging, the level of this interference varies widely among the samples generally offered to the inspector, causing unpredictable, wide variations in the bias effects" \cite{SPRINKLE1997}
@@ -66,7 +61,7 @@ Simple and complete model architectures discussed in Sections \ref{table:hyperpa
 
 \subsection{Training Dataset Details}
 
-A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid uranium sphere of radius 5.5 cm. The MCNP code was used to calculate the physics due to self attenuation in the uranium and GADRAS-DRF was used to model the gamma-ray spectrum from this source in a 2'' x 2'' NaI detector. The universe in the MCNP simulation, shown in Figure \ref{fig:mcnp_diagram}, was empty except for a 19 cm concrete block fixed at 180 cm from the origin, a 5.5 cm radius sphere of bare uranium fixed at the origin, and a bare 2'' x 2'' NaI cylinder located between them. The concrete block was added to incorporate backscatter radiation in the MCNP simulation. A total of 10$^{8}$ particles were simulated for each configuration.
+A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid uranium sphere of radius 5.5 cm. The MCNP code was used to calculate the physics due to self attenuation in the uranium and GADRAS-DRF was used to model the gamma-ray spectrum from this source in a 2'' x 2'' NaI(Tl) detector. The universe in the MCNP simulation, shown in Figure \ref{fig:mcnp_diagram}, was empty except for a 19 cm concrete block fixed at 180 cm from the origin, a 5.5 cm radius sphere of bare uranium fixed at the origin, and a bare 2'' x 2'' NaI(Tl) cylinder located between them. The concrete block was added to incorporate backscatter radiation in the MCNP simulation. A total of 10$^{8}$ particles were simulated for each configuration.
 
 \begin{figure}[H]
 	\centering
