@@ -616,9 +616,16 @@ Other commonly used feature extraction methods are principal component analysis 
 
 \section{annsa}
 
-As a part of this work we developed the open source (under the BSD 3 license) software package \verb|annsa| \cite{annsa}. \verb|annsa| leverages gamma-ray transport software and open source machine learning packages to generate trained machine learning models for spectroscopic tasks. \verb|annsa| contains machine learning models designed for tasks such as: classifying spectra based on an isotope library, quantifying an object's uranium enrichment, and extracting features from a spectrum using autoencoders. Machine learning models included in \verb|annsa| are dense neural networks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs). We designed \verb|annsa| to be modular, allowing for the addition of extra machine learning models and spectroscopic dataset construction methods. 
+As a part of this work we developed the open source (under the BSD 3 license) software package \verb|annsa| \cite{annsa}. \verb|annsa|'s main modules are shown in Figure \ref{fig:annsa_structure}. The dataset generation module leverages gamma-ray transport software to quickly prototype and generate training datasets. The machine learning model construction module uses TensorFlow and Keras to build machine learning models for spectroscopic tasks. \verb|annsa| contains machine learning models designed for tasks such as: classifying spectra based on an isotope library, quantifying an object's uranium enrichment, and extracting features from a spectrum using autoencoders. Machine learning models included in \verb|annsa| are dense neural networks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs).
 
-We also included unit tests using \verb|pytest| \cite{pytest3.5} and the continuous integration framework Circle CI to ensure new functionality can be safely incorporated into \verb|annsa|.
+\begin{figure}[H]
+	\centering
+	\includegraphics[trim=0 310 300 0,clip,width=0.8\linewidth]{images/annsa_structure}
+	\caption{The main modules in the \texttt{annsa} package.}
+	\label{fig:annsa_structure}
+\end{figure}
+
+Additional machine learning models and spectroscopic dataset construction methods can be added to \verb|annsa|. To make the integration of new and updating of existing components easier and safer, we also included unit tests using \verb|pytest| \cite{pytest3.5} and the continuous integration framework Circle CI. Circle CI runs \verb|annsa|'s unit tests when new code is uploaded to it's GitHub repository. This process ensures new functionality will not affect \verb|annsa|'s current functionality.
 
 The open source software stack \verb|annsa| uses include: TensorFlow \cite{tensorflow2015-whitepaper} and Keras \cite{chollet2015keras} for the machine learning model creation and training; NumPy \cite{numpy} and pandas \cite{mckinney-proc-scipy-2010} to manipulate and store data; and scikit-learn \cite{scikit-learn} for prepossessing and miscellaneous training tasks. \verb|annsa| can be installed in a UNIX environment using the following commands:
 \begin{lstlisting}[language=bash, basicstyle={\small\ttfamily}]
@@ -683,9 +690,7 @@ This workflow is designed to be flexible and allow for quick dataset prototyping
 
 \subsection{Machine Learning Models}
 
-\verb|annsa| includes Python functions that build Keras models using the Keras \verb|Sequential| API. The \verb|Sequential| API allows for simple model training and saving. \verb|annsa| includes functions to build DNNs, 1D CNNs, DAEs, and 1D CAEs. This section outlines the architectures available in \verb|annsa|.
-
-% In this way the encoding portion of the autoencoder can be used as a pretrained feature extractor.  Examples of these networks being used are available at \verb|https://github.com/arfc/annsa/examples|.
+\verb|annsa| includes Python functions that build machine learning models using both low-level TensorFlow and the Keras \verb|Sequential| API. Building functions using low-level TensorFlow allows for greater flexibility in model construction and training. The Keras \verb|Sequential| API simplifies how models are trained and saved. \verb|annsa| includes functions to build DNNs, 1D CNNs, DAEs, and 1D CAEs using both of these methods. This section outlines the architectures available in \verb|annsa|.
 
 \subsubsection{Dense Neural Network}
 
