@@ -50,12 +50,12 @@ To investigate how well a machine learning algorithm can learn to perform uraniu
 
 \subsection{Training Outline}
 
-Simple and complete model architectures discussed in Sections \ref{table:hyperparameter_opt_parameters_DNN} and \ref{table:hyperparameter_opt_parameters_CNN} were trained using dataset of 10$^{5}$ simulated uranium spectra. Model architectures were modified to perform regression. Modifications include changing: the number of output nodes to one, their output function to a sigmoid, and their main cost function to mean squared error. Typically the sigmoid output function is used in the context of logistic regression. In our case the regression targets, percent $^{235}$U enrichment, exist on [0,1], allowing use of the sigmoid output function. Pretrained simple and complete DAE and CAE models from Section \ref{section_autoencoder_archetectures} were also fine-tuned using the simulated uranium dataset. Each model was trained using 5-folds cross validation. For each test dataset in this chapter, uranium enrichment predictions from each trained model were averaged to reduce the prediction's variance. This process is illustrated in Figure \ref{fig:uenrich_training_outline}.
+Simple and complete model architectures discussed in Sections \ref{table:hyperparameter_opt_parameters_DNN} and \ref{table:hyperparameter_opt_parameters_CNN} were trained using dataset of 10$^{5}$ simulated uranium spectra. Model architectures were modified to perform regression. Modifications include changing: the number of output nodes to one, their output function to a sigmoid, and their main cost function to mean squared error. Typically the sigmoid output function is used in the context of logistic regression. In our case the regression targets, percent $^{235}$U enrichment, exist on [0,1], allowing use of the sigmoid output function. Using this function, we interpret each ANN's output as an enrichment value on [0,1] instead of a list of isotope posterior probabilities. Pretrained simple and complete DAE and CAE models from Section \ref{section_autoencoder_archetectures} were also fine-tuned using the simulated uranium dataset. Each model was trained using 5-folds cross validation. For each test dataset in this chapter, uranium enrichment predictions from each trained model were averaged to reduce the prediction's variance. This process is illustrated in Figure \ref{fig:uenrich_training_outline}.
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[trim=0 250 40 0,clip,width=1.0\linewidth]{images/uenrich_training_outline}
-	\caption{Diagram of MCNP simulation (not to scale).}
+	\caption{Training and prediction averaging.}
 	\label{fig:uenrich_training_outline}
 \end{figure}
 
@@ -88,11 +88,8 @@ $^{235}$U & 2.07 x 10$^{5}$ \\
 $^{238}$U & 3.80 x 10$^{3}$ \\ \hline
 \end{tabular}
 \end{table}
-
-
-% (for example: burn-up conditions in the recycled material, enrichment process, )
-
-$^{235}$U and $^{238}$U templates were combined in weighted combinations to create spectra of desired enrichments. To account for factors that change the $^{232}$U content, each sample that included $^{232}$U used a mass fraction uniformly chosen between 4 x 10$^{-9}$ and 2 x 10$^{-8}$ \cite{Peurrung2019}. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was one half. Complete simulation parameters for the coupled MCNP and GADRAS-DRF code are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
+% \ref{eq:template_sampling}
+$^{235}$U and $^{238}$U templates were combined in weighted combinations to create spectra of desired enrichments using the process described previously in . To account for factors that change the $^{232}$U content, each sample that included $^{232}$U used a mass fraction uniformly chosen between 4 x 10$^{-9}$ and 2 x 10$^{-8}$ \cite{Peurrung2019}. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was one half. Complete simulation parameters for the coupled MCNP and GADRAS-DRF code are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
 
 \begin{table}[H]
 \centering
@@ -101,22 +98,22 @@ $^{235}$U and $^{238}$U templates were combined in weighted combinations to crea
 \begin{tabular}{lll}
 \hline
 \textbf{Simulation Parameter} & \textbf{Range} & \textbf{Sampling} \\ \hline
-Source-Detector Distance [cm] & 25, 50, 100 & Uniform \\ % \hline
-FWHM 662 keV [s] & 6.0, 6.5, 7.0, 7.5 & N/A \\ % \hline
+Source-Detector Distance [cm] & 25, 50, 100, 150, 200 & Uniform \\ % \hline
+FWHM 662 keV [s] & 6.5, 7.0, 7.5 & N/A \\ % \hline
 Shielding (\% 200 keV Attenuated) & 0\%, 20\%, 40\%, 60\% & Uniform \\ % \hline
-Integration Time [s] & 30 - 3600 & Log-Uniform \\ % \hline
+Integration Time [s] & 60 - 3600 & Log-Uniform \\ % \hline
 Calibration Offset [channels] & -10 - 10 & Uniform \\ % \hline
 Calibration Gain & 0.8 - 1.2 & Uniform \\ % \hline
 $^{235}$U Enrichment [\%] & 0 - 100 & Uniform \\ % \hline
-Background Counts per Second & 150 - 250 & Uniform \\ % \hline
-Signal to Background Ratio & 0.1 - 4.0 & Uniform \\ \hline
+Background Counts per Second & 170 - 230 & Uniform \\ % \hline
+Signal to Background Ratio & 1.0 - 4.0 & Log-Uniform \\ \hline
 \end{tabular}
 \end{table}
 
 
-\section{Generalization Dependence Results - Simulated Data}
+\section{Results - Simulated Data}
 
-These sections describe how each trained model performs on simulated enriched uranium. To investigate the generalization performance, spectra were simulated with enrichments of 3\%, 25\%, 50\%, 75\%, and 93\% in different conditions. For each spectrum, the average enrichment predicted from five bagged trained models were recorded. To observe the enrichment prediction's variance, 10 spectra were simulated for each enrichment value and their predicted enrichment's average and variance were recorded. Default simulation parameters are shown in Table \ref{table:default_sim_params_uranium}. Changes to these defaults are indicated for each generalization experiment.
+These sections describe how each trained model performs when predicting the uranium enrichment of simulated spectra. To investigate performance, spectra were simulated with enrichments of 3\%, 25\%, 50\%, 75\%, and 93\% in different conditions. To observe each ANN's enrichment prediction variance, 10 spectra were simulated for each enrichment value. Each ANN's mean and variance when identifying all spectra at each enrichment value was recorded. Each ANN used the model averaging technique shown in Figure \ref{fig:uenrich_training_outline}. Default simulation parameters are shown in Table \ref{table:default_sim_params_uranium}. Changes to these defaults are indicated for each generalization experiment.
 
 \begin{table}[H]
 \centering
@@ -136,12 +133,9 @@ Background Counts Per Second & 200 \\ \hline
 \end{tabular}
 \end{table}
 
-\subsection{Generalization Dependence on Shielding}
+\subsection{Effect of Shielding on Enrichment Prediction}
 
-To test each model's generalization performance with respect to shielding, enriched uranium spectra were simulated with various amounts of shielding. The effect of each shielding is shown in Figure \ref{fig:simulated_uranium_shielding}. The predicted enrichments from each model on these cases are shown in Figure \ref{fig:simuranium-shielding}. In general for each case, the complete networks outperform the simple networks. This indicates that the reduced capacity of the simple networks is insufficient to properly perform uranium enrichment measurements using the provided dataset. At 93\% enrichment each model underpredicted the enrichment.
-
-The simple networks consistently overpredict the enrichment at and below 50\%. The simple models also underpredict the enrichment at values over 50\%. This reinforces the conclusion that the simple network has too little capacity to fit the data. Because the range of enrichments in the training data are uniformly distributed from 0 - 100\%, the naive method to minimize the cost function is predict enrichments near 50\%. The simple networks, except for the simple DAE, consistently underpredicted the enrichment in the case with 1.42 mm lead shielding. The complete models were largely unaffected by the various amounts of shielding.
-
+To test each model's ability to measure uranium enrichment when the uranium source is shielded, enriched uranium spectra were simulated with various thicknesses of shielding. The effect of each shielding thickness is shown in Figure \ref{fig:simulated_uranium_shielding}. The predicted enrichments from each model on these cases are shown in Figure \ref{fig:simuranium-shielding}. In general for each case, the complete networks outperform the simple networks by predicting enrichments closer to the simulated value. This indicates that the reduced capacity of the simple networks is insufficient to properly perform uranium enrichment measurements using the provided dataset. At 93\% enrichment each model underpredicts the enrichment.
 
 \begin{figure}[H]
 	\centering
@@ -179,58 +173,55 @@ The simple networks consistently overpredict the enrichment at and below 50\%. T
          \caption{1.42 mm lead.}
          \label{fig:simuranium-heavylead}
      \end{subfigure}
-        \caption{The dependence of performance on shielding with respect to simulated spectra. Simulated shielding amounts are indicated below each figure.}
+        \caption{The dependence of each model's predicted uranium enrichment on shielding with respect to simulated spectra. Simulated shielding amounts are indicated below each figure.}
         \label{fig:simuranium-shielding}
 \end{figure}
 
+In all cases except with 1.42 mm of lead shielding, simple networks overpredict the enrichment at and below 50\%. The simple models also underpredict the enrichment at values over 50\%. This reinforces the conclusion that the simple network has too little capacity to fit the data. Because the range of enrichments in the training data are uniformly distributed from 0 - 100\%, the naive method to minimize the cost function is predict enrichments near 50\%. The complete models were 
+within 20\% of the true value in all cases except with 1.42 mm of lead shielding. This shows that complete models are only affected by relatively large amounts of shielding.
 
 
-
-\subsection{Generalization Dependence on Changing Calibration} \label{section_uranium_sim_cal}
+\subsection{Effect of Calibration on Enrichment Prediction} \label{section_uranium_sim_cal}
 
 To test each model's generalization performance with respect to calibration, enriched uranium spectra were simulated with various relative gains. The predict enrichments from each model on these cases are shown in Figure \ref{fig:simuranium-cal}. Model performance at relative gains of 0.9 and 1.1 are similar to the reference gain case, shown in Figure \ref{fig:simuranium-noshield}.
+
+\begin{figure}[H]
+	\centering
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/simuranium-cal08.png}
+		\caption{0.8}
+		\label{fig:simuranium-cal08}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/simuranium-cal09.png}
+		\caption{0.9}
+		\label{fig:simuranium-cal09}
+	\end{subfigure}
+	
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/simuranium-cal11.png}
+		\caption{1.1}
+		\label{fig:simuranium-cal11}
+	\end{subfigure}
+	\hfill
+	\begin{subfigure}[b]{0.49\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/simuranium-cal12.png}
+		\caption{1.2}
+		\label{fig:simuranium-cal12}
+	\end{subfigure}
+	\caption{The dependence of each model's predicted uranium enrichment on calibration gain with respect to simulated spectra. The magnitude of the applied relative gain shift are shown below each figure.}
+	\label{fig:simuranium-cal}
+\end{figure}
+
 
 At the extreme relative gain shifts of 0.8 and 1.2 model performance changes. These shifts represent large deviations in normal NaI(Tl) operating temperature or a significantly miscalibrated detector.  At a relative gain shift of 0.8, the dense models display a large variance in predict enrichments while the convolutional models do not. Convolutional models are effected less by the large change in gain because of their inherent shift invariance. At a relative gain shift of 0.8, the 186 keV peak from $^{235}$U is shifted to the 225 keV region as seen in Figure \ref{fig:simulated_uranium_calibration_93pct}. This region contains little spectral information about enrichment. Without enrichment information, ANN weight connections in this region will not update significantly during training. With weak connections, this region - and the 186 keV peak - will be ignored with a relative gain shift of 0.8. Because the 186 keV peak is ignored the dense networks underpredict enrichment at a 0.8 relative gain shift. At a gain shift of 1.2 each model overpredicts enrichment for enrichments at and below 50\%. Because the 1.2 relative shift moves the 766 keV and 1001 keV $^{238}$U peaks into regions of little importance for the spectra without gain shift, seen in Figure \ref{fig:simulated_uranium_calibration_10pct}, these peaks are ignored and the enrichment is overpredicted.
 
 % Also, because the shifted peak is wider, more nodes connected to this region would need to update to extract useful information. 
-
-
-\begin{figure}[H]
-     \centering
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/simuranium-cal08.png}
-         \caption{0.8}
-         \label{fig:simuranium-cal08}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/simuranium-cal09.png}
-         \caption{0.9}
-         \label{fig:simuranium-cal09}
-     \end{subfigure}
-
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/simuranium-cal11.png}
-         \caption{1.1}
-         \label{fig:simuranium-cal11}
-     \end{subfigure}
-     \hfill
-     \begin{subfigure}[b]{0.49\textwidth}
-         \centering
-         \includegraphics[width=\textwidth]{images/simuranium-cal12.png}
-         \caption{1.2}
-         \label{fig:simuranium-cal12}
-     \end{subfigure}
-        \caption{The dependence of performance on calibration gain with respect to simulated spectra. The magnitude of the applied relative gain shift are shown below each figure.}
-        \label{fig:simuranium-cal}
-\end{figure}
-
-
-
-
 
 \begin{figure}[H]
 	\centering
@@ -278,7 +269,7 @@ Figure \ref{fig:measured_uranium} shows the predicted enrichment's mean and vari
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/measured_uranium.png}
-	\caption{Results from measured uranium of different enrichments.}
+	\caption{Each model's predicted uranium enrichment for measured uranium spectra.}
 	\label{fig:measured_uranium}
 \end{figure}
 
@@ -315,7 +306,7 @@ Similar to the simulated results, gain changes of 0.9 and 1.1 do not significant
          \caption{1.2}
          \label{fig:measured_uranium_12}
      \end{subfigure}
-        \caption{The dependence of performance on calibration gain with respect to real spectra. The magnitude of the applied relative gain shift are shown below each figure.}
+        \caption{The dependence of each model's predicted uranium enrichment on calibration gain with respect to real spectra. The magnitude of the applied relative gain shift are shown below each figure.}
         \label{fig:realuranium-cal}
 \end{figure}
 
