@@ -60,25 +60,24 @@ GADRAS-DRF was also used to simulate spectral changes associated with measuremen
 
 The template parameters used in this study are shown in Table \ref{table:all_fixed_simulation_parameters}. These parameters are based on handheld RIID scenarios. The source-detector height off the ground are sampled between shin and arm heights (50 cm to 150 cm). The source-detector distance range corresponds to standoff distances expected when measuring a source in a cargo container. The areal density of each material corresponds to 20$\%$, 40$\%$, 60$\%$, and 80$\%$ attenuation of a 200 keV photon. This photon energy was chosen because it is near the 186 keV energy of the characteristic $^{235}$U photopeak. A set of unshielded templates is also included. The FWHM range was chosen based on reported FWHM values for a NaI(Tl) detector (see section \ref{subsection_energy_resolution}). Background locations were chosen based on their geographic and geologic differences.
 
-In addition to the parameters simulated by GADRAS-DRF, parameters are included to perform additional data augmentation. These parameters are shown in Table \ref{table:all_variable_simulation_parameters}.
-
-
 \begin{table}[H]
-\centering
-\caption{Fixed GADRAS-DRF template simulation parameters.}
-\begin{tabular}{ll}
-\hline
-\textbf{Simulation Parameter} & \textbf{Values} \\ \hline
-source-detector height [cm] & 50, 100, 125 \\ 
-source-detector distance [cm] & 50, 175, 300 \\ 
-Areal density of solid aluminum [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.82, 4.18, 7.49, 13.16 \\ 
-Areal density of solid iron [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.53, 3.5, 6.28, 11.02 \\ 
-Areal density of solid lead [$\frac{\text{g}}{\text{cm}^{2}}$] & 0.22, 0.51, 0.92, 1.61 \\ 
-FWHM at  662 keV [\%] & 7.0, 7.5, 8.0 \\ 
-Background Location & \begin{tabular}[l]{@{}l@{}}Albuquerque, Atlanta, Austin,\\ Chicago , Knoxville , Miami\end{tabular} \\ \hline
-\end{tabular}
-\label{table:all_fixed_simulation_parameters}
+	\centering
+	\caption{Fixed GADRAS-DRF template simulation parameters.}
+	\begin{tabular}{ll}
+		\hline
+		\textbf{Simulation Parameter} & \textbf{Values} \\ \hline
+		source-detector height [cm] & 50, 100, 125 \\ 
+		source-detector distance [cm] & 50, 175, 300 \\ 
+		Areal density of solid aluminum [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.82, 4.18, 7.49, 13.16 \\ 
+		Areal density of solid iron [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.53, 3.5, 6.28, 11.02 \\ 
+		Areal density of solid lead [$\frac{\text{g}}{\text{cm}^{2}}$] & 0.22, 0.51, 0.92, 1.61 \\ 
+		FWHM at  662 keV [\%] & 7.0, 7.5, 8.0 \\ 
+		Background Location & \begin{tabular}[l]{@{}l@{}}Albuquerque, Atlanta, Austin,\\ Chicago , Knoxville , Miami\end{tabular} \\ \hline
+	\end{tabular}
+	\label{table:all_fixed_simulation_parameters}
 \end{table}
+
+In addition to the parameters simulated by GADRAS-DRF, parameters are included to perform additional data augmentation. These parameters are shown in Table \ref{table:all_variable_simulation_parameters}.
 
 \begin{table}[H]
 \centering
@@ -94,20 +93,6 @@ Calibration - Gain \\ \hline
 \end{tabular}
 \label{table:all_variable_simulation_parameters}
 \end{table}
-
-% \begin{table}[H]
-% \centering
-% \caption{Default data augmentation parameters.}
-% \begin{tabular}{ccc}
-% Parameter & Values & Sampling \\ \hline
-% integration time & 60 - 600 & uniform \\ 
-% background counts per second & 200 & Poisson \\ 
-% Signal to Background ratio & 0.5 - 2 & uniform \\ 
-% 0th order calibration & 0 - 10 & uniform \\ 
-% 1st order calibration & 0.83 - 1.16 & uniform \\ 
-% \end{tabular}
-% \label{table:all_variable_simulation_parameters}
-% \end{table}
 
 \section{Hyperparameter Search}
 
