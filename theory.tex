@@ -1,6 +1,6 @@
 \chapter{Theory} \label{theory}
 
-This chapter covers how radiation detectors convert gamma-rays into spectroscopic signals, the theory behind machine learning with artificial neural networks, and the open source Python package, \verb|annsa| (Artificial Neural Networks for Spectroscopic Analysis) \cite{annsa}, we created to facilitate the coupling of gamma-ray spectra simulation software and machine learning algorithms.
+This chapter covers how radiation detectors convert gamma-rays into spectroscopic signals, the theory behind machine learning with artificial neural networks, and the open source Python package, \verb|annsa| (Artificial Neural Networks for Spectroscopic Analysis) \cite{annsa}, we created to couple gamma-ray transport software and machine learning algorithms.
 
 \section{Gamma-ray Spectroscopy}
 
@@ -10,7 +10,7 @@ In this section, we describe the physical processes responsible for features in 
 
 \subsection{Energy Deposition Mechanisms}
 
-When a photon interacts with a radiation detection medium (e.g. a NaI(Tl) crystal), it deposits some or all of its energy into the material. There are three main methods of interaction: the photoelectric effect, Compton scattering, and pair production. These effects are energy dependent, as seen in Figure \ref{fig:energy_dependence_interactions}. After energy is deposited in the material, scintillation light produced bt the crystal is collected and amplified by the detector's electronics. This amplified signal is sent to a computer where it is recorded in a gamma-ray spectrum. The detector's signal at low energies (below 30 keV) is dominated by noise. To remove this noise from the spectrum, a low level discriminator is often used to reject the signal below a certain number of channels. In this work, we apply a low level discriminator by setting the first 10 channels' counts in each spectrum to zero. This low level discriminator removes energies below 30 keV in a detector with 1024 channels calibrated ]with a maximum energy of 3 MeV.
+When a photon interacts with a radiation detection medium (e.g. a NaI(Tl) crystal), it deposits some or all of its energy into the material. There are three main methods of interaction: the photoelectric effect, Compton scattering, and pair production. These effects are energy dependent, as seen in Figure \ref{fig:energy_dependence_interactions}. After energy is deposited in the material, scintillation light produced by the crystal is collected and amplified by the detector's electronics. This amplified signal is sent to a computer where it is recorded in a gamma-ray spectrum. The detector's signal at low energies (below 30 keV) is dominated by noise. To remove this noise from the spectrum, a low level discriminator is often used to reject the signal below a certain number of channels. In this work, we apply a low level discriminator by setting the first 10 channels' counts in each spectrum to zero. This low level discriminator removes energies below 30 keV in a detector with 1024 channels calibrated with a maximum energy of 3 MeV.
 
 \begin{figure}[H]
 	\centering
@@ -26,13 +26,14 @@ If the photon's total energy is deposited in the detector, a count is recorded i
 \subsubsection{Photoelectric Effect}
 % knoll pg 323
 
-Photoelectric effect is a process that can occur when a photon with energy, $E_{\gamma}$, greater than the binding energy of a bound electron, $E_{b}$, is absorbed by an atom. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron
+The photoelectric effect is a process that can occur when a photon with energy, $E_{\gamma}$, greater than the binding energy of a bound electron, $E_{b}$, is absorbed by an atom. This absorption produces a photoelectron, which has the energy of the photon minus the binding energy of the electron
 %
-\begin{align} \label{eq:photoelectric_effect}
+\begin{align} \label{eq:photoelectric_effect} 
 E_{e^{-}} &= E_{\gamma} - E_{b} \\
-&= h\nu - E_{b} \\
-\text{where } h &= \text{Planks Constant} \quad [J \cdot s] \nonumber \\
-\nu &= \text{The Photon's Frequency} \quad \left[\frac{1}{\text{s}}\right] \nonumber \\
+&= h\nu - E_{b} \nonumber
+\intertext{where} \nonumber
+h &= \text{Planks Constant} \quad [J \cdot s] \nonumber \\
+\nu &= \text{The Photon's Frequency} \quad \left[\frac{1}{\text{s}}\right] \nonumber
 \end{align}
 %
 where $E_{\gamma}$ = $h\nu$ is the incident photon's energy. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates an electron vacancy in the original atom. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
@@ -66,7 +67,7 @@ depends on the scattering angle, $\theta$, the incident photon's energy, E$_{\ga
 	\label{fig:ideal_compton}
 \end{figure}
 
-The Compton continuum of higher-energy photons will add to lower-energy photopeaks, adding noise to and changing the baseline of lower-energy photons' signals. The geometry between the source and detector changes the Compton continuum's shape, making the Compton continuum's signal difficult to incorporate into an identification algorithm. This signal can be incorporated into template matching or ANN based algorithms by including library or training set examples with various source-detector geometries.
+The Compton continuum of higher-energy photons will add to lower-energy photopeaks, adding noise to and changing the baseline of lower-energy photons' signals. The geometry between the source and detector changes the Compton continuum's shape, making the Compton continuum's signal difficult to incorporate into an identification algorithm. This signal can be incorporated into template matching or ANN-based algorithms by including library or training set examples with various source-detector geometries.
 
 
 
@@ -137,7 +138,7 @@ Spatial and temporal changes in background alter a gamma-ray spectrum's continuu
 \label{fig:background_components}
 \end{figure}
 
-These radiation components can change both spatially and temporally. Because subsurface rocks vary in their elemental composition, background radiation isotope concentrations change geologically (Figures \ref{fig:USGS_u_conc}, \ref{fig:USGS_th_conc}, and \ref{fig:USGS_k_conc}). Local changes in soil composition and building materials also are significant enough to impact background. Because common building materials like concrete and granite contain radioactive elements, the proximity to these structures cause local variations in background. 
+These radiation components can change both spatially and temporally. Because subsurface rocks vary in their elemental composition, background radiation isotope concentrations change geologically (Figures \ref{fig:USGS_u_conc}, \ref{fig:USGS_th_conc}, and \ref{fig:USGS_k_conc}). Local changes in soil composition and building materials also are significant enough to impact background. Because common building materials like concrete and granite contain radioactive elements, the proximity to these structures can also cause local variations in background. 
 
 \begin{figure}[H]
 	\centering
@@ -194,16 +195,16 @@ While automated gain stabilization methods exist, many require a clear photopeak
 
 \section{Machine Learning}
 
-Machine learning models can be though of like black box functions that transform some input into some output given a provided training dataset. An ANNs capacity describes how complicated this function can be. High capacity models can learn complicated relationships between inputs and outputs, but are sensitive to overtraining. Overtraining occurs when the model memorizes a training dataset and loses the ability to correctly map inputs from outside the training dataset to correct outputs. Low capacity models fail to learn the relationship between a given input and output dataset. A model's capacity is related to the number of its free parameters. Rigorously determining a model's capacity is an active area of machine learning research. 
+Machine learning models can be thought of as black box functions that transform some input into some output given a provided training dataset. An ANN's capacity describes how complicated this function can be. High capacity models can learn complicated relationships between inputs and outputs, but are sensitive to overtraining. Overtraining occurs when the model memorizes a training dataset and loses the ability to map inputs from outside the training dataset to correct outputs. Low capacity models fail to learn the relationship between a given input and output dataset. A model's capacity is related to the number of its free parameters. Rigorously determining a model's capacity is an active area of machine learning research. 
 
 Machine learning tasks often require different architectural and training hyperparameters for optimal performance on a tasks of different complexity \cite{Bergstra2012}. To investigate how hyperparameters differ for gamma-ray spectroscopy, in Chapter \ref{ChapterMachineLearningModelsExplored} we optimize architectures for isotope classification tasks of increasing difficulty. Analyzing optimal hyperparamters also allows us to determine model capacity requirements for increasingly difficult problems.
 
-In this section we describe the general theory behind how neural networks operate, how to train them, and how to optimize their architectures for a task. We also give an introduction to neural network architectures studied in this work and describe parameters that affect their training.
+In this section, we describe the general theory behind how neural networks operate, how to train them, and how to optimize their architectures for a task. We also give an introduction to neural network architectures studied in this work and describe parameters that affect their training.
 
 
 \subsection{General Neural Network Architecture}
 
-An artificial neural network (ANN) is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}{^M}$ to $\mathbb{R}{^N}$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not directly observed in the input or output layers. Each neuron in adjacent layers is connected by a weight matrix, represented in Figure \ref{fig:Network} by arrows connecting neurons.
+An artificial neural network (ANN) is a mathematical model that attempts to map an arbitrary function from $\mathbb{R}{^M}$ to $\mathbb{R}{^N}$, where $M$ and $N$ are positive integers. An ANN accomplishes this by mimicking biological neurons. One example of an ANN architecture is shown in Figure \ref{fig:Network}. This ANN has N neurons in input layer A, J neurons in layer B, and K neurons in output layer C. Layer B is called a hidden layer because it is not directly observed in the input or output layers. Neurons in adjacent layers are connected by a weight matrix, represented in Figure \ref{fig:Network} by arrows connecting neurons.
 
 
 \begin{figure}[H]
@@ -226,8 +227,9 @@ Similar to a biological neuron, the ANN neuron receives input stimuli, performs 
 As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A{_1}$, $A{_2}$, ... $A{_N}$) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by finding a function, $f$, that solves
 %
 \begin{align} \label{eq:argminW_Error}
-\underset{\mathbf{W}}{\text{argmin}} &{\text{ E}}(f(\mathbf{X} ; \mathbf{W} ) , \mathbf{T} ) \\
-\text{where E} &= \text{error metric} \nonumber \\
+\underset{\mathbf{W}}{\text{argmin}} &{\text{ E}}(f(\mathbf{X} ; \mathbf{W} ) , \mathbf{T} )
+\intertext{where} \nonumber
+\text{E} &= \text{error metric} \nonumber \\
 \mathbf{W} &= \text{weight matrix} \nonumber \\
 \mathbf{T} &= \text{target values} \nonumber \\
 \mathbf{X} &= \text{input data.} \nonumber
@@ -241,24 +243,26 @@ The most common ANN training method is applying gradient descent to the backprop
 %
 \begin{align}
 \Delta w_{j} &= - \eta \frac{dE(D)}{dw_j} \label{eq:update1} \\
-\Delta b_{j} &= - \eta \frac{dE(D)}{db_j} \label{eq:update2} \\
-\text{where E} &= \text{error metric} \nonumber \\
+\Delta b_{j} &= - \eta \frac{dE(D)}{db_j} \label{eq:update2}
+\intertext{where} \nonumber
+\text{E} &= \text{error metric} \nonumber \\
 \eta &= \text{learning rate,} \nonumber
 \end{align}
 % The learning rate determines the update step's size.
 to reduce the error metric for some training data,
 %
 \begin{align} \label{eq:train_data_D}
-D&={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}, \\
-\text{where } \boldsymbol{x}_{n} &= n^{th} \text{ training example} \nonumber \\
+D&={(\boldsymbol{x}_1,t_1), ... , (\boldsymbol{x}_n,t_n), ... , (\boldsymbol{x}_N,t_N)}, 
+\intertext{where} \nonumber
+\boldsymbol{x}_{n} &= n^{th} \text{ training example} \nonumber \\
 t_n &= n^{th} \text{ training target.} \nonumber
 \end{align}
 %
-The learning rate and its affect on training are discussed further in section \ref{LearningRateSubsection}. Using these equations, the gradients can be repeatedly measured to iteratively update the weights. Updating the network with the entire dataset only once is referred to as one training epoch. Due to computational constraints involving memory, it is often infeasible to calculate the update rules in Equations \ref{eq:update1} and \ref{eq:update2} for the entire training dataset. A common technique used to train on large datasets is to iteratively update weights using disjoint subsets of the training data, called minibatches.
+The learning rate and its affect on training are discussed further in section \ref{LearningRateSubsection}. Using these equations, the gradients can be repeatedly measured to iteratively update the weights. Updating the network with the entire dataset only once is referred to as one training \textit{epoch}. Due to computational constraints involving memory, it is often infeasible to calculate the update rules in Equations \ref{eq:update1} and \ref{eq:update2} for the entire training dataset. A common technique used to train on large datasets is to iteratively update weights using disjoint subsets of the training data, called \textit{minibatches}.
 
 Training occurs until an early stopping condition is met. Early stopping works by first removing a portion of the training data and defining it as validation data. The ANN is trained using the new training data while we monitor an error metric for the training and validation datasets. Early stopping conditions include ending training when a threshold on an error metric measured in the validation dataset is reached or when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs, called the early stopping patience. 
 
-Early stopping is needed to end training when the model begins to overfit or learning plateaus. Overfitting occurs when the validation dataset's error increases and the training dataset's error decreases, illustrated in Figure \ref{fig:training_testing_error}. This indicates that the model is memorizing the training data and not generalizing to examples not seen during training. Generalization is a term used to describe a model's performance data outside the training dataset. Learning can also plateau when the ANN's weight updates are not large enough to escape a minimum in the error metric measured on the training dataset.
+Early stopping is needed to end training when the model begins to overfit or learning plateaus. Overfitting occurs when the validation dataset's error increases and the training dataset's error decreases, illustrated in Figure \ref{fig:training_testing_error}. This indicates that the model is memorizing the training data and not \textit{generalizing} to examples not seen during training. Generalization is a term used to describe a model's performance data outside the training dataset. Learning can also plateau when the ANN's weight updates are not large enough to escape a minimum in the error metric measured on the training dataset.
 
 \begin{figure}[H]
 	\centering
@@ -360,7 +364,7 @@ and a single bias,
 \frac{dE_{MSE}}{db_j} =  -\frac{2}{N} \sum_{i=1}^N  (t_i - y_i) \tanh'( \boldsymbol{w}' \boldsymbol{x}_i + b).
 \end{equation}
 
-Gradient descent can be applied to an ANN with multiple layers. The input to the the $l^{th}$ layer given some training example $\boldsymbol{x}$ in an L-layer network is 
+Gradient descent can be applied to an ANN with multiple layers. The input to the $l^{th}$ layer given some training example $\boldsymbol{x}$ in a network with L layers is 
 \begin{equation}
 \boldsymbol{z}^{x,l} = \boldsymbol{w}^{l}  \boldsymbol{a}^{x,l-1} + \boldsymbol{b}^{l}
 \end{equation}
@@ -408,7 +412,7 @@ Using Equations \ref{eq:CrossEntropy1} and \ref{eq:CrossEntropy2}, the weights c
 In addition to the weights connecting neurons, \textit{hyperparameters} can modify ANN behavior. Hyperparameters determine both the network's structure (number of layers, number of nodes in each layer, activation function for each layer) and how the model learns (learning rate, momentum, loss function). The following section discusses various hyperparameters and their effects on ANN learning.
 
 % The hyperparameters and their ranges used to optimize dense and convolutional models in this dissertation are shown in Tables \ref{table:hyperparameter_dataset_parameters_DNN} and \ref{table:hyperparameter_dataset_parameters_CNN}, respectively. 
-Methods for hyperparameter optimization are discussed in Section \ref{section_hp_opt}. The hyperparameter ranges explored in this dissertation are base on ranged used in our published work \cite{kamuda2017, kamuda2018, kamudaThesis2017}.
+Methods for hyperparameter optimization are discussed in Section \ref{section_hp_opt}. The hyperparameter ranges explored in this dissertation are base on ranges used in our published work \cite{kamuda2017, kamuda2018, kamudaThesis2017}.
 
 \subsubsection{Learning Rate} \label{LearningRateSubsection}
 
@@ -422,7 +426,7 @@ The learning rate , $\eta$, affects the magnitude of each weight update. If $\et
 \end{figure}
 
 
-There are many methods to modify $\eta$ to encourage more efficient learning. One method to increase the speed of learning is to start with a large $\eta$ and decrease $\eta$ as a function of iteration number. Ideally, this method would lead to quick initial learning when far from an optima and slower learning near an optima to more finely explore it. The difficulty with this method is the requirement for a function that slows the learning rate efficiently for a given problem.
+There are many methods to modify $\eta$ to encourage more efficient learning. One method to increase the speed of learning is to start with a large $\eta$ and decrease $\eta$ as a function of iteration number. Ideally, this method would lead to quick initial learning when far from an optimum and slower learning near an optimum to more finely explore it. The difficulty with this method is the requirement for a function that slows the learning rate efficiently for a given problem.
 
 \subsubsection{Learning Momentum}
 
@@ -439,7 +443,7 @@ Similar to the goal of slowing learning over time described above, the momentum 
 There are many ANN training algorithms that employ various learning rate schedules and momentum functions. These algorithms include but are not limited to: Nesterov's accelerated gradient \cite{nesterov1983}, simulated annealing \cite{Kirkpatrick1983}, ADADELTA (An Adaptive Learning Rate Method) \cite{ADADELTA}, and Adam \cite{Kingma2015}. 
 
 % Adam incorporates of parts of RMSprop and AdaGrad.
-In this thesis, the Adam optimizer as implemented by TensorFlow \cite{tensorflow2015-whitepaper} was chosen as the training algorithm. The Adam optimizer is widely used due to training speedups and performance improvements on popular benchmark datasets like MNIST \cite{lecun98}, IMDB movie reviews \cite{Maas2011}, and CIFAR-10 \cite{Krizhevsky2009}. Another benefit of Adam is the introduction of effectively only one hyperparameter, the learning rate.
+In this thesis, the Adam optimizer as implemented by TensorFlow \cite{tensorflow2015-whitepaper} was chosen as the training algorithm. The Adam optimizer is widely used due to training speedups and performance improvements on popular benchmark datasets like MNIST (Modified National Institute of Standards and Technology) \cite{lecun98}, IMDB (Internet Movie Database) movie reviews \cite{Maas2011}, and CIFAR-10 (Canadian Institute For Advanced Research) \cite{Krizhevsky2009}. Another benefit of Adam is the introduction of effectively only one hyperparameter, the learning rate.
 
 The Adam optimizer update rule is described below. For the following, $g_t$ is the gradient of the error function with respect to the network parameters at iteration $t$, 
 \begin{equation} \label{eq:adam1}
@@ -478,7 +482,7 @@ E_{MCE} = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n).
 \end{equation}
 %
 
-The MSE function is appropriate when targets are any real number, as in a regression problem. The MSE cost function is used in the uranium enrichment regression problem in Chapter \ref{uranium-enrichment}. This cost function is also used when training the autoencoders in this work. Autoencoders, described in more detail in Section \ref{Autoencoders}, are ANNs that attempts to reconstruct an input signal.
+The MSE function is appropriate when targets are any real number, as in a regression problem. The MSE cost function is used in the uranium enrichment regression problem in Chapter \ref{uranium-enrichment}. This cost function is also used when training the autoencoders in this work. Autoencoders, described in more detail in Section \ref{Autoencoders}, are ANNs that attempt to reconstruct an input signal.
 
 Cross entropy measures the similarity between two probability distributions. By using cross entropy with the softmax output function,
 %
@@ -529,16 +533,16 @@ Machine learning algorithms perform better with more data. To increase the amoun
 	\label{fig:cat}
 \end{figure}
 
-In this work we offline data augmentation to expand a dataset of gamma-ray spectra obtained from a photon transport software. We augment data by changing the detectors calibration, ratio of source to background counts, background count rate, and measurement time.
+In this work we employ offline data augmentation to expand a dataset of gamma-ray spectra obtained from a photon transport software. We augment data by changing the detectors calibration, ratio of source to background counts, background count rate, and measurement time.
 
 
 \subsection{Hyperparameter Optimization} \label{section_hp_opt}
 
-ANNs hyperparameters require optimization. Optimizing these hyperparameters leads to more efficient training and better generalization performance. There are several different methods to perform hyperparameter optimization for an ANN. These methods include manual optimization, exhaustive grid search, and random parameter search.
+ANN hyperparameters require optimization. Optimizing these hyperparameters leads to more efficient training and better generalization performance. Methods to perform ANN hyperparameter optimization include manual optimization, exhaustive grid search, and random parameter search.
 
-Manually optimizing parameters is necessary when developing a novel algorithm. This involves changing hyperparameters and observing training performance and validation dataset error. Ideally, the ANN should train quickly and have a low error on a validation dataset. For many parameters `rule of thumb' values exist that can be used to find parameters that work to some degree. Due to the large hyperparameter space, a manual search is cost prohibitive if further optimization is desired.
+Manually optimizing parameters is necessary when developing a novel algorithm. This involves changing hyperparameters and observing training performance and validation dataset error. Ideally, the ANN should train quickly with low error on a validation dataset. For many parameters, `rule of thumb' values exist that can be used to find parameters that work to some degree. Due to the large hyperparameter space, a manual search is cost prohibitive if further optimization is desired.
 
-Once a range of parameters is determined through a manual search, multiple methods are available to explore the parameter space for an optimal solution. One method is an exhaustive grid search. In a grid search the parameter space is divided into a uniform grid and the joint performance of all parameters is tested. The grid search method is ineffective for two reasons. First, neural networks may have a large number of hyperparameters that need to be explored, and the computational requirement to explore the hyperparameter space increases exponentially with increasing hyperparamters. Second, in practice only a few hyperparameters dominate performance, but the dominating hyperparameters are different for different applications. A grid search may under represent the importance of key hyperparamters, as seen in Figure \ref{fig:Bergstra12a_hyperparameter_grid_vs_random}.  While this method works, it has been shown that a random search in the hyperparameter target domain finds better hyperparameters quicker than testing equally distributed points in the chosen range \cite{Bergstra2012}. It can also be shown that given 60 random samples over some space with a finite minimum, the minimum of those 60 random samples is within 5\% of the true minimum with 95\% probability \cite{Zheng2015}. In this work, we employ random hyperparameter searches using 256 randomly chosen hyperparameters to ensure this condition is met.
+Once a range of parameters is determined through a manual search, multiple methods are available to explore the parameter space for an optimal solution. One method is an exhaustive grid search. In a grid search, the parameter space is divided into a uniform grid and the joint performance of all parameters is tested. The grid search method is ineffective for two reasons. First, neural networks may have a large number of hyperparameters that need to be explored, and the computational requirement to explore the hyperparameter space increases exponentially with increasing hyperparamters. Second, in practice only a few hyperparameters dominate performance, but the dominating hyperparameters are different for different applications. A grid search may under-represent the importance of key hyperparamters, as seen in Figure \ref{fig:Bergstra12a_hyperparameter_grid_vs_random}.  While this method works, it has been shown that a random search in the hyperparameter target domain finds better hyperparameters quicker than testing equally distributed points in the chosen range \cite{Bergstra2012}. It can also be shown that given 60 random samples over some space with a finite minimum, the minimum of those 60 random samples is within 5\% of the true minimum with 95\% probability \cite{Zheng2015}. In this work, we employ random hyperparameter searches using 256 randomly chosen hyperparameters to ensure this condition is met.
 
 \begin{figure}[H]
 	\centering
@@ -570,9 +574,9 @@ Autoencoders, machine learning models that attempt to reconstruct their input, a
 
 \subsubsection{Convolutional Neural Networks}
 
-Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors (e.g. manually creating features using edge and line detectors for face recognition) and a simple trainable classifier like a linear model or naive Bayes. There are a number of issues with creating and using custom feature extractors. Robust feature extraction algorithms often require extensive domain knowledge - making them expensive to create. There is rarely a guarantee that these features will be optimal for classification or regression tasks. A classifier created around suboptimal features has the potential to perform poorly in real-world conditions or similar problems.
+Before the popularization of machine learning, many pattern recognition algorithms relied on hand-crafted feature extractors (e.g. manually creating features using edge and line detectors for face recognition) and a simple trainable classifier like a linear model or na{\"i}ve Bayes. There are a number of issues with creating and using custom feature extractors. Robust feature extraction algorithms often require extensive domain knowledge - making them expensive to create. There is rarely a guarantee that these features will be optimal for classification or regression tasks. A classifier created around suboptimal features has the potential to perform poorly in real-world conditions or similar problems.
 
-Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolutional layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared among classes. This weight sharing decreases the amount of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
+Deep learning algorithms use a dataset to learn optimum feature extraction and classification techniques simultaneously. CNNs do this by using locally connected convolutional filters instead of fully connected weights. DNNs are fully connected architectures, which means each activation from the previous layer is considered in the next. This leads to redundancy in problems where the input has local structure, like in image recognition or signal processing. Additional CNN layers add hierarchies of representations, meaning that early layers use simple features and deeper layers combine them into more complex features. The magnitude of abstraction can be controlled by tuning the number of convolutional layers in a model. Because low-level features are usually shared among the classes in some data (e.g. edge detection in hand-written digits) the convolutional filters can be shared among classes. This weight sharing decreases the number of parameters in the model which decreases the probability of overfitting. Weight sharing also makes the model more robust against transformations in the input (e.g. rotations, scaling, and translations).
 
 Figure \ref{fig:cnn_mnist_lecun98} shows one of the first successful CNN architectures, LeNet-5 \cite{Lecun1998}, which classified 32x32 images of handwritten digits using two convolution and average pooling layers followed by two dense layers and an output. This was the first example of a machine learning algorithm creating custom filters and a classification model for the MNIST dataset. 
 
@@ -588,6 +592,13 @@ Figure \ref{fig:cnn_mnist_lecun98} shows one of the first successful CNN archite
 
 Autoencoders were introduced by Hinton \cite{Hinton2006} as a generalized nonlinear dimension reduction technique. An autoencoder is a neural network designed to learn a compact representation of some input. This is accomplished by simultaneously training an \textit{encoding network} and a \textit{decoding network}. An example of this can be seen in Figure \ref{fig:Autoencoder_structure}. The encoding ANN reduces an $n-$dimension input signal, $X$, to a $m-$dimension signal, $z$, where $m < n$. The decoding ANN takes the encoded signal, $z$, and reproduces the input signal, $X'$. Once trained, the encoder can pre-train other neural networks or serve as a feature extractor \cite{Erhan2010,CHARTE2018}. 
 
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=0.8\linewidth]{images/Autoencoder_structure}
+	\caption{An example of an autoencoder. Image reproduced from \cite{wiki:AutoencoderStructure}.}
+	\label{fig:Autoencoder_structure}
+\end{figure}
+
 Methods to encourage the network to learn useful features include forcing the autoencoder to perform denoising \cite{Vincent2008, Vincent2010} and by using an encoding smaller than the input signal (also called an undercomplete autoencoder). Denoising autoencoders corrupt their input with noise, making the autoencoder learn more robust features than those used for simply copying the input. 
 
 % \cite{Masci2011} demonstrated that stacking convolution layers made a good autoencoder.
@@ -601,12 +612,6 @@ Other commonly used feature extraction methods are principal component analysis 
 % In addition to using fully connected autoencoders, a 1-D convolutional autoencoder will also be explored. A DNN does not assume the input has local spatial structure, while a CNN does. Because gamma-ray spectra have local spatial structure in the form of photopeaks and Compton continua, it may be better to use a CNN over a DNN \cite{CHARTE2018}. To test this, the experiment described above will be repeated using a 1-D convolutional autoencoder.
 
 
-\begin{figure}[H]
-\centering
-\includegraphics[width=0.8\linewidth]{images/Autoencoder_structure}
-\caption{An example of an autoencoder. Image reproduced from \cite{wiki:AutoencoderStructure}.}
-\label{fig:Autoencoder_structure}
-\end{figure}
 
 
 % Fully connected ANNs do not assume there is local spatial structure in a signal, so the fully connected ANN would need to learn that there is local structure. Convolutional ANNs assume there is local structure, and the extent of this structure can be changed by changing the length of the convolutional ANNs filters.
@@ -616,7 +621,7 @@ Other commonly used feature extraction methods are principal component analysis 
 
 \section{annsa}
 
-As a part of this work we developed the open source (under the BSD 3 license) software package \verb|annsa| \cite{annsa}. \verb|annsa|'s main modules are shown in Figure \ref{fig:annsa_structure}. The dataset generation module leverages gamma-ray transport software to quickly prototype and generate training datasets. The machine learning model construction module uses TensorFlow and Keras to build machine learning models for spectroscopic tasks. \verb|annsa| contains machine learning models designed for tasks such as: classifying spectra based on an isotope library, quantifying an object's uranium enrichment, and extracting features from a spectrum using autoencoders. Machine learning models included in \verb|annsa| are dense neural networks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs).
+As a part of this work we developed the open source (under the BSD 3 license) software package \verb|annsa| \cite{annsa}. \verb|annsa|'s main modules are shown in Figure \ref{fig:annsa_structure}. The dataset generation module leverages gamma-ray transport software to quickly prototype and generate training datasets. The machine learning model construction module uses TensorFlow \cite{tensorflow2015-whitepaper} and Keras \cite{chollet2015keras} to build machine learning models for spectroscopic tasks. \verb|annsa| contains machine learning models designed for tasks such as: classifying spectra based on an isotope library, quantifying an object's uranium enrichment, and extracting features from a spectrum using autoencoders. Machine learning models included in \verb|annsa| are dense neural networks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs).
 
 \begin{figure}[H]
 	\centering
@@ -637,7 +642,7 @@ python setup.py install
 
 The dataset generation process begins by creating a dataset of noiseless template spectra. A gamma-ray transport software and a software that simulates the response from a gamma-ray detector generate the templates. The gamma-ray transport software simulates how photons from each isotope scatter in an environment to reach the detector. Transport software that could be used for this include GADRAS-DRF \cite{mitchell2014}, MCNP \cite{Goorley2016}, or GEANT4 \cite{geant4}. The detector response software accounts for the calibration and Gaussian energy broadening of the detector. 
 
-\verb|annsa| uses separate csv formatted source and background template spectra datasets. These templates are simulated without Poisson noise. Poisson noise can be removed from a spectrum by simulating spectra with sufficient counts to minimize channel-to-channel variance. Columns in each template dataset correspond to simulation settings. Example rows from the source and background template csv files used in this work are shown in Figure \ref{fig:template_csv}. Source height, distance, and shielding are assumed to have no effect on the background templates and omitted from the background template dataset. Instead, the background template dataset includes entries for the location simulated, resolution of the detector, and the inclusion of cosmic radiation background. Cosmic radiation is assumed to be negligible and is not simulated for the background templates in this work.
+\verb|annsa| uses separate source and background template spectra datasets (csv formatted). These templates are simulated without Poisson noise. Poisson noise can be removed from a spectrum by simulating spectra with sufficient counts to minimize channel-to-channel variance. Columns in each template dataset correspond to simulation settings. Example rows from the source and background template csv files used in this work are shown in Figure \ref{fig:template_csv}. Source height, distance, and shielding are assumed to have no effect on the background templates and omitted from the background template dataset. Instead, the background template dataset includes entries for the location simulated, resolution of the detector, and the inclusion of cosmic radiation background. Cosmic radiation is assumed to be negligible and is not simulated for the background templates in this work.
 
 \begin{figure}[H]
 	\centering
@@ -658,7 +663,7 @@ B^{template} &= \text{noiseless background template PDF} \nonumber \\
 T &= \text{measurment time.} \nonumber 
 \end{align}
 %
-Source template probability density functions are created by rebinning a chosen template, removing channels above the 1024$^{th}$, setting counts defined by the low level discriminator to zero, and finally normalizing the spectrum by it's total counts. This process is illustrated in Figure \ref{fig:template_manipulation} for a background and $^{60}$Co template spectrum. \verb|annsa| contains a function that chooses templates based on a users input.
+Source template probability density functions are created by rebinning a chosen template, removing channels above the 1024$^{th}$, setting counts defined by the low level discriminator to zero, and finally normalizing the spectrum by it's total counts. This process is illustrated in Figure \ref{fig:template_manipulation} for a background and $^{60}$Co template spectrum. \verb|annsa| implements a function that chooses templates based on a users input.
 
 \begin{figure}[H]
 	\centering
@@ -676,7 +681,7 @@ After the normalization process, spectra are combined based on total counts desi
 	\label{fig:template_sampling_diagram}
 \end{figure}
 
-This workflow is designed to be flexible and allow for quick dataset prototyping. The workflow can be used for multiple gamma-ray transport and detector response software. Dataset simulation functions can be added or modified in \verb|annsa| to extend it's capabilities.
+This workflow is designed to be flexible and allow for quick dataset prototyping. The workflow can be used for multiple gamma-ray transport and detector response software. Dataset simulation functions can be added or modified in \verb|annsa| to extend its capabilities.
 
 % trim left bottom right top
 
@@ -694,7 +699,7 @@ This workflow is designed to be flexible and allow for quick dataset prototyping
 
 \subsubsection{Dense Neural Network}
 
-DNNs in \verb|annsa| are created by stacking dense-dropout layers between user defined input and output vectors. An outline of this architecture is shown in Figure \ref{fig:annsa_dnn}. The number of dense-dropout layers and the nodes in each layer are defined by a list of nodes provided by the user. The output length is also user defined, allowing for the training of different sized isotope libraries for classification or training on a single regression target. The input vector length is also defined by the user. Additional necessary user defined parameters are shown in Table \ref{table:annsa_dnn_params}.
+DNNs in \verb|annsa| are created by stacking dense-dropout layers between user-defined input and output vectors. An outline of this architecture is shown in Figure \ref{fig:annsa_dnn}. The number of dense-dropout layers and the nodes in each layer are defined by a list of nodes provided by the user. The output length is also user-defined, allowing for the training of different sized isotope libraries for classification or training on a single regression target. The input vector length is also defined by the user. Additional necessary user-defined parameters are shown in Table \ref{table:annsa_dnn_params}.
 
 \begin{figure}[H]
 \centering
@@ -770,7 +775,7 @@ Output Activation & softmax\\ \hline
 
 \subsubsection{Dense Autoencoder}
 
-\verb|annsa| includes a class to create DAEs. The DAE class contains an encoder and decoder function. Both functions contain a user defined number of dense-dropout layers and nodes in each layer. Using this, encoders and decoders with different dense architectures can be constructed. Parameters required by the DAE class are shown in Table \ref{table:annsa_dae_params}. An example autoencoder with a two-hidden layer encoder, a single hidden-layer decoder, and no dropout is shown in Figure \ref{fig:annsa_dae}. By changing the input and output, autoencoders can be trained to extract various features from input signals. The final layer of the encoder, called the encoding, contains these extracted features. This example demonstrates a background subtracting denoising autoencoder: the input is a Poisson sampled source and background spectrum and the output is only the source spectrum without Poisson sampling.
+\verb|annsa| includes a class to create DAEs (dense autoencoders). The DAE class contains an encoder and decoder function. Both functions contain a user-defined number of dense-dropout layers and nodes in each layer. Using this, encoders and decoders with different dense architectures can be constructed. Parameters required by the DAE class are shown in Table \ref{table:annsa_dae_params}. An example autoencoder with a two-hidden layer encoder, a single hidden-layer decoder, and no dropout is shown in Figure \ref{fig:annsa_dae}. By changing the input and output, autoencoders can be trained to extract various features from input signals. The final layer of the encoder, called the encoding, contains these extracted features. This example demonstrates a background-subtracting and denoising autoencoder: the input is a Poisson-sampled source and background spectrum and the output is only the source spectrum without Poisson sampling.
 
 Weights from the encoder of a trained DAE can be loaded into a classification DNN for additional training in a process called fine tuning. This process is shown in Figure \ref{fig:annsa_daednn}.
 
@@ -811,7 +816,7 @@ Output Activation & None \\ \hline
 
 \subsubsection{Convolutional Autoencoder}
 
-\verb|annsa| includes a class to create CAEs. Like the DAE, the CAE class contains an encoder and decoder function. The CAE uses parameters from the 1D CNN (Table \ref{fig:annsa_cnn}) with the exception of L2 regularization strength and dropout rate (parameters only used by dense layers). The encoder is constructed using stacked 1D convolutional-pooling layers. As with the CNNs described in section \ref{annsa_section_conv_neural_network}, the CAEs use padding to keep the input and output sizes the same when the strides parameter is set to one. In \verb|annsa| the CAE encoder pooling strides parameter is two by default, making each convolutional-pooling layer reduce the input's length by a factor of two. The decoder uses resize-convolutional layers to increase the dimension of the encoding. The resize layer doubles the input signal's length using bilinear interpolation. The final decoding convolutional layer must have one output filter to ensure the autoencoder's output is a vector. A summary of this operation is shown in Figure \ref{fig:annsa_cae}.
+\verb|annsa| includes a class to create CAEs. Like the DAE class, the CAE class contains an encoder and decoder function. The CAE uses parameters from the 1D CNN (Table \ref{fig:annsa_cnn}) with the exception of L2 regularization strength and dropout rate (parameters only used by dense layers). The encoder is constructed using stacked 1D convolutional-pooling layers. As with the CNNs described in section \ref{annsa_section_conv_neural_network}, the CAEs use padding to keep the input and output sizes the same when the strides parameter is set to one. In \verb|annsa|, the CAE encoder pooling strides parameter is two by default, making each convolutional-pooling layer reduce the input's length by a factor of two. The decoder uses resize-convolutional layers to increase the dimension of the encoding. The resize layer doubles the input signal's length using bilinear interpolation. The final decoding convolutional layer must have one output filter to ensure the autoencoder's output is a vector. A summary of this operation is shown in Figure \ref{fig:annsa_cae}.
 
 Similar to the DAE, the weights from the encoder of a trained CAE can be extracted into a CNN for additional training. This process is shown in Figure \ref{fig:annsa_caednn}.
 
