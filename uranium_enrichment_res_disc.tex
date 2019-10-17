@@ -7,7 +7,7 @@ This chapter demonstrates a validation demonstration applying \verb|annsa| to au
 
 \section{Uranium Enrichment Measurement Background}
 
-Verifying the enrichment of HEU through passive nondestructive analysis is important for nuclear safeguard applications and homeland security tasks. Passive nondestructive analysis, such as gamma-ray spectroscopy, is preferred to more accurate destructive methods due to its ability to operate quickly, preserve forensic evidence, and allow for remote measurements. The enriched uranium gamma-ray signatures visible in low-resolution detectors come from the decay of $^{238}$U, $^{235}$U, $^{232}$U, and the daughters of these isotopes. Figure \ref{fig:enriched_u_peaks_displayed} shows an example of a 27\% enriched uranium spectrum that displays $^{238}$U and $^{235}$U photopeaks. In low-resolution detectors, The primary photopeaks from $^{235}$U are at 144 keV, 163 keV, and 186 keV. The $^{238}$U daughter $^{234m}$Pa produces two main photopeaks at 766 keV and 1001 keV. $^{232}$U, only present in reprocessed uranium, produces a photopeak at 2.6 MeV from its $^{208}$Tl daughter.
+Verifying the enrichment of HEU through passive nondestructive analysis is important for nuclear safeguards applications and homeland security tasks. Passive nondestructive analysis, such as gamma-ray spectroscopy, is preferred to more accurate destructive methods due to its ability to operate quickly, preserve forensic evidence, and allow for remote measurements. The enriched uranium gamma-ray signatures visible in low-resolution detectors come from the decay of $^{238}$U, $^{235}$U, $^{232}$U, and the daughters of these isotopes. Figure \ref{fig:enriched_u_peaks_displayed} shows an example of a 27\% enriched uranium spectrum that displays $^{238}$U and $^{235}$U photopeaks. In low-resolution detectors, The primary photopeaks from $^{235}$U are at 144 keV, 163 keV, and 186 keV. The $^{238}$U daughter $^{234m}$Pa produces two main photopeaks at 766 keV and 1001 keV. $^{232}$U, only present in reprocessed uranium, produces a photopeak at 2.6 MeV from its $^{208}$Tl daughter.
 
 \begin{figure}[H]
 	\centering
@@ -19,8 +19,9 @@ Verifying the enrichment of HEU through passive nondestructive analysis is impor
 Traditionally, the enrichment meter method is used to measure uranium enrichment in NaI(Tl) spectra \cite{Reilly1970}. This, and all enrichment measurement methods based on gamma-ray spectroscopy, only measures the enrichment of an object's surface to a depth of 0.26 cm and 0.74 cm for uranium metal and U$_{3}$O$_{8}$ powder, respectively \cite{Pandas}. At these material depths, the attenuation properties of uranium removes 99.8\% of the 186 keV signal. The enrichment meter method method exploits the proportionality between the activity of the 186 keV photon and the enrichment of $^{235}$U. The enrichment meter method works by finding calibration constants that relate counts in two ROIs,
 %
 \begin{align} \label{eq:enrichment_meter_principle}
-E &= A  C_{ROI1} + B C_{ROI2} \\
-\text{where } C_{ROI1} &= \text{counts in ROI1 [\# counts]} \nonumber \\
+E &= A  C_{ROI1} + B C_{ROI2} 
+\intertext{where}
+C_{ROI1} &= \text{counts in ROI1 [\# counts]} \nonumber \\
 C_{ROI2} &= \text{counts in ROI2 [\# counts]} \nonumber \\
 A &= \text{calibration constant} \nonumber \\
 B &= \text{calibration constant,} \nonumber
@@ -59,7 +60,7 @@ Simple and complete model architectures discussed in Sections \ref{table:hyperpa
 
 \subsection{Training Dataset Details}
 
-A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid uranium sphere of radius 5.5 cm. The MCNP code was used to calculate the physics due to self attenuation in the uranium and GADRAS-DRF was used to model the gamma-ray spectrum from this source in a 2'' x 2'' NaI(Tl) detector. The universe in the MCNP simulation, shown in Figure \ref{fig:mcnp_diagram}, was empty except for a 19 cm concrete block fixed at 180 cm from the origin, a 5.5 cm radius sphere of bare uranium fixed at the origin, and a bare 2'' x 2'' NaI(Tl) cylinder located between them. The concrete block was added to incorporate backscatter radiation in the MCNP simulation. A total of 10$^{8}$ particles were simulated for each configuration.
+A coupled MCNP (Monte Carlo N-Particle Transport Code) and GADRAS-DRF code was used to simulate the spectrum from each uranium isotope uniformly distributed in a solid uranium sphere of radius 5.5 cm. MCNP simulation was used to calculate the physics due to self attenuation in the uranium and GADRAS-DRF was used to model the gamma-ray spectrum from this source in a 2'' x 2'' NaI(Tl) detector. The universe in the MCNP simulation, shown in Figure \ref{fig:mcnp_diagram}, was empty except for a 19 cm concrete block fixed at 180 cm from the origin, a 5.5 cm radius sphere of bare uranium fixed at the origin, and a bare 2'' x 2'' NaI(Tl) cylinder located between them. The concrete block was added to incorporate backscatter radiation in the MCNP simulation. A total of 10$^{8}$ particles were simulated for each configuration.
 
 \begin{figure}[H]
 	\centering
@@ -74,12 +75,8 @@ The software package RadSrc was used to generate specific gamma-ray intensities 
 \centering
 \caption{Specific activities for 50 year old uranium isotopes and their ingrown daughters.}
 \label{table:specific_activities_radsrc}
-\begin{tabular}{ll}
-% \cline{2-3}
-% Isotope & photos/second/gram \\ \hline
-% Isotope & $\frac{photos}{s g}$ \\ \hline
+\begin{tabular}{lr}
 \hline
-% Isotope & {\begin{tabular}[c]{@{}c@{}}Specific Gamma-ray\\ Intensities [$\gamma$/gram/second]\end{tabular}} \\ \hline
 \textbf{Isotope} & \textbf{Specific Gamma-ray Activity [$\frac{\gamma}{g s}$]} \\ \hline
 $^{232}$U & 1.20 x 10$^{12}$ \\ 
 $^{235}$U & 2.07 x 10$^{5}$ \\
@@ -87,7 +84,7 @@ $^{238}$U & 3.80 x 10$^{3}$ \\ \hline
 \end{tabular}
 \end{table}
 
-$^{235}$U and $^{238}$U templates were combined in weighted combinations to create spectra of desired enrichments using the process described previously in Equation \ref{eq:template_sampling}. To account for factors that change the $^{232}$U content, each sample that included $^{232}$U used a mass fraction uniformly chosen between 4 x 10$^{-9}$ and 2 x 10$^{-8}$ \cite{Peurrung2019}. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was one half. Complete simulation parameters for the coupled MCNP and GADRAS-DRF code are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
+$^{235}$U and $^{238}$U templates were combined in weighted combinations to create spectra of desired enrichments using the process described previously in Equation \ref{eq:template_sampling}. To account for factors that change the $^{232}$U content, each sample that included $^{232}$U used a mass fraction uniformly chosen between 4 x 10$^{-9}$ and 2 x 10$^{-8}$ \cite{Peurrung2019}. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was 0.5. Complete simulation parameters for the coupled MCNP and GADRAS-DRF approach are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
 
 \begin{table}[H]
 \centering
@@ -117,17 +114,17 @@ These sections describe how each trained model performs when predicting the uran
 \centering
 \caption{Default parameters used for all generalization datasets.}
 \label{table:default_sim_params_uranium}
-\begin{tabular}{ll}
+\begin{tabular}{lr}
 \hline
 \textbf{Simulation Parameter} &  \textbf{Value} \\ \hline
 Source-Detector Distance [cm] & 50.0\\ 
 FWHM 662 keV [s] & 7.0\\
 Shielding (\% 200 keV Attenuated) & 0\% \\ 
-Integration Time [s] & 600 \\ 
-Calibration - Offset (channels) & 0 \\ 
+Integration Time [s] & 600.0 \\ 
+Calibration - Offset (channels) & 0.0 \\ 
 Calibration - Gain & 1.0 \\ 
 Signal to Background Ratio & 3.0 \\ 
-Background Counts Per Second & 200 \\ \hline
+Background Counts Per Second & 200.0 \\ \hline
 \end{tabular}
 \end{table}
 
@@ -270,7 +267,7 @@ Figure \ref{fig:measured_uranium} shows the predicted enrichment's mean and vari
 	\label{fig:measured_uranium}
 \end{figure}
 
-At 27.1\% enrichment, most ANNs overestimate the enrichment by at least 13 points. The complete dense models more accurately predict enrichment values for the 27.1\% enriched uranium spectrum. Spectra with lower enrichment include a continuum-like signal from an effect called bremsstrahlung. Bremsstrahlung (German for "breaking radiation") is produces when charged particles accelerate in the electric field of a heavy nucleus. In enriched uranium, bremsstrahlung is produced from the 2.3 MeV beta particle that is associated with the decay of $^{234m}$Pa, a $^{238}$U daughter. Convolutional models extract features based on their 16 channel filter kernel lengths. Without the bremsstrahlung signal in the training dataset, convolutional models have learned feature extraction techniques that cannot work when the bremsstrahlung signal is present in low-enriched data. Dense models are forced to extract features in patches of 16 channels, so they can more easily ignore the bremsstrahlung continuum and use the $^{235}$U and $^{238}$U photopeaks for enrichment prediction. 
+At 27.1\% enrichment, most ANNs overestimate the enrichment by at least 13 points. The complete dense models more accurately predict enrichment values for the 27.1\% enriched uranium spectrum. Spectra with lower enrichment include a continuum-like signal from an effect called bremsstrahlung. Bremsstrahlung (German for ``breaking radiation'') is produces when charged particles accelerate in the electric field of a heavy nucleus. In enriched uranium, bremsstrahlung is produced from the 2.3 MeV beta particle that is associated with the decay of $^{234m}$Pa, a $^{238}$U daughter. Convolutional models extract features based on their 16 channel filter kernel lengths. Without the bremsstrahlung signal in the training dataset, convolutional models have learned feature extraction techniques that cannot work when the bremsstrahlung signal is present in low-enriched data. Dense models are forced to extract features in patches of 16 channels, so they can more easily ignore the bremsstrahlung continuum and use the $^{235}$U and $^{238}$U photopeaks for enrichment prediction. 
 
 
 To investigate how changing calibration effects each algorithm, the spectra from Figure \ref{fig:measured_uranium_plots} were recalibrated with the same gain settings explored in Section \ref{section_uranium_sim_cal}. Each ANN's enrichment prediction for these spectra is shown in Figure \ref{fig:realuranium-cal}.
