@@ -1,6 +1,6 @@
 \chapter{Machine Learning Models Explored} \label{ChapterMachineLearningModelsExplored}
 
-In this chapter, we investigate which parameters affect the convolutional and dense model's performance for datasets of different complexity. Analyzing which hyperparameters most influence performance informs future research into applying machine learning to gamma-ray spectroscopy. To accomplish this, we ran hyperparameter searches using two datasets: a complete dataset with a wide range of simulated parameters and a simple dataset with smaller parameter ranges. This section describes these datasets and the architectural and regularization hyperparameters choices for the dense and convolutional models. This section concludes with a discussion on the insights obtained from the hyperparameter searches.
+In this chapter, we investigate which parameters affect the convolutional and dense models' performance for datasets of different complexity. Analyzing which hyperparameters most influence performance informs future research into applying machine learning to gamma-ray spectroscopy. To accomplish this, we ran hyperparameter searches using two datasets: a complete dataset with a wide range of simulated parameters and a simple dataset with smaller parameter ranges. This section describes these datasets and the architectural and regularization hyperparameters choices for the dense and convolutional models. This section concludes with a discussion on the insights obtained from the hyperparameter searches.
 
 
 % Dense and convolutional models are explored for two different reasons. 
@@ -17,7 +17,7 @@ The datasets used to train the models are created using templates of simulated g
 \end{figure}
 
 
-GADRAS-DRF was also used to simulate spectral changes associated with measurement geometry. The measurement scenario used by GADRAS-DRF is illustrated in Figure \ref{fig:gadras_measurement_setup}. Using GADRAS-DRF, we can simulate changes in source-detector distance, the source and detector's mutual height from the ground, and optional shielding material between the source and detector. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the Compton continuum's shape, the peak-to-total ratio, and the backscatter peak's magnitude. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different FWHM parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
+GADRAS-DRF was also used to simulate spectral changes associated with measurement geometry. The measurement scenario used by GADRAS-DRF is illustrated in Figure \ref{fig:gadras_measurement_setup}. Using GADRAS-DRF, we can simulate changes in source-detector distance, the source and detector's mutual height from the ground, and optional shielding material between the source and detector. To demonstrate two of these effects, $^{60}$Co spectra were simulated at various source-detector distances, Figure \ref{fig:sim_spectra_distance_comparison}, and heights above the ground, Figure \ref{fig:sim_spectra_height_comparison}. These parameters change the Compton continuum's shape, the peak-to-total ratio, and the backscatter peak's magnitude. Another parameter that changes the spectrum is the Gaussian energy broadening of the photopeaks. Due to manufacturing differences, each detector has a different amount of energy broadening. Examples of $^{60}$Co spectra with different FWHM parameters are shown in Figure \ref{fig:sim_spectra_FWHM_comparison}.
 
 
 \begin{figure}[H]
@@ -66,8 +66,8 @@ The template parameters used in this study are shown in Table \ref{table:all_fix
 	\begin{tabular}{ll}
 		\hline
 		\textbf{Simulation Parameter} & \textbf{Values} \\ \hline
-		source-detector height [cm] & 50, 100, 125 \\ 
-		source-detector distance [cm] & 50, 175, 300 \\ 
+		Source-detector height [cm] & 50, 100, 125 \\ 
+		Source-detector distance [cm] & 50, 175, 300 \\ 
 		Areal density of solid aluminum [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.82, 4.18, 7.49, 13.16 \\ 
 		Areal density of solid iron [$\frac{\text{g}}{\text{cm}^{2}}$] & 1.53, 3.5, 6.28, 11.02 \\ 
 		Areal density of solid lead [$\frac{\text{g}}{\text{cm}^{2}}$] & 0.22, 0.51, 0.92, 1.61 \\ 
@@ -153,9 +153,10 @@ The parameters used for the simple dataset are shown in Table \ref{table:hyperpa
 The hyperparameter search for a single model and dataset is illustrated in Figure \ref{fig:hyperparameter_search_workflow}. For each dataset and model, 5-folds cross validation is performed on 256 sets of randomly chosen hyperparameters. The maximum number of epochs was set to 200 and an early stopping patience of 20 epochs was used to stop training using the validation dataset's F1 score,
 %
 \begin{align} \label{eq:f1_score}
-\text{F1 score} &= 2 \frac{\text{precision} \cdot \text{recall}}{\text{precision + recall}} \\
-\text{where precision} &= \frac{\text{true positives}}{\text{true positives + false positives}} \nonumber \\
-\text{recall} &= \frac{\text{true positives}}{\text{true positives + false negatives}}. \nonumber \\
+\text{F1 score} &= 2 \frac{\text{precision} \cdot \text{recall}}{\text{precision + recall}}
+\intertext{where} 
+\text{precision} &= \frac{\text{true positives}}{\text{true positives + false positives}} \nonumber \\
+\text{recall} &= \frac{\text{true positives}}{\text{true positives + false negatives}}. \nonumber
 \end{align}
 %
 In addition to this, training was ended after 10 epochs if the validation dataset's F1 score did cross a 10\% threshold. The hyperparameter combination with the lowest average validation dataset F1 score was declared the optimum hyperparameter combination for that model. The validation dataset being used to end training induces a biased into the score used to determine the best hyperparameter combination. A better approach would be to use a separate simulated dataset's F1 score to determine the optimum hyperparameter combination.
@@ -379,7 +380,7 @@ Random efficiency experiment curves for the CNN trained on the simple and comple
 \end{figure}
 
 
-Figure \ref{fig:cnn_hyperparameters_f1_score} shows the distribution of hyperparameters searched for the CNN and their average validation dataset F1 scores from the 5-folds cross validation. Similar to the DNN, few networks trained on the complete dataset achieved high validation dataset F1 scores. Conclusions based on these diagrams suffer from a small (albeit larger than the DNN) sample size.
+Figure \ref{fig:cnn_hyperparameters_f1_score} shows the distribution of hyperparameters searched for the CNN and their average validation dataset F1 scores from the 5-folds cross validation. Similar to the DNN, few networks trained on the complete dataset achieved high validation dataset F1 scores. Conclusions based on these diagrams suffer from small (albeit larger than the DNN) sample sizes.
 
 The CNN's training performance is largely agnostic to many hyperparameters, including those associated with the dense part of the CNN. Figure \ref{fig:cnn_hyperparameters_f1_score} shows that both datasets train similarly over a wide range of learning rates below 10$^{-2}$, dense layer dropout rates below 0.8, L2 regularization scales below 10$^{-1}$, between 50 - 200 total dense nodes, and both mini-batch sizes.
 
@@ -540,7 +541,7 @@ Input Scaling & sqrt-max & sqrt-max \\ \hline
 Without an autoencoder, a single ANN has to learn multiple tasks to identify isotopes. An ANN would have to simultaneously identify the detector calibration, background signal, and source signal. By pretraining each network using an autoencoder to reconstruct a background-subtracted spectrum, the task of isotope identification is simplified for the ANN. To determine if using pretrained models results in more accurate identifications, a DAE and CAE were trained using the model parameters found in the hyperparameter search.
 
 % (Tables \ref{table:hyperparameter_dataset_easy_parameters} and \ref{table:hyperparameter_dataset_full_parameters})
-Pretraining was performed using a dataset of 10000 samples generated using the simple and complete dataset parameters. Because of the implicit regularization of the undercomplete encoding and the denoising background subtracting process, both networks do not use additional regularization when training. The initial learning rate of each autoencoder was set to 10$^{-5}$.
+Pretraining was performed using a dataset of 10000 samples generated using the simple and complete dataset parameters. Because of the implicit regularization of the undercomplete encoding and the denoising background subtracting process, neither network uses additional regularization when training. The initial learning rate of each autoencoder was set to 10$^{-5}$.
 
 % This section will explain the hyperparameter structures searched. The autoencoder used is a undercomplete denoising autoencoder \cite{Goodfellow-et-al-2016}. Because the denoising operation performs regularization implicitly, no additional regularization is added to the autoencoders. 
 
