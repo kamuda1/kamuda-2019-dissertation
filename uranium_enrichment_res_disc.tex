@@ -86,8 +86,8 @@ $^{235}$U & 2.07 x 10$^{5}$ \\
 $^{238}$U & 3.80 x 10$^{3}$ \\ \hline
 \end{tabular}
 \end{table}
-% \ref{eq:template_sampling}
-$^{235}$U and $^{238}$U templates were combined in weighted combinations to create spectra of desired enrichments using the process described previously in . To account for factors that change the $^{232}$U content, each sample that included $^{232}$U used a mass fraction uniformly chosen between 4 x 10$^{-9}$ and 2 x 10$^{-8}$ \cite{Peurrung2019}. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was one half. Complete simulation parameters for the coupled MCNP and GADRAS-DRF code are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
+
+$^{235}$U and $^{238}$U templates were combined in weighted combinations to create spectra of desired enrichments using the process described previously in Equation \ref{eq:template_sampling}. To account for factors that change the $^{232}$U content, each sample that included $^{232}$U used a mass fraction uniformly chosen between 4 x 10$^{-9}$ and 2 x 10$^{-8}$ \cite{Peurrung2019}. To account for clean uranium, the probability that a spectrum was simulated with $^{232}$U was one half. Complete simulation parameters for the coupled MCNP and GADRAS-DRF code are shown in Table \ref{table:hyperparameter_dataset_full_parameters_enrichment}.
 
 \begin{table}[H]
 \centering
@@ -313,7 +313,7 @@ Similar to the simulated results, relative gain settings of 0.9 and 1.1 do not s
 
 \section{Discussion and Conclusion}
 
-The ability to distinguish low (<20\% $^{235}$U )and high (>85\% $^{235}$U) enriched uranium is extremely important. Low enriched uranium requires significant processing for use in a nuclear weapon while high enriched uranium requires much less processing. The current implementation can roughly differentiate between low and high enriched uranium. For example, it is reasonable to assume a sample of material is below 15\% enrichment if the complete DAE predicts an enrichment below 15\%. Similarly, complete DAE predictions above 25\% can be assumed to be high enriched uranium. Predictions within this range require additional testing to more accurately quantify enrichment.
+The ability to distinguish low ($<$20\% $^{235}$U )and high ($>$85\% $^{235}$U) enriched uranium is extremely important. Low enriched uranium requires significant processing for use in a nuclear weapon while high enriched uranium requires much less processing. The current implementation can roughly differentiate between low and high enriched uranium. For example, it is reasonable to assume a sample of material is below 15\% enrichment if the complete DAE predicts an enrichment below 15\%. Similarly, complete DAE predictions above 25\% can be assumed to be high enriched uranium. Predictions within this range require additional testing to more accurately quantify enrichment.
 
 This chapter shows that complete architectures outperform the simple architectures when predicting uranium enrichment. The results also show that the complete architectures tailored to isotope classification can be extend to other problems in gamma-ray spectroscopy. The chapter also demonstrates that autoencoders trained to reconstruct spectra for isotope identification can be used to pretrain networks for other spectroscopic tasks. The dense pretraining was shown to perform particularly well on both simulated and measured enriched uranium spectra. Dense models show promise in uranium enrichment regression. This is because the feature extraction processes used by the convolution architectures are tuned to isotope identification. The convolutional models used convolutional filters with lengths of 16 channels. Uranium enrichment regression may require shorter convolution filter lengths to extract features from photopeaks below 200 keV.
 
