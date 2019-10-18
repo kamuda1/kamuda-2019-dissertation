@@ -4,7 +4,7 @@ This chapter covers how radiation detectors convert gamma-rays into spectroscopi
 
 \section{Gamma-ray Spectroscopy}
 
-In this section, we describe the physical processes responsible for features in gamma-ray spectra and how some of these features complicate gamma-ray spectroscopy. Section \ref{section_dataset_gen} covers how we used gamma-ray transport software to simulate NaI(Tl) spectra with these features to create datasets for machine learning.
+In this section, we describe the physical processes responsible for features in gamma-ray spectra and how some of these features complicate gamma-ray spectroscopy.
 
 % https://sites.fas.harvard.edu/~phys191r/Bench_Notes/B1/NAI_catalog.pdf page 20 has efficiency uncertainty information
 
@@ -19,7 +19,7 @@ When a photon interacts with a radiation detection medium (e.g. a NaI(Tl) crysta
 	\label{fig:energy_dependence_interactions}
 \end{figure}
 
-If the photon's total energy is deposited in the detector, a count is recorded in the spectrum's photopeak. If the photon deposits only a part of its energy and escapes the detector, a count will be recorded somewhere below the full-energy photopeak.  The following sections describe intrinsic mechanisms that add and remove counts from the full-energy peak.
+If the photon's total energy is deposited in the detector, a count is recorded in the spectrum's photopeak. If the photon deposits only a part of its energy and escapes the detector, a count will be recorded somewhere below the full-energy photopeak. The following sections describe intrinsic mechanisms that add and remove counts from the full-energy peak.
 
 
 
@@ -31,12 +31,12 @@ The photoelectric effect is a process that can occur when a photon with energy, 
 \begin{align} \label{eq:photoelectric_effect} 
 E_{e^{-}} &= E_{\gamma} - E_{b} \\
 &= h\nu - E_{b} \nonumber
-\intertext{where} \nonumber
+\intertext{where}
 h &= \text{Planks Constant} \quad [J \cdot s] \nonumber \\
 \nu &= \text{The Photon's Frequency} \quad \left[\frac{1}{\text{s}}\right] \nonumber
 \end{align}
 %
-where $E_{\gamma}$ = $h\nu$ is the incident photon's energy. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This process also creates an electron vacancy in the original atom. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
+where $E_{\gamma}$ = $h\nu$ is the incident photon's energy. The photoelectron is typically absorbed by the material, resulting in full-energy deposition. This mechanism is primarily responsible for producing photopeaks in gamma-ray spectra. This process also creates an electron vacancy in the original atom. This vacancy is filled by another electron in the material, releasing a characteristic x-ray or Auger electron. The characteristic x-ray can either be reabsorbed by the material or escape. Because of their low energies, Auger electrons are typically quickly reabsorbed.
 
 \subsubsection{Compton scattering}
 
@@ -93,7 +93,7 @@ When a photon with energy above 1022 keV (two times the rest mass energy of an e
 
 \subsection{Energy Resolution} \label{subsection_energy_resolution}
 
-The energy resolution of a radiation detector determines the photopeak's distribution, specifically the full width of its Gaussian peak at half of its maximum value (FWHM), at a location in a spectrum. The FWHM is measured either in units of energy or as a percent of the peak's energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. The variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit \cite{knoll}. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as a standard for comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are compared in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum as measured by scintillation and semiconductor detectors. 
+The energy resolution of a radiation detector determines the photopeak's distribution, specifically the full width of its Gaussian peak at half of its maximum value (FWHM), at a location in a spectrum. The FWHM is measured either in units of energy or as a percent of the peak's energy. This broadening is mostly due to statistical fluctuations in the number of information carriers produced in the detection system. Other factors that increase the resolution in scintillation detectors include nonproportionality of light yield per energy absorbed, the variance in photoelectron collection in the photocathode, and the variance in electrons produced in the photomultiplier tube \cite{knoll}. Because semiconductor detectors more directly measure charge carriers, they do not suffer the resolution losses associated with transforming information carriers. The variance in information carriers produced for a given energy does not follow a Poisson process in semiconductor detectors. This effect is known as the Fano factor and it significantly decreases the resolution of semiconductor detectors below the theoretical Poisson limit \cite{knoll}. Because the resolution changes as function of energy, the resolution of a 662 keV photon from $^{137}$Cs is used as a standard for comparison. The energy resolution of three scintillator (NaI(Tl), LaBr, CeBr) and two semiconductor (CZT, HPGe) radiation detectors are compared in Table \ref{table:detector_resolutions}. Figure \ref{fig:Ba133_spectrum_different_detector_materials_Market_Survey_Report} compares a $^{133}$Ba spectrum as measured by scintillation and semiconductor detectors. In this figure we see that it is possible to resolve more photopeaks with higher-resolution detectors when compared to lower-resolution detectors.
 
 % pg 345 knoll
 \begin{table}[H]
@@ -224,7 +224,7 @@ Similar to a biological neuron, the ANN neuron receives input stimuli, performs 
 	\label{fig:Node}
 \end{figure}
 
-As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A{_1}$, $A{_2}$, ... $A{_N}$) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by finding a function, $f$, that solves
+As seen in Figure \ref{fig:Node}, each neuron operates by summing the products of the previous layer's values ($A{_1}$, $A{_2}$, ... $A{_N}$) and each individual weight ($w_{1j}$, $w_{2j}$, ... $w_{nj}$) connecting the neurons. This summation is analogous to the stimulus a biological neuron receives from its dendrites. A a non-linear activation function, $f$, operates on the total stimulus. The output signal, also known as the neurons activation, is then passed to the next layer of the ANN where the process repeats. An ANN may be trained by finding a function, $f$, that solves
 %
 \begin{align} \label{eq:argminW_Error}
 \underset{\mathbf{W}}{\text{argmin}} &{\text{ E}}(f(\mathbf{X} ; \mathbf{W} ) , \mathbf{T} )
@@ -245,6 +245,8 @@ The most common ANN training method is applying gradient descent to the backprop
 \Delta w_{j} &= - \eta \frac{dE(D)}{dw_j} \label{eq:update1} \\
 \Delta b_{j} &= - \eta \frac{dE(D)}{db_j} \label{eq:update2}
 \intertext{where} \nonumber
+w_{j} &= j^{th} \text{ weight} \nonumber \\
+b_{j} &= j^{th} \text{ bias} \nonumber \\
 \text{E} &= \text{error metric} \nonumber \\
 \eta &= \text{learning rate,} \nonumber
 \end{align}
@@ -260,7 +262,7 @@ t_n &= n^{th} \text{ training target.} \nonumber
 %
 The learning rate and its affect on training are discussed further in section \ref{LearningRateSubsection}. Using these equations, the gradients can be repeatedly measured to iteratively update the weights. Updating the network with the entire dataset only once is referred to as one training \textit{epoch}. Due to computational constraints involving memory, it is often infeasible to calculate the update rules in Equations \ref{eq:update1} and \ref{eq:update2} for the entire training dataset. A common technique used to train on large datasets is to iteratively update weights using disjoint subsets of the training data, called \textit{minibatches}.
 
-Training occurs until an early stopping condition is met. Early stopping works by first removing a portion of the training data and defining it as validation data. The ANN is trained using the new training data while we monitor an error metric for the training and validation datasets. Early stopping conditions include ending training when a threshold on an error metric measured in the validation dataset is reached or when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs, called the early stopping patience. 
+Training occurs until an early stopping condition is met. Early stopping works by first removing a portion of the training data and defining it as validation data. The ANN is trained using the new training data while we monitor an error metric against the training and validation datasets. Early stopping conditions include ending training when a threshold on an error metric measured in the validation dataset is reached or when the error metric has not improved (either by some factor or absolutely) in a fixed number of epochs, called the early stopping patience. 
 
 Early stopping is needed to end training when the model begins to overfit or learning plateaus. Overfitting occurs when the validation dataset's error increases and the training dataset's error decreases, illustrated in Figure \ref{fig:training_testing_error}. This indicates that the model is memorizing the training data and not \textit{generalizing} to examples not seen during training. Generalization is a term used to describe a model's performance data outside the training dataset. Learning can also plateau when the ANN's weight updates are not large enough to escape a minimum in the error metric measured on the training dataset.
 
@@ -271,7 +273,7 @@ Early stopping is needed to end training when the model begins to overfit or lea
 	\label{fig:training_testing_error}
 \end{figure}
 
-A common technique for choosing training and validation data is k-folds cross validation. Figure \ref{fig:kfolds} illustrates 5-folds cross validation. In this process, $\frac{1}{k}$ of all available data is split into a validation dataset and the rest is defined as the training dataset. The model is then trained using the training data and the validation dataset's error is recorded. The process of splitting the dataset is repeated k times. The average error metric of each trained model on the validation dataset is used to estimate the generalization capabilities of the overall model. In this work, we use 5-folds cross validation in our hyperparameter searches and final model training.
+A common technique for choosing training and validation data is k-folds cross validation. Figure \ref{fig:kfolds} illustrates 5-folds cross validation. In this process, $\frac{1}{k}$ of all available data is split into a validation dataset and the rest is defined as the training dataset. The model is then trained using the training data and the validation dataset's error is recorded. The process of splitting the dataset is repeated k times. The average error metric of each trained model on the validation dataset is used to estimate the generalization capabilities of the overall model. Typical values for $k$ are 5 or 10. To reduce computational requirements, we use 5-folds cross validation in our hyperparameter searches and final model training. 
 
 
 \begin{figure}[H]
@@ -283,11 +285,12 @@ A common technique for choosing training and validation data is k-folds cross va
 
 \subsection{Simple Neural Network Example}
 
-An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN is a function that takes two real-valued inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron are represented by $w_{ij}$. An extra node, called the bias, is added to make the layer affine. Without the bias, the layer would be linear, meaning an input vector of zeros could only be mapped to another vector of zeros. The bias allows for more expressive mappings, adding to the representational power of the model. The bias activation is set to a constant value of 1, allowing the bias to be trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range [-1, 1]. Using this function, if an input results in the $y_{j}^{th}$ output neuron rising above zero, that input can be classified as part of the ${j}^{th}$ class (or as not a part of the ${j}^{th}$ class if the output is below zero). Other functions that map outputs values to arbitrary bounds (e.g. other sigmoid functions or an unbounded linear function) can be used. The equation for the output corresponding to the $j^{th}$ class is 
+An example of a simple one-layer ANN is shown in Figure \ref{fig:one_layer_net}. This ANN is a function that takes two real-valued inputs ($x_1$ and $x_2$) and performs the operation shown in Figure \ref{fig:Node}. The weights in the hidden layer connecting the $i^{th}$ input neuron to the $j^{th}$ output neuron are represented by $w_{ij}$. ANNs where nodes in each subsequent layer are connected to each node in the previous layer are referred to as densely connected. An extra node, called the bias, is added to make the layer affine. Without the bias, the layer would be linear, meaning an input vector of zeros could only be mapped to another vector of zeros. The bias allows for more expressive mappings, adding to the representational power of the model. The bias activation is set to a constant value of 1, allowing the bias to be trained by changing the weights connecting the bias to the next layer. Using the hyperbolic tangent function, the network outputs for each class $y_1$, $y_2$, and $y_3$ range [-1, 1]. Using this function, if an input results in the $y_{j}^{th}$ output neuron rising above zero, that input can be classified as part of the ${j}^{th}$ class (or as not a part of the ${j}^{th}$ class if the output is below zero). Other functions that map outputs values to arbitrary bounds (e.g. other sigmoid functions or an unbounded linear function) can be used. The equation for the output corresponding to the $j^{th}$ class is 
 %
 \begin{align} \label{eq:single_layer_eq_sum}
-y_j &= \tanh(\sum_i x_i w_{ij} + b_j), \\
-\text{where } y_j &= j^{th} \text{ output activation} \nonumber \\
+y_j &= \tanh(\sum_i x_i w_{ij} + b_j)
+\intertext{where}
+y_j &= j^{th} \text{ output activation} \nonumber \\
 x_i &= i^{th} \text{ input from the previous layer} \nonumber \\
 b_j &= \text{weight connecting the } j^{th} \text{ output to the bias neuron.} \nonumber
 \end{align}
@@ -312,9 +315,9 @@ The classes in this example dataset are linearly separable, meaning lines can be
 
 Backpropagation uses the chain rule to find these derivatives for some training data and target. Applying backpropogation in a single-layer ANN requires finding an expression for the derivative of an error function with respect to the networks weights \cite{Nielsen2015}. For example, to apply backpropogation when using the mean squared error (MSE) function,
 %
-\begin{equation} \label{eq:MSE_error}
-E_{MSE} = {\frac{1} N} \sum_{n=1}^N (\hat{y}_n - y_n)^2,
-\end{equation}
+\begin{align} \label{eq:MSE_error}
+E_{MSE} = {\frac{1} N} \sum_{n=1}^N (t_n - y_n)^2,
+\end{align}
 %
 on the network described in Equation \ref{eq:single_layer_eq_sum}, we apply the chain rule to find an expression for
 %
@@ -443,7 +446,7 @@ Similar to the goal of slowing learning over time described above, the momentum 
 There are many ANN training algorithms that employ various learning rate schedules and momentum functions. These algorithms include but are not limited to: Nesterov's accelerated gradient \cite{nesterov1983}, simulated annealing \cite{Kirkpatrick1983}, ADADELTA (An Adaptive Learning Rate Method) \cite{ADADELTA}, and Adam \cite{Kingma2015}. 
 
 % Adam incorporates of parts of RMSprop and AdaGrad.
-In this thesis, the Adam optimizer as implemented by TensorFlow \cite{tensorflow2015-whitepaper} was chosen as the training algorithm. The Adam optimizer is widely used due to training speedups and performance improvements on popular benchmark datasets like MNIST (Modified National Institute of Standards and Technology) \cite{lecun98}, IMDB (Internet Movie Database) movie reviews \cite{Maas2011}, and CIFAR-10 (Canadian Institute For Advanced Research) \cite{Krizhevsky2009}. Another benefit of Adam is the introduction of effectively only one hyperparameter, the learning rate.
+In this work, we chose the Adam optimizer as implemented by TensorFlow \cite{tensorflow2015-whitepaper} as the training algorithm. The Adam optimizer is widely used due to training speedups and performance improvements on popular benchmark datasets like MNIST (Modified National Institute of Standards and Technology) \cite{lecun98}, IMDB (Internet Movie Database) movie reviews \cite{Maas2011}, and CIFAR-10 (Canadian Institute For Advanced Research) \cite{Krizhevsky2009}. Another benefit of Adam is the introduction of effectively only one hyperparameter, the learning rate.
 
 The Adam optimizer update rule is described below. For the following, $g_t$ is the gradient of the error function with respect to the network parameters at iteration $t$, 
 \begin{equation} \label{eq:adam1}
@@ -467,12 +470,6 @@ Finally, the weight update equation is computed as
 \end{equation}
 
 
-%Due to the number of free parameters in a ANN (each hidden layer weight is a free parameter), these models have a tendency to overfit data. The three methods used to prevent overfitting in this thesis are $L_2$ regularization, neuron dropout, and data augmentation. These techniques greatly improve the performance of the presented ANN. 
-
-% Is this neccesary? Just mentioning it is enough I think.
-
-%Another method is to randomly perturbing the weights during training using a simulated annealing technique \cite{Kirkpatrick1983}. Simulated annealing mimics how crystal lattices bond together in cooling metal to achieve a low energy state. As metal cools, its crystal lattice will orient itself to lower its total bond energy, but occasionally due to statistical heating sections will jump to a higher energy level. This encourages a global low energy state, as many local low energy state regions are discouraged. This process can be mimicked in a learning algorithm by randomly perturbing the weights during learning. As learning continues the network 'cools' and the frequency of weight perturbation decreases. It can be shown that given a long enough annealing schedule, the global optimum solution for a problem is guaranteed to be found \cite{Granville1994}.
-
 \subsubsection{Cost Functions}
 
 The choice of cost function used in an ANN depends on the task the network is attempting to learn. Tasks that require the network's output be real numbers typically use the MSE function and multi-class classification tasks use the mean cross entropy (MCE),
@@ -484,7 +481,7 @@ E_{MCE} = -{\frac{1} N} \sum_{n=1}^N y_n \log(\hat{y}_n).
 
 The MSE function is appropriate when targets are any real number, as in a regression problem. The MSE cost function is used in the uranium enrichment regression problem in Chapter \ref{uranium-enrichment}. This cost function is also used when training the autoencoders in this work. Autoencoders, described in more detail in Section \ref{Autoencoders}, are ANNs that attempt to reconstruct an input signal.
 
-Cross entropy measures the similarity between two probability distributions. By using cross entropy with the softmax output function,
+Another cost function is cross entropy. This function measures the similarity between two probability distributions. By using cross entropy with the softmax output function,
 %
 \begin{equation} \label{eq:softmax}
 softmax(z_j) = \frac{\exp(z_j)} {\sum_{k=1}^{K} \exp(z_k)},
@@ -540,7 +537,7 @@ In this work we employ offline data augmentation to expand a dataset of gamma-ra
 
 ANN hyperparameters require optimization. Optimizing these hyperparameters leads to more efficient training and better generalization performance. Methods to perform ANN hyperparameter optimization include manual optimization, exhaustive grid search, and random parameter search.
 
-Manually optimizing parameters is necessary when developing a novel algorithm. This involves changing hyperparameters and observing training performance and validation dataset error. Ideally, the ANN should train quickly with low error on a validation dataset. For many parameters, `rule of thumb' values exist that can be used to find parameters that work to some degree. Due to the large hyperparameter space, a manual search is cost prohibitive if further optimization is desired.
+Manually optimizing parameters is necessary when developing a novel algorithm. This involves changing hyperparameters and observing training performance and validation dataset error. Ideally, the ANN should train quickly with low error on a validation dataset. For many parameters, `rule of thumb' values exist that can be used to find parameters that work to some degree. Due to the large hyperparameter space used in this work, a manual search is cost prohibitive.
 
 Once a range of parameters is determined through a manual search, multiple methods are available to explore the parameter space for an optimal solution. One method is an exhaustive grid search. In a grid search, the parameter space is divided into a uniform grid and the joint performance of all parameters is tested. The grid search method is ineffective for two reasons. First, neural networks may have a large number of hyperparameters that need to be explored, and the computational requirement to explore the hyperparameter space increases exponentially with increasing hyperparamters. Second, in practice only a few hyperparameters dominate performance, but the dominating hyperparameters are different for different applications. A grid search may under-represent the importance of key hyperparamters, as seen in Figure \ref{fig:Bergstra12a_hyperparameter_grid_vs_random}.  While this method works, it has been shown that a random search in the hyperparameter target domain finds better hyperparameters quicker than testing equally distributed points in the chosen range \cite{Bergstra2012}. It can also be shown that given 60 random samples over some space with a finite minimum, the minimum of those 60 random samples is within 5\% of the true minimum with 95\% probability \cite{Zheng2015}. In this work, we employ random hyperparameter searches using 256 randomly chosen hyperparameters to ensure this condition is met.
 
@@ -566,9 +563,7 @@ Once a range of parameters is determined through a manual search, multiple metho
 
 \subsection{Additional Machine Learning Models}
 
-In addition to dense models, we also include convolutional and autoencoder models in this work.
-
-Convolutional models are used in this work because they assume the input data have local structure. Local structure refers to the fact that values around a given point in some data are related. In gamma-ray spectra local structure manifests itself in the shape of peaks and Compton continua.
+In addition to dense models, we also include convolutional and autoencoder models in this work. Convolutional models are used in this work because they assume the input data have local structure. Local structure refers to the fact that values around a given point in some data are related. In gamma-ray spectra local structure manifests itself in the shape of peaks and Compton continua.
 
 Autoencoders, machine learning models that attempt to reconstruct their input, are included to investigate their use for model pretraining. By training autoencoders to reconstruct gamma-ray spectra, we pretrain their weights for gamma-ray spectroscopy. This pretraining may allow the networks to learn a task more effectively.
 
@@ -603,7 +598,7 @@ Methods to encourage the network to learn useful features include forcing the au
 
 % \cite{Masci2011} demonstrated that stacking convolution layers made a good autoencoder.
 
-Other commonly used feature extraction methods are principal component analysis (PCA) \cite{Jolliffe2002}, and linear discriminant analysis (LDA) \cite{Welling2007}. PCA attempts to reduce the dimensionality of a dataset into linearly uncorrelated variables. Using a few of these principle components, the data may be represented in a reduced space that contains most of the information present in the original data. Another linear feature extraction method is LDA. LDA is a supervised feature extraction method that finds linear combinations of features that can be used to separate classes. Non-linear feature extraction methods, such as kernel PCA, also exist. Kernel PCA applies a non-linear transform to the input space and applies PCA to the data in this transformed space. For kernel PCA to perform well, the correct kernel must be chosen for a given problem, which is a non-trivial task.
+Other commonly used feature extraction methods are principal component analysis (PCA) \cite{Jolliffe2002}, and linear discriminant analysis (LDA) \cite{Welling2007}. PCA attempts to reduce the dimensionality of a dataset into linearly uncorrelated variables. Using a few of these principle components, the data may be represented in a reduced space that contains most of the information present in the original data. Another linear feature extraction method is LDA. LDA is a supervised feature extraction method that finds linear combinations of features that can be used to separate classes. An example of a non-linear feature extraction methods is kernel PCA. Kernel PCA applies a non-linear transform to the input space and applies PCA to the data in this transformed space. For kernel PCA to perform well, the correct kernel must be chosen for a given problem, which is a non-trivial task.
 
 % While autoencoders were touched on in the uranium enrichment work, they have not been explored thoroughly. There is some evidence that the autoencoder was overtrained to the A special case of denoising autoencoders will be explored for the ANSI dataset. 
 
@@ -621,7 +616,7 @@ Other commonly used feature extraction methods are principal component analysis 
 
 \section{annsa}
 
-As a part of this work we developed the open source (under the BSD 3 license) software package \verb|annsa| \cite{annsa}. \verb|annsa|'s main modules are shown in Figure \ref{fig:annsa_structure}. The dataset generation module leverages gamma-ray transport software to quickly prototype and generate training datasets. The machine learning model construction module uses TensorFlow \cite{tensorflow2015-whitepaper} and Keras \cite{chollet2015keras} to build machine learning models for spectroscopic tasks. \verb|annsa| contains machine learning models designed for tasks such as: classifying spectra based on an isotope library, quantifying an object's uranium enrichment, and extracting features from a spectrum using autoencoders. Machine learning models included in \verb|annsa| are dense neural networks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs).
+As a part of this work we developed the open source (under the BSD 3 license) software package \verb|annsa| \cite{annsa}. \verb|annsa|'s main modules are shown in Figure \ref{fig:annsa_structure}. The dataset generation module leverages gamma-ray transport software applications to quickly prototype and generate training datasets. The machine learning model construction module uses TensorFlow \cite{tensorflow2015-whitepaper} and Keras \cite{chollet2015keras} to build machine learning models for spectroscopic tasks. \verb|annsa| contains machine learning models designed for tasks such as: classifying spectra based on an isotope library, quantifying an object's uranium enrichment, and extracting features from a spectrum using autoencoders. Machine learning models included in \verb|annsa| are dense neural networks (DNNs), convolutional neural networks (CNNs), dense autoencoders (DAEs), and convolutional autoencoders (CAEs).
 
 \begin{figure}[H]
 	\centering
@@ -630,7 +625,7 @@ As a part of this work we developed the open source (under the BSD 3 license) so
 	\label{fig:annsa_structure}
 \end{figure}
 
-Additional machine learning models and spectroscopic dataset construction methods can be added to \verb|annsa|. To make the integration of new and updating of existing components easier and safer, we also included unit tests using \verb|pytest| \cite{pytest3.5} and the continuous integration framework Circle CI. Circle CI runs \verb|annsa|'s unit tests when new code is uploaded to it's GitHub repository. This process ensures new functionality will not affect \verb|annsa|'s current functionality.
+Additional machine learning models and spectroscopic dataset construction methods can be added to \verb|annsa|. To make the integration of new and updating of existing components easier, we also included unit tests using \verb|pytest| \cite{pytest3.5} and the continuous integration framework Circle CI. Circle CI runs \verb|annsa|'s unit tests when new code is uploaded to it's GitHub repository. This process ensures new functionality will not affect \verb|annsa|'s current functionality.
 
 The open source software stack \verb|annsa| uses include: TensorFlow \cite{tensorflow2015-whitepaper} and Keras \cite{chollet2015keras} for the machine learning model creation and training; NumPy \cite{numpy} and pandas \cite{mckinney-proc-scipy-2010} to manipulate and store data; and scikit-learn \cite{scikit-learn} for prepossessing and miscellaneous training tasks. \verb|annsa| can be installed in a UNIX environment using the following commands:
 \begin{lstlisting}[language=bash, basicstyle={\small\ttfamily}]
@@ -640,7 +635,7 @@ python setup.py install
 \end{lstlisting}
 \subsection{Dataset Generation} \label{section_dataset_gen}
 
-The dataset generation process begins by creating a dataset of noiseless template spectra. A gamma-ray transport software and a software that simulates the response from a gamma-ray detector generate the templates. The gamma-ray transport software simulates how photons from each isotope scatter in an environment to reach the detector. Transport software that could be used for this include GADRAS-DRF \cite{mitchell2014}, MCNP \cite{Goorley2016}, or GEANT4 \cite{geant4}. The detector response software accounts for the calibration and Gaussian energy broadening of the detector. 
+The dataset generation process begins by creating a dataset of noiseless template spectra. A gamma-ray transport software package and a software package that simulates the response from a gamma-ray detector are used to generate the templates. The gamma-ray transport software package simulates how photons from each isotope scatter in an environment to reach the detector. Transport software package that could be used for this include GADRAS-DRF \cite{mitchell2014}, MCNP \cite{Goorley2016}, or GEANT4 \cite{geant4}. The detector response software accounts for the calibration and Gaussian energy broadening of the detector. 
 
 \verb|annsa| uses separate source and background template spectra datasets (csv formatted). These templates are simulated without Poisson noise. Poisson noise can be removed from a spectrum by simulating spectra with sufficient counts to minimize channel-to-channel variance. Columns in each template dataset correspond to simulation settings. Example rows from the source and background template csv files used in this work are shown in Figure \ref{fig:template_csv}. Source height, distance, and shielding are assumed to have no effect on the background templates and omitted from the background template dataset. Instead, the background template dataset includes entries for the location simulated, resolution of the detector, and the inclusion of cosmic radiation background. Cosmic radiation is assumed to be negligible and is not simulated for the background templates in this work.
 
@@ -651,7 +646,7 @@ The dataset generation process begins by creating a dataset of noiseless templat
 	\label{fig:template_csv}
 \end{figure}
 
-A wide variety of realistic gamma-ray spectra can be generated using noiseless templates without the need to excessively run computationally expensive transport software. Spectra can be simulated by combining source and background templates in desired amounts,
+A wide variety of realistic gamma-ray spectra can be generated using noiseless templates without the need to excessively run computationally expensive transport software applications. Spectra can be simulated by combining source and background templates in desired amounts,
 %
 \begin{align} \label{eq:template_sampling}
 \text{spectrum} &= T ( S_{cps} \sum_{n=1}^{N} C_n S_{n}^{template}  + B_{cps} B^{template} ) \\

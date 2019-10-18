@@ -96,7 +96,7 @@ Calibration - Gain \\ \hline
 
 \section{Hyperparameter Search}
 
-To determine which parameters affect the convolutional and dense model's performance on datasets of increasing complexity, hyperparameter searches for each model are performed for a simple and more complicated dataset. The hyperparameter search for a single model and dataset is illustrated in Figure \ref{fig:hyperparameter_search_workflow}. For each dataset and model, 5-folds cross validation is performed on 256 sets of randomly chosen hyperparameters. The maximum number of epochs was set to 200 and an early stopping patience of 20 epochs was used to stop training with the validation dataset's F1 score. In addition to this, training was ended after 10 epochs if the validation dataset's F1 score did cross a 10\% threshold. The hyperparameter combination with the lowest average validation dataset F1 score was declared the optimum hyperparameter combination for that model. The validation dataset being used to end training induces a biased into the score used to determine the best hyperparameter combination. A better approach would be to use the a separate testing dataset's F1 score to determine the optimum hyperparameter combination.
+To determine which parameters affect the convolutional and dense model's performance on datasets of increasing complexity, hyperparameter searches for each model are performed for a simple and more complicated dataset. The hyperparameter search for a single model and dataset is illustrated in Figure \ref{fig:hyperparameter_search_workflow}. For each dataset and model, 5-folds cross validation is performed on 256 sets of randomly chosen hyperparameters. The maximum number of epochs was set to 200 and an early stopping patience of 20 epochs was used to stop training with the validation dataset's F1 score. In addition to this, training was ended after 10 epochs if the validation dataset's F1 score did cross a 10\% threshold. The hyperparameter combination with the lowest average validation dataset F1 score was declared the optimum hyperparameter combination for that model. The validation dataset being used to end training induces a bias into the score used to determine the best hyperparameter combination. To remove this bias, a separate testing dataset's F1 score would need to be used to determine the optimum hyperparameter combination.
 
 \begin{figure}[H]
 	\centering
@@ -159,7 +159,7 @@ The hyperparameter search for a single model and dataset is illustrated in Figur
 \text{recall} &= \frac{\text{true positives}}{\text{true positives + false negatives}}. \nonumber
 \end{align}
 %
-In addition to this, training was ended after 10 epochs if the validation dataset's F1 score did cross a 10\% threshold. The hyperparameter combination with the lowest average validation dataset F1 score was declared the optimum hyperparameter combination for that model. The validation dataset being used to end training induces a biased into the score used to determine the best hyperparameter combination. A better approach would be to use a separate simulated dataset's F1 score to determine the optimum hyperparameter combination.
+In addition to this, training was ended after 10 epochs if the validation dataset's F1 score did cross a 10\% threshold. The hyperparameter combination with the lowest average validation dataset F1 score was declared the optimum hyperparameter combination for that model. The validation dataset being used to end training induces a bias into the score used to determine the best hyperparameter combination. A better approach would be to use a separate simulated dataset's F1 score to determine the optimum hyperparameter combination.
 
 \begin{figure}[H]
 	\centering
@@ -182,8 +182,8 @@ In this section, hyperparameter search results are shown using random efficiency
 \subsection{Dense Architecture}
 
 The architecture and training hyperparameters used to construct DNN's are shown in Table \ref{table:hyperparameter_dataset_parameters_DNN}. The number of densely connected nodes decreases for each subsequent layer. The input scaling is read left-to-right. For example, the $sqrt-max$ scaling would first take the square root of the each channel in the spectrum and then normalized the spectrum by its maximum value. The $L1-norm$ normalizes a spectrum by its L1 norm. The $log1p$ function is defined as 
-\begin{align} \label{eq:single_layer_eq_sum}
-log1p(x) := log_{10}(x+1)
+\begin{align} \label{eq:log1p}
+log1p(x) := log_{10}(x+1).
 \end{align}
 
 \begin{table}[H]
