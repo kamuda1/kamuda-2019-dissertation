@@ -154,7 +154,7 @@ As shown in Figure \ref{fig:sim-generalization-cal}, at the higher signal-to-bac
 	\label{fig:sim-generalization-cal}
 \end{figure}
 
-begin generalizing to the 1.2 relative gain while performing poorly on the 0.8 relative gain. The lower relative gain has the potential to push spectral features into the LLD, removing them from the input signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
+Simple models begin generalizing to spectra with a relative gain of 1.2 while performing poorly on spectra with a relative gain of 0.8. The lower relative gain has the potential to push spectral features into the LLD, removing them from the input signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
 
 The complete models performed better with changing gain, but still struggled with the 0.8 relative gain for the reasons outline in the previous paragraph. Compared to other complete models, the complete CNN performed the best on each relative gain setting.
 

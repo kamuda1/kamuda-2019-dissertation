@@ -648,14 +648,27 @@ The dataset generation process begins by creating a dataset of noiseless templat
 
 A wide variety of realistic gamma-ray spectra can be generated using noiseless templates without the need to excessively run computationally expensive transport software applications. Spectra can be simulated by combining source and background templates in desired amounts,
 %
+%\begin{align} \label{eq:template_sampling}
+%\text{spectrum} &= T ( S_{cps} \sum_{n=1}^{N} C_n S_{n}^{template}  + B_{cps} B^{template} ) \\
+%\text{where } S_{cps} &= \text{total source counts per second measured by the detector} \nonumber \\
+%S_{n}^{template} &= n^{th} \text{ noiseless source template's PDF} \nonumber \\
+%C_{n} &= \text{relative contribution from the $n^{th}$ source} \nonumber \\
+%B_{cps} &= \text{background counts per second measured by the detector} \nonumber \\
+%B^{template} &= \text{noiseless background template PDF} \nonumber \\
+%T &= \text{measurment time.} \nonumber 
+%\end{align}
+%
+%
 \begin{align} \label{eq:template_sampling}
-\text{spectrum} &= T ( S_{cps} \sum_{n=1}^{N} C_n S_{n}^{template}  + B_{cps} B^{template} ) \\
-\text{where } S_{cps} &= \text{total source counts per second measured by the detector} \nonumber \\
-S_{n}^{template} &= n^{th} \text{ noiseless source template's PDF} \nonumber \\
-C_{n} &= \text{relative contribution from the $n^{th}$ source} \nonumber \\
-B_{cps} &= \text{background counts per second measured by the detector} \nonumber \\
-B^{template} &= \text{noiseless background template PDF} \nonumber \\
-T &= \text{measurment time.} \nonumber 
+C_{total}(E) &= t b_{cps} B(E) + t s_{cps} \sum_{n=1}^{N} c_{n} C_{n}(E)
+\intertext{where}
+C_{total}(E) &= \text{Counts in energy bin E for the simulated spectrum} \nonumber \\
+B(E) &= \text{Counts in energy bin E for the background template} \nonumber \\
+C_{n}(E) &= \text{Counts in energy bin E for n$^{th}$ source template} \nonumber \\
+c_{n} &= \text{Relative contribution from the n$^{th}$ source template} \nonumber \\
+b_{cps} &= \text{Background count rate measured by the detector [cps]} \nonumber \\
+s_{cps} &= \text{Total source count rate measured by the detector [cps]} \nonumber \\
+t &= \text{Measurment time [s].} \nonumber 
 \end{align}
 %
 Source template probability density functions are created by rebinning a chosen template, removing channels above the 1024$^{th}$, setting counts defined by the low level discriminator to zero, and finally normalizing the spectrum by it's total counts. This process is illustrated in Figure \ref{fig:template_manipulation} for a background and $^{60}$Co template spectrum. \verb|annsa| implements a function that chooses templates based on a users input.
