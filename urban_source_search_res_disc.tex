@@ -77,14 +77,28 @@ Background Counts Per Second & 200.0 \\ \hline
 
 In this section we analyze how each model's F1 score changes when identifying spectra simulated with different source-detector heights off the ground. This tests if each model is sensitive to changes in the Compton continuum due to environmental scattering associated with the source-detector height. An example of these changes can be seen in Figure \ref{fig:sim_spectra_height_comparison}. These changes are only noticeably significant in the region below the backscatter peak around 200 keV. This region is important because it contains photopeaks used to detect enriched uranium.
 
-As seen in Figure \ref{fig:sim-generalization-height}, the performance of each network is insensitive to changes in source-detector height. This shows that performance is not impacted by the relatively small changes in the continuum caused by varying the source-detector height. Figure \ref{fig:sim-generalization-height} also shows that simple models generalize to changes in source-detector height when the signal-to-background ratio is raised. This shows that the features required to accurately identify low signal-to-background spectra are significantly different from those required by higher signal-to-background spectra. 
+As seen in Figures \ref{fig:sim-generalization-height-f1}, \ref{fig:sim-generalization-height-precision}, and \ref{fig:sim-generalization-height-recall}, the performance of each network is insensitive to changes in source-detector height. This shows that performance is not impacted by the relatively small changes in the continuum caused by varying the source-detector height. Figure \ref{fig:sim-generalization-height-f1} also shows that simple models generalize to changes in source-detector height when the signal-to-background ratio is raised. This shows that the features required to accurately identify low signal-to-background spectra are significantly different from those required by higher signal-to-background spectra. 
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/sim-generalization-height}
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-height-f1}
 	\caption{F1 score dependence on source-detector height measured using simulated data.}
-	\label{fig:sim-generalization-height}
+	\label{fig:sim-generalization-height-f1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-height-precision}
+	\caption{Precision dependence on source-detector height measured using simulated data.}
+	\label{fig:sim-generalization-height-precision}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-height-recall}
+	\caption{Recall dependence on source-detector height measured using simulated data.}
+	\label{fig:sim-generalization-height-recall}
 \end{figure}
 
 
@@ -92,14 +106,28 @@ As seen in Figure \ref{fig:sim-generalization-height}, the performance of each n
 
 In this section we analyze how each model's F1 score depends on changes in source-detector distance. This tests if each model is sensitive to larger changes in the Compton continuum compared to those associated with changes in source-detector height. An example of these changes was shown previously in Figure \ref{fig:sim_spectra_distance_comparison}.
 
-As seen in Figure \ref{fig:sim-generalization-dist}, we observe similar trends seen in the source-detector height generalization such as superior performance of the convolutional models and the poor simple DAE encoding. Changing the source-detector distance changes performance more noticeably compared to changes in standoff distance.
+As seen in Figures \ref{fig:sim-generalization-dist-f1}, \ref{fig:sim-generalization-dist-precision}, and \ref{fig:sim-generalization-dist-recall}, we observe similar trends seen in the source-detector height generalization such as superior performance of the convolutional models and the poor simple DAE encoding. Changing the source-detector distance changes performance more noticeably compared to changes in standoff distance.
 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/sim-generalization-dist}
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-dist-f1}
 	\caption{F1 score dependence on source-detector distance measured using simulated data.}
-	\label{fig:sim-generalization-dist}
+	\label{fig:sim-generalization-dist-f1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-dist-precision}
+	\caption{Precision dependence on source-detector distance measured using simulated data.}
+	\label{fig:sim-generalization-dist-precision}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-dist-recall}
+	\caption{Recall dependence on source-detector distance measured using simulated data.}
+	\label{fig:sim-generalization-dist-recall}
 \end{figure}
 
 
@@ -111,47 +139,85 @@ This result also shows that each model is sensitive to a spectrum's photopeaks a
 
 \subsection{Generalization Dependence on Resolution}
 
-In this section we analyze how each model's F1 score depends on changes in detector resolution. An example of these changes can be seen in Figure \ref{fig:sim-generalization-fwhm}. Changes in resolution do not significantly impact performance of the models. General trends are similar to distance and height generalization. 
+In this section we analyze how each model's F1 score depends on changes in detector resolution. An example of these changes can be seen in Figures \ref{fig:sim-generalization-fwhm-f1}, \ref{fig:sim-generalization-fwhm-precision}, and \ref{fig:sim-generalization-fwhm-recall}. Changes in resolution do not significantly impact performance of the models. General trends are similar to distance and height generalization. 
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/sim-generalization-fwhm}
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-fwhm-f1}
 	\caption{F1 score dependence on detector resolution measured using simulated data.}
-	\label{fig:sim-generalization-fwhm}
+	\label{fig:sim-generalization-fwhm-f1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-fwhm-precision}
+	\caption{Precision dependence on detector resolution measured using simulated data.}
+	\label{fig:sim-generalization-fwhm-precision}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-fwhm-recall}
+	\caption{Recall dependence on detector resolution measured using simulated data.}
+	\label{fig:sim-generalization-fwhm-recall}
 \end{figure}
 
 
 \subsection{Generalization Dependence on Shielding.}
 
-In this section we analyze how each model's F1 score depends on changes in shielding. These results are shown in Figure \ref{fig:sim-generalization-ironshield}. Spectra were simulated with iron thicknesses that shield 40\%, 60\%, and 80\% of the intensity of a 200 keV gamma-ray.
+In this section we analyze how each model's F1 score depends on changes in shielding. These results are shown in Figures \ref{fig:sim-generalization-ironshield-f1}, \ref{fig:sim-generalization-ironshield-precision}, and 
+\ref{fig:sim-generalization-ironshield-recall}. Spectra were simulated with iron thicknesses that shield 40\%, 60\%, and 80\% of the intensity of a 200 keV gamma-ray.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/sim-generalization-ironshield}
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-ironshield-f1}
 	\caption{F1 score dependence on shielding measured using simulated data.}
-	\label{fig:sim-generalization-ironshield}
+	\label{fig:sim-generalization-ironshield-f1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-ironshield-precision}
+	\caption{Precision dependence on shielding measured using simulated data.}
+	\label{fig:sim-generalization-ironshield-precision}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-ironshield-recall}
+	\caption{Recall dependence on shielding measured using simulated data.}
+	\label{fig:sim-generalization-ironshield-recall}
 \end{figure}
 
 As seen previously, simple models do not generalize to the lower signal-to-background spectra. Simple models, which only use unshielded and 20\% shielded templates, achieve F1 scores between 50\% and 75\% in higher signal-to-background spectra. This shows that simple models generalize to other shielding thicknesses in higher signal-to-background spectra. The simple CAE outperforms the CNN in spectra with each shielding thicknesses. This demonstrates that the CAE pretraining is useful for conditioning the convolutional weights for identification tasks. 
 
 The complete models perform better in the low signal-to-background spectra. Both complete convolutional models perform comparatively and outperform the complete dense models. At 60\% and 80\% shielding the complete CAE outperformed the CNN in low signal-to-background spectra. This again shows the CAE pretraining boosting the CNN architecture's performance.
 
-% The performance of each complete ANN decreases when identifying spectra with additional attenuation.
-
-
-
-
 \subsection{Generalization Dependence on Gain}
 
 In this section we analyze how each model's F1 score depends on changes in calibration. Spectra were simulated with relative calibration gains of 0.8, 1.0, and 1.2. These relative gain calibrations represent the range of calibrations expected due to temperatures expected when performing source interdiction. The 1.0 gain setting calibrates the 1024$^{th}$ channel of the spectrum to 3 MeV.
 
-As shown in Figure \ref{fig:sim-generalization-cal}, at the higher signal-to-background ratio, the simple convolutional models achieve F1 scores above 50\% for each gain setting except 0.8. Simple dense models achieve F1 scores between 30\% and 50\% for the same settings.
+As shown in Figures \ref{fig:sim-generalization-cal-f1}, \ref{fig:sim-generalization-cal-precision}, and \ref{fig:sim-generalization-cal-recall}, at the higher signal-to-background ratio, the simple convolutional models achieve F1 scores above 50\% for each gain setting except 0.8. Simple dense models achieve F1 scores between 30\% and 50\% for the same settings.
 
 \begin{figure}[H]
 	\centering
-	\includegraphics[width=1.0\linewidth]{images/sim-generalization-cal}
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-cal-f1}
 	\caption{F1 score dependence on gain using simulated data.}
-	\label{fig:sim-generalization-cal}
+	\label{fig:sim-generalization-cal-f1}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-cal-precision}
+	\caption{Precision dependence on gain using simulated data.}
+	\label{fig:sim-generalization-cal-precision}
+\end{figure}
+
+\begin{figure}[H]
+	\centering
+	\includegraphics[width=1.0\linewidth]{images/sim-generalization-cal-recall}
+	\caption{Recall dependence on gain using simulated data.}
+	\label{fig:sim-generalization-cal-recall}
 \end{figure}
 
 Simple models begin generalizing to spectra with a relative gain of 1.2 while performing poorly on spectra with a relative gain of 0.8. The lower relative gain has the potential to push spectral features into the LLD, removing them from the input signal. Because the simple dataset parameters never obscure these features, the simple models cannot correctly identify spectra without them.
