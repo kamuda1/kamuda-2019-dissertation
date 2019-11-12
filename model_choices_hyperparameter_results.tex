@@ -85,10 +85,10 @@ In addition to the parameters simulated by GADRAS-DRF, parameters are included t
 \begin{tabular}{l}
 \hline
 \textbf{Simulation Parameter} \\ \hline
-integration time \\ 
-background counts per second \\ 
+integration time [t] \\ 
+Background Count Rate [cps] \\ 
 Signal to Background ratio \\ 
-Calibration - Offset \\ 
+Calibration - Offset [channels] \\ 
 Calibration - Gain \\ \hline
 \end{tabular}
 \label{table:all_variable_simulation_parameters}
@@ -119,13 +119,13 @@ The parameters used for the simple dataset are shown in Table \ref{table:hyperpa
 		\textbf{Simulation Parameter} & \textbf{Parameter Range} & \textbf{Sampling} \\ \hline
 		Source-Detector Distance [cm] & 175 & N/A \\ 
 		Source-Detector Height [cm] & 100 & N/A \\ 
-		FWHM at 662 keV & 7.5 & N/A \\ 
+		FWHM at 662 keV [\%] & 7.5 & N/A \\ 
 		Shielding [\% 200 keV Attenuated] & 0\%, 20\% & Uniform \\ 
 		Integration Time [s] & 60 - 600 & Log-Uniform \\ 
 		Calibration - Offset [channels] & 0 - 10 & Uniform \\ 
 		Calibration - Gain & 0.9 - 1.1 & Uniform \\ 
 		Signal to Background Ratio & 0.5 - 2.0 & Uniform \\ 
-		Background Counts Per Second & 200 & Poisson \\ \hline
+		Background Count Rate [cps] & 200 & Poisson \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -139,13 +139,13 @@ The parameters used for the simple dataset are shown in Table \ref{table:hyperpa
 		\textbf{Simulation Parameter} & \textbf{Parameter Range} & \textbf{Sampling} \\ \hline
 		Source-Detector Distance {[}cm{]} & 50, 175, 300 & Uniform \\ 
 		Source-Detector Height {[}cm{]} & 50, 100, 150 & Uniform \\ 
-		FWHM 662 keV {[}s{]} & 7.0, 7.5, 8.0 & Uniform \\ 
+		FWHM 662 keV [\%] & 7.0, 7.5, 8.0 & Uniform \\ 
 		Shielding [\% 200 keV Attenuated] & 0\%, 20\%, 40\%, 60\% & Uniform \\ 
-		Integration Time {[}s{]} & 10 - 3600 & Log-Uniform \\ 
-		Calibration - Offset (channels) & 0 - 10 & Uniform \\ 
+		Integration Time [s] & 10 - 3600 & Log-Uniform \\ 
+		Calibration - Offset [channels] & 0 - 10 & Uniform \\ 
 		Calibration - Gain & 0.8 - 1.2 & Uniform \\ 
 		Signal to Background Ratio & 0.1 - 3.0 & Uniform \\ 
-		Background Counts Per Second & 200 & Poisson \\ \hline
+		Background Count Rate [cps] & 200 & Poisson \\ \hline
 	\end{tabular}
 \end{table}
 
@@ -211,14 +211,14 @@ Random efficiency experiment curves for the DNN trained on the simple and comple
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/random_hp_search_dnn_easy}
-	\caption{Random hyperparameter search efficiency curves for the DNN using the simple dataset.}
+	\caption{Random hyperparameter search efficiency curves for the DNN using the simple dataset. Red crosses indicate individual experiments.}
 	\label{fig:random_hp_search_dnn_easy}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/random_hp_search_dnn_full}
-	\caption{Random hyperparameter search efficiency curves for the DNN using the complete dataset.}
+	\caption{Random hyperparameter search efficiency curves for the DNN using the complete dataset. Red crosses indicate individual experiments.}
 	\label{fig:random_hp_search_dnn_full}
 \end{figure}
 
@@ -368,14 +368,14 @@ Random efficiency experiment curves for the CNN trained on the simple and comple
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/random_hp_search_cnn_easy}
-	\caption{Random hyperparameter search efficiency curves for the CNN using the simple dataset.}
+	\caption{Random hyperparameter search efficiency curves for the CNN using the simple dataset. Red crosses indicate individual experiments.}
 	\label{fig:random_hp_search_cnn_easy}
 \end{figure}
 
 \begin{figure}[H]
 	\centering
 	\includegraphics[width=0.8\linewidth]{images/random_hp_search_cnn_full}
-	\caption{Random hyperparameter search efficiency curves for the CNN using the complete dataset.}
+	\caption{Random hyperparameter search efficiency curves for the CNN using the complete dataset. Red crosses indicate individual experiments.}
 	\label{fig:random_hp_search_cnn_full}
 \end{figure}
 
