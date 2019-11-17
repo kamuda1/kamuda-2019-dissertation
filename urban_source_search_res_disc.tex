@@ -30,6 +30,20 @@ Simple dense models reach an asymptote with a wider variance between F1 scores o
 	\label{fig:learning_curves_easy}
 \end{figure}
 
+\begin{table}[H]
+	\centering
+	\caption{Normalized area under the learning curves generated using the simple training dataset.}
+	\label{table:complete_learning_curve_auc}
+	\begin{tabular}{lll}
+		\hline
+		& \textbf{Training} & \textbf{Validation} \\ \hline
+		DNN & 0.87 & 0.88 \\
+		DAE & 0.81 & 0.82 \\
+		CNN & 0.98 & 0.98 \\
+		CAE & 0.98 & 0.97 \\ \hline
+	\end{tabular}
+\end{table}
+
 The validation dataset error curves in Figure \ref{fig:learning_curves_full} are less step than those in the simple learning curve plot. The asymptote for the full dense and convolutional models is also lower than the asymptote for the easy models, demonstrating that the complete dataset is more difficult for the models to generalize to. Even with a comparable number of trainable parameters, the convolutional networks outperform the dense networks. This indicates that the convolutional architecture is better suited to performing gamma-ray spectroscopy. 
 
 \begin{figure}[H]
@@ -39,7 +53,19 @@ The validation dataset error curves in Figure \ref{fig:learning_curves_full} are
 	\label{fig:learning_curves_full}
 \end{figure}
 
-
+\begin{table}[H]
+	\centering
+	\caption{Normalized area under the learning curves generated using the complete training dataset.}
+	\label{table:complete_learning_curve_auc}
+	\begin{tabular}{lll}
+		\hline
+		& \textbf{Training} & \textbf{Validation} \\ \hline
+		DNN & 0.76 & 0.74 \\
+		DAE & 0.76 & 0.74 \\
+		CNN & 0.93 & 0.88 \\
+		CAE & 0.94 & 0.89 \\ \hline
+	\end{tabular}
+\end{table}
 
 \section{Performance in Simulated Datasets} \label{simulated_dataset_performance}
 
@@ -52,7 +78,7 @@ In this section we analyze each simple and complete ANN's performance dependence
 	\label{fig:generalization_performance_diagram}
 \end{figure}
 
-To compare each ANN's performance, we simulated datasets with various source-detector heights, source-detector distances, detector resolutions, shielding thicknesses, and detector gain calibrations. Datasets were simulated with ten spectra for each ANSI N42-34-2006 isotope and unique parameter. Default simulation parameters for each testing dataset are shown in Table \ref{table:default_sim_params}. Testing datasets were simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5.
+To compare each ANN's performance, we simulated datasets with various source-detector heights, source-detector distances, detector resolutions, shielding thicknesses, and detector gain calibrations. Datasets were simulated with ten spectra for each ANSI N42-34-2006 isotope and unique parameter. Each spectrum contains a single isotope and background. Default simulation parameters for each testing dataset are shown in Table \ref{table:default_sim_params}. Testing datasets were simulated over integration times log-uniformly sampled from one second to an hour and signal to background ratios of 0.1 and 0.5.
 
 \begin{table}[H]
 \centering
@@ -255,7 +281,7 @@ Example $^{137}$Cs spectra identified in this analysis are shown in Figure \ref{
 	\label{fig:realspectra-cal-cs137-spec}
 \end{figure}
 
-Figure \ref{fig:realspectra-cal-cs137} demonstrates the effect of measurement time on each model's posterior probability for $^{137}$Cs. As time increases, the simple DNN and DAE monotonically increase their probabilities for $^{137}$Cs measured with the default gain. These probabilities approach an asymptote in the higher signal-to-background spectra. The simple CNN jumps to 100\% posterior probability for default gain spectra. Complete models demonstrate more monotonic performance for a wider range of gain settings. Monotonic increases in posterior probability are desirable for isotope identification algorithms because they are more easily interpreted by an unskilled user.
+Figure \ref{fig:realspectra-cal-cs137} demonstrates the effect of measurement time on each model's posterior probability for $^{137}$Cs. As time increases, the simple DNN and DAE monotonically increase their probabilities for $^{137}$Cs measured with the default gain. These probabilities approach an asymptote in the higher signal-to-background spectra. The simple CNN jumps to 100\% posterior probability for default gain spectra. This very high confidence from the CNN is likely due to fact that the single photopeak spectrum is easy to identify. Complete models demonstrate more monotonic performance for a wider range of gain settings. Monotonic increases in posterior probability are desirable for isotope identification algorithms because they are more easily interpreted by an unskilled user.
 
 \begin{figure}[H]
 	\centering
